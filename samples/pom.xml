@@ -10,8 +10,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>Azure Storage Java Async</name>
-    <artifactId>azure-storage-java-async</artifactId>
+    <name>Azure Storage Java Async Samples</name>
+    <artifactId>azure-storage-java-async-samples</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <repositories>
@@ -29,22 +29,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.microsoft.rest.v2</groupId>
-            <artifactId>client-runtime</artifactId>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-storage-java-async</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
-        <!--<dependency>
-            <groupId>com.microsoft.azure.v2</groupId>
-            <artifactId>azure-client-runtime</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.azure.v2</groupId>
-            <artifactId>azure-client-authentication</artifactId>
-        </dependency>-->
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
