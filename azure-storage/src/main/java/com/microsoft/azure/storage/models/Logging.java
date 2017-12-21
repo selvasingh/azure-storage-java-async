@@ -147,5 +147,4 @@ public class Logging {
         this.retentionPolicy = retentionPolicy;
         return this;
     }
-
 }

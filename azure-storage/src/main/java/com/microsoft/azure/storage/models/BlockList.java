@@ -71,5 +71,4 @@ public class BlockList {
         this.uncommittedBlocks = uncommittedBlocks;
         return this;
     }
-
 }

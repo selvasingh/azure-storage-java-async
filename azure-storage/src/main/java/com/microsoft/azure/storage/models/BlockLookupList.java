@@ -96,5 +96,4 @@ public class BlockLookupList {
         this.latest = latest;
         return this;
     }
-
 }

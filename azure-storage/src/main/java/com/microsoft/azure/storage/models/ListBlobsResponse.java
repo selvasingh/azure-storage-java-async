@@ -226,5 +226,4 @@ public class ListBlobsResponse {
         this.nextMarker = nextMarker;
         return this;
     }
-
 }

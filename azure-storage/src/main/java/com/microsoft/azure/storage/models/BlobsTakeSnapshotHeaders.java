@@ -198,5 +198,4 @@ public class BlobsTakeSnapshotHeaders {
         }
         return this;
     }
-
 }

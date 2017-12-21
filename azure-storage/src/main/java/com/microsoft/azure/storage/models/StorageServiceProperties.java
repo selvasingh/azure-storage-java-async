@@ -153,5 +153,4 @@ public class StorageServiceProperties {
         this.defaultServiceVersion = defaultServiceVersion;
         return this;
     }
-
 }

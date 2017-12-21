@@ -16,6 +16,7 @@ package com.microsoft.azure.storage.blob;
 
 import com.microsoft.azure.storage.implementation.StorageClientImpl;
 import com.microsoft.azure.storage.models.*;
+import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.RestResponse;
 import io.reactivex.Single;
@@ -84,7 +85,7 @@ public final class BlockBlobURL extends BlobURL {
      * @return the {@link Single&lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobsPutHeaders, Void>> putBlobAsync(
-            byte[] data, BlobHttpHeaders headers, Metadata metadata, BlobAccessConditions blobAccessConditions) {
+            AsyncInputStream data, BlobHttpHeaders headers, Metadata metadata, BlobAccessConditions blobAccessConditions) {
         if(blobAccessConditions == null) {
             blobAccessConditions = BlobAccessConditions.getDefault();
         }
@@ -118,7 +119,7 @@ public final class BlockBlobURL extends BlobURL {
      * @return the {@link Single&lt;RestResponse&lt;BlockBlobsPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlockAsync(
-            String base64BlockID, byte[] data, LeaseAccessConditions leaseAccessConditions) {
+            String base64BlockID, AsyncInputStream data, LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }

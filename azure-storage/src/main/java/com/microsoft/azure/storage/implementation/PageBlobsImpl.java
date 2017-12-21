@@ -33,7 +33,7 @@ import com.microsoft.rest.v2.annotations.HostParam;
 import com.microsoft.rest.v2.annotations.PathParam;
 import com.microsoft.rest.v2.annotations.PUT;
 import com.microsoft.rest.v2.annotations.QueryParam;
-import com.microsoft.rest.v2.annotations.UnexpectedResponseExceptionType;
+import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpClient;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
@@ -74,21 +74,17 @@ public class PageBlobsImpl implements PageBlobs {
      */
     @Host("{url}")
     interface PageBlobsService {
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.PageBlobs putPage" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
-        Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPage(@HostParam("url") String url, @BodyParam("application/xml; charset=utf-8") byte[] optionalbody, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-page-write") PageWriteType pageWrite, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-if-sequence-number-le") Integer ifSequenceNumberLessThanOrEqualTo, @HeaderParam("x-ms-if-sequence-number-lt") Integer ifSequenceNumberLessThan, @HeaderParam("x-ms-if-sequence-number-eq") Integer ifSequenceNumberEqualTo, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+        Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPage(@HostParam("url") String url, @BodyParam("application/xml; charset=utf-8") AsyncInputStream optionalbody, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-page-write") PageWriteType pageWrite, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-if-sequence-number-le") Integer ifSequenceNumberLessThanOrEqualTo, @HeaderParam("x-ms-if-sequence-number-lt") Integer ifSequenceNumberLessThan, @HeaderParam("x-ms-if-sequence-number-eq") Integer ifSequenceNumberEqualTo, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.PageBlobs getPageRanges" })
         @GET("{containerName}/{blob}")
         @ExpectedResponses({200})
         Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRanges(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @QueryParam("prevsnapshot") DateTime prevsnapshot, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.PageBlobs incrementalCopy" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({202})
         Single<RestResponse<PageBlobsIncrementalCopyHeaders, Void>> incrementalCopy(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-copy-source") String copySource, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
-
     }
 
     /**
@@ -143,7 +139,7 @@ public class PageBlobsImpl implements PageBlobs {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "page";
-        final byte[] optionalbody = new byte[0];
+        final AsyncInputStream optionalbody = null;
         final Integer timeout = null;
         final String range = null;
         final String leaseId = null;
@@ -205,7 +201,7 @@ public class PageBlobsImpl implements PageBlobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the void object if successful.
      */
-    public void putPage(String url, PageWriteType pageWrite, byte[] optionalbody, Integer timeout, String range, String leaseId, Integer ifSequenceNumberLessThanOrEqualTo, Integer ifSequenceNumberLessThan, Integer ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public void putPage(String url, PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Integer ifSequenceNumberLessThanOrEqualTo, Integer ifSequenceNumberLessThan, Integer ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         putPageAsync(url, pageWrite, optionalbody, timeout, range, leaseId, ifSequenceNumberLessThanOrEqualTo, ifSequenceNumberLessThan, ifSequenceNumberEqualTo, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
     }
 
@@ -232,7 +228,7 @@ public class PageBlobsImpl implements PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> putPageAsync(String url, PageWriteType pageWrite, byte[] optionalbody, Integer timeout, String range, String leaseId, Integer ifSequenceNumberLessThanOrEqualTo, Integer ifSequenceNumberLessThan, Integer ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> putPageAsync(String url, PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Integer ifSequenceNumberLessThanOrEqualTo, Integer ifSequenceNumberLessThan, Integer ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(putPageAsync(url, pageWrite, optionalbody, timeout, range, leaseId, ifSequenceNumberLessThanOrEqualTo, ifSequenceNumberLessThan, ifSequenceNumberEqualTo, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
@@ -258,7 +254,7 @@ public class PageBlobsImpl implements PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<PageBlobsPutPageHeaders, Void> object
      */
-    public Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPageWithRestResponseAsync(String url, PageWriteType pageWrite, byte[] optionalbody, Integer timeout, String range, String leaseId, Integer ifSequenceNumberLessThanOrEqualTo, Integer ifSequenceNumberLessThan, Integer ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPageWithRestResponseAsync(String url, PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Integer ifSequenceNumberLessThanOrEqualTo, Integer ifSequenceNumberLessThan, Integer ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
@@ -302,11 +298,10 @@ public class PageBlobsImpl implements PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<PageBlobsPutPageHeaders, Void> object
      */
-    public Completable putPageAsync(String url, PageWriteType pageWrite, byte[] optionalbody, Integer timeout, String range, String leaseId, Integer ifSequenceNumberLessThanOrEqualTo, Integer ifSequenceNumberLessThan, Integer ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Completable putPageAsync(String url, PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Integer ifSequenceNumberLessThanOrEqualTo, Integer ifSequenceNumberLessThan, Integer ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         return putPageWithRestResponseAsync(url, pageWrite, optionalbody, timeout, range, leaseId, ifSequenceNumberLessThanOrEqualTo, ifSequenceNumberLessThan, ifSequenceNumberEqualTo, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
-
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
@@ -500,7 +495,6 @@ public class PageBlobsImpl implements PageBlobs {
             });
     }
 
-
     /**
      * The Incremental Copy Blob operation copies a snapshot of the source page blob to a destination page blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual. This API is supported since REST version 2016-05-31.
      *
@@ -675,6 +669,4 @@ public class PageBlobsImpl implements PageBlobs {
         return incrementalCopyWithRestResponseAsync(url, copySource, timeout, metadata, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
-
-
 }

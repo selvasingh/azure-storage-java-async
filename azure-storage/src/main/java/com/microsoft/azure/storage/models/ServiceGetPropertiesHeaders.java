@@ -72,5 +72,4 @@ public class ServiceGetPropertiesHeaders {
         this.version = version;
         return this;
     }
-
 }

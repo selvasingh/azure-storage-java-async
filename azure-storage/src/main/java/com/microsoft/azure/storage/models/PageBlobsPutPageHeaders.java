@@ -253,5 +253,4 @@ public class PageBlobsPutPageHeaders {
         this.isServerEncrypted = isServerEncrypted;
         return this;
     }
-
 }

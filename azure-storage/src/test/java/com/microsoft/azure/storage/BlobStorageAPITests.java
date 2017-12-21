@@ -7,6 +7,7 @@ import com.microsoft.rest.v2.http.*;
 import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
+import com.microsoft.rest.v2.util.FlowableUtil;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import org.joda.time.DateTime;
@@ -16,6 +17,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import io.reactivex.Single;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -226,7 +228,7 @@ public class BlobStorageAPITests {
         cu.createAsync(null, null, PublicAccessType.BLOB).blockingGet();
         BlockBlobURL bu = cu.createBlockBlobURL("javatestblob");
         try {
-            bu.putBlobAsync(new byte[]{0, 0, 0},
+            bu.putBlobAsync(AsyncInputStream.create(new byte[]{0, 0, 0}),
                     new BlobHttpHeaders(null, null, null, null, null, null),
                     new Metadata(),
                     new BlobAccessConditions(new HttpAccessConditions(null, null, new ETag(""), new ETag("")),
@@ -236,9 +238,8 @@ public class BlobStorageAPITests {
             List<Container> containerList = resp.body().containers();
             Assert.assertEquals(1, containerList.size());
             Assert.assertEquals(containerList.get(0).name(), containerName);
-            InputStream data = bu.getBlobAsync(new BlobRange(new Long(0), new Long(3)), null, false, null).blockingGet().body();
-            byte[] dataByte = new byte[3];
-            data.read(dataByte, 0, 3);
+            AsyncInputStream data = bu.getBlobAsync(new BlobRange(new Long(0), new Long(3)), null, false, null).blockingGet().body();
+            byte[] dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
             BlobHttpHeaders headers = new BlobHttpHeaders("myControl", "myDisposition",
                     "myContentEncoding", "myLanguage", null, "myType");
@@ -267,7 +268,7 @@ public class BlobStorageAPITests {
             Assert.assertEquals(headers.getContentType(), receivedHeaders.contentType());
 
             BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
-            bu3.putBlockAsync("0000", new byte[]{0,0,0}, null).blockingGet();
+            bu3.putBlockAsync("0000", AsyncInputStream.create(new byte[]{0,0,0}), null).blockingGet();
             BlockList blockList = bu3.getBlockListAsync(BlockListType.ALL, null).blockingGet().body();
             Assert.assertEquals("0000", blockList.uncommittedBlocks().get(0).name());
             List<Blob> blobs = cu.listBlobsAsync(null,
@@ -278,7 +279,7 @@ public class BlobStorageAPITests {
             blockListNames.add("0000");
             bu3.putBlockListAsync(blockListNames, null, null, null).blockingGet();
             data = bu3.getBlobAsync(new BlobRange(new Long(0), new Long(3)), null, false, null).blockingGet().body();
-            data.read(dataByte, 0, 3);
+            dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0,0,0});
             // TODO: SAS generation
         }

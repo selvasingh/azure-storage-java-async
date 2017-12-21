@@ -19,6 +19,7 @@ import com.microsoft.azure.storage.models.AppendBlobsAppendBlockHeaders;
 import com.microsoft.azure.storage.models.BlobType;
 import com.microsoft.azure.storage.models.BlobsPutHeaders;
 import com.microsoft.rest.v2.RestResponse;
+import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
 
@@ -111,7 +112,7 @@ public final class AppendBlobURL extends BlobURL {
      * @return the {@link Single&lt;RestResponse&lt;AppendBlobsAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<AppendBlobsAppendBlockHeaders, Void>> appendBlockAsync(
-            byte[] data, BlobAccessConditions blobAccessConditions) {
+            AsyncInputStream data, BlobAccessConditions blobAccessConditions) {
         if(blobAccessConditions == null) {
             blobAccessConditions = BlobAccessConditions.getDefault();
         }

@@ -160,5 +160,4 @@ public class CorsRule {
         this.maxAgeInSeconds = maxAgeInSeconds;
         return this;
     }
-
 }

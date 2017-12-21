@@ -18,6 +18,7 @@ import com.microsoft.azure.storage.implementation.StorageClientImpl;
 import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.ServiceCallback;
+import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
 
@@ -165,7 +166,7 @@ public class BlobURL extends StorageURL {
      * @return
      *       {@link Single<InputStream>} object representing the stream the blob is downloaded to.
      */
-    public Single<RestResponse<BlobsGetHeaders, InputStream>> getBlobAsync(BlobRange range, BlobAccessConditions blobAccessConditions,
+    public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getBlobAsync(BlobRange range, BlobAccessConditions blobAccessConditions,
                                             boolean rangeGetContentMD5, Integer timeout) {
         if (blobAccessConditions == null) {
             blobAccessConditions = BlobAccessConditions.getDefault();

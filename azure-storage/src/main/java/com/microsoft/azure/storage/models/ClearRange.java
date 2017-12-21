@@ -69,5 +69,4 @@ public class ClearRange {
         this.end = end;
         return this;
     }
-
 }

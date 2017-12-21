@@ -45,14 +45,13 @@ import com.microsoft.rest.v2.annotations.HostParam;
 import com.microsoft.rest.v2.annotations.PathParam;
 import com.microsoft.rest.v2.annotations.PUT;
 import com.microsoft.rest.v2.annotations.QueryParam;
-import com.microsoft.rest.v2.annotations.UnexpectedResponseExceptionType;
+import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpClient;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
-import java.io.InputStream;
 import java.io.IOException;
 import org.joda.time.DateTime;
 
@@ -87,62 +86,49 @@ public class BlobsImpl implements Blobs {
      */
     @Host("{url}")
     interface BlobsService {
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs get" })
         @GET("{containerName}/{blob}")
-        // @Streaming not supported by RestProxy
         @ExpectedResponses({200, 206})
-        Single<RestResponse<BlobsGetHeaders, InputStream>> get(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-range-get-content-md5") Boolean rangeGetContentMD5, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
+        Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> get(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-range-get-content-md5") Boolean rangeGetContentMD5, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs getProperties" })
         @HEAD("{containerName}/{blob}")
         @ExpectedResponses({200})
         Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getProperties(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs delete" })
         @DELETE("{containerName}/{blob}")
         @ExpectedResponses({202})
         Single<RestResponse<BlobsDeleteHeaders, Void>> delete(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-delete-snapshots") DeleteSnapshotsOptionType deleteSnapshots, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs put" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
-        Single<RestResponse<BlobsPutHeaders, Void>> put(@HostParam("url") String url, @BodyParam("application/xml; charset=utf-8") byte[] optionalbody, @QueryParam("timeout") Integer timeout, @HeaderParam("Cache-Control") String cacheControl, @HeaderParam("x-ms-blob-content-type") String blobContentType, @HeaderParam("x-ms-blob-content-encoding") String blobContentEncoding, @HeaderParam("x-ms-blob-content-language") String blobContentLanguage, @HeaderParam("x-ms-blob-content-md5") String blobContentMD5, @HeaderParam("x-ms-blob-cache-control") String blobCacheControl, @HeaderParam("x-ms-blob-type") BlobType blobType, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-blob-content-disposition") String blobContentDisposition, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-blob-content-length") Long blobContentLength, @HeaderParam("x-ms-blob-sequence-number") Long blobSequenceNumber, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
+        Single<RestResponse<BlobsPutHeaders, Void>> put(@HostParam("url") String url, @BodyParam("application/xml; charset=utf-8") AsyncInputStream optionalbody, @QueryParam("timeout") Integer timeout, @HeaderParam("Cache-Control") String cacheControl, @HeaderParam("x-ms-blob-content-type") String blobContentType, @HeaderParam("x-ms-blob-content-encoding") String blobContentEncoding, @HeaderParam("x-ms-blob-content-language") String blobContentLanguage, @HeaderParam("x-ms-blob-content-md5") String blobContentMD5, @HeaderParam("x-ms-blob-cache-control") String blobCacheControl, @HeaderParam("x-ms-blob-type") BlobType blobType, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-blob-content-disposition") String blobContentDisposition, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-blob-content-length") Long blobContentLength, @HeaderParam("x-ms-blob-sequence-number") Long blobSequenceNumber, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs setProperties" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({200})
         Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setProperties(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-blob-cache-control") String blobCacheControl, @HeaderParam("x-ms-blob-content-type") String blobContentType, @HeaderParam("x-ms-blob-content-md5") String blobContentMD5, @HeaderParam("x-ms-blob-content-encoding") String blobContentEncoding, @HeaderParam("x-ms-blob-content-language") String blobContentLanguage, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-blob-content-disposition") String blobContentDisposition, @HeaderParam("x-ms-blob-content-length") Long blobContentLength, @HeaderParam("x-ms-sequence-number-action") SequenceNumberActionType sequenceNumberAction, @HeaderParam("x-ms-blob-sequence-number") Long blobSequenceNumber, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs getMetadata" })
         @GET("{containerName}/{blob}")
         @ExpectedResponses({200})
         Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadata(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs setMetadata" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({200})
         Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadata(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs lease" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({200, 201, 202})
         Single<RestResponse<BlobsLeaseHeaders, Void>> lease(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-lease-action") LeaseActionType action, @HeaderParam("x-ms-lease-break-period") Integer breakPeriod, @HeaderParam("x-ms-lease-duration") Integer duration, @HeaderParam("x-ms-proposed-lease-id") String proposedLeaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs takeSnapshot" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
         Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshot(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs copy" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({202})
         Single<RestResponse<BlobsCopyHeaders, Void>> copy(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("x-ms-source-if-modified-since") DateTimeRfc1123 sourceIfModifiedSince, @HeaderParam("x-ms-source-if-unmodified-since") DateTimeRfc1123 sourceIfUnmodifiedSince, @HeaderParam("x-ms-source-if-match") String sourceIfMatches, @HeaderParam("x-ms-source-if-none-match") String sourceIfNoneMatch, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-copy-source") String copySource, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-source-lease-id") String sourceLeaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Blobs abortCopy" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({204})
         Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopy(@HostParam("url") String url, @QueryParam("copyid") String copyId, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-copy-action") String copyActionAbortConstant, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
-
     }
 
     /**
@@ -152,9 +138,9 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
-     * @return the InputStream object if successful.
+     * @return the AsyncInputStream object if successful.
      */
-    public InputStream get(String url) {
+    public AsyncInputStream get(String url) {
         return getAsync(url).blockingGet();
     }
 
@@ -166,7 +152,7 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<InputStream> getAsync(String url, ServiceCallback<InputStream> serviceCallback) {
+    public ServiceFuture<AsyncInputStream> getAsync(String url, ServiceCallback<AsyncInputStream> serviceCallback) {
         return ServiceFuture.fromBody(getAsync(url), serviceCallback);
     }
 
@@ -175,9 +161,9 @@ public class BlobsImpl implements Blobs {
      *
      * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, InputStream> object
+     * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, AsyncInputStream> object
      */
-    public Single<RestResponse<BlobsGetHeaders, InputStream>> getWithRestResponseAsync(String url) {
+    public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
@@ -210,12 +196,12 @@ public class BlobsImpl implements Blobs {
      *
      * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, InputStream> object
+     * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, AsyncInputStream> object
      */
-    public Maybe<InputStream> getAsync(String url) {
+    public Maybe<AsyncInputStream> getAsync(String url) {
         return getWithRestResponseAsync(url)
-            .flatMapMaybe(new Function<RestResponse<BlobsGetHeaders, InputStream>, Maybe<InputStream>>() {
-                public Maybe<InputStream> apply(RestResponse<BlobsGetHeaders, InputStream> restResponse) {
+            .flatMapMaybe(new Function<RestResponse<BlobsGetHeaders, AsyncInputStream>, Maybe<AsyncInputStream>>() {
+                public Maybe<AsyncInputStream> apply(RestResponse<BlobsGetHeaders, AsyncInputStream> restResponse) {
                     if (restResponse.body() == null) {
                         return Maybe.empty();
                     } else {
@@ -242,9 +228,9 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
-     * @return the InputStream object if successful.
+     * @return the AsyncInputStream object if successful.
      */
-    public InputStream get(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public AsyncInputStream get(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         return getAsync(url, snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingGet();
     }
 
@@ -266,7 +252,7 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<InputStream> getAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, ServiceCallback<InputStream> serviceCallback) {
+    public ServiceFuture<AsyncInputStream> getAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, ServiceCallback<AsyncInputStream> serviceCallback) {
         return ServiceFuture.fromBody(getAsync(url, snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
@@ -285,9 +271,9 @@ public class BlobsImpl implements Blobs {
      * @param ifNoneMatch Specify an ETag value to operate only on blobs without a matching value.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, InputStream> object
+     * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, AsyncInputStream> object
      */
-    public Single<RestResponse<BlobsGetHeaders, InputStream>> getWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
@@ -320,12 +306,12 @@ public class BlobsImpl implements Blobs {
      * @param ifNoneMatch Specify an ETag value to operate only on blobs without a matching value.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, InputStream> object
+     * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, AsyncInputStream> object
      */
-    public Maybe<InputStream> getAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Maybe<AsyncInputStream> getAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         return getWithRestResponseAsync(url, snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
-            .flatMapMaybe(new Function<RestResponse<BlobsGetHeaders, InputStream>, Maybe<InputStream>>() {
-                public Maybe<InputStream> apply(RestResponse<BlobsGetHeaders, InputStream> restResponse) {
+            .flatMapMaybe(new Function<RestResponse<BlobsGetHeaders, AsyncInputStream>, Maybe<AsyncInputStream>>() {
+                public Maybe<AsyncInputStream> apply(RestResponse<BlobsGetHeaders, AsyncInputStream> restResponse) {
                     if (restResponse.body() == null) {
                         return Maybe.empty();
                     } else {
@@ -334,7 +320,6 @@ public class BlobsImpl implements Blobs {
                 }
             });
     }
-
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
@@ -499,7 +484,6 @@ public class BlobsImpl implements Blobs {
         return getPropertiesWithRestResponseAsync(url, snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
-
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
@@ -670,7 +654,6 @@ public class BlobsImpl implements Blobs {
             .toCompletable();
     }
 
-
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
@@ -716,7 +699,7 @@ public class BlobsImpl implements Blobs {
         if (this.client.version() == null) {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
-        final byte[] optionalbody = new byte[0];
+        final AsyncInputStream optionalbody = null;
         final Integer timeout = null;
         final String cacheControl = null;
         final String blobContentType = null;
@@ -786,7 +769,7 @@ public class BlobsImpl implements Blobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the void object if successful.
      */
-    public void put(String url, BlobType blobType, byte[] optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
+    public void put(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
         putAsync(url, blobType, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId).blockingAwait();
     }
 
@@ -817,7 +800,7 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> putAsync(String url, BlobType blobType, byte[] optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> putAsync(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(putAsync(url, blobType, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId), serviceCallback);
     }
 
@@ -847,7 +830,7 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsPutHeaders, Void> object
      */
-    public Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(String url, BlobType blobType, byte[] optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
+    public Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
@@ -894,11 +877,10 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsPutHeaders, Void> object
      */
-    public Completable putAsync(String url, BlobType blobType, byte[] optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
+    public Completable putAsync(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
         return putWithRestResponseAsync(url, blobType, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId)
             .toCompletable();
     }
-
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
@@ -1106,7 +1088,6 @@ public class BlobsImpl implements Blobs {
             .toCompletable();
     }
 
-
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
@@ -1273,7 +1254,6 @@ public class BlobsImpl implements Blobs {
             .toCompletable();
     }
 
-
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
@@ -1439,7 +1419,6 @@ public class BlobsImpl implements Blobs {
         return setMetadataWithRestResponseAsync(url, timeout, metadata, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
-
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
@@ -1631,7 +1610,6 @@ public class BlobsImpl implements Blobs {
             .toCompletable();
     }
 
-
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
@@ -1797,7 +1775,6 @@ public class BlobsImpl implements Blobs {
         return takeSnapshotWithRestResponseAsync(url, timeout, metadata, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, requestId)
             .toCompletable();
     }
-
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
@@ -2018,7 +1995,6 @@ public class BlobsImpl implements Blobs {
             .toCompletable();
     }
 
-
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
@@ -2159,6 +2135,4 @@ public class BlobsImpl implements Blobs {
         return abortCopyWithRestResponseAsync(url, copyId, timeout, leaseId, requestId)
             .toCompletable();
     }
-
-
 }

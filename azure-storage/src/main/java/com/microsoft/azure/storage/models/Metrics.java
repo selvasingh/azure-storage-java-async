@@ -122,5 +122,4 @@ public class Metrics {
         this.retentionPolicy = retentionPolicy;
         return this;
     }
-
 }

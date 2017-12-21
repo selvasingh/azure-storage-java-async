@@ -36,7 +36,6 @@ import com.microsoft.rest.v2.annotations.HostParam;
 import com.microsoft.rest.v2.annotations.PathParam;
 import com.microsoft.rest.v2.annotations.PUT;
 import com.microsoft.rest.v2.annotations.QueryParam;
-import com.microsoft.rest.v2.annotations.UnexpectedResponseExceptionType;
 import com.microsoft.rest.v2.http.HttpClient;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
@@ -76,26 +75,21 @@ public class ServicesImpl implements Services {
      */
     @Host("{url}")
     interface ServicesService {
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Services setProperties" })
         @PUT("")
         @ExpectedResponses({202})
         Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setProperties(@HostParam("url") String url, @BodyParam("application/xml; charset=utf-8") StorageServiceProperties storageServiceProperties, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Services getProperties" })
         @GET("")
         @ExpectedResponses({200})
         Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getProperties(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Services getStats" })
         @GET("")
         @ExpectedResponses({200})
         Single<RestResponse<ServiceGetStatsHeaders, StorageServiceStats>> getStats(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Services listContainers" })
         @GET("")
         @ExpectedResponses({200})
         Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainers(@HostParam("url") String url, @QueryParam("prefix") String prefix, @QueryParam("marker") String marker, @QueryParam("maxresults") Integer maxresults, @QueryParam("include") ListContainersIncludeType include, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
-
     }
 
     /**
@@ -236,7 +230,6 @@ public class ServicesImpl implements Services {
             .toCompletable();
     }
 
-
     /**
      * gets the properties of a storage account's Blob service, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
      *
@@ -375,7 +368,6 @@ public class ServicesImpl implements Services {
             });
     }
 
-
     /**
      * Retrieves statistics related to replication for the Blob service. It is only available on the secondary location endpoint when read-access geo-redundant replication is enabled for the storage account.
      *
@@ -513,7 +505,6 @@ public class ServicesImpl implements Services {
                 }
             });
     }
-
 
     /**
      * The List Containers operation returns a list of the containers under the specified account.
@@ -670,6 +661,4 @@ public class ServicesImpl implements Services {
                 }
             });
     }
-
-
 }

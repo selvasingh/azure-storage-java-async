@@ -69,5 +69,4 @@ public class SignedIdentifier {
         this.accessPolicy = accessPolicy;
         return this;
     }
-
 }
