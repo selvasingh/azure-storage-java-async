@@ -7,7 +7,7 @@ java: true
 enable-xml: true
 namespace: com.microsoft.azure.storage
 license-header: MICROSOFT_MIT_NO_VERSION
-output-folder: ../
+output-folder: ../azure-storage
 input-file:
 - ./blob-storage.yaml
 ```
