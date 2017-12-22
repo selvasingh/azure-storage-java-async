@@ -12,25 +12,29 @@ import java.util.concurrent.TimeUnit;
 
 public class CancellationSample {
     public static void main(String[] args) throws Exception {
-        // Create 100 MB of random data to upload.
-        byte[] data = new byte[1024 * 1024 * 100];
+        // Some data to upload.
+        byte[] data = new byte[1024 * 1024 * 10];
         new Random().nextBytes(data);
 
+        // Convert the byte[] to the common interface for streaming transfers.
         AsyncInputStream stream = AsyncInputStream.create(data);
+
+        // Set up the HTTP pipeline.
         HttpPipeline pipeline = HttpPipeline.build(new BasicSample.AddDatePolicyFactory());
 
+        // Represents the blob we're going to upload.
         final BlockBlobURL blobURL = new BlockBlobURL("http://accountname.blob.core.windows.net/testContainer/testblob", pipeline);
 
         System.out.println("Starting an upload, cancelling using Rx.");
         // You can cancel a stream by applying .takeUntil with another stream which indicates when to cancel.
         // The stream returned by .takeUntil() will emit CancellationException to notify the consumer that a cancellation occurred.
         try {
-            blobURL.putBlobAsync(AsyncInputStream.create(data), null, null, null)
+            blobURL.putBlobAsync(stream, null, null, null)
                     .doOnDispose(new Action() {
                         @Override
                         public void run() throws Exception {
-                            // This handler shows when the stream gets disposed.
-                            System.err.println("Canceling upload using Rx");
+                            // This handler runs when the stream gets disposed.
+                            System.err.println("Cancelled upload using Rx");
                         }
                     })
                     .takeUntil(Completable.complete().delay(2, TimeUnit.SECONDS))
@@ -45,7 +49,7 @@ public class CancellationSample {
                         .doOnDispose(new Action() {
                             @Override
                             public void run() throws Exception {
-                                System.err.println("Canceling upload using Disposable.dispose()");
+                                System.err.println("Cancelled upload using Disposable.dispose()");
                             }
                         })
                         .subscribe();
