@@ -54,15 +54,7 @@ public class BlobStorageAPITests {
         SharedKeyCredentials creds = new SharedKeyCredentials(System.getenv().get("ACCOUNT_NAME"),
                 System.getenv().get("ACCOUNT_KEY"));
 
-        // Pipeline options allow for customization of the behavior of the HttpPipeline. Here we show adding a logger
-        // and specifying options for logging, enabling telemetry, and enabling Fiddler. Currently, the pipeline
-        // requires non-null values for all the options, though this will be changing. For now, it is best to drop in
-        // these values as they are innocuous and do not affect the behavior of the request at all; they merely
-        // supply additional information.
-
-        // Uncomment these lines to enable interaction with Fiddler.
-        /*HttpClient.Configuration configuration = new HttpClient.Configuration(
-                new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));*/
+        // Currently only the default PipelineOptions are supported.
         HttpPipeline pipeline = StorageURL.CreatePipeline(creds, new PipelineOptions());
 
         // Create a reference to the service.
@@ -87,10 +79,15 @@ public class BlobStorageAPITests {
             cu.createAsync(null, PublicAccessType.BLOB).blockingGet();
 
             // List the containers in the account.
+            List<Container> containerList = new ArrayList<>();
             String marker = null;
-            RestResponse<ServiceListContainersHeaders, ListContainersResponse> resp = su.listConatinersAsync(
-                    "java", null, null,null).blockingGet();
-            List<Container> containerList = resp.body().containers();
+            do {
+                RestResponse<ServiceListContainersHeaders, ListContainersResponse> resp = su.listConatinersAsync(
+                        "java", marker, null, null).blockingGet();
+                containerList.addAll(resp.body().containers());
+                marker = resp.body().marker();
+            } while(marker != null);
+
             // NOTE: Assert statements are only for test purposes and should not be used in production.
             Assert.assertEquals(1, containerList.size());
             Assert.assertEquals(containerList.get(0).name(), containerName);
@@ -149,7 +146,7 @@ public class BlobStorageAPITests {
             BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
             ArrayList<String> blockIDs = new ArrayList<>();
             blockIDs.add(Base64.encode(new Byte[]{0}));
-            bu3.putBlockAsync("0000", AsyncInputStream.create(new byte[]{0,0,0}), null).blockingGet();
+            bu3.putBlockAsync(blockIDs.get(0), AsyncInputStream.create(new byte[]{0,0,0}), null).blockingGet();
 
             // Get the list of blocks on this blob. For demonstration purposes.
             BlockList blockList = bu3.getBlockListAsync(BlockListType.ALL, null)
@@ -205,7 +202,7 @@ public class BlobStorageAPITests {
 
             // Download the blob using the SAS. To perform other operations, ensure the appropriate permissions are
             // specified above.
-            sasBlob.getBlobAsync(new BlobRange(0L, 3L), null, false).blockingGet().body();
+            data = sasBlob.getBlobAsync(new BlobRange(0L, 3L), null, false).blockingGet().body();
             dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
