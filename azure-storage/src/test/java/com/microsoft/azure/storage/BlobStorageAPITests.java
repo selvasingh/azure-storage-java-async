@@ -69,30 +69,9 @@ public class BlobStorageAPITests {
         // supply additional information.
 
         // Uncomment these lines to enable interaction with Fiddler.
-        HttpClient.Configuration configuration = new HttpClient.Configuration(
-                new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));
-        PipelineOptions pop = new PipelineOptions();
-        pop.telemetryOptions = new TelemetryOptions();
-        pop.client = HttpClient.createDefault(configuration); // Pass in configuration for Fiddler support.
-        pop.logger = new HttpPipelineLogger() {
-            @Override
-            public HttpPipelineLogLevel minimumLogLevel() {
-                return HttpPipelineLogLevel.INFO;
-            }
-
-            @Override
-            public void log(HttpPipelineLogLevel logLevel, String s, Object... objects) {
-                if (logLevel == HttpPipelineLogLevel.INFO) {
-                    Logger.getGlobal().info(String.format(s, objects));
-                } else if (logLevel == HttpPipelineLogLevel.WARNING) {
-                    Logger.getGlobal().warning(String.format(s, objects));
-                } else if (logLevel == HttpPipelineLogLevel.ERROR) {
-                    Logger.getGlobal().severe(String.format(s, objects));
-                }
-            }
-        };
-        pop.loggingOptions = new LoggingOptions(Level.INFO);
-        HttpPipeline pipeline = StorageURL.CreatePipeline(creds, pop);
+        /*HttpClient.Configuration configuration = new HttpClient.Configuration(
+                new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));*/
+        HttpPipeline pipeline = StorageURL.CreatePipeline(creds, new PipelineOptions());
 
         // Create a reference to the service.
         ServiceURL su = new ServiceURL("http://" + System.getenv().get("ACCOUNT_NAME") + ".blob.core.windows.net", pipeline);
@@ -227,7 +206,7 @@ public class BlobStorageAPITests {
             parts.setSasQueryParameters(sas.GenerateSASQueryParameters(creds));
 
             // Using a SAS requires AnonymousCredentials on the pipeline.
-            pipeline = StorageURL.CreatePipeline(new AnonymousCredentials(), pop);
+            pipeline = StorageURL.CreatePipeline(new AnonymousCredentials(), new PipelineOptions());
 
             // Call toURL on the parts to get a string representation of the URL. This, along with the pipeline,
             // is used to create a new BlockBlobURL object.

@@ -1,7 +1,11 @@
 package com.microsoft.azure.storage.blob;
 
 import com.microsoft.rest.v2.http.HttpClient;
+import com.microsoft.rest.v2.http.HttpPipelineLogLevel;
 import com.microsoft.rest.v2.http.HttpPipelineLogger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class PipelineOptions {
 
@@ -18,4 +22,27 @@ public final class PipelineOptions {
 
     // Telemetry configures the built-in telemetry policy behavior.
     public TelemetryOptions telemetryOptions;
+
+    public PipelineOptions() {
+        this.telemetryOptions = new TelemetryOptions();
+        this.client = HttpClient.createDefault(); // Pass in configuration for Fiddler support.
+        this.logger = new HttpPipelineLogger() {
+            @Override
+            public HttpPipelineLogLevel minimumLogLevel() {
+                return HttpPipelineLogLevel.INFO;
+            }
+
+            @Override
+            public void log(HttpPipelineLogLevel logLevel, String s, Object... objects) {
+                if (logLevel == HttpPipelineLogLevel.INFO) {
+                    Logger.getGlobal().info(String.format(s, objects));
+                } else if (logLevel == HttpPipelineLogLevel.WARNING) {
+                    Logger.getGlobal().warning(String.format(s, objects));
+                } else if (logLevel == HttpPipelineLogLevel.ERROR) {
+                    Logger.getGlobal().severe(String.format(s, objects));
+                }
+            }
+        };
+        this.loggingOptions = new LoggingOptions(Level.INFO);
+    }
 }
