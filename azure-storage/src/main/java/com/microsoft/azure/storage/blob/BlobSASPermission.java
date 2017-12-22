@@ -19,6 +19,7 @@ import java.util.EnumSet;
 /**
  * Specifies the set of possible permissions for a blob shared access policy.
  */
+//TODO: Can only use container SAS Permissions?
 public enum BlobSASPermission {
     /**
      * Specifies Read access granted.
