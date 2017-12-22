@@ -87,9 +87,9 @@ public final class ContainerURL extends StorageURL {
      * @return
      */
     public Single<RestResponse<ContainerCreateHeaders, Void>> createAsync(
-            Integer timeout, Metadata metadata, PublicAccessType access) {
+            Metadata metadata, PublicAccessType access) {
         return this.storageClient.containers().createWithRestResponseAsync(
-                super.url, timeout, null, access, null);
+                super.url, null, null, access, null);
     }
 
     /**
@@ -98,12 +98,12 @@ public final class ContainerURL extends StorageURL {
      * @return
      */
     public Single<RestResponse<ContainerDeleteHeaders, Void>> deleteAsync(
-            Integer timeout, ContainerAccessConditions containerAccessConditions) {
+            ContainerAccessConditions containerAccessConditions) {
         if (containerAccessConditions == null) {
             containerAccessConditions = ContainerAccessConditions.getDefault();
         }
 
-        return this.storageClient.containers().deleteWithRestResponseAsync(super.url, timeout,
+        return this.storageClient.containers().deleteWithRestResponseAsync(super.url, null,
                 containerAccessConditions.getLeaseID().toString(),
                 containerAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 containerAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -118,18 +118,18 @@ public final class ContainerURL extends StorageURL {
      * @return
      */
     public Single<RestResponse<ContainerGetPropertiesHeaders, Void>> getPropertiesAndMetadataAsync(
-            Integer timeout, LeaseAccessConditions leaseAccessConditions) {
+            LeaseAccessConditions leaseAccessConditions) {
         if (leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
 
-        return this.storageClient.containers().getPropertiesWithRestResponseAsync(super.url, timeout,
+        return this.storageClient.containers().getPropertiesWithRestResponseAsync(super.url, null,
                 leaseAccessConditions.toString(), null);
     }
 
     
     public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadataAsync(
-            String metadata, Integer timeout, LeaseAccessConditions leaseAccessConditions,
+            String metadata, LeaseAccessConditions leaseAccessConditions,
             HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.getDefault();
@@ -143,18 +143,18 @@ public final class ContainerURL extends StorageURL {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
 
-        return this.storageClient.containers().setMetadataWithRestResponseAsync(url, timeout,
+        return this.storageClient.containers().setMetadataWithRestResponseAsync(url, null,
                 leaseAccessConditions.toString(), metadata, httpAccessConditions.getIfModifiedSince(),null);
     }
 
-    public Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getPermissionsAsync(Integer timeout,
-                                                                        LeaseAccessConditions leaseAccessConditions) {
+    public Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getPermissionsAsync(
+            LeaseAccessConditions leaseAccessConditions) {
         if (leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
 
         return this.storageClient.containers().getAclWithRestResponseAsync(
-                super.url, timeout, leaseAccessConditions.toString(), null);
+                super.url, null, leaseAccessConditions.toString(), null);
     }
 
     public Single<RestResponse<ContainerSetAclHeaders, Void>> setPermissionsAsync(

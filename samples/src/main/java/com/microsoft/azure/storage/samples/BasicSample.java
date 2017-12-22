@@ -105,7 +105,7 @@ public class BasicSample {
         // Convert the data to the common interface used for streaming transfers.
         final AsyncInputStream asyncStream = AsyncInputStream.create(data);
         // Create a container.
-        containerURL.createAsync(null, null, null)
+        containerURL.createAsync(null, null)
                 .flatMap(new Function<RestResponse<ContainerCreateHeaders, Void>, Single<RestResponse<BlobsPutHeaders, Void>>>() {
                     @Override
                     public Single<RestResponse<BlobsPutHeaders, Void>> apply(RestResponse<ContainerCreateHeaders, Void> response) throws Exception {
@@ -120,7 +120,7 @@ public class BasicSample {
                 // This method is called after the blob is uploaded successfully.
 
                 // Now let's download the blob.
-                return blobURL.getBlobAsync(new BlobRange(0L, new Long(data.length)), null, false, null);
+                return blobURL.getBlobAsync(new BlobRange(0L, new Long(data.length)), null, false);
             }
         }).subscribe(new SingleObserver<RestResponse<BlobsGetHeaders, AsyncInputStream>>() {
             @Override

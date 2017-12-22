@@ -50,11 +50,10 @@ public final class ServiceURL extends StorageURL {
  *          than 5000, the server will return up to 5,000 items.  Must be at least 1.
      * @param include
      *      A {@code String} representing which details to include when listing the containers in this storage account.
-     * @param timeout
      * @return
      */
-    public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainersAsync(
-            String prefix, String marker, Integer maxresults, ListContainersIncludeType include, Integer timeout) {
+    public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listConatinersAsync(
+            String prefix, String marker, Integer maxresults, ListContainersIncludeType include) {
         return this.storageClient.services().listContainersWithRestResponseAsync(this.url, prefix, marker,
                 maxresults, include, null, null);
     }

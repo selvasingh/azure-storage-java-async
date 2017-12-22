@@ -73,7 +73,7 @@ public class DownloadCancellationSample {
 
         // Canceling file downloads looks a little different,
         // because the Single<RestResponse<Headers, AsyncInputStream>> has already completed at the time you're doing a download.
-        RestResponse<BlobsGetHeaders, AsyncInputStream> response = blobURL.getBlobAsync(new BlobRange(0L, 1024L*1024L), null, false, null).blockingGet();
+        RestResponse<BlobsGetHeaders, AsyncInputStream> response = blobURL.getBlobAsync(new BlobRange(0L, 1024L*1024L), null, false).blockingGet();
 
         // Obtain a Disposable for the response content by subscribing to it.
         Disposable disposable = response.body().content().doOnCancel(new Action() {
@@ -88,7 +88,7 @@ public class DownloadCancellationSample {
 
         System.out.println("Starting a download, cancelling by throwing an exception in stream consumer.");
         // You can also cancel a download by subscribing to the response content and throwing an exception in the consumer.
-        blobURL.getBlobAsync(new BlobRange(0L, 1024L*1024L), null, false, null).flatMapPublisher(new Function<RestResponse<BlobsGetHeaders, AsyncInputStream>, Publisher<byte[]>>() {
+        blobURL.getBlobAsync(new BlobRange(0L, 1024L*1024L), null, false).flatMapPublisher(new Function<RestResponse<BlobsGetHeaders, AsyncInputStream>, Publisher<byte[]>>() {
             @Override
             public Publisher<byte[]> apply(RestResponse<BlobsGetHeaders, AsyncInputStream> response) throws Exception {
                 return response.body().content();
