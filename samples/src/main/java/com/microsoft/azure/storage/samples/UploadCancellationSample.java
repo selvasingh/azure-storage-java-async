@@ -21,12 +21,11 @@ import java.security.InvalidKeyException;
 import java.util.Random;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UploadCancellationSample {
-    static HttpPipeline getPipeline() throws UnsupportedEncodingException, InvalidKeyException {
+    static HttpPipeline getPipeline(String accountName, String accountKey) throws UnsupportedEncodingException, InvalidKeyException {
         HttpPipelineLogger logger = new HttpPipelineLogger() {
             @Override
             public HttpPipelineLogLevel minimumLogLevel() {
@@ -46,7 +45,7 @@ public class UploadCancellationSample {
         };
         LoggingOptions loggingOptions = new LoggingOptions(Level.INFO);
 
-        SharedKeyCredentials creds = new SharedKeyCredentials("account", "key");
+        SharedKeyCredentials creds = new SharedKeyCredentials(accountName, accountKey);
         TelemetryOptions telemetryOptions = new TelemetryOptions();
         PipelineOptions pop = new PipelineOptions();
         pop.telemetryOptions = telemetryOptions;
@@ -57,11 +56,14 @@ public class UploadCancellationSample {
     }
 
     public static void main(String[] args) throws Exception {
-        HttpPipeline pipeline = getPipeline();
+        String accountName = System.getenv("AZURE_STORAGE_ACCOUNT_NAME");
+        String accountKey = System.getenv("AZURE_STORAGE_ACCOUNT_KEY");
+
+        HttpPipeline pipeline = getPipeline(accountName, accountKey);
 
         // Get the URL of the blob we're going to upload.
-        final ServiceURL serviceURL = new ServiceURL("http://accountname.blob.core.windows.net", pipeline);
-        final BlockBlobURL blobURL = serviceURL.createContainerURL("mycontainer").createBlockBlobURL("blobname");
+        final ServiceURL serviceURL = new ServiceURL("http://" + accountName + ".blob.core.windows.net", pipeline);
+        final BlockBlobURL blobURL = serviceURL.createContainerURL("javasdktest").createBlockBlobURL("blobname");
 
         // Some data to upload.
         byte[] data = new byte[1024 * 1024 * 10];
@@ -69,37 +71,6 @@ public class UploadCancellationSample {
 
         // Convert the byte[] to the common interface for streaming transfers.
         AsyncInputStream stream = AsyncInputStream.create(data);
-
-        System.out.println("Starting an upload, cancelling using Rx.");
-        try {
-            blobURL.putBlobAsync(stream, null, null, null)
-                    .doOnDispose(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            System.err.println("Cancelled upload using .timeout()");
-                        }
-                    })
-                    .timeout(1, TimeUnit.SECONDS)
-                    .blockingGet();
-        } catch (RuntimeException ex) {
-            assert ex.getCause() instanceof TimeoutException;
-        }
-
-        // You can cancel a stream by applying .takeUntil with another stream which indicates when to cancel.
-        // The stream returned by .takeUntil() will emit CancellationException to notify the consumer that a cancellation occurred.
-        try {
-            blobURL.putBlobAsync(stream, null, null, null)
-                    .doOnDispose(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            // This handler runs when the stream gets disposed.
-                            System.err.println("Cancelled upload using .takeUntil()");
-                        }
-                    })
-                    .takeUntil(Completable.complete().delay(2, TimeUnit.SECONDS))
-                    .blockingGet();
-        } catch (CancellationException ignored) {
-        }
 
         System.out.println("Starting an upload, canceling with Disposable.dispose().");
         // Disposable allows us to cancel the operation initiated by subscribe().
@@ -117,6 +88,35 @@ public class UploadCancellationSample {
 
         // dispose() will cause resources associated with the .subscribe() to be freed.
         disposable.dispose();
+
+        Thread.sleep(1000);
+
+        System.out.println("Starting an upload, cancelling using .timeout().");
+        try {
+            blobURL.putBlobAsync(stream, null, null, null)
+                    .doOnDispose(new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            System.err.println("Cancelled upload using .timeout()");
+                        }
+                    })
+                    .timeout(1, TimeUnit.SECONDS)
+                    .blockingGet();
+        } catch (RuntimeException ex) {
+            // ex here is a wrapper around a java.util.concurrent.TimeoutException
+        }
+
+        System.out.println("Starting an upload, cancelling using .takeUntil().");
+        // You can cancel a stream by applying .takeUntil with another stream which emits an event to indicate the original stream should be canceled.
+        // The stream returned by .takeUntil() will emit CancellationException to notify the consumer that a cancellation occurred.
+        try {
+            blobURL.putBlobAsync(stream, null, null, null)
+                    .takeUntil(Completable.complete().delay(1, TimeUnit.SECONDS))
+                    .blockingGet();
+        } catch (CancellationException ignored) {
+            // This exception is thrown by .takeUntil() to signal that a cancel event was emitted by the other stream.
+            System.err.println("Canceled upload using .takeUntil()");
+        }
 
         System.exit(0);
     }

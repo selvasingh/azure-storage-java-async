@@ -7,6 +7,7 @@
 
 package com.microsoft.azure.storage.samples;
 
+import com.microsoft.azure.storage.blob.BlobRange;
 import com.microsoft.azure.storage.blob.BlockBlobURL;
 import com.microsoft.azure.storage.blob.Constants;
 import com.microsoft.azure.storage.blob.ContainerURL;
@@ -17,6 +18,7 @@ import com.microsoft.azure.storage.blob.ServiceURL;
 import com.microsoft.azure.storage.blob.SharedKeyCredentials;
 import com.microsoft.azure.storage.blob.StorageURL;
 import com.microsoft.azure.storage.blob.TelemetryOptions;
+import com.microsoft.azure.storage.models.BlobsGetHeaders;
 import com.microsoft.azure.storage.models.BlobsPutHeaders;
 import com.microsoft.azure.storage.models.BlockBlobsGetBlockListHeaders;
 import com.microsoft.azure.storage.models.BlockList;
@@ -35,7 +37,11 @@ import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
 import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.SingleSource;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.exceptions.Exceptions;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -45,11 +51,13 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BasicSample {
-    static HttpPipeline getPipeline() throws UnsupportedEncodingException, InvalidKeyException {
+    static HttpPipeline getPipeline(String accountName, String accountKey) throws UnsupportedEncodingException, InvalidKeyException {
         HttpPipelineLogger logger = new HttpPipelineLogger() {
             @Override
             public HttpPipelineLogLevel minimumLogLevel() {
@@ -69,7 +77,7 @@ public class BasicSample {
         };
         LoggingOptions loggingOptions = new LoggingOptions(Level.INFO);
 
-        SharedKeyCredentials creds = new SharedKeyCredentials("account", "key");
+        SharedKeyCredentials creds = new SharedKeyCredentials(accountName, accountKey);
         TelemetryOptions telemetryOptions = new TelemetryOptions();
         PipelineOptions pop = new PipelineOptions();
         pop.telemetryOptions = telemetryOptions;
@@ -80,57 +88,58 @@ public class BasicSample {
     }
 
     public static void main(String[] args) throws Exception {
-        HttpPipeline pipeline = getPipeline();
+        // TODO: link to Rx primer
+        String accountName = System.getenv("AZURE_STORAGE_ACCOUNT_NAME");
+        String accountKey = System.getenv("AZURE_STORAGE_ACCOUNT_KEY");
 
-        System.out.println("Starting an upload, cancelling using Rx.");
+        HttpPipeline pipeline = getPipeline(accountName, accountKey);
+
         // Objects representing the Azure Storage resources we're sending requests to.
-        final ServiceURL serviceURL = new ServiceURL("http://javasdktest.blob.core.windows.net", pipeline);
+        final ServiceURL serviceURL = new ServiceURL("http://" + accountName + ".blob.core.windows.net", pipeline);
         final ContainerURL containerURL = serviceURL.createContainerURL("javasdktest");
         final BlockBlobURL blobURL = containerURL.createBlockBlobURL("testBlob");
 
         // Some data to put into Azure Storage
         final byte[] data = { 0, 1, 2, 3, 4 };
+
+        // Convert the data to the common interface used for streaming transfers.
         final AsyncInputStream asyncStream = AsyncInputStream.create(data);
-
         // Create a container.
-        Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> finalAsyncResponse = containerURL.createAsync(null, null, null)
-            .flatMap(new Function<RestResponse<ContainerCreateHeaders, Void>, Single<RestResponse<BlobsPutHeaders, Void>>>() {
-            @Override
-            public Single<RestResponse<BlobsPutHeaders, Void>> apply(RestResponse<ContainerCreateHeaders, Void> response) throws Exception {
-                // If this method gets called, then the call was successful.
-                // Responses with "error" status codes like 404 get turned into exceptions.
+        containerURL.createAsync(null, null, null)
+                .flatMap(new Function<RestResponse<ContainerCreateHeaders, Void>, Single<RestResponse<BlobsPutHeaders, Void>>>() {
+                    @Override
+                    public Single<RestResponse<BlobsPutHeaders, Void>> apply(RestResponse<ContainerCreateHeaders, Void> response) throws Exception {
+                        // This method is called when the container was created successfully.
 
-                // The container has been created. Let's put a blob in the container.
-                return blobURL.putBlobAsync(asyncStream, null, null, null);
-            }
-        }).flatMap(new Function<RestResponse<BlobsPutHeaders, Void>, Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>>>() {
+                        // The container has been created. Let's put a blob in the container.
+                        return blobURL.putBlobAsync(asyncStream, null, null, null);
+                    }
+                }).flatMap(new Function<RestResponse<BlobsPutHeaders, Void>, Single<RestResponse<BlobsGetHeaders, AsyncInputStream>>>() {
             @Override
-            public Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> apply(RestResponse<BlobsPutHeaders, Void> blobsPutHeadersVoidRestResponse) throws Exception {
-                // Since we got here, the service has indicated that the blob was successfully put in the container.
-                // Now let's get the block list for the blob we just put.
-                return blobURL.getBlockListAsync(BlockListType.ALL, null);
+            public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> apply(RestResponse<BlobsPutHeaders, Void> blobsPutHeadersVoidRestResponse) throws Exception {
+                // This method is called after the blob is uploaded successfully.
+
+                // Now let's download the blob.
+                return blobURL.getBlobAsync(new BlobRange(0L, new Long(data.length)), null, false, null);
+            }
+        }).subscribe(new SingleObserver<RestResponse<BlobsGetHeaders, AsyncInputStream>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                // This is called right away, and the Disposable given can be used at any point to cancel the operation.
+            }
+
+            @Override
+            public void onSuccess(RestResponse<BlobsGetHeaders, AsyncInputStream> response) {
+                System.out.println("Size of the blob: " + response.headers().contentLength());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                System.err.println("Something went wrong along the way: " + e.getMessage());
             }
         });
 
-        // None of the async methods will run their tasks until a method like .subscribe() or .blockingGet() is called.
-        // If an exception was emitted in the stream, it will be thrown when blockingGet() is called.
-        try {
-            RestResponse<BlockBlobsGetBlockListHeaders, BlockList> finalResponse = finalAsyncResponse.blockingGet();
-            if (finalResponse.body().committedBlocks() != null) {
-                System.out.println("Number of committed blocks: " + finalResponse.body().committedBlocks().size());
-            }
-        } catch (RestException e) {
-            // RestException is thrown if a service error occurs, like receiving a HTTP 400 or 500 status code.
-            System.err.println("An HTTP error occurred: " + e.response().statusCode());
-
-            // e.body() contains the deserialized XML from the service response
-            if (e.body() != null) {
-                // TODO: service specification should declare an exception type in order to provide type information about the deserialized XML body
-                System.err.println("Here's the body: " + e.body());
-            }
-
-            // getMessage() gives a generic error message containing the response status code and body content.
-            System.err.println(e.getMessage());
-        }
+        // Wait for the operation to complete.
+        System.in.read();
     }
 }

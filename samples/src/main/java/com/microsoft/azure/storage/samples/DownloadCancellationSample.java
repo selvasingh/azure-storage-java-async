@@ -9,13 +9,13 @@ import com.microsoft.azure.storage.blob.SharedKeyCredentials;
 import com.microsoft.azure.storage.blob.StorageURL;
 import com.microsoft.azure.storage.blob.TelemetryOptions;
 import com.microsoft.azure.storage.models.BlobsGetHeaders;
-import com.microsoft.rest.v2.RestException;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpClient;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.http.HttpPipelineLogLevel;
 import com.microsoft.rest.v2.http.HttpPipelineLogger;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -23,13 +23,12 @@ import org.reactivestreams.Publisher;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
-import java.util.Random;
 import java.util.concurrent.CancellationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DownloadCancellationSample {
-    static HttpPipeline getPipeline() throws UnsupportedEncodingException, InvalidKeyException {
+    static HttpPipeline getPipeline(String accountName, String accountKey) throws UnsupportedEncodingException, InvalidKeyException {
         HttpPipelineLogger logger = new HttpPipelineLogger() {
             @Override
             public HttpPipelineLogLevel minimumLogLevel() {
@@ -49,7 +48,7 @@ public class DownloadCancellationSample {
         };
         LoggingOptions loggingOptions = new LoggingOptions(Level.INFO);
 
-        SharedKeyCredentials creds = new SharedKeyCredentials("account", "key");
+        SharedKeyCredentials creds = new SharedKeyCredentials(accountName, accountKey);
         TelemetryOptions telemetryOptions = new TelemetryOptions();
         PipelineOptions pop = new PipelineOptions();
         pop.telemetryOptions = telemetryOptions;
@@ -60,49 +59,62 @@ public class DownloadCancellationSample {
     }
 
     public static void main(String[] args) throws Exception {
-        HttpPipeline pipeline = getPipeline();
+        String accountName = System.getenv("AZURE_STORAGE_ACCOUNT_NAME");
+        String accountKey = System.getenv("AZURE_STORAGE_ACCOUNT_KEY");
 
-        // Get the URL of the blob we're going to upload.
-        final ServiceURL serviceURL = new ServiceURL("http://accountname.blob.core.windows.net", pipeline);
-        final BlockBlobURL blobURL = serviceURL.createContainerURL("accountname").createBlockBlobURL("blobname");
+        HttpPipeline pipeline = getPipeline(accountName, accountKey);
 
-        System.out.println("Starting an upload, cancelling using Rx.");
+        // Get the URL of the blob we're going to download.
+        // The container and blob must exist already.
+        final ServiceURL serviceURL = new ServiceURL("http://" + accountName + ".blob.core.windows.net", pipeline);
+        final BlockBlobURL blobURL = serviceURL.createContainerURL("containername").createBlockBlobURL("blobname");
 
-        // Canceling file downloads looks a little different, because the Single<RestResponse<Headers, AsyncInputStream>> has already completed.
-        // Instead, you have to dispose of the AsyncInputStream's content.
-        try {
-            RestResponse<BlobsGetHeaders, AsyncInputStream> response = blobURL.getBlobAsync(new BlobRange(0L, null), null, false, null).blockingGet();
+        System.out.println("Starting a download, cancelling using .dispose().");
 
-            // NOTE: the AsyncInputStream returned by body() is likely to have a dispose() method added in the future.
-            // So the code will instead look like: response.body().close();
-            response.body().content().subscribe().dispose();
-        } catch (RestException ignored) {
-        }
+        // Canceling file downloads looks a little different,
+        // because the Single<RestResponse<Headers, AsyncInputStream>> has already completed at the time you're doing a download.
+        RestResponse<BlobsGetHeaders, AsyncInputStream> response = blobURL.getBlobAsync(new BlobRange(0L, 1024L*1024L), null, false, null).blockingGet();
 
+        // Obtain a Disposable for the response content by subscribing to it.
+        Disposable disposable = response.body().content().doOnCancel(new Action() {
+            @Override
+            public void run() throws Exception {
+                System.err.println("Canceled download using .dispose()");
+            }
+        }).subscribe();
+
+        // Then dispose of the Disposable.
+        disposable.dispose();
+
+        System.out.println("Starting a download, cancelling by throwing an exception in stream consumer.");
         // You can also cancel a download by subscribing to the response content and throwing an exception in the consumer.
-        try {
-            blobURL.getBlobAsync(new BlobRange(0L, null), null, false, null).flatMapPublisher(new Function<RestResponse<BlobsGetHeaders, AsyncInputStream>, Publisher<byte[]>>() {
-                @Override
-                public Publisher<byte[]> apply(RestResponse<BlobsGetHeaders, AsyncInputStream> response) throws Exception {
-                    return response.body().content();
-                }
-            }).doOnCancel(new Action() {
-                @Override
-                public void run() throws Exception {
-                    System.err.println("Canceled download by throwing an exception in the onNext consumer.");
-                }
-            }).blockingSubscribe(new Consumer<byte[]>() {
-                int count = 0;
-                @Override
-                public void accept(byte[] bytes) throws Exception {
-                    count++;
-                    if (count == 3) {
-                        throw new CancellationException();
-                    }
-                }
-            });
-        } catch (CancellationException ignored) {
-        }
+        blobURL.getBlobAsync(new BlobRange(0L, 1024L*1024L), null, false, null).flatMapPublisher(new Function<RestResponse<BlobsGetHeaders, AsyncInputStream>, Publisher<byte[]>>() {
+            @Override
+            public Publisher<byte[]> apply(RestResponse<BlobsGetHeaders, AsyncInputStream> response) throws Exception {
+                return response.body().content();
+            }
+        }).doOnCancel(new Action() {
+            @Override
+            public void run() throws Exception {
+                System.err.println("Canceled download by throwing an exception in the onNext consumer.");
+            }
+        }).blockingSubscribe(new Consumer<byte[]>() {
+            int count = 0;
 
+            @Override
+            public void accept(byte[] bytes) throws Exception {
+                count++;
+                if (count == 3) {
+                    throw new CancellationException();
+                }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                // throwable here is a wrapper around the exception thrown in the accept(byte[]) method.
+            }
+        });
+
+        System.exit(0);
     }
 }
