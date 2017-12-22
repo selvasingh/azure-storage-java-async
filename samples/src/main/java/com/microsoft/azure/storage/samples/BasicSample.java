@@ -11,8 +11,12 @@ import com.microsoft.azure.storage.blob.BlockBlobURL;
 import com.microsoft.azure.storage.blob.Constants;
 import com.microsoft.azure.storage.blob.ContainerURL;
 import com.microsoft.azure.storage.blob.ICredentials;
+import com.microsoft.azure.storage.blob.LoggingOptions;
 import com.microsoft.azure.storage.blob.PipelineOptions;
+import com.microsoft.azure.storage.blob.ServiceURL;
 import com.microsoft.azure.storage.blob.SharedKeyCredentials;
+import com.microsoft.azure.storage.blob.StorageURL;
+import com.microsoft.azure.storage.blob.TelemetryOptions;
 import com.microsoft.azure.storage.models.BlobsPutHeaders;
 import com.microsoft.azure.storage.models.BlockBlobsGetBlockListHeaders;
 import com.microsoft.azure.storage.models.BlockList;
@@ -21,7 +25,10 @@ import com.microsoft.azure.storage.models.ContainerCreateHeaders;
 import com.microsoft.rest.v2.RestException;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.AsyncInputStream;
+import com.microsoft.rest.v2.http.HttpClient;
 import com.microsoft.rest.v2.http.HttpPipeline;
+import com.microsoft.rest.v2.http.HttpPipelineLogLevel;
+import com.microsoft.rest.v2.http.HttpPipelineLogger;
 import com.microsoft.rest.v2.http.HttpRequest;
 import com.microsoft.rest.v2.http.HttpResponse;
 import com.microsoft.rest.v2.policy.RequestPolicy;
@@ -34,51 +41,51 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.util.Locale;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BasicSample {
-
-    // A RequestPolicy is similar to an Interceptor or Filter in other HTTP clients.
-    // A RequestPolicyFactory creates RequestPolicies. Each RequestPolicy is notified when
-    // an HttpRequest is sent out and can modify the outgoing request or incoming response as it sees fit.
-    static class AddDatePolicyFactory implements RequestPolicyFactory {
-
-        @Override
-        public RequestPolicy create(RequestPolicy next, RequestPolicyOptions options) {
-            return new AddDatePolicy(next);
-        }
-
-        // This RequestPolicy is instantiated for each request which allows it to have internal state if needed
-        // e.g. number of retries attempted for a retry policy
-        public final class AddDatePolicy implements RequestPolicy {
-            private final DateTimeFormatter format = DateTimeFormat
-                    .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'")
-                    .withZoneUTC()
-                    .withLocale(Locale.US);
-
-            private final RequestPolicy next;
-            public AddDatePolicy(RequestPolicy next) {
-                this.next = next;
+    static HttpPipeline getPipeline() throws UnsupportedEncodingException, InvalidKeyException {
+        HttpPipelineLogger logger = new HttpPipelineLogger() {
+            @Override
+            public HttpPipelineLogLevel minimumLogLevel() {
+                return HttpPipelineLogLevel.INFO;
             }
 
             @Override
-            public Single<HttpResponse> sendAsync(HttpRequest request) {
-                // Set the Date header on the request
-                request.headers().set(Constants.HeaderConstants.DATE, format.print(DateTime.now()));
-
-                // Pass the request on to the next RequestPolicy, which may make other modifications to the request or response.
-                return next.sendAsync(request);
+            public void log(HttpPipelineLogLevel logLevel, String s, Object... objects) {
+                if (logLevel == HttpPipelineLogLevel.INFO) {
+                    Logger.getGlobal().info(String.format(s, objects));
+                } else if (logLevel == HttpPipelineLogLevel.WARNING) {
+                    Logger.getGlobal().warning(String.format(s, objects));
+                } else if (logLevel == HttpPipelineLogLevel.ERROR) {
+                    Logger.getGlobal().severe(String.format(s, objects));
+                }
             }
-        }
+        };
+        LoggingOptions loggingOptions = new LoggingOptions(Level.INFO);
+
+        SharedKeyCredentials creds = new SharedKeyCredentials("account", "key");
+        TelemetryOptions telemetryOptions = new TelemetryOptions();
+        PipelineOptions pop = new PipelineOptions();
+        pop.telemetryOptions = telemetryOptions;
+        pop.client = HttpClient.createDefault();
+        pop.logger = logger;
+        pop.loggingOptions = loggingOptions;
+        return StorageURL.CreatePipeline(creds, pop);
     }
 
     public static void main(String[] args) throws Exception {
-        // HttpPipeline is where RequestPolicyFactories are assembled.
-        // TODO: add credentials
-        HttpPipeline pipeline = HttpPipeline.build(new AddDatePolicyFactory());
+        HttpPipeline pipeline = getPipeline();
 
+        System.out.println("Starting an upload, cancelling using Rx.");
         // Objects representing the Azure Storage resources we're sending requests to.
-        final ContainerURL containerURL = new ContainerURL("http://accountname.blob.core.windows.net/testContainer", pipeline);
+        final ServiceURL serviceURL = new ServiceURL("http://javasdktest.blob.core.windows.net", pipeline);
+        final ContainerURL containerURL = serviceURL.createContainerURL("javasdktest");
         final BlockBlobURL blobURL = containerURL.createBlockBlobURL("testBlob");
 
         // Some data to put into Azure Storage

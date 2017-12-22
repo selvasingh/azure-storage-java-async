@@ -4,27 +4,15 @@ import com.microsoft.azure.storage.blob.*;
 import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.*;
-import com.microsoft.rest.v2.policy.RequestPolicy;
-import com.microsoft.rest.v2.policy.RequestPolicyFactory;
-import com.microsoft.rest.v2.policy.RequestPolicyOptions;
 import com.microsoft.rest.v2.util.FlowableUtil;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.junit.Test;
-import io.reactivex.Single;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.security.InvalidKeyException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -114,7 +102,7 @@ public class BlobStorageAPITests {
             cu.createAsync(null, null, PublicAccessType.BLOB).blockingGet();
 
             // List the containers in the account.
-            RestResponse<ServiceListContainersHeaders, ListContainersResponse> resp = su.listConatinersAsync(
+            RestResponse<ServiceListContainersHeaders, ListContainersResponse> resp = su.listContainersAsync(
                     "java", null, null,null, null).blockingGet();
             List<Container> containerList = resp.body().containers();
             Assert.assertEquals(1, containerList.size());
