@@ -43,5 +43,4 @@ public class StorageServiceStats {
         this.geoReplication = geoReplication;
         return this;
     }
-
 }

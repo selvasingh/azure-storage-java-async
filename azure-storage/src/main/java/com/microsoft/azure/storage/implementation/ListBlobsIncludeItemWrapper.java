@@ -19,7 +19,6 @@ import java.util.List;
 
 @JacksonXmlRootElement(localName = "ListBlobsIncludeItem")
 public class ListBlobsIncludeItemWrapper {
-
     @JacksonXmlProperty(localName = "ListBlobsIncludeItem")
     private final List<ListBlobsIncludeItem> listBlobsIncludeItem;
 

@@ -852,5 +852,4 @@ public class BlobsGetHeaders {
         this.blobContentMD5 = blobContentMD5;
         return this;
     }
-
 }

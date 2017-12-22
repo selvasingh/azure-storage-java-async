@@ -306,5 +306,4 @@ public class ContainerGetPropertiesHeaders {
         this.blobPublicAccess = blobPublicAccess;
         return this;
     }
-
 }

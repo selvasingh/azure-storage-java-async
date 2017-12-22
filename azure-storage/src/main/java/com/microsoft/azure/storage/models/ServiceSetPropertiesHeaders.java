@@ -72,5 +72,4 @@ public class ServiceSetPropertiesHeaders {
         this.version = version;
         return this;
     }
-
 }

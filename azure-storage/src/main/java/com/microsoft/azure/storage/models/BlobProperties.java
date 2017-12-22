@@ -606,5 +606,4 @@ public class BlobProperties {
         this.incrementalCopy = incrementalCopy;
         return this;
     }
-
 }

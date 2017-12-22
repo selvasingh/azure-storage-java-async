@@ -198,5 +198,4 @@ public class BlobsGetMetadataHeaders {
         }
         return this;
     }
-
 }

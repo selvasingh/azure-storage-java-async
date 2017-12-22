@@ -227,5 +227,4 @@ public class BlockBlobsPutBlockListHeaders {
         this.isServerEncrypted = isServerEncrypted;
         return this;
     }
-
 }

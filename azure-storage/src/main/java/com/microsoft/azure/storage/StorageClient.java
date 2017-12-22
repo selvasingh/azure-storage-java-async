@@ -14,7 +14,6 @@ package com.microsoft.azure.storage;
  * The interface for StorageClient class.
  */
 public interface StorageClient {
-
     /**
      * Gets Specifies the version of the operation to use for this request.
      *
@@ -65,5 +64,4 @@ public interface StorageClient {
      * @return the AppendBlobs object.
      */
     AppendBlobs appendBlobs();
-
 }

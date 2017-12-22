@@ -224,5 +224,4 @@ public class BlockBlobsGetBlockListHeaders {
         }
         return this;
     }
-
 }

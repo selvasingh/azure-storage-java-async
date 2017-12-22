@@ -227,5 +227,4 @@ public class BlobsPutHeaders {
         this.isServerEncrypted = isServerEncrypted;
         return this;
     }
-
 }

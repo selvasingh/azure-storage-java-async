@@ -96,5 +96,4 @@ public class AccessPolicy {
         this.permission = permission;
         return this;
     }
-
 }

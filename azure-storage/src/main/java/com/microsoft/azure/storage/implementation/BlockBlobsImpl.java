@@ -35,7 +35,7 @@ import com.microsoft.rest.v2.annotations.HostParam;
 import com.microsoft.rest.v2.annotations.PathParam;
 import com.microsoft.rest.v2.annotations.PUT;
 import com.microsoft.rest.v2.annotations.QueryParam;
-import com.microsoft.rest.v2.annotations.UnexpectedResponseExceptionType;
+import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpClient;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
@@ -76,21 +76,17 @@ public class BlockBlobsImpl implements BlockBlobs {
      */
     @Host("{url}")
     interface BlockBlobsService {
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.BlockBlobs putBlock" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
-        Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlock(@HostParam("url") String url, @QueryParam("blockid") String blockId, @BodyParam("application/xml; charset=utf-8") byte[] body, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+        Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlock(@HostParam("url") String url, @QueryParam("blockid") String blockId, @BodyParam("application/xml; charset=utf-8") AsyncInputStream body, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.BlockBlobs putBlockList" })
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
         Single<RestResponse<BlockBlobsPutBlockListHeaders, Void>> putBlockList(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-blob-cache-control") String blobCacheControl, @HeaderParam("x-ms-blob-content-type") String blobContentType, @HeaderParam("x-ms-blob-content-encoding") String blobContentEncoding, @HeaderParam("x-ms-blob-content-language") String blobContentLanguage, @HeaderParam("x-ms-blob-content-md5") String blobContentMD5, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-blob-content-disposition") String blobContentDisposition, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @BodyParam("application/xml; charset=utf-8") BlockLookupList blocks, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.BlockBlobs getBlockList" })
         @GET("{containerName}/{blob}")
         @ExpectedResponses({200})
         Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockList(@HostParam("url") String url, @QueryParam("snapshot") String snapshot, @QueryParam("blocklisttype") BlockListType listType, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
-
     }
 
     /**
@@ -104,7 +100,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the void object if successful.
      */
-    public void putBlock(String url, String blockId, byte[] body) {
+    public void putBlock(String url, String blockId, AsyncInputStream body) {
         putBlockAsync(url, blockId, body).blockingAwait();
     }
 
@@ -118,7 +114,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> putBlockAsync(String url, String blockId, byte[] body, ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> putBlockAsync(String url, String blockId, AsyncInputStream body, ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(putBlockAsync(url, blockId, body), serviceCallback);
     }
 
@@ -131,7 +127,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlockBlobsPutBlockHeaders, Void> object
      */
-    public Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String url, String blockId, byte[] body) {
+    public Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String url, String blockId, AsyncInputStream body) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
@@ -160,7 +156,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlockBlobsPutBlockHeaders, Void> object
      */
-    public Completable putBlockAsync(String url, String blockId, byte[] body) {
+    public Completable putBlockAsync(String url, String blockId, AsyncInputStream body) {
         return putBlockWithRestResponseAsync(url, blockId, body)
             .toCompletable();
     }
@@ -179,7 +175,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the void object if successful.
      */
-    public void putBlock(String url, String blockId, byte[] body, Integer timeout, String leaseId, String requestId) {
+    public void putBlock(String url, String blockId, AsyncInputStream body, Integer timeout, String leaseId, String requestId) {
         putBlockAsync(url, blockId, body, timeout, leaseId, requestId).blockingAwait();
     }
 
@@ -196,7 +192,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> putBlockAsync(String url, String blockId, byte[] body, Integer timeout, String leaseId, String requestId, ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> putBlockAsync(String url, String blockId, AsyncInputStream body, Integer timeout, String leaseId, String requestId, ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(putBlockAsync(url, blockId, body, timeout, leaseId, requestId), serviceCallback);
     }
 
@@ -212,7 +208,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlockBlobsPutBlockHeaders, Void> object
      */
-    public Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String url, String blockId, byte[] body, Integer timeout, String leaseId, String requestId) {
+    public Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String url, String blockId, AsyncInputStream body, Integer timeout, String leaseId, String requestId) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
@@ -241,11 +237,10 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlockBlobsPutBlockHeaders, Void> object
      */
-    public Completable putBlockAsync(String url, String blockId, byte[] body, Integer timeout, String leaseId, String requestId) {
+    public Completable putBlockAsync(String url, String blockId, AsyncInputStream body, Integer timeout, String leaseId, String requestId) {
         return putBlockWithRestResponseAsync(url, blockId, body, timeout, leaseId, requestId)
             .toCompletable();
     }
-
 
     /**
      * The Put Block List operation writes a blob by specifying the list of block IDs that make up the blob. In order to be written as part of a blob, a block must have been successfully written to the server in a prior Put Block operation. You can call Put Block List to update a blob by uploading only those blocks that have changed, then committing the new and existing blocks together. You can do this by specifying whether to commit a block from the committed block list or from the uncommitted block list, or to commit the most recently uploaded version of the block, whichever list it may belong to.
@@ -459,7 +454,6 @@ public class BlockBlobsImpl implements BlockBlobs {
             .toCompletable();
     }
 
-
     /**
      * The Get Block List operation retrieves the list of blocks that have been uploaded as part of a block blob.
      *
@@ -619,6 +613,4 @@ public class BlockBlobsImpl implements BlockBlobs {
                 }
             });
     }
-
-
 }

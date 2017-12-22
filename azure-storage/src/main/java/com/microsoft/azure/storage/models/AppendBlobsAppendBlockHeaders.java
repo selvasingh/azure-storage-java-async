@@ -253,5 +253,4 @@ public class AppendBlobsAppendBlockHeaders {
         this.blobCommittedBlockCount = blobCommittedBlockCount;
         return this;
     }
-
 }

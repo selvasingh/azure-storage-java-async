@@ -197,5 +197,4 @@ public class PageBlobsGetPageRangesHeaders {
         }
         return this;
     }
-
 }

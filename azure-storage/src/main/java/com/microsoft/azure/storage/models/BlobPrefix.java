@@ -43,5 +43,4 @@ public class BlobPrefix {
         this.name = name;
         return this;
     }
-
 }

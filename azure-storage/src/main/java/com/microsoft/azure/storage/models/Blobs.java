@@ -70,5 +70,4 @@ public class Blobs {
         this.blob = blob;
         return this;
     }
-
 }

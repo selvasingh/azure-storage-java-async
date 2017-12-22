@@ -226,5 +226,4 @@ public class PageBlobsIncrementalCopyHeaders {
         this.copyStatus = copyStatus;
         return this;
     }
-
 }
