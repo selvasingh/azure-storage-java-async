@@ -16,6 +16,8 @@ package com.microsoft.azure.storage.blob;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.util.Date;
 import java.util.EnumSet;
@@ -94,7 +96,11 @@ public final class ServiceSAS extends BaseSAS {
         sasParams.identifier = this.identifier;
         sasParams.resource = resource;
         sasParams.permissions = super.permissions;
-        sasParams.signature = signature;
+        try {
+            sasParams.signature = URLEncoder.encode(signature, "UTF-8");// TODO: use non depricated version
+        } catch (UnsupportedEncodingException e) {
+            // If UTF-8 is not supported, we have no idea what to do
+        }
         return sasParams;
     }
 
@@ -109,7 +115,7 @@ public final class ServiceSAS extends BaseSAS {
                 },
                 '/');
         if (!Utility.isNullOrEmpty(this.blobName)) {
-            canoncialName += this.blobName.replace("\\", "/");
+            canoncialName += "/" + this.blobName.replace("\\", "/");
         }
 
         return canoncialName;

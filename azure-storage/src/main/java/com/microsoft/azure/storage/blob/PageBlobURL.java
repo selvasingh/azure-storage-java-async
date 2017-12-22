@@ -59,7 +59,7 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *      A {@link PageBlobURL} object with the given pipeline.
      */
-    public PageBlobURL withSnapshot(Date snapshot) throws MalformedURLException, UnsupportedEncodingException {
+    public PageBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
         BlobURLParts blobURLParts = URLParser.ParseURL(super.url);
         blobURLParts.setSnapshot(snapshot);
         return new PageBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());

@@ -62,7 +62,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      A {@link BlobURL} object with the given pipeline.
      */
-    public BlobURL withSnapshot(Date snapshot) throws MalformedURLException, UnsupportedEncodingException {
+    public BlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
         BlobURLParts blobURLParts = URLParser.ParseURL(super.url);
         blobURLParts.setSnapshot(snapshot);
         return new BlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
@@ -114,6 +114,10 @@ public class BlobURL extends StorageURL {
                                                                        BlobAccessConditions sourceAccessConditions,
                                                                        BlobAccessConditions destAccessConditions,
                                                                        Integer timeout) {
+
+        //TODO: What if someone passes in BlobAccessConditions that only have HttpAccessConditions? Then those will
+        // be fine but Lease will be null. Or samething about just specifying ifModified but not ifMatch.
+        // Maybe have a method that's like "fill null values with defaults" that I can can call for all of them. May be a noop in some cases
         if (sourceAccessConditions == null) {
             sourceAccessConditions = BlobAccessConditions.getDefault();
         }

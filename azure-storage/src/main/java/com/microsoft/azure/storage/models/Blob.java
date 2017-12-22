@@ -13,7 +13,6 @@ package com.microsoft.azure.storage.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.Map;
-import org.joda.time.DateTime;
 
 /**
  * An Azure Storage blob.
@@ -30,7 +29,7 @@ public class Blob {
      * The snapshot property.
      */
     @JsonProperty(value = "Snapshot", required = true)
-    private DateTime snapshot;
+    private String snapshot;
 
     /**
      * The properties property.
@@ -69,7 +68,7 @@ public class Blob {
      *
      * @return the snapshot value
      */
-    public DateTime snapshot() {
+    public String snapshot() {
         return this.snapshot;
     }
 
@@ -79,7 +78,7 @@ public class Blob {
      * @param snapshot the snapshot value to set
      * @return the Blob object itself.
      */
-    public Blob withSnapshot(DateTime snapshot) {
+    public Blob withSnapshot(String snapshot) {
         this.snapshot = snapshot;
         return this;
     }

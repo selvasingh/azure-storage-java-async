@@ -157,6 +157,20 @@ public final class ContainerURL extends StorageURL {
                 super.url, timeout, leaseAccessConditions.toString(), null);
     }
 
+    public Single<RestResponse<ContainerSetAclHeaders, Void>> setPermissionsAsync(
+            PublicAccessType accessType, List<SignedIdentifier> identifiers, ContainerAccessConditions containerAccessConditions) {
+        if(containerAccessConditions == null) {
+            containerAccessConditions = ContainerAccessConditions.getDefault();
+        }
+        return this.storageClient.containers().setAclWithRestResponseAsync(this.url, identifiers, null,
+                containerAccessConditions.getLeaseID().toString(), accessType,
+                containerAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                containerAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
+                containerAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                containerAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
+                null);
+    }
+
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobsAsync(
             String marker, ListBlobsOptions listBlobsOptions) {
         return this.storageClient.containers().listBlobsWithRestResponseAsync(this.url, listBlobsOptions.getPrefix(),

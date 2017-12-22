@@ -61,10 +61,10 @@ public final class URLParser {
         }
         Map<String, String[]> queryParamsMap = parseQueryString(url.getQuery(), true);
 
-        Date snapshot = null;
+        String snapshot = null;
         String[] snapshotArray = queryParamsMap.get("snapshot");
         if (snapshotArray != null) {
-            snapshot = Utility.parseDate(snapshotArray[0]);
+            snapshot = snapshotArray[0];
             queryParamsMap.remove("snapshot");
         }
 

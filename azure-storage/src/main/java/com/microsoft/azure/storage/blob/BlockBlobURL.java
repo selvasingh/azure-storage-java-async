@@ -61,7 +61,7 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      A {@link BlockBlobURL} object with the given pipeline.
      */
-    public BlockBlobURL withSnapshot(Date snapshot) throws MalformedURLException, UnsupportedEncodingException {
+    public BlockBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
         BlobURLParts blobURLParts = URLParser.ParseURL(super.url);
         blobURLParts.setSnapshot(snapshot);
         return new BlockBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
@@ -92,6 +92,7 @@ public final class BlockBlobURL extends BlobURL {
         if(headers == null) {
             headers = BlobHttpHeaders.getDefault();
         }
+        // TODO: Metadata protocol layer broken.
         if(metadata == null) {
             metadata = Metadata.getDefault();
         }

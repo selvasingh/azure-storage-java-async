@@ -71,7 +71,7 @@ public final class BlobAccessConditions {
     PageBlobAccessConditions getPageBlobAccessConditions() {
         return pageBlobAccessConditions;
     }
-
+    
     public static BlobAccessConditions getDefault() {
         if (defaultBlobAccessConditions == null) {
             defaultBlobAccessConditions = new BlobAccessConditions(HttpAccessConditions.getDefault(),

@@ -29,6 +29,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -242,9 +243,10 @@ public final class SharedKeyCredentials implements ICredentials {
             final List<String> queryParamValues = queryParams.get(queryParamName);
             Collections.sort(queryParamValues);
 
-            //TODO: URL encode the snapshot
+            String queryParamValuesStr = StringUtils.join(queryParamValues, ',');
+            //queryParamValuesStr = URLEncoder.encode(queryParamValuesStr, "UTF-8");
             // concatenation of the query param name + colon + join of query param values which are commas separated
-            canonicalizedResource.append("\n" + queryParamName.toLowerCase(Locale.US) + ":" + StringUtils.join(queryParamValues, ','));
+            canonicalizedResource.append("\n" + queryParamName.toLowerCase(Locale.US) + ":" + queryParamValuesStr);
         }
 
         // append to main string builder the join of completed params with new line

@@ -1337,7 +1337,6 @@ x-ms-paths:
             x-ms-destination-snapshot:
               x-ms-client-name: DestinationSnapshot
               type: string
-              format: date-time-rfc1123
               description: Included if the blob is incremental copy blob or incremental
                 copy snapshot, if x-ms-copy-status is success. Snapshot time of the
                 last successful incremental copy snapshot for this blob.
@@ -1918,7 +1917,6 @@ x-ms-paths:
             x-ms-snapshot:
               x-ms-client-name: Snapshot
               type: string
-              format: date-time
               description: Uniquely identifies the snapshot and indicates the snapshot
                 version. It may be used in subsequent requests to access the snapshot
             ETag:
@@ -2634,7 +2632,6 @@ definitions:
         type: string
       Snapshot:
         type: string
-        format: date-time
       Properties:
         "$ref": "#/definitions/BlobProperties"
       Metadata:
@@ -3508,8 +3505,8 @@ parameters:
     items:
       "$ref": "#/definitions/ListBlobsIncludeItem"
     x-ms-parameter-location: method
-    description:  Include this parameter to specify one or more datasets to include
-      in the response. 
+    description: Include this parameter to specify one or more datasets to include
+      in the response.
   ListContainersInclude:
     name: include
     in: query
@@ -3646,7 +3643,6 @@ parameters:
     in: query
     required: false
     type: string
-    format: date-time
     x-ms-parameter-location: method
     description: Optional in version 2015-07-08 and newer. The prevsnapshot parameter
       is a DateTime value that specifies that the response will contain only pages
@@ -3695,7 +3691,6 @@ parameters:
     in: query
     required: false
     type: string
-    format: date-time
     x-ms-parameter-location: method
     description: The snapshot parameter is an opaque DateTime value that, when present,
       specifies the blob snapshot to retrieve. For more information on working with
