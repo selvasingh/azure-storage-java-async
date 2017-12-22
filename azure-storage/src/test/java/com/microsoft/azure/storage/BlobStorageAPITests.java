@@ -60,7 +60,10 @@ public class BlobStorageAPITests {
         SharedKeyCredentials creds = new SharedKeyCredentials("account", "key");
 
         // Pipeline options allow for customization of the behavior of the HttpPipeline. Here we show adding a logger
-        // and specifying options for logging, enabling telemetry, and enabling Fiddler.
+        // and specifying options for logging, enabling telemetry, and enabling Fiddler. Currently, the pipeline
+        // requires non-null values for all the options, though this will be changing. For now, it is best to drop in
+        // these values as they are innocuous and do not affect the behavior of the request at all; they merely
+        // supply additional information.
         HttpPipelineLogger logger = new HttpPipelineLogger() {
             @Override
             public HttpPipelineLogLevel minimumLogLevel() {
@@ -78,27 +81,28 @@ public class BlobStorageAPITests {
                 }
             }
         };
-        LoggingOptions loggingOptions = new LoggingOptions(Level.INFO);
+
 
         // This will enable interaction with Fiddler.
         HttpClient.Configuration configuration = new HttpClient.Configuration(
                 new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));
-        TelemetryOptions telemetryOptions = new TelemetryOptions();
         PipelineOptions pop = new PipelineOptions();
-        pop.telemetryOptions = telemetryOptions;
+        pop.telemetryOptions = new TelemetryOptions();
         pop.client = HttpClient.createDefault(configuration);
         pop.logger = logger;
-        pop.loggingOptions = loggingOptions;
+        pop.loggingOptions = new LoggingOptions(Level.INFO);
         HttpPipeline pipeline = StorageURL.CreatePipeline(creds, pop);
 
         // Create a reference to the service.
         ServiceURL su = new ServiceURL("http://xclientdev2.blob.core.windows.net", pipeline);
 
-        // Create a reference to a container.
+        // Create a reference to a container. Using the ServiceURL to create the ContainerURL will propagate
+        // the path to the service, appending the container name. A ContainerURL may also be created by calling the
+        // constructor with a full path to the container and a pipeline.
         String containerName = "javatestcontainer" + System.currentTimeMillis();
         ContainerURL cu = su.createContainerURL(containerName);
 
-        // Create a reference to a blob.
+        // Create a reference to a blob. Same pattern as containers.
         BlockBlobURL bu = cu.createBlockBlobURL("javatestblob");
         try {
             // Note: Calls to blockingGet force the call to be synchronous. This whole test is synchronous.
@@ -128,9 +132,8 @@ public class BlobStorageAPITests {
 
             // Set and retrieve the blob properties. Metadata is not yet supported.
             BlobHttpHeaders headers = new BlobHttpHeaders("myControl", "myDisposition",
-                    "myContentEncoding", "myLanguage", null, "myType");
-            Metadata metadata = new Metadata();
-            metadata.put("foo", "bar");
+                    "myContentEncoding", "myLanguage", null,
+                    "myType");
             bu.setPropertiesAsync(headers, null, null).blockingGet();
             BlobsGetPropertiesHeaders receivedHeaders = bu.getPropertiesAndMetadataAsync(
                     null, null).blockingGet().headers();
@@ -144,7 +147,8 @@ public class BlobStorageAPITests {
             String snapshot = bu.createSnapshotAsync(null, null, null).blockingGet()
                     .headers().snapshot();
 
-            // Create a reference to the snapshot.
+            // Create a reference to the snapshot. This will return a BlockBlobURL object that references the same
+            // path as the base blob with the query string including the snapshot value appended to the end.
             BlockBlobURL buSnapshot = bu.withSnapshot(snapshot);
 
             // Download the contents of the snapshot.
@@ -161,6 +165,8 @@ public class BlobStorageAPITests {
             // Simple delay to wait for the copy. Inefficient buf effective. A better method would be to periodically
             // poll the blob.
             TimeUnit.SECONDS.sleep(5);
+
+            // Check the existence of the copied blob.
             receivedHeaders = bu2.getPropertiesAndMetadataAsync(null, null).blockingGet()
                     .headers();
             Assert.assertEquals(headers.getContentType(), receivedHeaders.contentType());
@@ -181,8 +187,8 @@ public class BlobStorageAPITests {
                             null, null, null)).blockingGet().body().blobs().blob();
             Assert.assertEquals(4, blobs.size());
 
-            // Commit the list of blocks.
-            ArrayList<String> blockListNames = new ArrayList<String>();
+            // Commit the list of blocks. Download the blob to verify.
+            ArrayList<String> blockListNames = new ArrayList<>();
             blockListNames.add("0000");
             bu3.putBlockListAsync(blockListNames, null, null, null)
                     .blockingGet();
@@ -192,8 +198,8 @@ public class BlobStorageAPITests {
             assertArrayEquals(dataByte, new byte[]{0,0,0});
 
             // SAS -----------------------------
-            // Create new anonymous credentials for the pipeline. This will do a no-op on authorization and thereby not
-            // set the Authorization header as is required for SAS.
+            // Create new anonymous credentials for the pipeline. This will do a no-op for authentication and thereby
+            // not set the Authorization header as is required for SAS. We can use the same options as above.
             AnonymousCredentials creds2 = new AnonymousCredentials();
             pipeline = StorageURL.CreatePipeline(creds2, pop);
 
@@ -202,12 +208,12 @@ public class BlobStorageAPITests {
             EnumSet<AccountSASPermission> permissions = EnumSet.of(
                     AccountSASPermission.READ, AccountSASPermission.WRITE);
 
-            // Construct the SAS values object.
+            // Construct the AccountSAS values object. This encapsulates all the values needed to create an AccountSAS.
             AccountSAS sas = new AccountSAS("2016-05-31", SASProtocol.HTTPS_HTTP, null,
                     DateTime.now().plusDays(1).toDate(), permissions, null,
                     EnumSet.of(AccountSASService.BLOB), EnumSet.of(AccountSASResourceType.OBJECT));
 
-            // Construct a BlobURLParts object with all the consituent pieces of a reference to the blob.
+            // Construct a BlobURLParts object with all the constituent pieces of a reference to the blob.
             // Use the above SAS object to generate the query parameters to pass for that parameter.
             BlobURLParts parts = new BlobURLParts("http", "xclientdev2.blob.core.windows.net",
                     containerName, "javablob", null, sas.GenerateSASQueryParameters(creds),
@@ -216,24 +222,29 @@ public class BlobStorageAPITests {
             // Call toURL on the parts to get a string representation of the URL. This, along with the pipeline,
             // are used to create a new BlobURL object.
             BlockBlobURL sasBlob = new BlockBlobURL(parts.toURL(), pipeline);
-            System.out.println(parts.toURL());
+
+            // Call putBlock and getBlockList using the SAS.
             sasBlob.putBlockAsync("0001", new byte[]{1,1,1}, null).blockingGet();
             blockList = sasBlob.getBlockListAsync(BlockListType.ALL, null).blockingGet().body();
             Assert.assertEquals("0001", blockList.uncommittedBlocks().get(0).name());
 
-            //TODO: Can only use container SAS Permissions?
-            ServiceSAS serviceSAS = new ServiceSAS("2016-05-31", SASProtocol.HTTPS_HTTP, DateTime.now().minusDays(1).toDate(),
-                    DateTime.now().plusDays(1).toDate(), EnumSet.of(ContainerSASPermission.READ, ContainerSASPermission.WRITE),
+            // Construct a ServiceSAS in a pattern similar to that of the AccountSAS.
+            ServiceSAS serviceSAS = new ServiceSAS("2016-05-31", SASProtocol.HTTPS_HTTP,
+                    DateTime.now().minusDays(1).toDate(), DateTime.now().plusDays(1).toDate(),
+                    EnumSet.of(ContainerSASPermission.READ, ContainerSASPermission.WRITE),
                     null, containerName, "javablob", null, null,
                     null, null, null, null);
-            parts = new BlobURLParts("http", "xclientdev2.blob.core.windows.net",
-                    containerName, "javablob", null, serviceSAS.GenerateSASQueryParameters(creds), null);
+            parts = new BlobURLParts("http", "xclientdev2.blob.core.windows.net", containerName,
+                    "javablob", null, serviceSAS.GenerateSASQueryParameters(creds),
+                    null);
             BlockBlobURL serviceSasBlob = new BlockBlobURL(parts.toURL(), pipeline);
-            blockList = serviceSasBlob.getBlockListAsync(BlockListType.UNCOMMITTED, null).blockingGet().body();
+            blockList = serviceSasBlob.getBlockListAsync(BlockListType.UNCOMMITTED, null)
+                    .blockingGet().body();
             Assert.assertEquals("0001", blockList.uncommittedBlocks().get(0).name());
 
         }
         finally {
+            // Delete the blob and container.
             bu.deleteAsync(DeleteSnapshotsOptionType.INCLUDE, null, null).blockingGet();
             cu.deleteAsync(null, null).blockingGet();
         }
