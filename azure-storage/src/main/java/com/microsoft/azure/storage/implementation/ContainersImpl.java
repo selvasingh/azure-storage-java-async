@@ -45,7 +45,6 @@ import com.microsoft.rest.v2.annotations.HostParam;
 import com.microsoft.rest.v2.annotations.PathParam;
 import com.microsoft.rest.v2.annotations.PUT;
 import com.microsoft.rest.v2.annotations.QueryParam;
-import com.microsoft.rest.v2.annotations.UnexpectedResponseExceptionType;
 import com.microsoft.rest.v2.http.HttpClient;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
@@ -87,51 +86,41 @@ public class ContainersImpl implements Containers {
      */
     @Host("{url}")
     interface ContainersService {
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Containers create" })
         @PUT("{containerName}")
         @ExpectedResponses({201})
         Single<RestResponse<ContainerCreateHeaders, Void>> create(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("x-ms-blob-public-access") PublicAccessType access, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Containers getProperties" })
         @GET("{containerName}")
         @ExpectedResponses({200})
         Single<RestResponse<ContainerGetPropertiesHeaders, Void>> getProperties(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Containers delete" })
         @DELETE("{containerName}")
         @ExpectedResponses({202})
         Single<RestResponse<ContainerDeleteHeaders, Void>> delete(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Containers getMetadata" })
         @GET("{containerName}")
         @ExpectedResponses({200})
         Single<RestResponse<ContainerGetMetadataHeaders, Void>> getMetadata(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Containers setMetadata" })
         @PUT("{containerName}")
         @ExpectedResponses({200})
         Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadata(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Containers getAcl" })
         @GET("{containerName}")
         @ExpectedResponses({200})
         Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getAcl(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Containers setAcl" })
         @PUT("{containerName}")
         @ExpectedResponses({200})
         Single<RestResponse<ContainerSetAclHeaders, Void>> setAcl(@HostParam("url") String url, @BodyParam("application/xml; charset=utf-8") SignedIdentifiersWrapper containerAcl, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-blob-public-access") PublicAccessType access, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Containers lease" })
         @PUT("{containerName}")
         @ExpectedResponses({200, 201, 202})
         Single<RestResponse<ContainerLeaseHeaders, Void>> lease(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-lease-action") LeaseActionType action, @HeaderParam("x-ms-lease-break-period") Integer breakPeriod, @HeaderParam("x-ms-lease-duration") Integer duration, @HeaderParam("x-ms-proposed-lease-id") String proposedLeaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp, @QueryParam("restype") String restype);
 
-        @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.Containers listBlobs" })
         @GET("{containerName}")
         @ExpectedResponses({200})
         Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobs(@HostParam("url") String url, @QueryParam("prefix") String prefix, @QueryParam("delimiter") String delimiter, @QueryParam("marker") String marker, @QueryParam("maxresults") Integer maxresults, @QueryParam("include") String include, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
-
     }
 
     /**
@@ -264,7 +253,6 @@ public class ContainersImpl implements Containers {
             .toCompletable();
     }
 
-
     /**
      * returns all user-defined metadata and system properties for the specified container. The data returned does not include the container's list of blobs.
      *
@@ -389,7 +377,6 @@ public class ContainersImpl implements Containers {
         return getPropertiesWithRestResponseAsync(url, timeout, leaseId, requestId)
             .toCompletable();
     }
-
 
     /**
      * operation marks the specified container for deletion. The container and any blobs contained within it are later deleted during garbage collection.
@@ -552,7 +539,6 @@ public class ContainersImpl implements Containers {
             .toCompletable();
     }
 
-
     /**
      * returns all user-defined metadata for the container.
      *
@@ -679,7 +665,6 @@ public class ContainersImpl implements Containers {
         return getMetadataWithRestResponseAsync(url, timeout, leaseId, requestId)
             .toCompletable();
     }
-
 
     /**
      * operation sets one or more user-defined name-value pairs for the specified container.
@@ -826,7 +811,6 @@ public class ContainersImpl implements Containers {
             .toCompletable();
     }
 
-
     /**
      * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
@@ -954,7 +938,6 @@ public class ContainersImpl implements Containers {
             });
     }
 
-
     /**
      * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
@@ -999,7 +982,6 @@ public class ContainersImpl implements Containers {
         final String ifMatches = null;
         final String ifNoneMatch = null;
         final String requestId = null;
-        Validator.validate(containerAcl);
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
             ifModifiedSinceConverted = new DateTimeRfc1123(ifModifiedSince);
@@ -1113,7 +1095,6 @@ public class ContainersImpl implements Containers {
         return setAclWithRestResponseAsync(url, containerAcl, timeout, leaseId, access, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
-
 
     /**
      * establishes and manages a lock on a container for delete operations. The lock duration can be 15 to 60 seconds, or can be infinite.
@@ -1297,7 +1278,6 @@ public class ContainersImpl implements Containers {
             .toCompletable();
     }
 
-
     /**
      * The List Blobs operation returns a list of the blobs under the specified container.
      *
@@ -1346,7 +1326,6 @@ public class ContainersImpl implements Containers {
         final List<ListBlobsIncludeItem> include = null;
         final Integer timeout = null;
         final String requestId = null;
-        Validator.validate(include);
         String includeConverted = this.client.serializerAdapter().serializeList(include, CollectionFormat.CSV);
         return service.listBlobs(url, prefix, delimiter, marker, maxresults, includeConverted, timeout, this.client.version(), requestId, restype, comp);
     }
@@ -1464,6 +1443,4 @@ public class ContainersImpl implements Containers {
                 }
             });
     }
-
-
 }

@@ -70,5 +70,4 @@ public class PageList {
         this.clearRange = clearRange;
         return this;
     }
-
 }

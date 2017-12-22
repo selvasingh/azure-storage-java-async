@@ -849,5 +849,4 @@ public class BlobsGetPropertiesHeaders {
         this.isServerEncrypted = isServerEncrypted;
         return this;
     }
-
 }

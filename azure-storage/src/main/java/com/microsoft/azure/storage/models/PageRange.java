@@ -69,5 +69,4 @@ public class PageRange {
         this.end = end;
         return this;
     }
-
 }

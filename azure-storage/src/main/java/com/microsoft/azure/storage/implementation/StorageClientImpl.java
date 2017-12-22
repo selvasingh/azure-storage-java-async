@@ -25,7 +25,6 @@ import com.microsoft.rest.v2.http.HttpPipeline;
  * Initializes a new instance of the StorageClient class.
  */
 public class StorageClientImpl extends ServiceClient implements StorageClient {
-
     /**
      * Specifies the version of the operation to use for this request.
      */
@@ -149,7 +148,6 @@ public class StorageClientImpl extends ServiceClient implements StorageClient {
      */
     public StorageClientImpl(HttpPipeline httpPipeline) {
         super(httpPipeline);
-
         this.services = new ServicesImpl(this);
         this.containers = new ContainersImpl(this);
         this.blobs = new BlobsImpl(this);

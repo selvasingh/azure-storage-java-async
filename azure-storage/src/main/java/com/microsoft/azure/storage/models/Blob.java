@@ -122,5 +122,4 @@ public class Blob {
         this.metadata = metadata;
         return this;
     }
-
 }

@@ -199,5 +199,4 @@ public class BlobsSetMetadataHeaders {
         this.isServerEncrypted = isServerEncrypted;
         return this;
     }
-
 }

@@ -198,5 +198,4 @@ public class BlobsSetPropertiesHeaders {
         }
         return this;
     }
-
 }

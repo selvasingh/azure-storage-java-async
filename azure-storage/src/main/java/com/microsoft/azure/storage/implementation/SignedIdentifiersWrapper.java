@@ -19,7 +19,6 @@ import java.util.List;
 
 @JacksonXmlRootElement(localName = "SignedIdentifiers")
 public class SignedIdentifiersWrapper {
-
     @JacksonXmlProperty(localName = "SignedIdentifier")
     private final List<SignedIdentifier> signedIdentifiers;
 

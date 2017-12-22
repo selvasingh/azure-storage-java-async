@@ -5,23 +5,15 @@ import com.microsoft.azure.storage.blob.Base64;
 import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.*;
-import com.microsoft.rest.v2.policy.RequestPolicy;
-import com.microsoft.rest.v2.policy.RequestPolicyFactory;
-import com.microsoft.rest.v2.policy.RequestPolicyOptions;
+import com.microsoft.rest.v2.util.FlowableUtil;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.Assert;
 import org.junit.Test;
-import io.reactivex.Single;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.security.InvalidKeyException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -125,13 +117,12 @@ public class BlobStorageAPITests {
             Assert.assertEquals(containerList.get(0).name(), containerName);
 
             // Create the blob with a single put. See below for the putBlock(List) scenario.
-            bu.putBlobAsync(new byte[]{0, 0, 0}, null, null, null).blockingGet();
+            bu.putBlobAsync(AsyncInputStream.create(new byte[]{0, 0, 0}), null, null, null).blockingGet();
 
             // Download the blob contents.
-            InputStream data = bu.getBlobAsync(new BlobRange(0L, 3L),
+            AsyncInputStream data = bu.getBlobAsync(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
-            byte[] dataByte = new byte[3];
-            data.read(dataByte, 0, 3);
+            byte[] dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
             // Set and retrieve the blob properties. Metadata is not yet supported.
@@ -158,7 +149,7 @@ public class BlobStorageAPITests {
             // Download the contents of the snapshot.
             data = buSnapshot.getBlobAsync(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
-            data.read(dataByte, 0, 3);
+            dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0,0,0});
 
             // Create a reference to another blob within the same container and copies the first blob into this location.
@@ -179,7 +170,7 @@ public class BlobStorageAPITests {
             BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
             ArrayList<String> blockIDs = new ArrayList<>();
             blockIDs.add(Base64.encode(new Byte[]{0}));
-            bu3.putBlockAsync(blockIDs.get(0), new byte[]{0,0,0}, null).blockingGet();
+            bu3.putBlockAsync("0000", AsyncInputStream.create(new byte[]{0,0,0}), null).blockingGet();
 
             // Get the list of blocks on this blob. For demonstration purposes.
             BlockList blockList = bu3.getBlockListAsync(BlockListType.ALL, null)
@@ -198,7 +189,7 @@ public class BlobStorageAPITests {
             bu3.putBlockListAsync(blockIDs, null, null, null).blockingGet();
             data = bu3.getBlobAsync(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
-            data.read(dataByte, 0, 3);
+            dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0,0,0});
 
             // SAS -----------------------------
@@ -236,7 +227,7 @@ public class BlobStorageAPITests {
             // Download the blob using the SAS. To perform other operations, ensure the appropriate permissions are
             // specified above.
             sasBlob.getBlobAsync(new BlobRange(0L, 3L), null, false).blockingGet().body();
-            data.read(dataByte, 0, 3);
+            dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
         }

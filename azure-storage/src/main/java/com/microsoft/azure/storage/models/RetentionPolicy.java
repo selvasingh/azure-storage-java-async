@@ -70,5 +70,4 @@ public class RetentionPolicy {
         this.days = days;
         return this;
     }
-
 }

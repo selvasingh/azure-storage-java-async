@@ -70,5 +70,4 @@ public class Block {
         this.size = size;
         return this;
     }
-
 }
