@@ -7,8 +7,6 @@ import com.microsoft.rest.v2.http.*;
 import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -18,14 +16,12 @@ import io.reactivex.Single;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.security.InvalidKeyException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,162 +30,37 @@ import static org.junit.Assert.assertArrayEquals;
 
 
 public class BlobStorageAPITests {
-    /**
-     * Stores a reference to the RFC1123 date/time pattern.
-     */
-    private static final String RFC1123_PATTERN = "EEE, dd MMM yyyy HH:mm:ss z";
-
-    /**
-     * Stores a reference to the GMT time zone.
-     */
-    public static final TimeZone GMT_ZONE = TimeZone.getTimeZone("GMT");
-
-    /**
-     * Stores a reference to the US locale.
-     */
-    public static final Locale LOCALE_US = Locale.US;
-    public static DateFormat RFC1123_GMT_DATE_TIME_FORMATTER = new SimpleDateFormat(RFC1123_PATTERN, LOCALE_US);
-
-    public static String getGMTTime() {
-        return getGMTTime(new Date());
-    }
-
-    /**
-     * Returns the GTM date/time String for the specified value using the RFC1123 pattern.
-     *
-     * @param date
-     *            A <code>Date</code> object that represents the date to convert to GMT date/time in the RFC1123
-     *            pattern.
-     *
-     * @return A {@code String} that represents the GMT date/time for the specified value using the RFC1123
-     *         pattern.
-     */
-    public static String getGMTTime(final Date date) {
-        return RFC1123_GMT_DATE_TIME_FORMATTER.format(date);
-    }
-
-    static class AddDatePolicy implements RequestPolicyFactory {
-
-        @Override
-        public RequestPolicy create(RequestPolicy next, RequestPolicyOptions options) {
-            return new AddDate(next);
-        }
-
-        public final class AddDate implements RequestPolicy {
-            private final DateTimeFormatter format = DateTimeFormat
-                    .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'")
-                    .withZoneUTC()
-                    .withLocale(Locale.US);
-
-            private final RequestPolicy next;
-            public AddDate(RequestPolicy next) {
-                this.next = next;
-            }
-
-            @Override
-            public Single<HttpResponse> sendAsync(HttpRequest request) {
-                request.headers().set(Constants.HeaderConstants.DATE, getGMTTime(new Date()));
-                return this.next.sendAsync(request);
-            }
-        }
-    }
-
-    @Test
-    public void testBasic() throws Exception {
-
-        HttpPipelineLogger logger = new HttpPipelineLogger() {
-            @Override
-            public HttpPipelineLogLevel minimumLogLevel() {
-                return HttpPipelineLogLevel.INFO;
-            }
-
-            @Override
-            public void log(HttpPipelineLogLevel logLevel, String s, Object... objects) {
-                if (logLevel == HttpPipelineLogLevel.INFO) {
-                    Logger.getGlobal().info(String.format(s, objects));
-                }
-                else if (logLevel == HttpPipelineLogLevel.WARNING) {
-                    Logger.getGlobal().warning(String.format(s, objects));
-                }
-                else if (logLevel == HttpPipelineLogLevel.ERROR) {
-                    Logger.getGlobal().severe(String.format(s, objects));
-                }
-            }
-        };
-
-        HttpClient.Configuration configuration = new HttpClient.Configuration(
-                new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));
-        LoggingOptions loggingOptions = new LoggingOptions(Level.INFO);
-        SharedKeyCredentials creds = new SharedKeyCredentials("account", "key");
-        //AnonymousCredentials creds = new AnonymousCredentials();
-        //RequestRetryFactory requestRetryFactory = new RequestRetryFactory();
-        TelemetryOptions telemetryOptions = new TelemetryOptions();
-        AddDatePolicy addDate = new AddDatePolicy();
-
-
-//        builder.withHttpClient(HttpClient.createDefault(configuration))
-//                .withLogger(logger)
-//                .withRequestPolicies(requestIDFactory, telemetryFactory, addDate, creds, loggingFactory);
-        //StorageClientImpl client = new StorageClientImpl(builder.build());
-
-        PipelineOptions pop = new PipelineOptions();
-        pop.logger = logger;
-        pop.client = HttpClient.createDefault(configuration);
-        pop.loggingOptions = loggingOptions;
-        pop.telemetryOptions = telemetryOptions;
-        HttpPipeline pipeline = StorageURL.CreatePipeline(creds, pop);
-        ContainerURL containerURL = new ContainerURL("http://xclientdev.blob.core.windows.net/newautogencontainerr", pipeline);
-        containerURL.createAsync(30, new Metadata(), PublicAccessType.BLOB).blockingGet();
-        //containerURL.deleteAsync("\"http://xclientdev.blob.core.windows.net/newautogencontainer").toBlocking().value();
-        //containerURL.createAsync().blockingGet();
-        //containerURL.deleteAsync().blockingGet();
-
-        final ContainerURL containerURL2 = new ContainerURL("http://xclientfileencryption.blob.core.windows.net/" + generateRandomContainerName(), pipeline);
-        //containerURL.deleteAsync(null, null).blockingGet();
-        //containerURL.createAsync(null, null, null).blockingGet();
-        //containerURL.getPropertiesAndMetadataAsync(null, null).blockingGet().headers();
-
-        final CountDownLatch latch = new CountDownLatch(1);
-        final boolean valid = true;
-        containerURL2.createAsync(null, null, null)
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        // check if error is something other than container exists
-                        //if (throwable.getCause() != null)
-                        //valid = false;
-                    }
-                })
-                .doFinally(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        if (!valid) {
-                            latch.countDown();
-                            return;
-                        }
-
-                        containerURL2.deleteAsync(null, null).doFinally(
-                                new Action() {
-                                    @Override
-                                    public void run() throws Exception {
-                                        latch.countDown();
-                                    }
-                                }
-                        );
-                    }
-                }).subscribe();
-
-        latch.await();
-    }
-
-    public static String generateRandomContainerName() {
-        String containerName = "container" + UUID.randomUUID().toString();
-        return containerName.replace("-", "");
-    }
 
     @Test
     public void TestPutBlobBasic() throws IOException, InvalidKeyException, InterruptedException {
-        RFC1123_GMT_DATE_TIME_FORMATTER.setTimeZone(GMT_ZONE);
+        /**
+         * This library uses the Azure Rest Pipeline to make its requests. Details on this pipline can be found here:
+         * https://github.com/Azure/azure-pipeline-go/blob/master/pipeline/doc.go All references to HttpPipeline and
+         * the like refer to this structure.
+         * This library uses Microsoft AutoRest to generate the protocol layer off of the Swagger API spec of the
+         * blob service. All files in the implementation and models folders as well as the Interfaces in the root
+         * directory are auto-generated using this tool.
+         * This library's paradigm is centered around the URL object. A URL is constructed to a resource, such as
+         * BlobURL. This is solely a reference to a location; the existence of a BlobURL does not indicate the existence
+         * of a blob or hold any state related to the blob. The URL objects define methods for all operations related
+         * to that resource (or will eventually; some are not supported in the library yet).
+         * Several structures are defined on top of the auto-generated protocol layer to logically group items or
+         * concepts relevant to a given operation or resource. This both reduces the length of the parameter list
+         * and provides some coherency and relationship of ideas to aid the developer, improving efficiency and
+         * discoverability.
+         * In this sample test, we demonstrate the use of all APIs that are currently implemented. They have been tested
+         * to work in these cases, but they have not been thoroughly tested. More advanced operations performed by
+         * specifying or modifying calls in this test are not guaranteed to work. APIs not shown here are not guaranteed
+         * to work. Any reports on bugs found will be welcomed and addressed.
+         */
+
+
+        // Creating a pipeline requires a credentials and a structure of pipline options to customize the behavior.
+        // Credentials may be SharedKey as shown here or Anonymous as shown below.
+        SharedKeyCredentials creds = new SharedKeyCredentials("account", "key");
+
+        // Pipeline options allow for customization of the behavior of the HttpPipeline. Here we show adding a logger
+        // and specifying options for logging, enabling telemetry, and enabling Fiddler.
         HttpPipelineLogger logger = new HttpPipelineLogger() {
             @Override
             public HttpPipelineLogLevel minimumLogLevel() {
@@ -207,9 +78,9 @@ public class BlobStorageAPITests {
                 }
             }
         };
-
         LoggingOptions loggingOptions = new LoggingOptions(Level.INFO);
-        SharedKeyCredentials creds = new SharedKeyCredentials("account", "key");
+
+        // This will enable interaction with Fiddler.
         HttpClient.Configuration configuration = new HttpClient.Configuration(
                 new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));
         TelemetryOptions telemetryOptions = new TelemetryOptions();
@@ -220,71 +91,152 @@ public class BlobStorageAPITests {
         pop.loggingOptions = loggingOptions;
         HttpPipeline pipeline = StorageURL.CreatePipeline(creds, pop);
 
+        // Create a reference to the service.
         ServiceURL su = new ServiceURL("http://xclientdev2.blob.core.windows.net", pipeline);
+
+        // Create a reference to a container.
         String containerName = "javatestcontainer" + System.currentTimeMillis();
         ContainerURL cu = su.createContainerURL(containerName);
-        cu.createAsync(null, null, PublicAccessType.BLOB).blockingGet();
+
+        // Create a reference to a blob.
         BlockBlobURL bu = cu.createBlockBlobURL("javatestblob");
         try {
-            bu.putBlobAsync(new byte[]{0, 0, 0},
-                    new BlobHttpHeaders(null, null, null, null, null, null),
-                    new Metadata(),
-                    new BlobAccessConditions(new HttpAccessConditions(null, null, new ETag(""), new ETag("")),
-                            new LeaseAccessConditions(""), null, null)).blockingGet();
-            RestResponse<ServiceListContainersHeaders, ListContainersResponse> resp = su.listConatinersAsync("java", null, null,
-                    null, null).blockingGet();
+            // Note: Calls to blockingGet force the call to be synchronous. This whole test is synchronous.
+            // APIs will typically return a RestResponse<*HeadersType*, *BodyType*>. It is therefore possible to
+            // retrieve the headers and the body of every request. If there is no body in the request, the body type
+            // will be void.
+
+            // Create the container.
+            cu.createAsync(null, null, PublicAccessType.BLOB).blockingGet();
+
+            // List the containers in the account.
+            RestResponse<ServiceListContainersHeaders, ListContainersResponse> resp = su.listConatinersAsync(
+                    "java", null, null,null, null).blockingGet();
             List<Container> containerList = resp.body().containers();
             Assert.assertEquals(1, containerList.size());
             Assert.assertEquals(containerList.get(0).name(), containerName);
-            InputStream data = bu.getBlobAsync(new BlobRange(new Long(0), new Long(3)), null, false, null).blockingGet().body();
+
+            // Create the blob with a single put. See below for the putBlock(List) scenario.
+            bu.putBlobAsync(new byte[]{0, 0, 0}, null, null, null).blockingGet();
+
+            // Download the blob contents.
+            InputStream data = bu.getBlobAsync(new BlobRange(new Long(0), new Long(3)),
+                    null, false, null).blockingGet().body();
             byte[] dataByte = new byte[3];
             data.read(dataByte, 0, 3);
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
+
+            // Set and retrieve the blob properties. Metadata is not yet supported.
             BlobHttpHeaders headers = new BlobHttpHeaders("myControl", "myDisposition",
                     "myContentEncoding", "myLanguage", null, "myType");
             Metadata metadata = new Metadata();
             metadata.put("foo", "bar");
             bu.setPropertiesAsync(headers, null, null).blockingGet();
-            bu.setMetadaAsync(metadata, null, null).blockingGet();
-            BlobsGetPropertiesHeaders receivedHeaders = bu.getPropertiesAndMetadataAsync(null, null).blockingGet().headers();
+            BlobsGetPropertiesHeaders receivedHeaders = bu.getPropertiesAndMetadataAsync(
+                    null, null).blockingGet().headers();
             Assert.assertEquals(headers.getCacheControl(), receivedHeaders.cacheControl());
             Assert.assertEquals(headers.getContentDisposition(), receivedHeaders.contentDisposition());
             Assert.assertEquals(headers.getContentEncoding(), receivedHeaders.contentEncoding());
             Assert.assertEquals(headers.getContentLanguage(), receivedHeaders.contentLanguage());
             Assert.assertEquals(headers.getContentType(), receivedHeaders.contentType());
-            //Assert.assertEquals(metadata, receivedHeaders.metadata()); TODO: Metadata broken
 
-            DateTime snapshot = bu.createSnapshotAsync(null, null, null).blockingGet().headers().snapshot();
-            BlockBlobURL buSnapshot = bu.withSnapshot(snapshot.toDate());
-            data = buSnapshot.getBlobAsync(new BlobRange(new Long(0), new Long(3)), null, false, null).blockingGet().body();
-            //data.read(dataByte, 0, 3);
-            //assertArrayEquals(dataByte, new byte[]{0,0,0});
-            //Assert.assertEquals(headers.getContentType(), receivedHeaders.contentType()); //TODO: Snapshot parsing not working
-            BlockBlobURL bu2 = cu.createBlockBlobURL("javablob2");
-            bu2.startCopyAsync(bu.toString(), null, null, null, null).blockingGet();
-            TimeUnit.SECONDS.sleep(5);
-            receivedHeaders = bu2.getPropertiesAndMetadataAsync(null, null).blockingGet().headers();
-            Assert.assertEquals(headers.getContentType(), receivedHeaders.contentType());
+            // Create a snapshot of the blob and pull the snapshot ID out of the headers.
+            String snapshot = bu.createSnapshotAsync(null, null, null).blockingGet()
+                    .headers().snapshot();
 
-            BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
-            bu3.putBlockAsync("0000", new byte[]{0,0,0}, null).blockingGet();
-            BlockList blockList = bu3.getBlockListAsync(BlockListType.ALL, null).blockingGet().body();
-            Assert.assertEquals("0000", blockList.uncommittedBlocks().get(0).name());
-            List<Blob> blobs = cu.listBlobsAsync(null,
-                    new ListBlobsOptions(new BlobListingDetails(true, false, true, true),
-                            null, null, null)).blockingGet().body().blobs().blob();
-            Assert.assertEquals(4, blobs.size());
-            ArrayList<String> blockListNames = new ArrayList<String>();
-            blockListNames.add("0000");
-            bu3.putBlockListAsync(blockListNames, null, null, null).blockingGet();
-            data = bu3.getBlobAsync(new BlobRange(new Long(0), new Long(3)), null, false, null).blockingGet().body();
+            // Create a reference to the snapshot.
+            BlockBlobURL buSnapshot = bu.withSnapshot(snapshot);
+
+            // Download the contents of the snapshot.
+            data = buSnapshot.getBlobAsync(new BlobRange(new Long(0), new Long(3)),
+                    null, false, null).blockingGet().body();
             data.read(dataByte, 0, 3);
             assertArrayEquals(dataByte, new byte[]{0,0,0});
-            // TODO: SAS generation
+
+            // Create a reference to another blob and copy the first blob into this location.
+            BlockBlobURL bu2 = cu.createBlockBlobURL("javablob2");
+            bu2.startCopyAsync(bu.toString(), null, null, null,
+                    null).blockingGet();
+
+            // Simple delay to wait for the copy. Inefficient buf effective. A better method would be to periodically
+            // poll the blob.
+            TimeUnit.SECONDS.sleep(5);
+            receivedHeaders = bu2.getPropertiesAndMetadataAsync(null, null).blockingGet()
+                    .headers();
+            Assert.assertEquals(headers.getContentType(), receivedHeaders.contentType());
+
+            // Create a reference to a new blob to upload blocks. Upload a single block.
+            BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
+            bu3.putBlockAsync("0000", new byte[]{0,0,0}, null).blockingGet();
+
+            // Get the list of blocks on this blob.
+            BlockList blockList = bu3.getBlockListAsync(BlockListType.ALL, null)
+                    .blockingGet().body();
+            Assert.assertEquals("0000", blockList.uncommittedBlocks().get(0).name());
+
+            // Get a list of blobs in the container including copies, snapshots, and uncommitted blobs.
+            List<Blob> blobs = cu.listBlobsAsync(null,
+                    new ListBlobsOptions(new BlobListingDetails(
+                            true, false, true, true),
+                            null, null, null)).blockingGet().body().blobs().blob();
+            Assert.assertEquals(4, blobs.size());
+
+            // Commit the list of blocks.
+            ArrayList<String> blockListNames = new ArrayList<String>();
+            blockListNames.add("0000");
+            bu3.putBlockListAsync(blockListNames, null, null, null)
+                    .blockingGet();
+            data = bu3.getBlobAsync(new BlobRange(new Long(0), new Long(3)),
+                    null, false, null).blockingGet().body();
+            data.read(dataByte, 0, 3);
+            assertArrayEquals(dataByte, new byte[]{0,0,0});
+
+            // SAS -----------------------------
+            // Create new anonymous credentials for the pipeline. This will do a no-op on authorization and thereby not
+            // set the Authorization header as is required for SAS.
+            AnonymousCredentials creds2 = new AnonymousCredentials();
+            pipeline = StorageURL.CreatePipeline(creds2, pop);
+
+            // Create an EnumSet of permissions for the resource. This can also be done inline as shown below for
+            // the service and resourceType.
+            EnumSet<AccountSASPermission> permissions = EnumSet.of(
+                    AccountSASPermission.READ, AccountSASPermission.WRITE);
+
+            // Construct the SAS values object.
+            AccountSAS sas = new AccountSAS("2016-05-31", SASProtocol.HTTPS_HTTP, null,
+                    DateTime.now().plusDays(1).toDate(), permissions, null,
+                    EnumSet.of(AccountSASService.BLOB), EnumSet.of(AccountSASResourceType.OBJECT));
+
+            // Construct a BlobURLParts object with all the consituent pieces of a reference to the blob.
+            // Use the above SAS object to generate the query parameters to pass for that parameter.
+            BlobURLParts parts = new BlobURLParts("http", "xclientdev2.blob.core.windows.net",
+                    containerName, "javablob", null, sas.GenerateSASQueryParameters(creds),
+                    null );
+
+            // Call toURL on the parts to get a string representation of the URL. This, along with the pipeline,
+            // are used to create a new BlobURL object.
+            BlockBlobURL sasBlob = new BlockBlobURL(parts.toURL(), pipeline);
+            System.out.println(parts.toURL());
+            sasBlob.putBlockAsync("0001", new byte[]{1,1,1}, null).blockingGet();
+            blockList = sasBlob.getBlockListAsync(BlockListType.ALL, null).blockingGet().body();
+            Assert.assertEquals("0001", blockList.uncommittedBlocks().get(0).name());
+
+            //TODO: Can only use container SAS Permissions?
+            ServiceSAS serviceSAS = new ServiceSAS("2016-05-31", SASProtocol.HTTPS_HTTP, DateTime.now().minusDays(1).toDate(),
+                    DateTime.now().plusDays(1).toDate(), EnumSet.of(ContainerSASPermission.READ, ContainerSASPermission.WRITE),
+                    null, containerName, "javablob", null, null,
+                    null, null, null, null);
+            parts = new BlobURLParts("http", "xclientdev2.blob.core.windows.net",
+                    containerName, "javablob", null, serviceSAS.GenerateSASQueryParameters(creds), null);
+            BlockBlobURL serviceSasBlob = new BlockBlobURL(parts.toURL(), pipeline);
+            blockList = serviceSasBlob.getBlockListAsync(BlockListType.UNCOMMITTED, null).blockingGet().body();
+            Assert.assertEquals("0001", blockList.uncommittedBlocks().get(0).name());
+
         }
         finally {
             bu.deleteAsync(DeleteSnapshotsOptionType.INCLUDE, null, null).blockingGet();
             cu.deleteAsync(null, null).blockingGet();
         }
     }
+
 }

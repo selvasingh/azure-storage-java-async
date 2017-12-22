@@ -60,7 +60,7 @@ public final class AppendBlobURL extends BlobURL {
      * @return
      *      A {@link BlobURL} object with the given pipeline.
      */
-    public AppendBlobURL withSnapshot(Date snapshot) throws MalformedURLException, UnsupportedEncodingException {
+    public AppendBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
         BlobURLParts blobURLParts = URLParser.ParseURL(super.url);
         blobURLParts.setSnapshot(snapshot);
         return new AppendBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());

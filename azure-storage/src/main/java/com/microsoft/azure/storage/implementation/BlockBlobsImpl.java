@@ -89,7 +89,7 @@ public class BlockBlobsImpl implements BlockBlobs {
         @Headers({ "x-ms-logging-context: com.microsoft.azure.storage.BlockBlobs getBlockList" })
         @GET("{containerName}/{blob}")
         @ExpectedResponses({200})
-        Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockList(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("blocklisttype") BlockListType listType, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+        Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockList(@HostParam("url") String url, @QueryParam("snapshot") String snapshot, @QueryParam("blocklisttype") BlockListType listType, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
     }
 
@@ -506,7 +506,7 @@ public class BlockBlobsImpl implements BlockBlobs {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "blocklist";
-        final DateTime snapshot = null;
+        final String snapshot = null;
         final Integer timeout = null;
         final String leaseId = null;
         final String requestId = null;
@@ -548,7 +548,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the BlockList object if successful.
      */
-    public BlockList getBlockList(String url, BlockListType listType, DateTime snapshot, Integer timeout, String leaseId, String requestId) {
+    public BlockList getBlockList(String url, BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId) {
         return getBlockListAsync(url, listType, snapshot, timeout, leaseId, requestId).blockingGet();
     }
 
@@ -565,7 +565,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<BlockList> getBlockListAsync(String url, BlockListType listType, DateTime snapshot, Integer timeout, String leaseId, String requestId, ServiceCallback<BlockList> serviceCallback) {
+    public ServiceFuture<BlockList> getBlockListAsync(String url, BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId, ServiceCallback<BlockList> serviceCallback) {
         return ServiceFuture.fromBody(getBlockListAsync(url, listType, snapshot, timeout, leaseId, requestId), serviceCallback);
     }
 
@@ -581,7 +581,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlockBlobsGetBlockListHeaders, BlockList> object
      */
-    public Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockListWithRestResponseAsync(String url, BlockListType listType, DateTime snapshot, Integer timeout, String leaseId, String requestId) {
+    public Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockListWithRestResponseAsync(String url, BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
@@ -607,7 +607,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlockBlobsGetBlockListHeaders, BlockList> object
      */
-    public Maybe<BlockList> getBlockListAsync(String url, BlockListType listType, DateTime snapshot, Integer timeout, String leaseId, String requestId) {
+    public Maybe<BlockList> getBlockListAsync(String url, BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId) {
         return getBlockListWithRestResponseAsync(url, listType, snapshot, timeout, leaseId, requestId)
             .flatMapMaybe(new Function<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>, Maybe<BlockList>>() {
                 public Maybe<BlockList> apply(RestResponse<BlockBlobsGetBlockListHeaders, BlockList> restResponse) {

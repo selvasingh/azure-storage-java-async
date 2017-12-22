@@ -333,7 +333,7 @@ public interface BlockBlobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the BlockList object if successful.
      */
-    BlockList getBlockList(String url, BlockListType listType, DateTime snapshot, Integer timeout, String leaseId, String requestId);
+    BlockList getBlockList(String url, BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId);
 
     /**
      * The Get Block List operation retrieves the list of blocks that have been uploaded as part of a block blob.
@@ -348,7 +348,7 @@ public interface BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;BlockList&gt;} object
      */
-    ServiceFuture<BlockList> getBlockListAsync(String url, BlockListType listType, DateTime snapshot, Integer timeout, String leaseId, String requestId, final ServiceCallback<BlockList> serviceCallback);
+    ServiceFuture<BlockList> getBlockListAsync(String url, BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId, final ServiceCallback<BlockList> serviceCallback);
 
     /**
      * The Get Block List operation retrieves the list of blocks that have been uploaded as part of a block blob.
@@ -362,7 +362,7 @@ public interface BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Maybe&lt;BlockList&gt;} object if successful.
      */
-    Maybe<BlockList> getBlockListAsync(String url, BlockListType listType, DateTime snapshot, Integer timeout, String leaseId, String requestId);
+    Maybe<BlockList> getBlockListAsync(String url, BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId);
 
     /**
      * The Get Block List operation retrieves the list of blocks that have been uploaded as part of a block blob.
@@ -376,6 +376,6 @@ public interface BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlockBlobsGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockListWithRestResponseAsync(String url, BlockListType listType, DateTime snapshot, Integer timeout, String leaseId, String requestId);
+    Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockListWithRestResponseAsync(String url, BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId);
 
 }

@@ -38,7 +38,7 @@ public final class BlobURLParts {
 
     private String blobName;
 
-    private Date snapshot;
+    private String snapshot;
 
     private SASQueryParameters sasQueryParameters;
 
@@ -62,7 +62,7 @@ public final class BlobURLParts {
      *      A {@code Map<String, String[]} representing query parameter vey value pairs aside from SAS parameters and
      *      snapshot time or {@code null}
      */
-    public BlobURLParts(String scheme, String host, String containerName, String blobName, Date snapshot, SASQueryParameters sasQueryParameters, Map<String, String[]> unparsedParameters) {
+    public BlobURLParts(String scheme, String host, String containerName, String blobName, String snapshot, SASQueryParameters sasQueryParameters, Map<String, String[]> unparsedParameters) {
         this.scheme = scheme;
         this.host = host;
         this.containerName = containerName;
@@ -108,7 +108,7 @@ public final class BlobURLParts {
      * @return
      *      A {@code java.util.Date} representing the snapshot time or {@code null}
      */
-    public Date getSnapshot() {
+    public String getSnapshot() {
         return snapshot;
     }
 
@@ -153,16 +153,17 @@ public final class BlobURLParts {
 
         boolean isFirst = true;
 
-        for(Map.Entry<String, String[]> entry : this.unparsedParameters.entrySet()) {
-            if (isFirst) {
-                urlBuilder.append('?');
-                isFirst = false;
-            }
-            else {
-                urlBuilder.append('&');
-            }
+        if(this.unparsedParameters != null) {
+            for (Map.Entry<String, String[]> entry : this.unparsedParameters.entrySet()) {
+                if (isFirst) {
+                    urlBuilder.append('?');
+                    isFirst = false;
+                } else {
+                    urlBuilder.append('&');
+                }
 
-            urlBuilder.append(entry.getKey() + '=' + StringUtils.join(entry.getValue(), ','));
+                urlBuilder.append(entry.getKey() + '=' + StringUtils.join(entry.getValue(), ','));
+            }
         }
 
         if (this.snapshot != null) {
@@ -174,7 +175,8 @@ public final class BlobURLParts {
                 urlBuilder.append('&');
             }
 
-            urlBuilder.append("snapshot=" + URLEncoder.encode(getGMTTimeSnapshot(this.snapshot), "UTF-8"));
+            //urlBuilder.append("snapshot=" + URLEncoder.encode(getGMTTimeSnapshot(this.snapshot), "UTF-8"));
+            urlBuilder.append("snapshot=" + this.snapshot); // The snapshot should only be what is returned by the service and so formatted correctly
         }
 
         String sasEncoding = this.sasQueryParameters.encode();
@@ -210,7 +212,7 @@ public final class BlobURLParts {
         this.blobName = blobName;
     }
 
-    public void setSnapshot(Date snapshot) {
+    public void setSnapshot(String snapshot) {
         this.snapshot = snapshot;
     }
 

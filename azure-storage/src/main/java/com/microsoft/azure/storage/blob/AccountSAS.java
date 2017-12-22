@@ -16,6 +16,8 @@ package com.microsoft.azure.storage.blob;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.util.Date;
 import java.util.EnumSet;
@@ -72,6 +74,13 @@ public final class AccountSAS extends BaseSAS {
         if (sharedKeyCredentials == null) {
             throw new IllegalArgumentException("SharedKeyCredentials cannot be null.");
         }
+        IPRange ipRange;
+        if (super.ipRange == null) {
+            ipRange = IPRange.getDefault();
+        }
+        else {
+            ipRange = super.ipRange;
+        }
 
         String servicesString = AccountSASService.servicesToString(this.services);
         String resourceTypesString = AccountSASResourceType.resourceTypesToString(this.resourceTypes);
@@ -83,7 +92,7 @@ public final class AccountSAS extends BaseSAS {
                         resourceTypesString,
                         Utility.getUTCTimeOrEmpty(super.startTime),
                         Utility.getUTCTimeOrEmpty(super.expiryTime),
-                        super.ipRange.toString(),
+                        ipRange.toString(),
                         super.protocol.toString(),
                         super.version,
                         Constants.EMPTY_STRING // Account SAS requires an additional newline character
@@ -95,13 +104,18 @@ public final class AccountSAS extends BaseSAS {
 
         SASQueryParameters sasParams = new SASQueryParameters();
         sasParams.version = super.version;
+        sasParams.services = servicesString;
         sasParams.resourceTypes = resourceTypesString;
         sasParams.protocol = super.protocol.toString();
         sasParams.startTime = super.startTime;
         sasParams.expiryTime = super.expiryTime;
         sasParams.ipRange = super.ipRange;
         sasParams.permissions = super.permissions;
-        sasParams.signature = signature;
+        try {
+            sasParams.signature = URLEncoder.encode(signature, "UTF-8");// TODO: use non depricated version
+        } catch (UnsupportedEncodingException e) {
+            // If UTF-8 is not supported, we have no idea what to do
+        }
         return sasParams;
     }
 }

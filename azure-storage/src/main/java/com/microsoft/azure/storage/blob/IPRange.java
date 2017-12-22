@@ -20,6 +20,7 @@ import java.net.Inet4Address;
  * A continuous range of IP addresses.
  */
 public final class IPRange {
+    private static IPRange defaultIPRange;
     private String ipMin;
     private String ipMax;
 
@@ -83,6 +84,9 @@ public final class IPRange {
      */
     @Override
     public String toString() {
+        if(this.ipMin.length() == 0) {
+            return "";
+        }
         StringBuilder str = new StringBuilder(this.ipMin);
         if (!this.ipMin.equals(this.ipMax)) {
             str.append("-");
@@ -106,5 +110,12 @@ public final class IPRange {
         catch (Exception ex) {
             throw new IllegalArgumentException(String.format(SR.INVALID_IP_ADDRESS, ipAddress), ex);
         }
+    }
+
+    public static IPRange getDefault() {
+        if(defaultIPRange == null) {
+            defaultIPRange = new IPRange("", "");
+        }
+        return defaultIPRange;
     }
 }
