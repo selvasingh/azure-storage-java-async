@@ -4,6 +4,8 @@ import com.microsoft.rest.v2.http.HttpClient;
 import com.microsoft.rest.v2.http.HttpPipelineLogLevel;
 import com.microsoft.rest.v2.http.HttpPipelineLogger;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +27,9 @@ public final class PipelineOptions {
 
     public PipelineOptions() {
         this.telemetryOptions = new TelemetryOptions();
-        this.client = HttpClient.createDefault(); // Pass in configuration for Fiddler support.
+        HttpClient.Configuration configuration = new HttpClient.Configuration(
+                new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));
+        this.client = HttpClient.createDefault(configuration); // Pass in configuration for Fiddler support.
         this.logger = new HttpPipelineLogger() {
             @Override
             public HttpPipelineLogLevel minimumLogLevel() {
