@@ -15,9 +15,9 @@
 package com.microsoft.azure.storage.blob;
 
 import com.microsoft.azure.storage.implementation.StorageClientImpl;
-import com.microsoft.azure.storage.models.BlobType;
-import com.microsoft.azure.storage.models.BlobsPutHeaders;
+import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
+import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
 
@@ -69,10 +69,10 @@ public final class PageBlobURL extends BlobURL {
      * Create creates a page blob of the specified length. Call PutPage to upload data data to a page blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
      * @param size
-     *           specifies the maximum size for the page blob, up to 8 TB. The page blob size must be aligned to a
+     *           Specifies the maximum size for the page blob, up to 8 TB. The page blob size must be aligned to a
      *           512-byte boundary.
      * @param sequenceNumber
-     *            a user-controlled value that you can use to track requests. The value of the sequence number must be
+     *            A user-controlled value that you can use to track requests. The value of the sequence number must be
      *            between 0 and 2^63 - 1.The default value is 0.
      * @param blobHttpHeaders
      *            A {@Link BlobHttpHeaders} object that specifies which properties to set on the blob.
@@ -103,6 +103,69 @@ public final class PageBlobURL extends BlobURL {
                 blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), size, sequenceNumber, null);
+                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
+                size, sequenceNumber, null);
+    }
+
+    /**
+     * PutPages writes 1 or more pages to the page blob. The start and end offsets must be a multiple of 512.
+     * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-page.
+     * @param pageRange
+     *           A {@Link PageRange} object. Specifies the range of bytes to be written as a page.
+     * @param body
+     *           A {@Link AsyncInputStream} that contains the content of the page.
+     * @param accessConditions
+     *           A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
+     *           complete.
+     * @return
+     */
+    public Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPagesAsync(
+            PageRange pageRange, AsyncInputStream body, BlobAccessConditions accessConditions) {
+        if(accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
+        }
+        return this.storageClient.pageBlobs().putPageWithRestResponseAsync(this.url, PageWriteType.UPDATE, body,
+                null, this.pageRangeToString(pageRange), accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThanOrEqual(),
+                accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThan(),
+                accessConditions.getPageBlobAccessConditions().getIfSequenceNumberEqual(),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
+    }
+
+    public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setSequenceNumber(
+            SequenceNumberActionType action, Long sequenceNumber, BlobHttpHeaders headers,
+            BlobAccessConditions accessConditions) {
+        if(headers == null) {
+            headers = BlobHttpHeaders.getDefault();
+        }
+        if(accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
+        }
+        // TODO: validate sequenceNumber
+        if(action == SequenceNumberActionType.INCREMENT) {
+           sequenceNumber = null;
+        }
+        return this.storageClient.blobs().setPropertiesWithRestResponseAsync(this.url, null,
+                headers.getCacheControl(), headers.getContentType(), headers.getContentMD5(),
+                headers.getContentEncoding(), headers.getContentLanguage(),
+                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
+                headers.getContentDisposition(),
+                null, action, sequenceNumber, null);
+    }
+
+    private String pageRangeToString(PageRange pageRange) {
+        // TODO: Validation on PageRange.
+        StringBuilder range = new StringBuilder("bytes=");
+        range.append(pageRange.start());
+        range.append('-');
+        range.append(pageRange.end());
+        return range.toString();
     }
 }

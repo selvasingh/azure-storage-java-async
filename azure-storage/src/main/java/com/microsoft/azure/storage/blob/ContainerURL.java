@@ -107,8 +107,6 @@ public final class ContainerURL extends StorageURL {
                 containerAccessConditions.getLeaseID().toString(),
                 containerAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 containerAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
-                containerAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                containerAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null);
     }
 
@@ -166,8 +164,6 @@ public final class ContainerURL extends StorageURL {
                 containerAccessConditions.getLeaseID().toString(), accessType,
                 containerAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 containerAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
-                containerAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                containerAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null);
     }
 

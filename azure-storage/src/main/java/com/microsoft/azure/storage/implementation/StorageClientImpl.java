@@ -22,7 +22,7 @@ import com.microsoft.rest.v2.ServiceClient;
 import com.microsoft.rest.v2.http.HttpPipeline;
 
 /**
- * Initializes a new instance of the StorageClient class.
+ * Initializes a new instance of the StorageClient type.
  */
 public class StorageClientImpl extends ServiceClient implements StorageClient {
     /**

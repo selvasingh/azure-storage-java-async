@@ -22,20 +22,20 @@ public class PageRange {
      * The start property.
      */
     @JsonProperty(value = "Start", required = true)
-    private int start;
+    private long start;
 
     /**
      * The end property.
      */
     @JsonProperty(value = "End", required = true)
-    private int end;
+    private long end;
 
     /**
      * Get the start value.
      *
      * @return the start value
      */
-    public int start() {
+    public long start() {
         return this.start;
     }
 
@@ -45,7 +45,7 @@ public class PageRange {
      * @param start the start value to set
      * @return the PageRange object itself.
      */
-    public PageRange withStart(int start) {
+    public PageRange withStart(long start) {
         this.start = start;
         return this;
     }
@@ -55,7 +55,7 @@ public class PageRange {
      *
      * @return the end value
      */
-    public int end() {
+    public long end() {
         return this.end;
     }
 
@@ -65,7 +65,7 @@ public class PageRange {
      * @param end the end value to set
      * @return the PageRange object itself.
      */
-    public PageRange withEnd(int end) {
+    public PageRange withEnd(long end) {
         this.end = end;
         return this;
     }

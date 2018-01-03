@@ -50,7 +50,7 @@ import java.io.IOException;
  */
 public class ServicesImpl implements Services {
     /**
-     * The RestProxy service to perform REST calls.
+     * The proxy service used to perform REST calls.
      */
     private ServicesService service;
 
@@ -60,18 +60,18 @@ public class ServicesImpl implements Services {
     private StorageClientImpl client;
 
     /**
-     * Initializes an instance of Services.
+     * Initializes an instance of ServicesImpl.
      *
      * @param client the instance of the service client containing this operation class.
      */
     public ServicesImpl(StorageClientImpl client) {
-        this.service = RestProxy.create(ServicesService.class, client.httpPipeline(), client.serializerAdapter());
+        this.service = RestProxy.create(ServicesService.class, client);
         this.client = client;
     }
 
     /**
-     * The interface defining all the services for Services to be used by
-     * RestProxy to perform REST calls.
+     * The interface defining all the services for Services to be used by the
+     * proxy service to perform REST calls.
      */
     @Host("{url}")
     interface ServicesService {
@@ -100,7 +100,6 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
-     * @return the void object if successful.
      */
     public void setProperties(String url, StorageServiceProperties storageServiceProperties) {
         setPropertiesAsync(url, storageServiceProperties).blockingAwait();
@@ -115,7 +114,7 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> setPropertiesAsync(String url, StorageServiceProperties storageServiceProperties, ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> setPropertiesAsync(String url, StorageServiceProperties storageServiceProperties, final ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(setPropertiesAsync(url, storageServiceProperties), serviceCallback);
     }
 
@@ -125,7 +124,7 @@ public class ServicesImpl implements Services {
      * @param url The url to the resource.
      * @param storageServiceProperties The StorageService properties.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<ServiceSetPropertiesHeaders, Void> object
+     * @return the {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(String url, StorageServiceProperties storageServiceProperties) {
         if (url == null) {
@@ -168,7 +167,6 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
-     * @return the void object if successful.
      */
     public void setProperties(String url, StorageServiceProperties storageServiceProperties, Integer timeout, String requestId) {
         setPropertiesAsync(url, storageServiceProperties, timeout, requestId).blockingAwait();
@@ -185,7 +183,7 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> setPropertiesAsync(String url, StorageServiceProperties storageServiceProperties, Integer timeout, String requestId, ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> setPropertiesAsync(String url, StorageServiceProperties storageServiceProperties, Integer timeout, String requestId, final ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(setPropertiesAsync(url, storageServiceProperties, timeout, requestId), serviceCallback);
     }
 
@@ -197,7 +195,7 @@ public class ServicesImpl implements Services {
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<ServiceSetPropertiesHeaders, Void> object
+     * @return the {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(String url, StorageServiceProperties storageServiceProperties, Integer timeout, String requestId) {
         if (url == null) {
@@ -251,7 +249,7 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<StorageServiceProperties> getPropertiesAsync(String url, ServiceCallback<StorageServiceProperties> serviceCallback) {
+    public ServiceFuture<StorageServiceProperties> getPropertiesAsync(String url, final ServiceCallback<StorageServiceProperties> serviceCallback) {
         return ServiceFuture.fromBody(getPropertiesAsync(url), serviceCallback);
     }
 
@@ -260,7 +258,7 @@ public class ServicesImpl implements Services {
      *
      * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties> object
+     * @return the {@link Single&lt;RestResponse&lt;ServiceGetPropertiesHeaders, StorageServiceProperties&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getPropertiesWithRestResponseAsync(String url) {
         if (url == null) {
@@ -321,7 +319,7 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<StorageServiceProperties> getPropertiesAsync(String url, Integer timeout, String requestId, ServiceCallback<StorageServiceProperties> serviceCallback) {
+    public ServiceFuture<StorageServiceProperties> getPropertiesAsync(String url, Integer timeout, String requestId, final ServiceCallback<StorageServiceProperties> serviceCallback) {
         return ServiceFuture.fromBody(getPropertiesAsync(url, timeout, requestId), serviceCallback);
     }
 
@@ -332,7 +330,7 @@ public class ServicesImpl implements Services {
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties> object
+     * @return the {@link Single&lt;RestResponse&lt;ServiceGetPropertiesHeaders, StorageServiceProperties&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getPropertiesWithRestResponseAsync(String url, Integer timeout, String requestId) {
         if (url == null) {
@@ -389,7 +387,7 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<StorageServiceStats> getStatsAsync(String url, ServiceCallback<StorageServiceStats> serviceCallback) {
+    public ServiceFuture<StorageServiceStats> getStatsAsync(String url, final ServiceCallback<StorageServiceStats> serviceCallback) {
         return ServiceFuture.fromBody(getStatsAsync(url), serviceCallback);
     }
 
@@ -398,7 +396,7 @@ public class ServicesImpl implements Services {
      *
      * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<ServiceGetStatsHeaders, StorageServiceStats> object
+     * @return the {@link Single&lt;RestResponse&lt;ServiceGetStatsHeaders, StorageServiceStats&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ServiceGetStatsHeaders, StorageServiceStats>> getStatsWithRestResponseAsync(String url) {
         if (url == null) {
@@ -459,7 +457,7 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<StorageServiceStats> getStatsAsync(String url, Integer timeout, String requestId, ServiceCallback<StorageServiceStats> serviceCallback) {
+    public ServiceFuture<StorageServiceStats> getStatsAsync(String url, Integer timeout, String requestId, final ServiceCallback<StorageServiceStats> serviceCallback) {
         return ServiceFuture.fromBody(getStatsAsync(url, timeout, requestId), serviceCallback);
     }
 
@@ -470,7 +468,7 @@ public class ServicesImpl implements Services {
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<ServiceGetStatsHeaders, StorageServiceStats> object
+     * @return the {@link Single&lt;RestResponse&lt;ServiceGetStatsHeaders, StorageServiceStats&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ServiceGetStatsHeaders, StorageServiceStats>> getStatsWithRestResponseAsync(String url, Integer timeout, String requestId) {
         if (url == null) {
@@ -527,7 +525,7 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<ListContainersResponse> listContainersAsync(String url, ServiceCallback<ListContainersResponse> serviceCallback) {
+    public ServiceFuture<ListContainersResponse> listContainersAsync(String url, final ServiceCallback<ListContainersResponse> serviceCallback) {
         return ServiceFuture.fromBody(listContainersAsync(url), serviceCallback);
     }
 
@@ -536,7 +534,7 @@ public class ServicesImpl implements Services {
      *
      * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<ServiceListContainersHeaders, ListContainersResponse> object
+     * @return the {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainersWithRestResponseAsync(String url) {
         if (url == null) {
@@ -608,7 +606,7 @@ public class ServicesImpl implements Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<ListContainersResponse> listContainersAsync(String url, String prefix, String marker, Integer maxresults, ListContainersIncludeType include, Integer timeout, String requestId, ServiceCallback<ListContainersResponse> serviceCallback) {
+    public ServiceFuture<ListContainersResponse> listContainersAsync(String url, String prefix, String marker, Integer maxresults, ListContainersIncludeType include, Integer timeout, String requestId, final ServiceCallback<ListContainersResponse> serviceCallback) {
         return ServiceFuture.fromBody(listContainersAsync(url, prefix, marker, maxresults, include, timeout, requestId), serviceCallback);
     }
 
@@ -623,7 +621,7 @@ public class ServicesImpl implements Services {
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<ServiceListContainersHeaders, ListContainersResponse> object
+     * @return the {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainersWithRestResponseAsync(String url, String prefix, String marker, Integer maxresults, ListContainersIncludeType include, Integer timeout, String requestId) {
         if (url == null) {

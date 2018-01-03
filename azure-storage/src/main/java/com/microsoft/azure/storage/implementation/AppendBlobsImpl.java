@@ -43,7 +43,7 @@ import org.joda.time.DateTime;
  */
 public class AppendBlobsImpl implements AppendBlobs {
     /**
-     * The RestProxy service to perform REST calls.
+     * The proxy service used to perform REST calls.
      */
     private AppendBlobsService service;
 
@@ -53,18 +53,18 @@ public class AppendBlobsImpl implements AppendBlobs {
     private StorageClientImpl client;
 
     /**
-     * Initializes an instance of AppendBlobs.
+     * Initializes an instance of AppendBlobsImpl.
      *
      * @param client the instance of the service client containing this operation class.
      */
     public AppendBlobsImpl(StorageClientImpl client) {
-        this.service = RestProxy.create(AppendBlobsService.class, client.httpPipeline(), client.serializerAdapter());
+        this.service = RestProxy.create(AppendBlobsService.class, client);
         this.client = client;
     }
 
     /**
      * The interface defining all the services for AppendBlobs to be used by
-     * RestProxy to perform REST calls.
+     * the proxy service to perform REST calls.
      */
     @Host("{url}")
     interface AppendBlobsService {
@@ -81,7 +81,6 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
-     * @return the void object if successful.
      */
     public void appendBlock(String url, AsyncInputStream body) {
         appendBlockAsync(url, body).blockingAwait();
@@ -96,7 +95,7 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> appendBlockAsync(String url, AsyncInputStream body, ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> appendBlockAsync(String url, AsyncInputStream body, final ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(appendBlockAsync(url, body), serviceCallback);
     }
 
@@ -106,7 +105,7 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @param url The url to the resource.
      * @param body Initial data
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<AppendBlobsAppendBlockHeaders, Void> object
+     * @return the {@link Single&lt;RestResponse&lt;AppendBlobsAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<AppendBlobsAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(String url, AsyncInputStream body) {
         if (url == null) {
@@ -169,7 +168,6 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
-     * @return the void object if successful.
      */
     public void appendBlock(String url, AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         appendBlockAsync(url, body, timeout, leaseId, maxSize, appendPosition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
@@ -193,7 +191,7 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> appendBlockAsync(String url, AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> appendBlockAsync(String url, AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(appendBlockAsync(url, body, timeout, leaseId, maxSize, appendPosition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
@@ -212,7 +210,7 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @param ifNoneMatch Specify an ETag value to operate only on blobs without a matching value.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return a {@link Single} emitting the RestResponse<AppendBlobsAppendBlockHeaders, Void> object
+     * @return the {@link Single&lt;RestResponse&lt;AppendBlobsAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<AppendBlobsAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(String url, AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         if (url == null) {

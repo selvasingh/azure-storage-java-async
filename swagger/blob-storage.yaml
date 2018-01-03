@@ -335,8 +335,6 @@ x-ms-paths:
       - "$ref": "#/parameters/LeaseId"
       - "$ref": "#/parameters/IfModifiedSince"
       - "$ref": "#/parameters/IfUnmodifiedSince"
-      - "$ref": "#/parameters/IfMatch"
-      - "$ref": "#/parameters/IfNoneMatch"
       - "$ref": "#/parameters/ApiVersionParameter"
       - "$ref": "#/parameters/ClientRequestId"
       responses:
@@ -539,8 +537,6 @@ x-ms-paths:
       - "$ref": "#/parameters/BlobPublicAccess"
       - "$ref": "#/parameters/IfModifiedSince"
       - "$ref": "#/parameters/IfUnmodifiedSince"
-      - "$ref": "#/parameters/IfMatch"
-      - "$ref": "#/parameters/IfNoneMatch"
       - "$ref": "#/parameters/ApiVersionParameter"
       - "$ref": "#/parameters/ClientRequestId"
       responses:
@@ -1337,6 +1333,7 @@ x-ms-paths:
             x-ms-destination-snapshot:
               x-ms-client-name: DestinationSnapshot
               type: string
+              format: date-time
               description: Included if the blob is incremental copy blob or incremental
                 copy snapshot, if x-ms-copy-status is success. Snapshot time of the
                 last successful incremental copy snapshot for this blob.
@@ -1917,6 +1914,7 @@ x-ms-paths:
             x-ms-snapshot:
               x-ms-client-name: Snapshot
               type: string
+              format: date-time
               description: Uniquely identifies the snapshot and indicates the snapshot
                 version. It may be used in subsequent requests to access the snapshot
             ETag:
@@ -2632,6 +2630,7 @@ definitions:
         type: string
       Snapshot:
         type: string
+        format: date-time
       Properties:
         "$ref": "#/definitions/BlobProperties"
       Metadata:
@@ -3028,10 +3027,12 @@ definitions:
     properties:
       Start:
         type: integer
+        format: int64
         xml:
           name: Start
       End:
         type: integer
+        format: int64
         xml:
           name: End
     xml:
@@ -3475,6 +3476,7 @@ parameters:
     in: header
     required: false
     type: integer
+    format: int64
     x-ms-parameter-location: method
     description: Specify this header value to operate only on a blob if it has the
       specified sequence number.
@@ -3484,6 +3486,7 @@ parameters:
     in: header
     required: false
     type: integer
+    format: int64
     x-ms-parameter-location: method
     description: Specify this header value to operate only on a blob if it has a sequence
       number less than the specified.
@@ -3493,6 +3496,7 @@ parameters:
     in: header
     required: false
     type: integer
+    format: int64
     x-ms-parameter-location: method
     description: Specify this header value to operate only on a blob if it has a sequence
       number less than or equal to the specified.
@@ -3643,6 +3647,7 @@ parameters:
     in: query
     required: false
     type: string
+    format: date-time
     x-ms-parameter-location: method
     description: Optional in version 2015-07-08 and newer. The prevsnapshot parameter
       is a DateTime value that specifies that the response will contain only pages
@@ -3691,6 +3696,7 @@ parameters:
     in: query
     required: false
     type: string
+    format: date-time
     x-ms-parameter-location: method
     description: The snapshot parameter is an opaque DateTime value that, when present,
       specifies the blob snapshot to retrieve. For more information on working with

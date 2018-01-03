@@ -25,7 +25,7 @@ public class BlobsTakeSnapshotHeaders {
      * may be used in subsequent requests to access the snapshot.
      */
     @JsonProperty(value = "x-ms-snapshot")
-    private String snapshot;
+    private DateTime snapshot;
 
     /**
      * The ETag contains a value that you can use to perform operations
@@ -70,7 +70,7 @@ public class BlobsTakeSnapshotHeaders {
      *
      * @return the snapshot value
      */
-    public String snapshot() {
+    public DateTime snapshot() {
         return this.snapshot;
     }
 
@@ -80,7 +80,7 @@ public class BlobsTakeSnapshotHeaders {
      * @param snapshot the snapshot value to set
      * @return the BlobsTakeSnapshotHeaders object itself.
      */
-    public BlobsTakeSnapshotHeaders withSnapshot(String snapshot) {
+    public BlobsTakeSnapshotHeaders withSnapshot(DateTime snapshot) {
         this.snapshot = snapshot;
         return this;
     }
