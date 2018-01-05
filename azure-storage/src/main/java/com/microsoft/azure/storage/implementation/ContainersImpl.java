@@ -158,9 +158,6 @@ public class ContainersImpl implements Containers {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "container";
         final Integer timeout = null;
         final String metadata = null;
@@ -228,9 +225,6 @@ public class ContainersImpl implements Containers {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "container";
         return service.create(url, timeout, metadata, access, this.client.version(), requestId, restype);
     }
@@ -285,9 +279,6 @@ public class ContainersImpl implements Containers {
     public Single<RestResponse<ContainerGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "container";
         final Integer timeout = null;
@@ -352,9 +343,6 @@ public class ContainersImpl implements Containers {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "container";
         return service.getProperties(url, timeout, leaseId, this.client.version(), requestId, restype);
     }
@@ -408,9 +396,6 @@ public class ContainersImpl implements Containers {
     public Single<RestResponse<ContainerDeleteHeaders, Void>> deleteWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "container";
         final Integer timeout = null;
@@ -491,9 +476,6 @@ public class ContainersImpl implements Containers {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "container";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -557,9 +539,6 @@ public class ContainersImpl implements Containers {
     public Single<RestResponse<ContainerGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "container";
         final String comp = "metadata";
@@ -625,9 +604,6 @@ public class ContainersImpl implements Containers {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "container";
         final String comp = "metadata";
         return service.getMetadata(url, timeout, leaseId, this.client.version(), requestId, restype, comp);
@@ -682,9 +658,6 @@ public class ContainersImpl implements Containers {
     public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "container";
         final String comp = "metadata";
@@ -762,9 +735,6 @@ public class ContainersImpl implements Containers {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "container";
         final String comp = "metadata";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -820,9 +790,6 @@ public class ContainersImpl implements Containers {
     public Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getAclWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "container";
         final String comp = "acl";
@@ -889,9 +856,6 @@ public class ContainersImpl implements Containers {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "container";
         final String comp = "acl";
         return service.getAcl(url, timeout, leaseId, this.client.version(), requestId, restype, comp);
@@ -946,9 +910,6 @@ public class ContainersImpl implements Containers {
     public Single<RestResponse<ContainerSetAclHeaders, Void>> setAclWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "container";
         final String comp = "acl";
@@ -1030,9 +991,6 @@ public class ContainersImpl implements Containers {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "container";
         final String comp = "acl";
         Validator.validate(containerAcl);
@@ -1104,9 +1062,6 @@ public class ContainersImpl implements Containers {
         }
         if (action == null) {
             throw new IllegalArgumentException("Parameter action is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "lease";
         final String restype = "container";
@@ -1207,9 +1162,6 @@ public class ContainersImpl implements Containers {
         if (action == null) {
             throw new IllegalArgumentException("Parameter action is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "lease";
         final String restype = "container";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -1279,9 +1231,6 @@ public class ContainersImpl implements Containers {
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobsWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "container";
         final String comp = "list";
@@ -1372,9 +1321,6 @@ public class ContainersImpl implements Containers {
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobsWithRestResponseAsync(String url, String prefix, String delimiter, String marker, Integer maxresults, List<ListBlobsIncludeItem> include, Integer timeout, String requestId) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "container";
         final String comp = "list";

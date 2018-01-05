@@ -136,9 +136,6 @@ public class BlockBlobsImpl implements BlockBlobs {
         if (body == null) {
             throw new IllegalArgumentException("Parameter body is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "block";
         final Integer timeout = null;
         final String leaseId = null;
@@ -216,9 +213,6 @@ public class BlockBlobsImpl implements BlockBlobs {
         if (body == null) {
             throw new IllegalArgumentException("Parameter body is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "block";
         return service.putBlock(url, blockId, body, timeout, leaseId, this.client.version(), requestId, comp);
     }
@@ -280,9 +274,6 @@ public class BlockBlobsImpl implements BlockBlobs {
         }
         if (blocks == null) {
             throw new IllegalArgumentException("Parameter blocks is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "blocklist";
         final Integer timeout = null;
@@ -407,9 +398,6 @@ public class BlockBlobsImpl implements BlockBlobs {
         if (blocks == null) {
             throw new IllegalArgumentException("Parameter blocks is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "blocklist";
         Validator.validate(blocks);
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -491,9 +479,6 @@ public class BlockBlobsImpl implements BlockBlobs {
         }
         if (listType == null) {
             throw new IllegalArgumentException("Parameter listType is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "blocklist";
         final DateTime snapshot = null;
@@ -577,9 +562,6 @@ public class BlockBlobsImpl implements BlockBlobs {
         }
         if (listType == null) {
             throw new IllegalArgumentException("Parameter listType is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "blocklist";
         return service.getBlockList(url, snapshot, listType, timeout, leaseId, this.client.version(), requestId, comp);

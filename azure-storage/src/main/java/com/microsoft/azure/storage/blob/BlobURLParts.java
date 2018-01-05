@@ -62,7 +62,8 @@ public final class BlobURLParts {
      *      A {@code Map<String, String[]} representing query parameter vey value pairs aside from SAS parameters and
      *      snapshot time or {@code null}
      */
-    public BlobURLParts(String scheme, String host, String containerName, String blobName, String snapshot, SASQueryParameters sasQueryParameters, Map<String, String[]> unparsedParameters) {
+    public BlobURLParts(String scheme, String host, String containerName, String blobName, String snapshot,
+                        SASQueryParameters sasQueryParameters, Map<String, String[]> unparsedParameters) {
         this.scheme = scheme;
         this.host = host;
         this.containerName = containerName;

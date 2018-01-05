@@ -133,9 +133,6 @@ public class ServicesImpl implements Services {
         if (storageServiceProperties == null) {
             throw new IllegalArgumentException("Parameter storageServiceProperties is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "service";
         final String comp = "properties";
         final Integer timeout = null;
@@ -204,9 +201,6 @@ public class ServicesImpl implements Services {
         if (storageServiceProperties == null) {
             throw new IllegalArgumentException("Parameter storageServiceProperties is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "service";
         final String comp = "properties";
         Validator.validate(storageServiceProperties);
@@ -263,9 +257,6 @@ public class ServicesImpl implements Services {
     public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getPropertiesWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "service";
         final String comp = "properties";
@@ -336,9 +327,6 @@ public class ServicesImpl implements Services {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "service";
         final String comp = "properties";
         return service.getProperties(url, timeout, this.client.version(), requestId, restype, comp);
@@ -401,9 +389,6 @@ public class ServicesImpl implements Services {
     public Single<RestResponse<ServiceGetStatsHeaders, StorageServiceStats>> getStatsWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String restype = "service";
         final String comp = "stats";
@@ -474,9 +459,6 @@ public class ServicesImpl implements Services {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String restype = "service";
         final String comp = "stats";
         return service.getStats(url, timeout, this.client.version(), requestId, restype, comp);
@@ -539,9 +521,6 @@ public class ServicesImpl implements Services {
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainersWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "list";
         final String prefix = null;
@@ -626,9 +605,6 @@ public class ServicesImpl implements Services {
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainersWithRestResponseAsync(String url, String prefix, String marker, Integer maxresults, ListContainersIncludeType include, Integer timeout, String requestId) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "list";
         return service.listContainers(url, prefix, marker, maxresults, include, timeout, this.client.version(), requestId, comp);

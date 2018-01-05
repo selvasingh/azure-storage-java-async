@@ -2,6 +2,8 @@ package com.microsoft.azure.storage.blob;
 
 public class BlobRange {
 
+    private static BlobRange defaultBlobRange;
+
     public Long offset;
 
     public Long count;
@@ -27,5 +29,12 @@ public class BlobRange {
         }
 
         return null;
+    }
+
+    public static BlobRange getDefault() {
+        if(defaultBlobRange == null) {
+            defaultBlobRange = new BlobRange(null, null);
+        }
+        return defaultBlobRange;
     }
 }

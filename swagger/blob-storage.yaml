@@ -3148,6 +3148,8 @@ parameters:
     in: header
     required: true
     type: string
+    enum:
+    - '2016-05-31'
     description: Specifies the version of the operation to use for this request.
   Blob:
     name: blob

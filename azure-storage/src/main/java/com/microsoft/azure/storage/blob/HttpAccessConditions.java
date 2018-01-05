@@ -67,8 +67,8 @@ public final class HttpAccessConditions {
 
     public static HttpAccessConditions getDefault() {
         if (defaultHttpAccessConditions == null) {
-            defaultHttpAccessConditions = new HttpAccessConditions(null, null, ETag.getDefault(),
-                    ETag.getDefault());
+            defaultHttpAccessConditions = new HttpAccessConditions(null, null,
+                    ETag.getDefault(), ETag.getDefault());
         }
 
         return defaultHttpAccessConditions;

@@ -114,9 +114,6 @@ public class AppendBlobsImpl implements AppendBlobs {
         if (body == null) {
             throw new IllegalArgumentException("Parameter body is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "appendblock";
         final Integer timeout = null;
         final String leaseId = null;
@@ -218,9 +215,6 @@ public class AppendBlobsImpl implements AppendBlobs {
         }
         if (body == null) {
             throw new IllegalArgumentException("Parameter body is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "appendblock";
         DateTimeRfc1123 ifModifiedSinceConverted = null;

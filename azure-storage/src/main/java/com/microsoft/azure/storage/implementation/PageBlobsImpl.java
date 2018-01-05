@@ -134,9 +134,6 @@ public class PageBlobsImpl implements PageBlobs {
         if (pageWrite == null) {
             throw new IllegalArgumentException("Parameter pageWrite is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "page";
         final AsyncInputStream optionalbody = null;
         final Integer timeout = null;
@@ -259,9 +256,6 @@ public class PageBlobsImpl implements PageBlobs {
         if (pageWrite == null) {
             throw new IllegalArgumentException("Parameter pageWrite is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "page";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -336,9 +330,6 @@ public class PageBlobsImpl implements PageBlobs {
     public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "pagelist";
         final DateTime snapshot = null;
@@ -448,9 +439,6 @@ public class PageBlobsImpl implements PageBlobs {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "pagelist";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -533,9 +521,6 @@ public class PageBlobsImpl implements PageBlobs {
         }
         if (copySource == null) {
             throw new IllegalArgumentException("Parameter copySource is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "incrementalcopy";
         final Integer timeout = null;
@@ -630,9 +615,6 @@ public class PageBlobsImpl implements PageBlobs {
         }
         if (copySource == null) {
             throw new IllegalArgumentException("Parameter copySource is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "incrementalcopy";
         DateTimeRfc1123 ifModifiedSinceConverted = null;

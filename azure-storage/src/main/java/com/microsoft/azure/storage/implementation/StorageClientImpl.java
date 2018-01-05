@@ -148,6 +148,7 @@ public class StorageClientImpl extends ServiceClient implements StorageClient {
      */
     public StorageClientImpl(HttpPipeline httpPipeline) {
         super(httpPipeline);
+        this.version = "2016-05-31";
         this.services = new ServicesImpl(this);
         this.containers = new ContainersImpl(this);
         this.blobs = new BlobsImpl(this);

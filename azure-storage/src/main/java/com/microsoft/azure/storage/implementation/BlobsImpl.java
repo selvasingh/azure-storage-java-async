@@ -167,9 +167,6 @@ public class BlobsImpl implements Blobs {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final DateTime snapshot = null;
         final Integer timeout = null;
         final String range = null;
@@ -277,9 +274,6 @@ public class BlobsImpl implements Blobs {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
             ifModifiedSinceConverted = new DateTimeRfc1123(ifModifiedSince);
@@ -355,9 +349,6 @@ public class BlobsImpl implements Blobs {
     public Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final DateTime snapshot = null;
         final Integer timeout = null;
@@ -449,9 +440,6 @@ public class BlobsImpl implements Blobs {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
             ifModifiedSinceConverted = new DateTimeRfc1123(ifModifiedSince);
@@ -517,9 +505,6 @@ public class BlobsImpl implements Blobs {
     public Single<RestResponse<BlobsDeleteHeaders, Void>> deleteWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final DateTime snapshot = null;
         final Integer timeout = null;
@@ -615,9 +600,6 @@ public class BlobsImpl implements Blobs {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
             ifModifiedSinceConverted = new DateTimeRfc1123(ifModifiedSince);
@@ -690,9 +672,6 @@ public class BlobsImpl implements Blobs {
         }
         if (blobType == null) {
             throw new IllegalArgumentException("Parameter blobType is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final AsyncInputStream optionalbody = null;
         final Integer timeout = null;
@@ -831,9 +810,6 @@ public class BlobsImpl implements Blobs {
         if (blobType == null) {
             throw new IllegalArgumentException("Parameter blobType is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
             ifModifiedSinceConverted = new DateTimeRfc1123(ifModifiedSince);
@@ -910,9 +886,6 @@ public class BlobsImpl implements Blobs {
     public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "properties";
         final Integer timeout = null;
@@ -1037,9 +1010,6 @@ public class BlobsImpl implements Blobs {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "properties";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -1114,9 +1084,6 @@ public class BlobsImpl implements Blobs {
     public Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "metadata";
         final DateTime snapshot = null;
@@ -1209,9 +1176,6 @@ public class BlobsImpl implements Blobs {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "metadata";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -1278,9 +1242,6 @@ public class BlobsImpl implements Blobs {
     public Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "metadata";
         final Integer timeout = null;
@@ -1373,9 +1334,6 @@ public class BlobsImpl implements Blobs {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "metadata";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -1448,9 +1406,6 @@ public class BlobsImpl implements Blobs {
         }
         if (action == null) {
             throw new IllegalArgumentException("Parameter action is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "lease";
         final Integer timeout = null;
@@ -1558,9 +1513,6 @@ public class BlobsImpl implements Blobs {
         if (action == null) {
             throw new IllegalArgumentException("Parameter action is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "lease";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -1630,9 +1582,6 @@ public class BlobsImpl implements Blobs {
     public Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshotWithRestResponseAsync(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "snapshot";
         final Integer timeout = null;
@@ -1725,9 +1674,6 @@ public class BlobsImpl implements Blobs {
         if (url == null) {
             throw new IllegalArgumentException("Parameter url is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String comp = "snapshot";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -1800,9 +1746,6 @@ public class BlobsImpl implements Blobs {
         }
         if (copySource == null) {
             throw new IllegalArgumentException("Parameter copySource is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final Integer timeout = null;
         final String metadata = null;
@@ -1929,9 +1872,6 @@ public class BlobsImpl implements Blobs {
         if (copySource == null) {
             throw new IllegalArgumentException("Parameter copySource is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         DateTimeRfc1123 sourceIfModifiedSinceConverted = null;
         if (sourceIfModifiedSince != null) {
             sourceIfModifiedSinceConverted = new DateTimeRfc1123(sourceIfModifiedSince);
@@ -2018,9 +1958,6 @@ public class BlobsImpl implements Blobs {
         if (copyId == null) {
             throw new IllegalArgumentException("Parameter copyId is required and cannot be null.");
         }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
-        }
         final String copyActionAbortConstant = "abort";
         final String comp = "copy";
         final Integer timeout = null;
@@ -2091,9 +2028,6 @@ public class BlobsImpl implements Blobs {
         }
         if (copyId == null) {
             throw new IllegalArgumentException("Parameter copyId is required and cannot be null.");
-        }
-        if (this.client.version() == null) {
-            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String copyActionAbortConstant = "abort";
         final String comp = "copy";
