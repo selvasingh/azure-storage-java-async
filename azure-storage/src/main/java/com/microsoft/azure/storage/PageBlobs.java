@@ -35,7 +35,6 @@ public interface PageBlobs {
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
-     * @param url The url to the resource.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'
@@ -43,12 +42,11 @@ public interface PageBlobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void putPage(String url, PageWriteType pageWrite);
+    void putPage(PageWriteType pageWrite);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
-     * @param url The url to the resource.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'
@@ -56,36 +54,33 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> putPageAsync(String url, PageWriteType pageWrite, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putPageAsync(PageWriteType pageWrite, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
-     * @param url The url to the resource.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable putPageAsync(String url, PageWriteType pageWrite);
+    Completable putPageAsync(PageWriteType pageWrite);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
-     * @param url The url to the resource.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;PageBlobsPutPageHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPageWithRestResponseAsync(String url, PageWriteType pageWrite);
+    Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPageWithRestResponseAsync(PageWriteType pageWrite);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
-     * @param url The url to the resource.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'
@@ -105,12 +100,11 @@ public interface PageBlobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void putPage(String url, PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void putPage(PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
-     * @param url The url to the resource.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'
@@ -130,12 +124,11 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> putPageAsync(String url, PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putPageAsync(PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
-     * @param url The url to the resource.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'
@@ -154,12 +147,11 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable putPageAsync(String url, PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable putPageAsync(PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
-     * @param url The url to the resource.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'
@@ -178,51 +170,46 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;PageBlobsPutPageHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPageWithRestResponseAsync(String url, PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPageWithRestResponseAsync(PageWriteType pageWrite, AsyncInputStream optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the PageList object if successful.
      */
-    PageList getPageRanges(String url);
+    PageList getPageRanges();
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;PageList&gt;} object
      */
-    ServiceFuture<PageList> getPageRangesAsync(String url, final ServiceCallback<PageList> serviceCallback);
+    ServiceFuture<PageList> getPageRangesAsync(final ServiceCallback<PageList> serviceCallback);
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Maybe&lt;PageList&gt;} object if successful.
      */
-    Maybe<PageList> getPageRangesAsync(String url);
+    Maybe<PageList> getPageRangesAsync();
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;PageBlobsGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
      */
-    Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesWithRestResponseAsync(String url);
+    Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesWithRestResponseAsync();
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param prevsnapshot Optional in version 2015-07-08 and newer. The prevsnapshot parameter is a DateTime value that specifies that the response will contain only pages that were changed between target blob and previous snapshot. Changed pages include both updated and cleared pages. The target blob may be a snapshot, as long as the snapshot specified by prevsnapshot is the older of the two. Note that incremental snapshots are currently supported only for blobs created on or after January 1, 2016.
@@ -238,12 +225,11 @@ public interface PageBlobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the PageList object if successful.
      */
-    PageList getPageRanges(String url, DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    PageList getPageRanges(DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param prevsnapshot Optional in version 2015-07-08 and newer. The prevsnapshot parameter is a DateTime value that specifies that the response will contain only pages that were changed between target blob and previous snapshot. Changed pages include both updated and cleared pages. The target blob may be a snapshot, as long as the snapshot specified by prevsnapshot is the older of the two. Note that incremental snapshots are currently supported only for blobs created on or after January 1, 2016.
@@ -258,12 +244,11 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;PageList&gt;} object
      */
-    ServiceFuture<PageList> getPageRangesAsync(String url, DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<PageList> serviceCallback);
+    ServiceFuture<PageList> getPageRangesAsync(DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<PageList> serviceCallback);
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param prevsnapshot Optional in version 2015-07-08 and newer. The prevsnapshot parameter is a DateTime value that specifies that the response will contain only pages that were changed between target blob and previous snapshot. Changed pages include both updated and cleared pages. The target blob may be a snapshot, as long as the snapshot specified by prevsnapshot is the older of the two. Note that incremental snapshots are currently supported only for blobs created on or after January 1, 2016.
@@ -277,12 +262,11 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Maybe&lt;PageList&gt;} object if successful.
      */
-    Maybe<PageList> getPageRangesAsync(String url, DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Maybe<PageList> getPageRangesAsync(DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param prevsnapshot Optional in version 2015-07-08 and newer. The prevsnapshot parameter is a DateTime value that specifies that the response will contain only pages that were changed between target blob and previous snapshot. Changed pages include both updated and cleared pages. The target blob may be a snapshot, as long as the snapshot specified by prevsnapshot is the older of the two. Note that incremental snapshots are currently supported only for blobs created on or after January 1, 2016.
@@ -296,54 +280,49 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;PageBlobsGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
      */
-    Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesWithRestResponseAsync(DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Incremental Copy Blob operation copies a snapshot of the source page blob to a destination page blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual. This API is supported since REST version 2016-05-31.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void incrementalCopy(String url, String copySource);
+    void incrementalCopy(String copySource);
 
     /**
      * The Incremental Copy Blob operation copies a snapshot of the source page blob to a destination page blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual. This API is supported since REST version 2016-05-31.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> incrementalCopyAsync(String url, String copySource, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> incrementalCopyAsync(String copySource, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Incremental Copy Blob operation copies a snapshot of the source page blob to a destination page blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual. This API is supported since REST version 2016-05-31.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable incrementalCopyAsync(String url, String copySource);
+    Completable incrementalCopyAsync(String copySource);
 
     /**
      * The Incremental Copy Blob operation copies a snapshot of the source page blob to a destination page blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual. This API is supported since REST version 2016-05-31.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;PageBlobsIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<PageBlobsIncrementalCopyHeaders, Void>> incrementalCopyWithRestResponseAsync(String url, String copySource);
+    Single<RestResponse<PageBlobsIncrementalCopyHeaders, Void>> incrementalCopyWithRestResponseAsync(String copySource);
 
     /**
      * The Incremental Copy Blob operation copies a snapshot of the source page blob to a destination page blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual. This API is supported since REST version 2016-05-31.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -356,12 +335,11 @@ public interface PageBlobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void incrementalCopy(String url, String copySource, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void incrementalCopy(String copySource, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Incremental Copy Blob operation copies a snapshot of the source page blob to a destination page blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual. This API is supported since REST version 2016-05-31.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -374,12 +352,11 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> incrementalCopyAsync(String url, String copySource, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> incrementalCopyAsync(String copySource, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Incremental Copy Blob operation copies a snapshot of the source page blob to a destination page blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual. This API is supported since REST version 2016-05-31.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -391,12 +368,11 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable incrementalCopyAsync(String url, String copySource, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable incrementalCopyAsync(String copySource, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Incremental Copy Blob operation copies a snapshot of the source page blob to a destination page blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual. This API is supported since REST version 2016-05-31.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -408,5 +384,5 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;PageBlobsIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<PageBlobsIncrementalCopyHeaders, Void>> incrementalCopyWithRestResponseAsync(String url, String copySource, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<PageBlobsIncrementalCopyHeaders, Void>> incrementalCopyWithRestResponseAsync(String copySource, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 }

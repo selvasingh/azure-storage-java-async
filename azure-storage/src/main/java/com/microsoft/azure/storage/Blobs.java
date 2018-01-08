@@ -10,6 +10,7 @@
 
 package com.microsoft.azure.storage;
 
+import com.microsoft.azure.storage.models.AccessTier;
 import com.microsoft.azure.storage.models.BlobsAbortCopyHeaders;
 import com.microsoft.azure.storage.models.BlobsCopyHeaders;
 import com.microsoft.azure.storage.models.BlobsDeleteHeaders;
@@ -18,6 +19,7 @@ import com.microsoft.azure.storage.models.BlobsGetMetadataHeaders;
 import com.microsoft.azure.storage.models.BlobsGetPropertiesHeaders;
 import com.microsoft.azure.storage.models.BlobsLeaseHeaders;
 import com.microsoft.azure.storage.models.BlobsPutHeaders;
+import com.microsoft.azure.storage.models.BlobsSetBlobTierHeaders;
 import com.microsoft.azure.storage.models.BlobsSetMetadataHeaders;
 import com.microsoft.azure.storage.models.BlobsSetPropertiesHeaders;
 import com.microsoft.azure.storage.models.BlobsTakeSnapshotHeaders;
@@ -45,46 +47,41 @@ public interface Blobs {
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the AsyncInputStream object if successful.
      */
-    AsyncInputStream get(String url);
+    AsyncInputStream get();
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;AsyncInputStream&gt;} object
      */
-    ServiceFuture<AsyncInputStream> getAsync(String url, final ServiceCallback<AsyncInputStream> serviceCallback);
+    ServiceFuture<AsyncInputStream> getAsync(final ServiceCallback<AsyncInputStream> serviceCallback);
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Maybe&lt;AsyncInputStream&gt;} object if successful.
      */
-    Maybe<AsyncInputStream> getAsync(String url);
+    Maybe<AsyncInputStream> getAsync();
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetHeaders, AsyncInputStream&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync(String url);
+    Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync();
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param range Return only the bytes of the blob in the specified range.
@@ -100,12 +97,11 @@ public interface Blobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the AsyncInputStream object if successful.
      */
-    AsyncInputStream get(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    AsyncInputStream get(DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param range Return only the bytes of the blob in the specified range.
@@ -120,12 +116,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;AsyncInputStream&gt;} object
      */
-    ServiceFuture<AsyncInputStream> getAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<AsyncInputStream> serviceCallback);
+    ServiceFuture<AsyncInputStream> getAsync(DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<AsyncInputStream> serviceCallback);
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param range Return only the bytes of the blob in the specified range.
@@ -139,12 +134,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Maybe&lt;AsyncInputStream&gt;} object if successful.
      */
-    Maybe<AsyncInputStream> getAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Maybe<AsyncInputStream> getAsync(DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param range Return only the bytes of the blob in the specified range.
@@ -158,50 +152,45 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetHeaders, AsyncInputStream&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync(DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void getProperties(String url);
+    void getProperties();
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> getPropertiesAsync(String url, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> getPropertiesAsync(final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable getPropertiesAsync(String url);
+    Completable getPropertiesAsync();
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync(String url);
+    Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync();
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -214,12 +203,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void getProperties(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void getProperties(DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -232,12 +220,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> getPropertiesAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> getPropertiesAsync(DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -249,12 +236,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable getPropertiesAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable getPropertiesAsync(DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -266,50 +252,45 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync(DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void delete(String url);
+    void delete();
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> deleteAsync(String url, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> deleteAsync(final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable deleteAsync(String url);
+    Completable deleteAsync();
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsDeleteHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsDeleteHeaders, Void>> deleteWithRestResponseAsync(String url);
+    Single<RestResponse<BlobsDeleteHeaders, Void>> deleteWithRestResponseAsync();
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -323,12 +304,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void delete(String url, DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void delete(DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -342,12 +322,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> deleteAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> deleteAsync(DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -360,12 +339,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable deleteAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable deleteAsync(DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -378,54 +356,49 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsDeleteHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsDeleteHeaders, Void>> deleteWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<BlobsDeleteHeaders, Void>> deleteWithRestResponseAsync(DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void put(String url, BlobType blobType);
+    void put(BlobType blobType);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> putAsync(String url, BlobType blobType, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putAsync(BlobType blobType, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable putAsync(String url, BlobType blobType);
+    Completable putAsync(BlobType blobType);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(String url, BlobType blobType);
+    Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(BlobType blobType);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param optionalbody Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
@@ -449,12 +422,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void put(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
+    void put(BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param optionalbody Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
@@ -478,12 +450,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> putAsync(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putAsync(BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param optionalbody Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
@@ -506,12 +477,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable putAsync(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
+    Completable putAsync(BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param optionalbody Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
@@ -534,50 +504,45 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
+    Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void setProperties(String url);
+    void setProperties();
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> setPropertiesAsync(String url, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> setPropertiesAsync(final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable setPropertiesAsync(String url);
+    Completable setPropertiesAsync();
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(String url);
+    Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync();
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param blobCacheControl Optional. Sets the blob's cache control. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
@@ -598,12 +563,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void setProperties(String url, Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId);
+    void setProperties(Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId);
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param blobCacheControl Optional. Sets the blob's cache control. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
@@ -624,12 +588,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> setPropertiesAsync(String url, Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> setPropertiesAsync(Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param blobCacheControl Optional. Sets the blob's cache control. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
@@ -649,12 +612,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable setPropertiesAsync(String url, Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId);
+    Completable setPropertiesAsync(Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId);
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param blobCacheControl Optional. Sets the blob's cache control. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
@@ -674,50 +636,45 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(String url, Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId);
+    Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId);
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void getMetadata(String url);
+    void getMetadata();
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> getMetadataAsync(String url, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> getMetadataAsync(final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable getMetadataAsync(String url);
+    Completable getMetadataAsync();
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync(String url);
+    Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync();
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -730,12 +687,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void getMetadata(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void getMetadata(DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -748,12 +704,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> getMetadataAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> getMetadataAsync(DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -765,12 +720,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable getMetadataAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable getMetadataAsync(DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -782,50 +736,45 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync(DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void setMetadata(String url);
+    void setMetadata();
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> setMetadataAsync(String url, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> setMetadataAsync(final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable setMetadataAsync(String url);
+    Completable setMetadataAsync();
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(String url);
+    Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync();
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -838,12 +787,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void setMetadata(String url, Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void setMetadata(Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -856,12 +804,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> setMetadataAsync(String url, Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> setMetadataAsync(Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -873,12 +820,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable setMetadataAsync(String url, Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable setMetadataAsync(Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -890,54 +836,49 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(String url, Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void lease(String url, LeaseActionType action);
+    void lease(LeaseActionType action);
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> leaseAsync(String url, LeaseActionType action, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> leaseAsync(LeaseActionType action, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable leaseAsync(String url, LeaseActionType action);
+    Completable leaseAsync(LeaseActionType action);
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsLeaseHeaders, Void>> leaseWithRestResponseAsync(String url, LeaseActionType action);
+    Single<RestResponse<BlobsLeaseHeaders, Void>> leaseWithRestResponseAsync(LeaseActionType action);
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -953,12 +894,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void lease(String url, LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void lease(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -974,12 +914,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> leaseAsync(String url, LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> leaseAsync(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -994,12 +933,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable leaseAsync(String url, LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable leaseAsync(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1014,50 +952,45 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsLeaseHeaders, Void>> leaseWithRestResponseAsync(String url, LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<BlobsLeaseHeaders, Void>> leaseWithRestResponseAsync(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void takeSnapshot(String url);
+    void takeSnapshot();
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> takeSnapshotAsync(String url, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> takeSnapshotAsync(final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable takeSnapshotAsync(String url);
+    Completable takeSnapshotAsync();
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsTakeSnapshotHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshotWithRestResponseAsync(String url);
+    Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshotWithRestResponseAsync();
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param ifModifiedSince Specify this header value to operate only on a blob if it has been modified since the specified date/time.
@@ -1070,12 +1003,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void takeSnapshot(String url, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId);
+    void takeSnapshot(Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId);
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param ifModifiedSince Specify this header value to operate only on a blob if it has been modified since the specified date/time.
@@ -1088,12 +1020,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> takeSnapshotAsync(String url, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> takeSnapshotAsync(Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param ifModifiedSince Specify this header value to operate only on a blob if it has been modified since the specified date/time.
@@ -1105,12 +1036,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable takeSnapshotAsync(String url, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId);
+    Completable takeSnapshotAsync(Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId);
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param ifModifiedSince Specify this header value to operate only on a blob if it has been modified since the specified date/time.
@@ -1122,54 +1052,49 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsTakeSnapshotHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshotWithRestResponseAsync(String url, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId);
+    Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshotWithRestResponseAsync(Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId);
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void copy(String url, String copySource);
+    void copy(String copySource);
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> copyAsync(String url, String copySource, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> copyAsync(String copySource, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable copyAsync(String url, String copySource);
+    Completable copyAsync(String copySource);
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsCopyHeaders, Void>> copyWithRestResponseAsync(String url, String copySource);
+    Single<RestResponse<BlobsCopyHeaders, Void>> copyWithRestResponseAsync(String copySource);
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -1188,12 +1113,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void copy(String url, String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId);
+    void copy(String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId);
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -1212,12 +1136,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> copyAsync(String url, String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> copyAsync(String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -1235,12 +1158,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable copyAsync(String url, String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId);
+    Completable copyAsync(String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId);
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -1258,54 +1180,49 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsCopyHeaders, Void>> copyWithRestResponseAsync(String url, String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId);
+    Single<RestResponse<BlobsCopyHeaders, Void>> copyWithRestResponseAsync(String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId);
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void abortCopy(String url, String copyId);
+    void abortCopy(String copyId);
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> abortCopyAsync(String url, String copyId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> abortCopyAsync(String copyId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable abortCopyAsync(String url, String copyId);
+    Completable abortCopyAsync(String copyId);
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsAbortCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyWithRestResponseAsync(String url, String copyId);
+    Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyWithRestResponseAsync(String copyId);
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1314,12 +1231,11 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void abortCopy(String url, String copyId, Integer timeout, String leaseId, String requestId);
+    void abortCopy(String copyId, Integer timeout, String leaseId, String requestId);
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1328,12 +1244,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> abortCopyAsync(String url, String copyId, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> abortCopyAsync(String copyId, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1341,12 +1256,11 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable abortCopyAsync(String url, String copyId, Integer timeout, String leaseId, String requestId);
+    Completable abortCopyAsync(String copyId, Integer timeout, String leaseId, String requestId);
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1354,5 +1268,89 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsAbortCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyWithRestResponseAsync(String url, String copyId, Integer timeout, String leaseId, String requestId);
+    Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyWithRestResponseAsync(String copyId, Integer timeout, String leaseId, String requestId);
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @throws RestException thrown if the request is rejected by server
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
+     */
+    void setBlobTier(AccessTier tier);
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link ServiceFuture&lt;Void&gt;} object
+     */
+    ServiceFuture<Void> setBlobTierAsync(AccessTier tier, final ServiceCallback<Void> serviceCallback);
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link Completable} object if successful.
+     */
+    Completable setBlobTierAsync(AccessTier tier);
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link Single&lt;RestResponse&lt;BlobsSetBlobTierHeaders, Void&gt;&gt;} object if successful.
+     */
+    Single<RestResponse<BlobsSetBlobTierHeaders, Void>> setBlobTierWithRestResponseAsync(AccessTier tier);
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
+     * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @throws RestException thrown if the request is rejected by server
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
+     */
+    void setBlobTier(AccessTier tier, Integer timeout, String requestId);
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
+     * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
+     * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link ServiceFuture&lt;Void&gt;} object
+     */
+    ServiceFuture<Void> setBlobTierAsync(AccessTier tier, Integer timeout, String requestId, final ServiceCallback<Void> serviceCallback);
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
+     * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link Completable} object if successful.
+     */
+    Completable setBlobTierAsync(AccessTier tier, Integer timeout, String requestId);
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
+     * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link Single&lt;RestResponse&lt;BlobsSetBlobTierHeaders, Void&gt;&gt;} object if successful.
+     */
+    Single<RestResponse<BlobsSetBlobTierHeaders, Void>> setBlobTierWithRestResponseAsync(AccessTier tier, Integer timeout, String requestId);
 }

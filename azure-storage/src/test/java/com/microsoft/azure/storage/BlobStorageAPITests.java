@@ -116,7 +116,7 @@ public class BlobStorageAPITests {
 
             // Create a snapshot of the blob and pull the snapshot ID out of the headers.
             String snapshot = bu.createSnapshotAsync(null, null).blockingGet()
-                    .headers().snapshot();
+                    .headers().snapshot().toString();
 
             // Create a reference to the blob snapshot. This returns a new BlockBlobURL object that references the same
             // path as the base blob with the query string including the snapshot value appended to the end.
@@ -206,6 +206,9 @@ public class BlobStorageAPITests {
             dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
+        }
+        catch(Exception e) {
+            e.printStackTrace();
         }
         finally {
             // Delete the blob and container. Deleting a container does not require deleting the blobs first.

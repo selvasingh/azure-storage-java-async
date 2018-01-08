@@ -11,48 +11,43 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.microsoft.rest.v2.ExpandableStringEnum;
+import java.util.Collection;
 
 /**
  * Defines values for GeoReplicationStatusType.
  */
-public enum GeoReplicationStatusType {
-    /** Enum value live. */
-    LIVE("live"),
+public final class GeoReplicationStatusType extends ExpandableStringEnum<GeoReplicationStatusType> {
+    /**
+     * Static value live for GeoReplicationStatusType.
+     */
+    public static final GeoReplicationStatusType LIVE = fromString("live");
 
-    /** Enum value bootstrap. */
-    BOOTSTRAP("bootstrap"),
+    /**
+     * Static value bootstrap for GeoReplicationStatusType.
+     */
+    public static final GeoReplicationStatusType BOOTSTRAP = fromString("bootstrap");
 
-    /** Enum value unavailable. */
-    UNAVAILABLE("unavailable");
+    /**
+     * Static value unavailable for GeoReplicationStatusType.
+     */
+    public static final GeoReplicationStatusType UNAVAILABLE = fromString("unavailable");
 
-    /** The actual serialized value for a GeoReplicationStatusType instance. */
-    private String value;
-
-    GeoReplicationStatusType(String value) {
-        this.value = value;
+    /**
+     * Creates or finds a GeoReplicationStatusType from its string representation.
+     *
+     * @param name a name to look for
+     * @return the corresponding GeoReplicationStatusType
+     */
+    @JsonCreator
+    public static GeoReplicationStatusType fromString(String name) {
+        return fromString(name, GeoReplicationStatusType.class);
     }
 
     /**
-     * Parses a serialized value to a GeoReplicationStatusType instance.
-     *
-     * @param value the serialized value to parse.
-     * @return the parsed GeoReplicationStatusType object, or null if unable to parse.
+     * @return known GeoReplicationStatusType values
      */
-    @JsonCreator
-    public static GeoReplicationStatusType fromString(String value) {
-        GeoReplicationStatusType[] items = GeoReplicationStatusType.values();
-        for (GeoReplicationStatusType item : items) {
-            if (item.toString().equalsIgnoreCase(value)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    @JsonValue
-    @Override
-    public String toString() {
-        return this.value;
+    public static Collection<GeoReplicationStatusType> values() {
+        return values(GeoReplicationStatusType.class);
     }
 }

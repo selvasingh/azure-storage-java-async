@@ -52,7 +52,7 @@ public class BlobURL extends StorageURL {
      *      A {@link BlobURL} object with the given pipeline.
      */
     public BlobURL withPipeline(HttpPipeline pipeline) {
-        return new BlobURL(super.url, pipeline);
+        return new BlobURL(this.storageClient.url(), pipeline);
     }
 
     /**
@@ -63,7 +63,7 @@ public class BlobURL extends StorageURL {
      *      A {@link BlobURL} object with the given pipeline.
      */
     public BlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(super.url);
+        BlobURLParts blobURLParts = URLParser.ParseURL(this.storageClient.url());
         blobURLParts.setSnapshot(snapshot);
         return new BlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
@@ -74,7 +74,7 @@ public class BlobURL extends StorageURL {
      *      A {@link BlockBlobURL} object.
      */
     public BlockBlobURL toBlockBlobURL() {
-        return new BlockBlobURL(super.url, super.storageClient.httpPipeline());
+        return new BlockBlobURL(this.storageClient.url(), super.storageClient.httpPipeline());
     }
 
     /**
@@ -83,7 +83,7 @@ public class BlobURL extends StorageURL {
      *      A {@link AppendBlobURL} object.
      */
     public AppendBlobURL toAppendBlobURL() {
-        return new AppendBlobURL(super.url, super.storageClient.httpPipeline());
+        return new AppendBlobURL(this.storageClient.url(), super.storageClient.httpPipeline());
     }
 
     /**
@@ -92,7 +92,7 @@ public class BlobURL extends StorageURL {
      *      A {@link PageBlobURL} object.
      */
     public PageBlobURL toPageBlobURL() {
-        return new PageBlobURL(super.url, super.storageClient.httpPipeline());
+        return new PageBlobURL(this.storageClient.url(), super.storageClient.httpPipeline());
     }
 
     /**
@@ -125,7 +125,7 @@ public class BlobURL extends StorageURL {
             destAccessConditions = BlobAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().copyWithRestResponseAsync(super.url, sourceURL, null, null,
+        return this.storageClient.blobs().copyWithRestResponseAsync(sourceURL, null, null,
                 sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -156,7 +156,7 @@ public class BlobURL extends StorageURL {
         }
 
         return this.storageClient.blobs().abortCopyWithRestResponseAsync(
-                super.url, copyId, null, leaseAccessConditions.toString(), null);
+                copyId, null, leaseAccessConditions.toString(), null);
     }
 
     /**
@@ -175,7 +175,7 @@ public class BlobURL extends StorageURL {
             blobAccessConditions = BlobAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().getWithRestResponseAsync(super.url, null, null,
+        return this.storageClient.blobs().getWithRestResponseAsync(null, null,
                 range.toString(), blobAccessConditions.getLeaseAccessConditions().toString(),
                 rangeGetContentMD5, blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -201,7 +201,7 @@ public class BlobURL extends StorageURL {
             blobAccessConditions = BlobAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().deleteWithRestResponseAsync(super.url, null, null,
+        return this.storageClient.blobs().deleteWithRestResponseAsync(null, null,
                 blobAccessConditions.getLeaseAccessConditions().toString(),
                 deleteBlobSnapshotOptions,
                 blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
@@ -223,7 +223,7 @@ public class BlobURL extends StorageURL {
             blobAccessConditions = BlobAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().getPropertiesWithRestResponseAsync(super.url, null, null,
+        return this.storageClient.blobs().getPropertiesWithRestResponseAsync(null, null,
                 blobAccessConditions.getLeaseAccessConditions().toString(),
                 blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -244,7 +244,7 @@ public class BlobURL extends StorageURL {
             blobAccessConditions = BlobAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().setPropertiesWithRestResponseAsync(super.url, null,
+        return this.storageClient.blobs().setPropertiesWithRestResponseAsync(null,
                 blobHttpHeaders.getCacheControl(), blobHttpHeaders.getContentType(), blobHttpHeaders.getContentMD5(),
                 blobHttpHeaders.getContentEncoding(),
                 blobHttpHeaders.getContentLanguage(), blobAccessConditions.getLeaseAccessConditions().toString(),
@@ -270,7 +270,7 @@ public class BlobURL extends StorageURL {
             blobAccessConditions = BlobAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().setMetadataWithRestResponseAsync(super.url, null, metadata.toString(),
+        return this.storageClient.blobs().setMetadataWithRestResponseAsync(null, metadata.toString(),
                 blobAccessConditions.getLeaseAccessConditions().toString(),
                 blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -296,7 +296,7 @@ public class BlobURL extends StorageURL {
         // CreateSnapshot does NOT panic if the user tries to create a snapshot using a URL that already has a snapshot query parameter
         // because checking this would be a performance hit for a VERY unusual path and I don't think the common case should suffer this
         // performance hit.
-        return this.storageClient.blobs().takeSnapshotWithRestResponseAsync(super.url, null, null,
+        return this.storageClient.blobs().takeSnapshotWithRestResponseAsync(null, null,
                 blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -320,7 +320,7 @@ public class BlobURL extends StorageURL {
             httpAccessConditions = HttpAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.ACQUIRE, null,
+        return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.ACQUIRE, null,
                 null, null, duration, proposedID,
                 httpAccessConditions.getIfModifiedSince(), httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
@@ -340,7 +340,7 @@ public class BlobURL extends StorageURL {
             httpAccessConditions = HttpAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
+        return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.RENEW, null,
                 leaseID, null, null, null,
                 httpAccessConditions.getIfModifiedSince(), httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
@@ -369,7 +369,7 @@ public class BlobURL extends StorageURL {
             httpAccessConditions = HttpAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
+        return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.RENEW, null,
                 leaseID, breakPeriodInSeconds, null, null,
                 httpAccessConditions.getIfModifiedSince(), httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
@@ -392,7 +392,7 @@ public class BlobURL extends StorageURL {
             httpAccessConditions = HttpAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
+        return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.RENEW, null,
                 leaseId, null, null, proposedID,
                 httpAccessConditions.getIfModifiedSince(), httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),

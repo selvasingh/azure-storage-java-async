@@ -38,7 +38,7 @@ public final class ContainerURL extends StorageURL {
      *      A {@link ContainerURL} object with the given pipeline.
      */
     public ContainerURL withPipeline(HttpPipeline pipeline) {
-        return new ContainerURL(this.url, pipeline);
+        return new ContainerURL(this.storageClient.url(), pipeline);
     }
 
     /**
@@ -51,7 +51,8 @@ public final class ContainerURL extends StorageURL {
      * @return
      */
     public BlockBlobURL createBlockBlobURL(String blobName) {
-        return new BlockBlobURL(super.appendToURLPath(this.url, blobName), this.storageClient.httpPipeline());
+        return new BlockBlobURL(super.appendToURLPath(this.storageClient.url(), blobName),
+                this.storageClient.httpPipeline());
     }
 
     /**
@@ -64,7 +65,8 @@ public final class ContainerURL extends StorageURL {
      * @return
      */
     public PageBlobURL createPageBlobURL(String blobName) {
-        return new PageBlobURL(super.appendToURLPath(this.url, blobName), this.storageClient.httpPipeline());
+        return new PageBlobURL(super.appendToURLPath(this.storageClient.url(), blobName),
+                this.storageClient.httpPipeline());
     }
 
     /**
@@ -77,7 +79,8 @@ public final class ContainerURL extends StorageURL {
      * @return
      */
     public AppendBlobURL createAppendBlobURL(String blobName) {
-        return new AppendBlobURL(super.appendToURLPath(this.url, blobName), this.storageClient.httpPipeline());
+        return new AppendBlobURL(super.appendToURLPath(this.storageClient.url(), blobName),
+                this.storageClient.httpPipeline());
     }
 
     /**
@@ -89,7 +92,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerCreateHeaders, Void>> createAsync(
             Metadata metadata, PublicAccessType access) {
         return this.storageClient.containers().createWithRestResponseAsync(
-                super.url, null, null, access, null);
+                null, null, access, null);
     }
 
     /**
@@ -103,7 +106,7 @@ public final class ContainerURL extends StorageURL {
             containerAccessConditions = ContainerAccessConditions.getDefault();
         }
 
-        return this.storageClient.containers().deleteWithRestResponseAsync(super.url, null,
+        return this.storageClient.containers().deleteWithRestResponseAsync(null,
                 containerAccessConditions.getLeaseID().toString(),
                 containerAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 containerAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -121,7 +124,7 @@ public final class ContainerURL extends StorageURL {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
 
-        return this.storageClient.containers().getPropertiesWithRestResponseAsync(super.url, null,
+        return this.storageClient.containers().getPropertiesWithRestResponseAsync(null,
                 leaseAccessConditions.toString(), null);
     }
 
@@ -141,7 +144,7 @@ public final class ContainerURL extends StorageURL {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
 
-        return this.storageClient.containers().setMetadataWithRestResponseAsync(url, null,
+        return this.storageClient.containers().setMetadataWithRestResponseAsync(null,
                 leaseAccessConditions.toString(), metadata, httpAccessConditions.getIfModifiedSince(),null);
     }
 
@@ -152,7 +155,7 @@ public final class ContainerURL extends StorageURL {
         }
 
         return this.storageClient.containers().getAclWithRestResponseAsync(
-                super.url, null, leaseAccessConditions.toString(), null);
+                null, leaseAccessConditions.toString(), null);
     }
 
     public Single<RestResponse<ContainerSetAclHeaders, Void>> setPermissionsAsync(
@@ -160,7 +163,7 @@ public final class ContainerURL extends StorageURL {
         if(containerAccessConditions == null) {
             containerAccessConditions = ContainerAccessConditions.getDefault();
         }
-        return this.storageClient.containers().setAclWithRestResponseAsync(this.url, identifiers, null,
+        return this.storageClient.containers().setAclWithRestResponseAsync(identifiers, null,
                 containerAccessConditions.getLeaseID().toString(), accessType,
                 containerAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 containerAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -169,7 +172,7 @@ public final class ContainerURL extends StorageURL {
 
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobsAsync(
             String marker, ListBlobsOptions listBlobsOptions) {
-        return this.storageClient.containers().listBlobsWithRestResponseAsync(this.url, listBlobsOptions.getPrefix(),
+        return this.storageClient.containers().listBlobsWithRestResponseAsync(listBlobsOptions.getPrefix(),
                 listBlobsOptions.getDelimiter(), marker, listBlobsOptions.getMaxResults(),
                 listBlobsOptions.getDetails().toList(), null, null);
     }

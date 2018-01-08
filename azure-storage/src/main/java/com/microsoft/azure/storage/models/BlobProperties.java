@@ -154,6 +154,32 @@ public class BlobProperties {
     private Boolean incrementalCopy;
 
     /**
+     * The destinationSnapshot property.
+     */
+    @JsonProperty(value = "DestinationSnapshot")
+    private DateTime destinationSnapshot;
+
+    /**
+     * Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50',
+     * 'Hot', 'Cool', 'Archive'.
+     */
+    @JsonProperty(value = "AccessTier")
+    private AccessTier accessTier;
+
+    /**
+     * The accessTierInferred property.
+     */
+    @JsonProperty(value = "AccessTierInferred")
+    private Boolean accessTierInferred;
+
+    /**
+     * Possible values include: 'rehydrate-pending-to-hot',
+     * 'rehydrate-pending-to-cool'.
+     */
+    @JsonProperty(value = "ArchiveStatus")
+    private ArchiveStatus archiveStatus;
+
+    /**
      * Get the lastModified value.
      *
      * @return the lastModified value
@@ -604,6 +630,86 @@ public class BlobProperties {
      */
     public BlobProperties withIncrementalCopy(Boolean incrementalCopy) {
         this.incrementalCopy = incrementalCopy;
+        return this;
+    }
+
+    /**
+     * Get the destinationSnapshot value.
+     *
+     * @return the destinationSnapshot value
+     */
+    public DateTime destinationSnapshot() {
+        return this.destinationSnapshot;
+    }
+
+    /**
+     * Set the destinationSnapshot value.
+     *
+     * @param destinationSnapshot the destinationSnapshot value to set
+     * @return the BlobProperties object itself.
+     */
+    public BlobProperties withDestinationSnapshot(DateTime destinationSnapshot) {
+        this.destinationSnapshot = destinationSnapshot;
+        return this;
+    }
+
+    /**
+     * Get the accessTier value.
+     *
+     * @return the accessTier value
+     */
+    public AccessTier accessTier() {
+        return this.accessTier;
+    }
+
+    /**
+     * Set the accessTier value.
+     *
+     * @param accessTier the accessTier value to set
+     * @return the BlobProperties object itself.
+     */
+    public BlobProperties withAccessTier(AccessTier accessTier) {
+        this.accessTier = accessTier;
+        return this;
+    }
+
+    /**
+     * Get the accessTierInferred value.
+     *
+     * @return the accessTierInferred value
+     */
+    public Boolean accessTierInferred() {
+        return this.accessTierInferred;
+    }
+
+    /**
+     * Set the accessTierInferred value.
+     *
+     * @param accessTierInferred the accessTierInferred value to set
+     * @return the BlobProperties object itself.
+     */
+    public BlobProperties withAccessTierInferred(Boolean accessTierInferred) {
+        this.accessTierInferred = accessTierInferred;
+        return this;
+    }
+
+    /**
+     * Get the archiveStatus value.
+     *
+     * @return the archiveStatus value
+     */
+    public ArchiveStatus archiveStatus() {
+        return this.archiveStatus;
+    }
+
+    /**
+     * Set the archiveStatus value.
+     *
+     * @param archiveStatus the archiveStatus value to set
+     * @return the BlobProperties object itself.
+     */
+    public BlobProperties withArchiveStatus(ArchiveStatus archiveStatus) {
+        this.archiveStatus = archiveStatus;
         return this;
     }
 }

@@ -51,7 +51,7 @@ public final class AppendBlobURL extends BlobURL {
      *      A {@link AppendBlobURL} object with the given pipeline.
      */
     public AppendBlobURL withPipeline(HttpPipeline pipeline) {
-        return new AppendBlobURL(super.url, pipeline);
+        return new AppendBlobURL(this.storageClient.url(), pipeline);
     }
 
     /**
@@ -62,7 +62,7 @@ public final class AppendBlobURL extends BlobURL {
      *      A {@link BlobURL} object with the given pipeline.
      */
     public AppendBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(super.url);
+        BlobURLParts blobURLParts = URLParser.ParseURL(this.storageClient.url());
         blobURLParts.setSnapshot(snapshot);
         return new AppendBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
@@ -90,7 +90,7 @@ public final class AppendBlobURL extends BlobURL {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
-        return this.storageClient.blobs().putWithRestResponseAsync(this.url, BlobType.APPEND_BLOB, null,
+        return this.storageClient.blobs().putWithRestResponseAsync(BlobType.APPEND_BLOB, null,
                 null, headers.getCacheControl(), headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
                 accessConditions.getLeaseAccessConditions().toString(),
@@ -116,7 +116,7 @@ public final class AppendBlobURL extends BlobURL {
         if(blobAccessConditions == null) {
             blobAccessConditions = BlobAccessConditions.getDefault();
         }
-        return this.storageClient.appendBlobs().appendBlockWithRestResponseAsync(this.url, data, null,
+        return this.storageClient.appendBlobs().appendBlockWithRestResponseAsync(data, null,
                 blobAccessConditions.getLeaseAccessConditions().toString(),
                 blobAccessConditions.getAppendBlobAccessConditions().getIfMaxSizeLessThanOrEqual(),
                 blobAccessConditions.getAppendBlobAccessConditions().getIfAppendPositionEquals(),
