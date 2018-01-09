@@ -28,14 +28,14 @@ public final class RequestRetryOptions {
 
     // MaxTries specifies the maximum number of attempts an operation will be tried before producing an error (0=default).
     // A value of zero means that you accept our default policy. A value of 1 means 1 try and no retries.
-    private int maxRetries = 4;
+    int maxTries = 4;
 
-    // TryTimeout indicates the maximum time allowed for any single try of an HTTP request.
+    // TryTimeout indicates the maximum time in seconds allowed for any single try of an HTTP request.
     // A value of zero means that you accept our default timeout. NOTE: When transferring large amounts
     // of data, the default TryTimeout will probably not be sufficient. You should override this value
     // based on the bandwidth available to the host machine and proximity to the Storage service. A good
     // starting point may be something like (60 seconds per MB of anticipated-payload-size).
-    private long tryTimeoutInMs = TimeUnit.SECONDS.toMillis(30);
+    int tryTimeout = 30;
 
     // RetryDelay specifies the amount of delay to use before retrying an operation (0=default).
     // The delay increases (exponentially or linearly) with each retry up to a maximum specified by
@@ -55,17 +55,17 @@ public final class RequestRetryOptions {
     public RequestRetryOptions() {
     }
 
-    public RequestRetryOptions(RetryPolicyType retryPolicyType, Integer maxRetries, Long tryTimeoutInMs,
+    public RequestRetryOptions(RetryPolicyType retryPolicyType, int maxTries, int tryTimeout,
                                Long retryDelayInMs, Long maxRetryDelayInMs, String secondaryHost) {
         this.retryPolicyType = retryPolicyType;
-        if (maxRetries != null) {
-            Utility.assertInBounds("maxRetries", maxRetries, 1, Integer.MAX_VALUE);
-            this.maxRetries = maxRetries;
+        if (maxTries != 0) {
+            Utility.assertInBounds("maxRetries", maxTries, 1, Integer.MAX_VALUE);
+            this.maxTries = maxTries;
         }
 
-        if (tryTimeoutInMs != null) {
-            Utility.assertInBounds("tryTimeoutInMs", tryTimeoutInMs, 1, Long.MAX_VALUE);
-            this.tryTimeoutInMs = tryTimeoutInMs;
+        if (tryTimeout != 0) {
+            Utility.assertInBounds("tryTimeoutInMs", tryTimeout, 1, Long.MAX_VALUE);
+            this.tryTimeout = tryTimeout;
         }
 
         if (retryDelayInMs != null && maxRetryDelayInMs != null) {
