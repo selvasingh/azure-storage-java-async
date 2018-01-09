@@ -14,8 +14,6 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import org.joda.time.DateTime;
-
 import java.util.Date;
 
 /**
@@ -24,8 +22,8 @@ import java.util.Date;
 public final class HttpAccessConditions {
 
     private static HttpAccessConditions defaultHttpAccessConditions;
-    private final DateTime ifModifiedSince;
-    private final DateTime ifUnmodifiedSince;
+    private final Date ifModifiedSince;
+    private final Date ifUnmodifiedSince;
     private final ETag ifMatch;
     private final ETag ifNoneMatch;
 
@@ -41,18 +39,18 @@ public final class HttpAccessConditions {
      *      A {@link ETag} if none match condition
      */
     public HttpAccessConditions(Date ifModifiedSince, Date ifUnmodifiedSince, ETag ifMatch, ETag ifNoneMatch) {
-        this.ifModifiedSince = (ifModifiedSince != null) ? new DateTime(ifModifiedSince) : null;
-        this.ifUnmodifiedSince = (ifUnmodifiedSince != null) ? new DateTime(ifUnmodifiedSince) : null;
+        this.ifModifiedSince = (ifModifiedSince != null) ? new Date(ifModifiedSince.getTime()) : null;
+        this.ifUnmodifiedSince = (ifUnmodifiedSince != null) ? new Date(ifUnmodifiedSince.getTime()) : null;
 
         this.ifMatch = ifMatch == null ? ETag.getDefault() : ifMatch;
         this.ifNoneMatch = ifNoneMatch == null ? ETag.getDefault() : ifNoneMatch;
     }
 
-    public DateTime getIfModifiedSince() {
+    public Date getIfModifiedSince() {
         return ifModifiedSince;
     }
 
-    public DateTime getIfUnmodifiedSince() {
+    public Date getIfUnmodifiedSince() {
         return ifUnmodifiedSince;
     }
 

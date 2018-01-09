@@ -14,7 +14,6 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import com.microsoft.azure.storage.implementation.StorageClientImpl;
 import com.microsoft.azure.storage.models.AppendBlobsAppendBlockHeaders;
 import com.microsoft.azure.storage.models.BlobType;
 import com.microsoft.azure.storage.models.BlobsPutHeaders;
@@ -25,7 +24,7 @@ import io.reactivex.Single;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.Date;
+
 
 /**
  * Represents a URL to a page blob.

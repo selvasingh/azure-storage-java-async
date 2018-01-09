@@ -17,11 +17,9 @@ package com.microsoft.azure.storage.blob;
 import com.microsoft.rest.v2.http.*;
 import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
-import com.microsoft.rest.v2.policy.RetryPolicy;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.reactivex.functions.Consumer;
-import org.apache.commons.lang3.StringUtils;
 import io.reactivex.Single;
 
 import javax.crypto.Mac;
@@ -29,7 +27,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -142,9 +139,7 @@ public final class SharedKeyCredentials implements ICredentials {
         String contentLength = getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LENGTH);
         contentLength = contentLength.equals("0") ? Constants.EMPTY_STRING : contentLength;
 
-        // TODO: Change to String.join when Java 7 support is removed
-        return StringUtils.join(
-                new String[]{
+        String[] components = new String[]{
                         request.httpMethod(),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_ENCODING),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LANGUAGE),
@@ -160,9 +155,14 @@ public final class SharedKeyCredentials implements ICredentials {
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.RANGE),
                         getAdditionalXmsHeaders(httpHeaders),
                         getCanonicalizedResource(request.url())
-                },
-                '\n'
-        );
+                };
+        StringBuilder stringToSign = new StringBuilder();
+        for(String component : components) {
+            stringToSign.append(component);
+            stringToSign.append('\n');
+        }
+        stringToSign.deleteCharAt(stringToSign.length() - 1); // Delete the extra '\n\
+        return stringToSign.toString();
     }
 
     private void appendCanonicalizedElement(final StringBuilder builder, final String element) {
@@ -243,10 +243,13 @@ public final class SharedKeyCredentials implements ICredentials {
             final List<String> queryParamValues = queryParams.get(queryParamName);
             Collections.sort(queryParamValues);
 
-            String queryParamValuesStr = StringUtils.join(queryParamValues, ',');
-            //queryParamValuesStr = URLEncoder.encode(queryParamValuesStr, "UTF-8");
-            // concatenation of the query param name + colon + join of query param values which are commas separated
-            canonicalizedResource.append("\n" + queryParamName.toLowerCase(Locale.US) + ":" + queryParamValuesStr);
+            StringBuilder queryParamValuesStr = new StringBuilder();
+            for(String value : queryParamValues) {
+                queryParamValuesStr.append(value);
+                queryParamValuesStr.append(',');
+            }
+            queryParamValuesStr.deleteCharAt(queryParamValuesStr.length() - 1); // Delete the ',' at the end
+            canonicalizedResource.append("\n" + queryParamName.toLowerCase(Locale.US) + ":" + queryParamValuesStr.toString());
         }
 
         // append to main string builder the join of completed params with new line

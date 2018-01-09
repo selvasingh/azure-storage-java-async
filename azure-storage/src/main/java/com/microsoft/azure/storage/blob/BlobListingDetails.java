@@ -17,8 +17,6 @@ package com.microsoft.azure.storage.blob;
 import com.microsoft.azure.storage.models.ListBlobsIncludeItem;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Details indicating what additional information the service should return with each blob.

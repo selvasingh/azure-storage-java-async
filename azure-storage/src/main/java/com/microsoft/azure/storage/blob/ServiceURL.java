@@ -14,7 +14,6 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import com.microsoft.azure.storage.implementation.StorageClientImpl;
 import com.microsoft.azure.storage.models.ListContainersIncludeType;
 import com.microsoft.azure.storage.models.ListContainersResponse;
 import com.microsoft.azure.storage.models.ServiceListContainersHeaders;

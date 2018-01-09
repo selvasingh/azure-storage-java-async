@@ -14,11 +14,7 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Date;
 import java.util.Map;
 
 import static com.microsoft.azure.storage.blob.Utility.getGMTTime;
@@ -163,7 +159,14 @@ public final class BlobURLParts {
                     urlBuilder.append('&');
                 }
 
-                urlBuilder.append(entry.getKey() + '=' + StringUtils.join(entry.getValue(), ','));
+                urlBuilder.append(entry.getKey());
+                urlBuilder.append('=');
+
+                for(String value : entry.getValue()) {
+                    urlBuilder.append(value);
+                    urlBuilder.append(',');
+                }
+                urlBuilder.deleteCharAt(urlBuilder.length() - 1); // Delete the extra ','
             }
         }
 

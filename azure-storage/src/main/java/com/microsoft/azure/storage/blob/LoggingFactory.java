@@ -14,23 +14,16 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.http.HttpPipelineLogLevel;
 import com.microsoft.rest.v2.http.HttpRequest;
 import com.microsoft.rest.v2.http.HttpResponse;
 import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
-import io.netty.handler.codec.http.HttpResponseStatus;
-//import org.apache.log4j.Level;
-import io.netty.handler.codec.http.HttpStatusClass;
 import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
 
 import java.net.HttpURLConnection;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
 
 /**
  * Factory for logging requests and responses

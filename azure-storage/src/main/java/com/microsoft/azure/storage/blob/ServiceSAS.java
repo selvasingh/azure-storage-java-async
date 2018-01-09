@@ -14,8 +14,6 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
@@ -66,8 +64,7 @@ public final class ServiceSAS extends BaseSAS {
             resource = "b";
         }
 
-        String stringToSign = StringUtils.join(
-                new String[]{
+         String[] components = new String[]{
                         super.permissions,
                         Utility.getUTCTimeOrEmpty(super.startTime),
                         Utility.getUTCTimeOrEmpty(super.expiryTime),
@@ -81,11 +78,14 @@ public final class ServiceSAS extends BaseSAS {
                         this.contentEncoding,
                         this.contentLanguage,
                         this.contentType
-                },
-                '\n'
-        );
-
-        String signature = sharedKeyCredentials.computeHmac256(stringToSign);
+                };
+        StringBuilder stringToSign = new StringBuilder();
+        for(String component : components) {
+            stringToSign.append(component);
+            stringToSign.append('\n');
+        }
+        stringToSign.deleteCharAt(stringToSign.length() - 1); // Delete the extra '\n'
+        String signature = sharedKeyCredentials.computeHmac256(stringToSign.toString());
 
         SASQueryParameters sasParams = new SASQueryParameters();
         sasParams.version = super.version;
@@ -107,17 +107,16 @@ public final class ServiceSAS extends BaseSAS {
     private String getCanonicalName(String accountName) {
         // Container: "/blob/account/containername"
         // Blob:      "/blob/account/containername/blobname"
-        String canoncialName = StringUtils.join(
-                new String[]{
-                        "/blob",
-                        accountName,
-                        this.containerName
-                },
-                '/');
+        StringBuilder canonicalName = new StringBuilder("/blob");
+        canonicalName.append('/');
+        canonicalName.append(accountName);
+        canonicalName.append('/');
+        canonicalName.append(this.containerName);
+
         if (!Utility.isNullOrEmpty(this.blobName)) {
-            canoncialName += "/" + this.blobName.replace("\\", "/");
+            canonicalName.append("/" + this.blobName.replace("\\", "/"));
         }
 
-        return canoncialName;
+        return canonicalName.toString();
     }
 }

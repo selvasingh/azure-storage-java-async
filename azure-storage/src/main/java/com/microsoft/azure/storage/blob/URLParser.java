@@ -16,11 +16,8 @@ package com.microsoft.azure.storage.blob;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 

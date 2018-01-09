@@ -14,8 +14,6 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Date;
 import java.util.Map;
 
