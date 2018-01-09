@@ -72,7 +72,7 @@ public class PageBlobsImpl implements PageBlobs {
      * The interface defining all the services for PageBlobs to be used by the
      * proxy service to perform REST calls.
      */
-    @Host("{accountUrl}")
+    @Host("{url}")
     interface PageBlobsService {
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})

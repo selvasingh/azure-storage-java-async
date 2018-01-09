@@ -86,7 +86,7 @@ public class BlobsImpl implements Blobs {
      * The interface defining all the services for Blobs to be used by the
      * proxy service to perform REST calls.
      */
-    @Host("{accountUrl}")
+    @Host("{url}")
     interface BlobsService {
         @GET("{containerName}/{blob}")
         @ExpectedResponses({200, 206})

@@ -84,7 +84,7 @@ public class ContainersImpl implements Containers {
      * The interface defining all the services for Containers to be used by the
      * proxy service to perform REST calls.
      */
-    @Host("{accountUrl}")
+    @Host("{url}")
     interface ContainersService {
         @PUT("{containerName}")
         @ExpectedResponses({201})

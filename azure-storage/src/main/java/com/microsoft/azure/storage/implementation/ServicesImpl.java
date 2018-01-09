@@ -73,7 +73,7 @@ public class ServicesImpl implements Services {
      * The interface defining all the services for Services to be used by the
      * proxy service to perform REST calls.
      */
-    @Host("{accountUrl}")
+    @Host("{url}")
     interface ServicesService {
         @PUT("")
         @ExpectedResponses({202})

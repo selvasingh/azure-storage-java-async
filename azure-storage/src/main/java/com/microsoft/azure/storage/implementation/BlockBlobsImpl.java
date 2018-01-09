@@ -74,7 +74,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * The interface defining all the services for BlockBlobs to be used by the
      * proxy service to perform REST calls.
      */
-    @Host("{accountUrl}")
+    @Host("{url}")
     interface BlockBlobsService {
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})

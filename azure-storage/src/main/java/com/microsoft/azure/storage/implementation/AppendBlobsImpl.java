@@ -66,7 +66,7 @@ public class AppendBlobsImpl implements AppendBlobs {
      * The interface defining all the services for AppendBlobs to be used by
      * the proxy service to perform REST calls.
      */
-    @Host("{accountUrl}")
+    @Host("{url}")
     interface AppendBlobsService {
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
