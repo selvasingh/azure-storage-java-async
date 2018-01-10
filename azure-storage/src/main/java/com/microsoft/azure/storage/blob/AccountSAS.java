@@ -32,23 +32,23 @@ public final class AccountSAS extends BaseSAS {
     /**
      * AccountSAS is used to generate a Shared Access Signature (SAS) for an Azure Storage account.
      * @param version
-     *       If null or empty, this defaults to <code>Constants.HeaderConstants.TARGET_STORAGE_VERSION</code>
+     *       If null or empty, this defaults to {@code Constants.HeaderConstants.TARGET_STORAGE_VERSION}
      * @param protocol
      *      A {@link SASProtocol} representing the allowed Internet protocols.
      * @param startTime
-     *      A <code>java.util.Date</code> object which contains the shared access signature start time.
+     *      A {@code java.util.Date} object which contains the shared access signature start time.
      * @param expiryTime
-     *      A <code>java.util.Date</code> object which contains the shared access signature expiry time.
+     *      A {@code java.util.Date} object which contains the shared access signature expiry time.
      * @param permissions
-     *      A <code>java.util.EnumSet</code> object that contains {@link AccountSASPermission} values that indicates
+     *      A {@code java.util.EnumSet} object that contains {@link AccountSASPermission} values that indicates
      *            the allowed permissions.
      * @param ipRange
      *      A {@link IPRange} representing the allowed IP range.
      * @param services
-     *      A <code>java.util.EnumSet</code> object that contains {@link AccountSASService} values that indicates
+     *      A {@code java.util.EnumSet} object that contains {@link AccountSASService} values that indicates
      *            the allowed services.
      * @param resourceTypes
-     *      A <code>java.util.EnumSet</code> object that contains {@link AccountSASResourceType} values that indicates
+     *      A {@code java.util.EnumSet} object that contains {@link AccountSASResourceType} values that indicates
      *            the allowed resource types.
      */
     public AccountSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime,
@@ -60,15 +60,16 @@ public final class AccountSAS extends BaseSAS {
     }
 
     /**
-     * Generates {@link SASQueryParameters} object which contains all SAS uery parameters
+     * Generates {@link SASQueryParameters} object which contains all SAS query parameters
      * @param sharedKeyCredentials
      *      A (@link SharedKeyCredentials} object for the storage account and corresponding primary or secondary key
      * @return
-     *      A {@link SASQueryParameters} object which contains all SAS uery parameters
+     *      A {@link SASQueryParameters} object which contains all SAS query parameters
      * @throws InvalidKeyException
      */
     @Override
-    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials) throws InvalidKeyException {
+    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials)
+            throws InvalidKeyException {
         if (sharedKeyCredentials == null) {
             throw new IllegalArgumentException("SharedKeyCredentials cannot be null.");
         }
@@ -82,25 +83,20 @@ public final class AccountSAS extends BaseSAS {
 
         String servicesString = AccountSASService.servicesToString(this.services);
         String resourceTypesString = AccountSASResourceType.resourceTypesToString(this.resourceTypes);
-        String[] components = new String[]{
+        String stringToSign = Utility.join(new String[]{
                         sharedKeyCredentials.getAccountName(),
                         super.permissions,
                         servicesString,
                         resourceTypesString,
-                        Utility.getUTCTimeOrEmpty(super.startTime),
+                        Utility.getUTCTimeOrEmpty(super.startTime), // TODO: Get rid of utility class
                         Utility.getUTCTimeOrEmpty(super.expiryTime),
                         ipRange.toString(),
                         super.protocol.toString(),
                         super.version,
                         Constants.EMPTY_STRING // Account SAS requires an additional newline character
-                };
-        StringBuilder stringToSign = new StringBuilder();
-        for (String component : components) {
-            stringToSign.append(component);
-            stringToSign.append('\n');
-        }
-        stringToSign.deleteCharAt(servicesString.length() - 1); // Delete the extra '\n'.
-        String signature = sharedKeyCredentials.computeHmac256(stringToSign.toString());
+                }, '\n');
+
+        String signature = sharedKeyCredentials.computeHmac256(stringToSign);
 
         SASQueryParameters sasParams = new SASQueryParameters();
         sasParams.version = super.version;
@@ -112,7 +108,7 @@ public final class AccountSAS extends BaseSAS {
         sasParams.ipRange = super.ipRange;
         sasParams.permissions = super.permissions;
         try {
-            sasParams.signature = URLEncoder.encode(signature, "UTF-8");// TODO: use non depricated version
+            sasParams.signature = URLEncoder.encode(signature, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             // If UTF-8 is not supported, we have no idea what to do
         }

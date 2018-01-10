@@ -34,15 +34,15 @@ public class BlobListingDetails {
     /**
      * A {@Link BlobListingDetails} object.
      * @param copy
-     *           A <code>boolean</code> indicating if blob metadata related to any current or previous Copy Blob
+     *           A {@code boolean} indicating if blob metadata related to any current or previous Copy Blob
      *           operation should be included in the response.
      * @param metadata
-     *           A <code>boolean</code> indicating if metadata should be returned.
+     *           A {@code boolean} indicating if metadata should be returned.
      * @param snapshots
-     *           A <code>boolean</code> indicating if snapshots should be returned. Snapshots are listed from oldest to
+     *           A {@code boolean} indicating if snapshots should be returned. Snapshots are listed from oldest to
      *           newest.
      * @param uncommittedBlobs
-     *           A <code>boolean</code> indicating if blobs for which blocks have been uploaded, but which have not
+     *           A {@code boolean} indicating if blobs for which blocks have been uploaded, but which have not
      *           been committed using Put Block List, be included in the response.
      */
     public BlobListingDetails(boolean copy, boolean metadata, boolean snapshots, boolean uncommittedBlobs) {
@@ -54,7 +54,7 @@ public class BlobListingDetails {
 
     /**
      * @return
-     *           A <code>boolean</code> indicating if blob copies should be returned.
+     *           A {@code boolean} indicating if blob copies should be returned.
      */
     public boolean getCopy() {
         return copy;
@@ -62,7 +62,7 @@ public class BlobListingDetails {
 
     /**
      * @return
-     *           A <code>boolean</code> indicating if metadata should be returned.
+     *           A {@code boolean} indicating if metadata should be returned.
      */
     public boolean getMetadata() {
         return metadata;
@@ -70,7 +70,7 @@ public class BlobListingDetails {
 
     /**
      * @return
-     *           A <code>boolean</code> indicating if snapshots should be returned.
+     *           A {@code boolean} indicating if snapshots should be returned.
      */
     public boolean getSnapshots() {
         return snapshots;
@@ -78,7 +78,7 @@ public class BlobListingDetails {
 
     /**
      * @return
-     *           A <code>boolean</code> indicating if uncomitted blobs should be returned.
+     *           A {@code boolean} indicating if uncomitted blobs should be returned.
      */
     public boolean getUncommittedBlobs() {
         return uncommittedBlobs;

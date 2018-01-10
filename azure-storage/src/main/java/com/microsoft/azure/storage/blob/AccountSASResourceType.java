@@ -38,10 +38,10 @@ public enum AccountSASResourceType {
     char value;
 
     /**
-     * Create a <code>AccountSASResourceType</code>.
+     * Create a {@code AccountSASResourceType}.
      *
      * @param c
-     *            The <code>char</code> which represents this resource type.
+     *            The {@code char} which represents this resource type.
      */
     private AccountSASResourceType(char c) {
         this.value = c;
@@ -53,7 +53,7 @@ public enum AccountSASResourceType {
      * @param types
      *            The resource types to convert to a {@code String}.
      *
-     * @return A {@code String} which represents the <code>AccountSASResourceTypes</code>.
+     * @return A {@code String} which represents the {@code AccountSASResourceTypes}.
      */
     static String resourceTypesToString(EnumSet<AccountSASResourceType> types) {
         if (types == null) {
@@ -81,7 +81,7 @@ public enum AccountSASResourceType {
      * Creates an {@link EnumSet<AccountSASResourceType>} from the specified resource types string.
      *
      * @param resourceTypesString
-     *            A {@code String} which represents the <code>AccountSASResourceTypes</code>.
+     *            A {@code String} which represents the {@code AccountSASResourceTypes}.
      * @return A {@link EnumSet<AccountSASResourceType>} generated from the given {@code String}.
      */
     static EnumSet<AccountSASResourceType> resourceTypesFromString(String resourceTypesString) {

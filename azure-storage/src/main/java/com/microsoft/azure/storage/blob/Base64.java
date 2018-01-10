@@ -285,10 +285,9 @@ public final class Base64 {
      *
      * @param data
      *            the string, as a {@code String} object, to validate
-     * @return <code>true</code> if <code>data</code> is a valid Base64 string, otherwise <code>false</code>
+     * @return {@code true} if {@code data} is a valid Base64 string, otherwise {@code false}
      */
     public static boolean validateIsBase64String(final String data) {
-
         if (data == null || data.length() % 4 != 0) {
             return false;
         }

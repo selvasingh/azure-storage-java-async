@@ -139,7 +139,7 @@ public final class SharedKeyCredentials implements ICredentials {
         String contentLength = getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LENGTH);
         contentLength = contentLength.equals("0") ? Constants.EMPTY_STRING : contentLength;
 
-        String[] components = new String[]{
+        String stringToSign = Utility.join(new String[]{
                         request.httpMethod(),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_ENCODING),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LANGUAGE),
@@ -155,14 +155,8 @@ public final class SharedKeyCredentials implements ICredentials {
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.RANGE),
                         getAdditionalXmsHeaders(httpHeaders),
                         getCanonicalizedResource(request.url())
-                };
-        StringBuilder stringToSign = new StringBuilder();
-        for(String component : components) {
-            stringToSign.append(component);
-            stringToSign.append('\n');
-        }
-        stringToSign.deleteCharAt(stringToSign.length() - 1); // Delete the extra '\n\
-        return stringToSign.toString();
+                }, '\n');
+         return stringToSign;
     }
 
     private void appendCanonicalizedElement(final StringBuilder builder, final String element) {
@@ -242,14 +236,8 @@ public final class SharedKeyCredentials implements ICredentials {
             final String queryParamName = queryParamNames.get(i);
             final List<String> queryParamValues = queryParams.get(queryParamName);
             Collections.sort(queryParamValues);
-
-            StringBuilder queryParamValuesStr = new StringBuilder();
-            for(String value : queryParamValues) {
-                queryParamValuesStr.append(value);
-                queryParamValuesStr.append(',');
-            }
-            queryParamValuesStr.deleteCharAt(queryParamValuesStr.length() - 1); // Delete the ',' at the end
-            canonicalizedResource.append("\n" + queryParamName.toLowerCase(Locale.US) + ":" + queryParamValuesStr.toString());
+            String queryParamValuesStr = Utility.join(queryParamValues.toArray(new String[]{}), ',');
+            canonicalizedResource.append("\n" + queryParamName.toLowerCase(Locale.US) + ":" + queryParamValuesStr);
         }
 
         // append to main string builder the join of completed params with new line

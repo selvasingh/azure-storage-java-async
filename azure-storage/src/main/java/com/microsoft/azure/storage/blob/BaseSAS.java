@@ -21,7 +21,6 @@ import java.util.Date;
  * RESERVED FOR INTERNAL USE
  * Common class for service and account SAS
  */
-// TODO look at how permissions work for derived classes
 abstract class BaseSAS {
     final String version;
 

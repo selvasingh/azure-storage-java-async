@@ -64,7 +64,7 @@ public final class ServiceSAS extends BaseSAS {
             resource = "b";
         }
 
-         String[] components = new String[]{
+         String stringToSign = Utility.join(new String[]{
                         super.permissions,
                         Utility.getUTCTimeOrEmpty(super.startTime),
                         Utility.getUTCTimeOrEmpty(super.expiryTime),
@@ -78,14 +78,9 @@ public final class ServiceSAS extends BaseSAS {
                         this.contentEncoding,
                         this.contentLanguage,
                         this.contentType
-                };
-        StringBuilder stringToSign = new StringBuilder();
-        for(String component : components) {
-            stringToSign.append(component);
-            stringToSign.append('\n');
-        }
-        stringToSign.deleteCharAt(stringToSign.length() - 1); // Delete the extra '\n'
-        String signature = sharedKeyCredentials.computeHmac256(stringToSign.toString());
+                }, '\n');
+
+        String signature = sharedKeyCredentials.computeHmac256(stringToSign);
 
         SASQueryParameters sasParams = new SASQueryParameters();
         sasParams.version = super.version;

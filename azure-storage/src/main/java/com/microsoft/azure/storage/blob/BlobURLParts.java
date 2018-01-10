@@ -161,12 +161,7 @@ public final class BlobURLParts {
 
                 urlBuilder.append(entry.getKey());
                 urlBuilder.append('=');
-
-                for(String value : entry.getValue()) {
-                    urlBuilder.append(value);
-                    urlBuilder.append(',');
-                }
-                urlBuilder.deleteCharAt(urlBuilder.length() - 1); // Delete the extra ','
+                urlBuilder.append(Utility.join(entry.getValue(), ','));
             }
         }
 

@@ -37,20 +37,22 @@ public final class BlobHttpHeaders {
      * A {@link BlobHttpHeaders} object.
      * @param cacheControl
      *      A {@code String} representing the cache-control value stored for the blob.
+     *      If this field has not been set for the blob, this field returns {@code null}.
      * @param contentDisposition
      *      A {@code String} representing the content-disposition value stored for the blob.
-     *      If this field has not been set for the blob, the field returns <code>null</code>.
+     *      If this field has not been set for the blob, the field returns {@code null}.
      * @param contentEncoding
      *      A {@code String} the content-encoding value stored for the blob.
-     *      If this field has not been set for the blob, the field returns <code>null</code>.
+     *      If this field has not been set for the blob, the field returns {@code null}.
      * @param contentLanguage
      *      A {@code String} representing the content-language value stored for the blob.
-     *      If this field has not been set for the blob, the field returns <code>null</code>.
+     *      If this field has not been set for the blob, the field returns {@code null}.
      * @param contentMD5
      *      A {@code String} representing the content MD5 value stored for the blob.
+     *      If this field has not been set for the blob, the field returns {@code null}.
      * @param contentType
      *      A {@code String} representing the content type value stored for the blob.
-     *      If this field has not been set for the blob, the field returns <code>null</code>.
+     *      If this field has not been set for the blob, the field returns {@code null}.
      */
     public BlobHttpHeaders(String cacheControl, String contentDisposition, String contentEncoding,
                            String contentLanguage, String contentMD5, String contentType) {

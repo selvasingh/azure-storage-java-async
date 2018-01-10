@@ -48,7 +48,7 @@ public final class AnonymousCredentials implements ICredentials {
     }
 
     /**
-     * Creates a new <code>AnonymousCredentialsPolicy</code>
+     * Creates a new {@code AnonymousCredentialsPolicy}.
      * @param nextRequestPolicy
      * @return
      */
