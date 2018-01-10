@@ -52,11 +52,11 @@ public final class Base64 {
      * Decodes a given Base64 string into its corresponding byte array.
      *
      * @param data
-     *            the Base64 string, as a {@code String} object, to decode
-     *
-     * @return the corresponding decoded byte array
+     *      The Base64 string, as a {@code String} object, to decode.
+     * @return
+     *      The corresponding decoded byte array
      * @throws IllegalArgumentException
-     *             If the string is not a valid base64 encoded string
+     *      If the string is not a valid base64 encoded string.
      */
     public static byte[] decode(final String data) {
         if (data == null) {
@@ -119,11 +119,11 @@ public final class Base64 {
      * Decodes a given Base64 string into its corresponding byte array.
      *
      * @param data
-     *            the Base64 string, as a {@code String} object, to decode
-     *
-     * @return the corresponding decoded byte array
+     *      The Base64 string, as a {@code String} object, to decode
+     * @return
+     *      The corresponding decoded byte array
      * @throws IllegalArgumentException
-     *             If the string is not a valid base64 encoded string
+     *      If the string is not a valid base64 encoded string
      */
     public static Byte[] decodeAsByteObjectArray(final String data) {
         int byteArrayLength = 3 * data.length() / 4;
@@ -182,8 +182,9 @@ public final class Base64 {
      * Encodes a byte array as a Base64 string.
      *
      * @param data
-     *            the byte array to encode
-     * @return the Base64-encoded string, as a {@code String} object
+     *      The byte array to encode
+     * @return
+     *      The Base64-encoded string, as a {@code String} object
      */
     public static String encode(final byte[] data) {
         final StringBuilder builder = new StringBuilder();
@@ -233,8 +234,9 @@ public final class Base64 {
      * Encodes a byte array as a Base64 string.
      *
      * @param data
-     *            the byte array to encode
-     * @return the Base64-encoded string, as a {@code String} object
+     *      The byte array to encode
+     * @return
+     *      The Base64-encoded string, as a {@code String} object
      */
     public static String encode(final Byte[] data) {
         final StringBuilder builder = new StringBuilder();
@@ -284,8 +286,9 @@ public final class Base64 {
      * Determines whether the given string contains only Base64 characters.
      *
      * @param data
-     *            the string, as a {@code String} object, to validate
-     * @return {@code true} if {@code data} is a valid Base64 string, otherwise {@code false}
+     *       the string, as a {@code String} object, to validate
+     * @return
+     *      {@code true} if {@code data} is a valid Base64 string, otherwise {@code false}
      */
     public static boolean validateIsBase64String(final String data) {
         if (data == null || data.length() % 4 != 0) {

@@ -46,7 +46,7 @@ public enum AccountSASService {
      * Creates a {@code AccountSASService}.
      *
      * @param c
-     *            The {@code char} which represents this service.
+     *      The {@code char} which represents this service.
      */
     private AccountSASService(char c) {
         this.value = c;
@@ -56,9 +56,9 @@ public enum AccountSASService {
      * Converts the given services to a {@code String}.
      *
      * @param services
-     *            The services to convert to a {@code String}.
-     *
-     * @return A {@code String} which represents the {@code SharedAccessAccountServices}.
+     *      The services to convert to a {@code String}.
+     * @return
+     *      A {@code String} which represents the {@code SharedAccessAccountServices}.
      */
     static String servicesToString(EnumSet<AccountSASService> services) {
         if (services == null) {

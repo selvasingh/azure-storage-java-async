@@ -38,11 +38,26 @@ public final class ServiceSAS extends BaseSAS {
 
     private final String contentType;
 
-    public ServiceSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime, EnumSet<ContainerSASPermission> permissions,
+    public ServiceSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime,
+                      EnumSet<ContainerSASPermission> permissions,
+                      IPRange ipRange, String containerName, String identifier, String cacheControl,
+                      String contentDisposition, String contentEncoding, String contentLanguage, String contentType) {
+        super(version, protocol, startTime, expiryTime, ContainerSASPermission.permissionsToString(permissions), ipRange);
+        this.containerName = containerName;
+        this.blobName = null;
+        this.identifier = identifier;
+        this.cacheControl = cacheControl;
+        this.contentDisposition = contentDisposition;
+        this.contentEncoding = contentEncoding;
+        this.contentLanguage = contentLanguage;
+        this.contentType = contentType;
+    }
+
+    public ServiceSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime,
+                      EnumSet<BlobSASPermission> permissions,
                       IPRange ipRange, String containerName, String blobName, String identifier, String cacheControl,
                       String contentDisposition, String contentEncoding, String contentLanguage, String contentType) {
-        //permissions.getClass();
-        super(version, protocol, startTime, expiryTime, ContainerSASPermission.permissionsToString(permissions), ipRange);
+        super(version, protocol, startTime, expiryTime, BlobSASPermission.permissionsToString(permissions), ipRange);
         this.containerName = containerName;
         this.blobName = blobName;
         this.identifier = identifier;

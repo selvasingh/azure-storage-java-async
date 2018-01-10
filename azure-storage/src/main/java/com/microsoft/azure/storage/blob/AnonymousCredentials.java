@@ -40,15 +40,19 @@ public final class AnonymousCredentials implements ICredentials {
         }
 
         /**
-         * For anonymous credentials, this is effectively a no-op
+         * For anonymous credentials, this is effectively a no-op.
+         *
          * @param request
+         *      An {@link HttpRequest} object representing the storage request.
          * @return
+         *      The {@link Single&lt;HttpResponse&gt;} containing the response if successful.
          */
         public Single<HttpResponse> sendAsync(HttpRequest request) { return requestPolicy.sendAsync(request); }
     }
 
     /**
      * Creates a new {@code AnonymousCredentialsPolicy}.
+     *
      * @param nextRequestPolicy
      * @return
      */

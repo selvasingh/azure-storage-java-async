@@ -27,6 +27,7 @@ public final class AppendBlobAccessConditions {
 
     /**
      * Creates a {@link AppendBlobAccessConditions} object
+     *
      * @param ifAppendPositionEquals
      *      Ensures that the AppendBlock operation succeeds only if the append position is equal to a value.
      * @param ifMaxSizeLessThanOrEqual

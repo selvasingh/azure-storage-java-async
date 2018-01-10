@@ -31,6 +31,7 @@ public final class AccountSAS extends BaseSAS {
 
     /**
      * AccountSAS is used to generate a Shared Access Signature (SAS) for an Azure Storage account.
+     *
      * @param version
      *       If null or empty, this defaults to {@code Constants.HeaderConstants.TARGET_STORAGE_VERSION}
      * @param protocol
@@ -41,15 +42,15 @@ public final class AccountSAS extends BaseSAS {
      *      A {@code java.util.Date} object which contains the shared access signature expiry time.
      * @param permissions
      *      A {@code java.util.EnumSet} object that contains {@link AccountSASPermission} values that indicates
-     *            the allowed permissions.
+     *      the allowed permissions.
      * @param ipRange
      *      A {@link IPRange} representing the allowed IP range.
      * @param services
      *      A {@code java.util.EnumSet} object that contains {@link AccountSASService} values that indicates
-     *            the allowed services.
+     *      the allowed services.
      * @param resourceTypes
      *      A {@code java.util.EnumSet} object that contains {@link AccountSASResourceType} values that indicates
-     *            the allowed resource types.
+     *      the allowed resource types.
      */
     public AccountSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime,
                       EnumSet<AccountSASPermission> permissions, IPRange ipRange, EnumSet<AccountSASService> services,
@@ -60,7 +61,8 @@ public final class AccountSAS extends BaseSAS {
     }
 
     /**
-     * Generates {@link SASQueryParameters} object which contains all SAS query parameters
+     * Generates {@link SASQueryParameters} object which contains all SAS query parameters.
+     *
      * @param sharedKeyCredentials
      *      A (@link SharedKeyCredentials} object for the storage account and corresponding primary or secondary key
      * @return

@@ -22,7 +22,7 @@ import static com.microsoft.azure.storage.blob.Utility.getGMTTimeSnapshot;
 
 /**
  * A BlobURLParts object represents the components that make up an Azure Storage Container/Blob URL. You parse an
- * existing URL into its parts by calling NewBlobURLParts(). You construct a URL from parts by calling URL().
+ * existing URL into its parts by calling NewBlobURLParts(). You construct a URL from parts by calling toURL().
  * NOTE: Changing any SAS-related field requires computing a new SAS signature.
  */
 public final class BlobURLParts {
@@ -41,22 +41,23 @@ public final class BlobURLParts {
     private Map<String, String[]> unparsedParameters;
 
     /**
-     * Creates a {@link BlobURLParts} object
+     * Creates a {@link BlobURLParts} object.
+     *
      * @param scheme
-     *      A {@code String} representing the scheme. Ex: "https://"
+     *      A {@code String} representing the scheme. Ex: "https://".
      * @param host
-     *      A {@code String} representing the host. Ex: "account.blob.core.windows.net"
+     *      A {@code String} representing the host. Ex: "account.blob.core.windows.net".
      * @param containerName
-     *      A {@code String} representing the container name or {@code null}
+     *      A {@code String} representing the container name or {@code null}.
      * @param blobName
-     *      A {@code String} representing the blob name or {@code null}
+     *      A {@code String} representing the blob name or {@code null}.
      * @param snapshot
-     *      A {@code java.util.Date} representing the snapshot time or {@code null}
+     *      A {@code java.util.Date} representing the snapshot time or {@code null}.
      * @param sasQueryParameters
-     *      A {@link SASQueryParameters} representing the SAS query parameters or {@code null}
+     *      A {@link SASQueryParameters} representing the SAS query parameters or {@code null}.
      * @param unparsedParameters
-     *      A {@code Map<String, String[]} representing query parameter vey value pairs aside from SAS parameters and
-     *      snapshot time or {@code null}
+     *      A {@code Map&lt;String, String[]&gt;} representing query parameter vey value pairs aside from SAS parameters
+     *      and snapshot time or {@code null}.
      */
     public BlobURLParts(String scheme, String host, String containerName, String blobName, String snapshot,
                         SASQueryParameters sasQueryParameters, Map<String, String[]> unparsedParameters) {
@@ -71,7 +72,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code String} representing the scheme. Ex: "https"
+     *      A {@code String} representing the scheme. Ex: "https".
      */
     public String getScheme() {
         return scheme;
@@ -79,7 +80,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code String} representing the host. Ex: "account.blob.core.windows.net"
+     *      A {@code String} representing the host. Ex: "account.blob.core.windows.net".
      */
     public String getHost() {
         return host;
@@ -87,7 +88,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code String} representing the container name or {@code null}
+     *      A {@code String} representing the container name or {@code null}.
      */
     public String getContainerName() {
         return containerName;
@@ -95,7 +96,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code String} representing the blob name or {@code null}
+     *      A {@code String} representing the blob name or {@code null}.
      */
     public String getBlobName() {
         return blobName;
@@ -103,7 +104,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code java.util.Date} representing the snapshot time or {@code null}
+     *      A {@code java.util.Date} representing the snapshot time or {@code null}.
      */
     public String getSnapshot() {
         return snapshot;
@@ -111,7 +112,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@link SASQueryParameters} representing the SAS query parameters or {@code null}
+     *      A {@link SASQueryParameters} representing the SAS query parameters or {@code null}.
      */
     public SASQueryParameters getSasQueryParameters() {
         return sasQueryParameters;
@@ -119,17 +120,17 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code Map<String, String[]} representing query parameter vey value pairs aside from SAS parameters and
-     *      snapshot time or {@code null}
+     *      A {@code Map&lt;String, String[]&gt;} representing query parameter vey value pairs aside from SAS parameters and
+     *      snapshot time or {@code null}.
      */
     public Map<String, String[]> getUnparsedParameters() {
         return unparsedParameters;
     }
 
     /**
-     * Converts the blob URL parts to {@code String} representing a URL
+     * Converts the blob URL parts to {@code String} representing a URL.
      * @return
-     *      A {@code String} representing a URL
+     *      A {@code String} representing a URL.
      */
     public String toURL() throws UnsupportedEncodingException {
         StringBuilder urlBuilder = new StringBuilder();

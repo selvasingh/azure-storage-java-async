@@ -19,6 +19,7 @@ import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
+import org.joda.time.DateTime;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -30,11 +31,12 @@ import java.net.MalformedURLException;
 public class BlobURL extends StorageURL {
 
     /**
-     * Creates a new {@link BlobURL} object
+     * Creates a new {@link BlobURL} object.
+     *
      * @param url
      *      A {@code String} representing a URL
      * @param pipeline
-     *      A {@link HttpPipeline} representing a pipeline for requests
+     *      An {@link HttpPipeline} representing a pipeline for requests
      */
     public BlobURL(String url, HttpPipeline pipeline) {
         super(url, pipeline);
@@ -42,8 +44,9 @@ public class BlobURL extends StorageURL {
 
     /**
      * Creates a new {@link BlobURL} with the given pipeline.
+     *
      * @param pipeline
-     *      A {@link HttpPipeline} object to set.
+     *      An {@link HttpPipeline} object to set.
      * @return
      *      A {@link BlobURL} object with the given pipeline.
      */
@@ -53,8 +56,9 @@ public class BlobURL extends StorageURL {
 
     /**
      * Creates a new {@link BlobURL} with the given snapshot.
+     *
      * @param snapshot
-     *      A <code>java.util.Date</code> to set.
+     *      A {@code java.util.Date} to set.
      * @return
      *      A {@link BlobURL} object with the given pipeline.
      */
@@ -74,9 +78,10 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * Converts this BlobURL to a {@link AppendBlobURL} object.
+     * Converts this BlobURL to an {@link AppendBlobURL} object.
+     *
      * @return
-     *      A {@link AppendBlobURL} object.
+     *      An {@link AppendBlobURL} object.
      */
     public AppendBlobURL toAppendBlobURL() {
         return new AppendBlobURL(super.url, super.storageClient.httpPipeline());
@@ -84,6 +89,7 @@ public class BlobURL extends StorageURL {
 
     /**
      * Converts this BlobURL to a {@link PageBlobURL} object.
+     *
      * @return
      *      A {@link PageBlobURL} object.
      */
@@ -94,25 +100,23 @@ public class BlobURL extends StorageURL {
     /**
      * StartCopy copies the data at the source URL to a blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/copy-blob.
+     *
      * @param sourceURL
      *      A {@code String} representing the source URL to copy from.
      *      URLs outside of Azure may only be copied to block blobs.
      * @param metadata
-     *      {@link Metadata} representing the metadata to set on the blob
+     *      A {@link Metadata} object that specifies key value pairs to set on the blob.
      * @param sourceAccessConditions
      *      {@link BlobAccessConditions} object to check against the source
      * @param destAccessConditions
      *      {@link BlobAccessConditions} object to check against the destination
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobsCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsCopyHeaders, Void>> startCopyAsync(String sourceURL, Metadata metadata,
-                                                                       BlobAccessConditions sourceAccessConditions,
-                                                                       BlobAccessConditions destAccessConditions) {
+    public Single<RestResponse<BlobsCopyHeaders, Void>> startCopyAsync(
+            String sourceURL, Metadata metadata, BlobAccessConditions sourceAccessConditions,
+            BlobAccessConditions destAccessConditions) {
 
-        //TODO: What if someone passes in BlobAccessConditions that only have HttpAccessConditions? Then those will
-        // be fine but Lease will be null. Or samething about just specifying ifModified but not ifMatch.
-        // Maybe have a method that's like "fill null values with defaults" that I can can call for all of them. May be a noop in some cases
         if (sourceAccessConditions == null) {
             sourceAccessConditions = BlobAccessConditions.getDefault();
         }
@@ -122,12 +126,12 @@ public class BlobURL extends StorageURL {
         }
 
         return this.storageClient.blobs().copyWithRestResponseAsync(super.url, sourceURL, null, null,
-                sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
-                sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
+                new DateTime(sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince()),
+                new DateTime(sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
                 sourceAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 sourceAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
-                destAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
-                destAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
+                new DateTime(destAccessConditions.getHttpAccessConditions().getIfModifiedSince()),
+                new DateTime(destAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
                 destAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 destAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 sourceAccessConditions.getLeaseAccessConditions().toString(),
@@ -138,15 +142,17 @@ public class BlobURL extends StorageURL {
      * AbortCopy stops a pending copy that was previously started
      * and leaves a destination blob with 0 length and metadata.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/abort-copy-blob.
+     *
      * @param copyId
      *      A {@code String} representing the copy identifier provided in the x-ms-copy-id header of
      *      the original Copy Blob operation.
      * @param leaseAccessConditions
      *      {@link LeaseAccessConditions} object representing lease access conditions
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobsAbortCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyAsync(String copyId, LeaseAccessConditions leaseAccessConditions) {/*String copyID, LeaseAccessConditions leaseAccessConditions) {*/
+    public Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyAsync(
+            String copyId, LeaseAccessConditions leaseAccessConditions) {
         if (leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
@@ -158,25 +164,26 @@ public class BlobURL extends StorageURL {
     /**
      * GetBlob reads a range of bytes from a blob. The response also includes the blob's properties and metadata.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/get-blob.
+     *
      * @param range
-     *      A {@code Long} which represents the number of bytes to read or <code>null</code>.
-     * @param blobAccessConditions
+     *      A {@code Long} which represents the number of bytes to read or {@code null}.
+     * @param accessConditions
      *      A {@link BlobAccessConditions} object that represents the access conditions for the blob.
      * @return
-     *       {@link Single<InputStream>} object representing the stream the blob is downloaded to.
+     *      The {@link Single&lt;RestResponse&lt;BlobsGetHeaders, AsyncInputStream&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getBlobAsync(BlobRange range, BlobAccessConditions blobAccessConditions,
-                                            boolean rangeGetContentMD5) {
-        if (blobAccessConditions == null) {
-            blobAccessConditions = BlobAccessConditions.getDefault();
+    public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getBlobAsync(
+            BlobRange range, BlobAccessConditions accessConditions, boolean rangeGetContentMD5) {
+        if (accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
         }
 
         return this.storageClient.blobs().getWithRestResponseAsync(super.url, null, null,
-                range.toString(), blobAccessConditions.getLeaseAccessConditions().toString(),
-                rangeGetContentMD5, blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
+                range.toString(), accessConditions.getLeaseAccessConditions().toString(),
+                rangeGetContentMD5, new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null);
     }
 
@@ -184,142 +191,162 @@ public class BlobURL extends StorageURL {
      * Deletes the specified blob or snapshot.
      * Note that deleting a blob also deletes all its snapshots.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/delete-blob.
+     *
      * @param deleteBlobSnapshotOptions
      *      A {@link DeleteBlobSnapshotOptions} which represents delete snapshot options.
-     * @param blobAccessConditions
+     * @param accessConditions
      *      A {@link BlobAccessConditions} object that represents the access conditions for the blob.
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      A {@link Single&lt;RestResponse&lt;BlobsDeleteHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsDeleteHeaders, Void>> deleteAsync(DeleteSnapshotsOptionType deleteBlobSnapshotOptions,
-                                                                      BlobAccessConditions blobAccessConditions) {
-        if (blobAccessConditions == null) {
-            blobAccessConditions = BlobAccessConditions.getDefault();
+    public Single<RestResponse<BlobsDeleteHeaders, Void>> deleteAsync(
+            DeleteSnapshotsOptionType deleteBlobSnapshotOptions, BlobAccessConditions accessConditions) {
+        if (accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
         }
 
         return this.storageClient.blobs().deleteWithRestResponseAsync(super.url, null, null,
-                blobAccessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getLeaseAccessConditions().toString(),
                 deleteBlobSnapshotOptions,
-                blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
+                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }
 
     /**
      * GetPropertiesAndMetadata returns the blob's metadata and properties.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/get-blob-properties.
-     * @param blobAccessConditions
+     *
+     * @param accessConditions
      *      A {@link BlobAccessConditions} object that represents the access conditions for the blob.
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobsGetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesAndMetadataAsync(BlobAccessConditions blobAccessConditions) {
-        if (blobAccessConditions == null) {
-            blobAccessConditions = BlobAccessConditions.getDefault();
+    public Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesAndMetadataAsync(
+            BlobAccessConditions accessConditions) {
+        if (accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
         }
 
         return this.storageClient.blobs().getPropertiesWithRestResponseAsync(super.url, null, null,
-                blobAccessConditions.getLeaseAccessConditions().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
+                accessConditions.getLeaseAccessConditions().toString(),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }
 
     /**
      * SetProperties changes a blob's HTTP header properties.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/set-blob-properties.
-     * @param blobHttpHeaders
-     * @param blobAccessConditions
+     *
+     * @param headers
+     *      A {@Link BlobHttpHeaders} object that specifies which properties to set on the blob.
+     * @param accessConditions
+     *      A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesAsync(BlobHttpHeaders blobHttpHeaders, BlobAccessConditions blobAccessConditions) {
-        if (blobAccessConditions == null) {
-            blobAccessConditions = BlobAccessConditions.getDefault();
+    public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesAsync(
+            BlobHttpHeaders headers, BlobAccessConditions accessConditions) {
+        if (accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
         }
 
         return this.storageClient.blobs().setPropertiesWithRestResponseAsync(super.url, null,
-                blobHttpHeaders.getCacheControl(), blobHttpHeaders.getContentType(), blobHttpHeaders.getContentMD5(),
-                blobHttpHeaders.getContentEncoding(),
-                blobHttpHeaders.getContentLanguage(), blobAccessConditions.getLeaseAccessConditions().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
-                blobHttpHeaders.getContentDisposition(),
+                headers.getCacheControl(), headers.getContentType(), headers.getContentMD5(),
+                headers.getContentEncoding(),
+                headers.getContentLanguage(), accessConditions.getLeaseAccessConditions().toString(),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
+                headers.getContentDisposition(),
                 null, null, null, null);
     }
 
     /**
      * SetMetadata changes a blob's metadata.
      * https://docs.microsoft.com/rest/api/storageservices/set-blob-metadata.
+     *
      * @param metadata
-     * @param blobAccessConditions
-     *      A {@link BlobAccessConditions} object that represents the access conditions for the blob.
+     *      A {@link Metadata} object that specifies key value pairs to set on the blob.
+     * @param accessConditions
+     *      A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobsSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadaAsync(Metadata metadata, BlobAccessConditions blobAccessConditions) {
-        if (blobAccessConditions == null) {
-            blobAccessConditions = BlobAccessConditions.getDefault();
+    public Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadaAsync(
+            Metadata metadata, BlobAccessConditions accessConditions) {
+        if (accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
         }
 
         return this.storageClient.blobs().setMetadataWithRestResponseAsync(super.url, null, metadata.toString(),
-                blobAccessConditions.getLeaseAccessConditions().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
+                accessConditions.getLeaseAccessConditions().toString(),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null);
     }
 
     /**
      * CreateSnapshot creates a read-only snapshot of a blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/snapshot-blob.
+     *
      * @param metadata
-     * @param blobAccessConditions
+     *      A {@link Metadata} object that specifies key value pairs to set on the blob.
+     * @param accessConditions
      *      A {@link BlobAccessConditions} object that represents the access conditions for the blob.
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobsTakeSnapshotHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> createSnapshotAsync(Metadata metadata, BlobAccessConditions blobAccessConditions) {
-        if (blobAccessConditions == null) {
-            blobAccessConditions = BlobAccessConditions.getDefault();
+    public Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> createSnapshotAsync(
+            Metadata metadata, BlobAccessConditions accessConditions) {
+        if (accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
         }
 
-        // CreateSnapshot does NOT panic if the user tries to create a snapshot using a URL that already has a snapshot query parameter
-        // because checking this would be a performance hit for a VERY unusual path and I don't think the common case should suffer this
-        // performance hit.
-        return this.storageClient.blobs().takeSnapshotWithRestResponseAsync(super.url, null, null,
-                blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
-                blobAccessConditions.getLeaseAccessConditions().toString(), null);
+        return this.storageClient.blobs().takeSnapshotWithRestResponseAsync(super.url, null,
+                metadata.toString(),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
+                accessConditions.getLeaseAccessConditions().toString(), null);
     }
 
     /**
      * AcquireLease acquires a lease on the blob for write and delete operations. The lease duration must be between
      * 15 to 60 seconds, or infinite (-1).
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
+     *
      * @param proposedID
+     *      A {@code String} in any valid GUID format.
      * @param duration
+     *      A {@code String} specifies the duration of the lease, in seconds, or negative one (-1) for a lease that
+     *      never expires. A non-infinite lease can be between 15 and 60 seconds.
      * @param httpAccessConditions
      *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsLeaseHeaders, Void>> acquireLeaseAsync(String proposedID, Integer duration, HttpAccessConditions httpAccessConditions) {
+    public Single<RestResponse<BlobsLeaseHeaders, Void>> acquireLeaseAsync(
+            String proposedID, Integer duration, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.getDefault();
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.ACQUIRE, null,
                 null, null, duration, proposedID,
-                httpAccessConditions.getIfModifiedSince(), httpAccessConditions.getIfUnmodifiedSince(),
-                httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfMatch().toString(),
+                httpAccessConditions.getIfNoneMatch().toString(),
                 null);
     }
 
@@ -327,18 +354,22 @@ public class BlobURL extends StorageURL {
      * RenewLease renews the blob's previously-acquired lease.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
      * @param leaseID
+     *      A {@code String} representing the lease on the blob.
      * @param httpAccessConditions
      *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
      * @return
+     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsLeaseHeaders, Void>> renewLeaseAsync(String leaseID, HttpAccessConditions httpAccessConditions) {
+    public Single<RestResponse<BlobsLeaseHeaders, Void>> renewLeaseAsync(
+            String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.getDefault();
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
                 leaseID, null, null, null,
-                httpAccessConditions.getIfModifiedSince(), httpAccessConditions.getIfUnmodifiedSince(),
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
                 null);
     }
@@ -347,6 +378,7 @@ public class BlobURL extends StorageURL {
      * BreakLease breaks the blob's previously-acquired lease (if it exists). Pass the LeaseBreakDefault (-1) constant
      * to break a fixed-duration lease when it expires or an infinite lease immediately.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
+     *
      * @param leaseID
      *      A {@code String} representing the lease ID to break
      * @param breakPeriodInSeconds
@@ -357,7 +389,7 @@ public class BlobURL extends StorageURL {
      * @param httpAccessConditions
      *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobsLeaseHeaders, Void>> breakLeaseAsync(String leaseID, Integer breakPeriodInSeconds,
                                         HttpAccessConditions httpAccessConditions) {
@@ -367,7 +399,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
                 leaseID, breakPeriodInSeconds, null, null,
-                httpAccessConditions.getIfModifiedSince(), httpAccessConditions.getIfUnmodifiedSince(),
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
                 null);
     }
@@ -375,22 +408,24 @@ public class BlobURL extends StorageURL {
     /**
      * ChangeLease changes the blob's lease ID.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
+     *
      * @param proposedID
-     *      A {@code String} representing the proposed lease ID, in a GUID String format.
+     *      A {@code String} in any valid GUID format.
      * @param httpAccessConditions
      *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      A {@link Single<Void>} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsLeaseHeaders, Void>> changeLeaseAsync(String leaseId, String proposedID,
-                                                                          HttpAccessConditions httpAccessConditions) {
+    public Single<RestResponse<BlobsLeaseHeaders, Void>> changeLeaseAsync(
+            String leaseId, String proposedID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.getDefault();
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
                 leaseId, null, null, proposedID,
-                httpAccessConditions.getIfModifiedSince(), httpAccessConditions.getIfUnmodifiedSince(),
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
                 null);
     }

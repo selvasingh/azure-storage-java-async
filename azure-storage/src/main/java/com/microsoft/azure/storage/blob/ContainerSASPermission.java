@@ -53,10 +53,10 @@ public enum ContainerSASPermission {
     final private char value;
 
     /**
-     * Create a <code>ContainerSASPermission</code>.
+     * Create a {@code ContainerSASPermission}.
      *
      * @param c
-     *            The <code>char</code> which represents this permission.
+     *      The {@code char} which represents this permission.
      */
     private ContainerSASPermission(char c) {
         this.value = c;
@@ -66,9 +66,9 @@ public enum ContainerSASPermission {
      * Converts the given permissions to a {@code String}.
      *
      * @param permissions
-     *            The permissions to convert to a {@code String}.
-     *
-     * @return A {@code String} which represents the <code>ContainerSASPermission</code>.
+     *      The permissions to convert to a {@code String}.
+     * @return
+     *      A {@code String} which represents the {@code ContainerSASPermission}.
      */
     static String permissionsToString(EnumSet<ContainerSASPermission> permissions) {
         if (permissions == null) {
@@ -109,8 +109,9 @@ public enum ContainerSASPermission {
      * Creates an {@link EnumSet<ContainerSASPermission>} from the specified permissions string.
      *
      * @param permString
-     *            A {@code String} which represents the <code>ContainerSASPermission</code>.
-     * @return A {@link EnumSet<ContainerSASPermission>} generated from the given {@code String}.
+     *      A {@code String} which represents the {@code ContainerSASPermission}.
+     * @return
+     *      A {@link EnumSet<ContainerSASPermission>} generated from the given {@code String}.
      */
     static EnumSet<ContainerSASPermission> permissionsFromString(String permString) {
         EnumSet<ContainerSASPermission> permissions = EnumSet.noneOf(ContainerSASPermission.class);

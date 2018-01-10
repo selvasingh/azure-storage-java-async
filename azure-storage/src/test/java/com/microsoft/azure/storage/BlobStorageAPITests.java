@@ -185,7 +185,7 @@ public class BlobStorageAPITests {
             /*ServiceSAS sas = new ServiceSAS("2016-05-31", SASProtocol.HTTPS_HTTP,
                     DateTime.now().minusDays(1).toDate(), DateTime.now().plusDays(1).toDate(),
                     EnumSet.of(ContainerSASPermission.READ, ContainerSASPermission.WRITE),
-                    null, containerName, "javatestblob", null, null,
+                    null, containerName, null, null,
                     null, null, null, null);*/
 
 

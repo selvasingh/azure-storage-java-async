@@ -66,7 +66,7 @@ public enum AccountSASPermission {
      * Create an {@code AccountSASPermission}.
      *
      * @param c
-     *            The {@code char} which represents this permission.
+     *      The {@code char} which represents this permission.
      */
     private AccountSASPermission(char c) {
         this.value = c;
@@ -76,9 +76,9 @@ public enum AccountSASPermission {
      * Converts the given permissions to a {@code String}.
      *
      * @param permissions
-     *            The permissions to convert to a {@code String}.
-     *
-     * @return A {@code String} which represents the {@code AccountSASPermissions}.
+     *      The permissions to convert to a {@code String}.
+     * @return
+     *      A {@code String} which represents the {@code AccountSASPermissions}.
      */
     static String permissionsToString(EnumSet<AccountSASPermission> permissions) {
         if (permissions == null) {
@@ -126,8 +126,9 @@ public enum AccountSASPermission {
      * Creates an {@link EnumSet<AccountSASPermission>} from the specified permissions string.
      *
      * @param permString
-     *            A {@code String} which represents the {@code SharedAccessAccountPermissions}.
-     * @return A {@link EnumSet<AccountSASPermission>} generated from the given {@code String}.
+     *      A {@code String} which represents the {@code SharedAccessAccountPermissions}.
+     * @return
+     *      A {@link EnumSet<AccountSASPermission>} generated from the given {@code String}.
      */
     static EnumSet<AccountSASPermission> permissionsFromString(String permString) {
         EnumSet<AccountSASPermission> permissions = EnumSet.noneOf(AccountSASPermission.class);
