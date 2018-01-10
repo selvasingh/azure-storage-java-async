@@ -328,7 +328,7 @@ public class BlobURL extends StorageURL {
      * @param proposedID
      *      A {@code String} in any valid GUID format.
      * @param duration
-     *      A {@code String} specifies the duration of the lease, in seconds, or negative one (-1) for a lease that
+     *      A {@code Integer} specifies the duration of the lease, in seconds, or negative one (-1) for a lease that
      *      never expires. A non-infinite lease can be between 15 and 60 seconds.
      * @param httpAccessConditions
      *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
@@ -375,12 +375,37 @@ public class BlobURL extends StorageURL {
     }
 
     /**
+     * ReleaseLease releases the blob's previously-acquired lease. For more information, see
+     * https://docs.microsoft.com/rest/api/storageservices/lease-blob.
+     *
+     * @param leaseID
+     *      A {@code String} representing the lease on the blob.
+     * @param httpAccessConditions
+     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     * @return
+     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<BlobsLeaseHeaders, Void>> releaseLeaseAsync(
+            String leaseID, HttpAccessConditions httpAccessConditions) {
+        if (httpAccessConditions == null) {
+            httpAccessConditions = HttpAccessConditions.getDefault();
+        }
+
+        return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RELEASE, null,
+                leaseID, null, null, null,
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
+                null);
+    }
+
+    /**
      * BreakLease breaks the blob's previously-acquired lease (if it exists). Pass the LeaseBreakDefault (-1) constant
      * to break a fixed-duration lease when it expires or an infinite lease immediately.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
      *
      * @param leaseID
-     *      A {@code String} representing the lease ID to break
+     *      A {@code String} representing the lease ID to break.
      * @param breakPeriodInSeconds
      *      An optional {@code Integer} representing the proposed duration of seconds that the lease should continue
      *      before it is broken, between 0 and 60 seconds. This break period is only used if it is shorter than the time
@@ -409,6 +434,8 @@ public class BlobURL extends StorageURL {
      * ChangeLease changes the blob's lease ID.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
      *
+     * @param leaseId
+     *      A {@code String} representing the lease ID to change.
      * @param proposedID
      *      A {@code String} in any valid GUID format.
      * @param httpAccessConditions

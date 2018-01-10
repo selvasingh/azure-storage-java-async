@@ -230,17 +230,174 @@ public final class ContainerURL extends StorageURL {
                 null);
     }
 
+    private boolean validateLeaseOperationAccessConditions(HttpAccessConditions httpAccessConditions) {
+        if (httpAccessConditions.getIfMatch() == ETag.getDefault() &&
+                httpAccessConditions.getIfNoneMatch() == ETag.getDefault()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * AcquireLease acquires a lease on the container for delete operations. The lease duration must be between 15 to
+     * 60 seconds, or infinite (-1). For more information, see
+     * https://docs.microsoft.com/rest/api/storageservices/lease-container.
+     *
+     * @param proposedID
+     *      A {@code String} in any valid GUID format.
+     * @param duration
+     *      A {@code Integer} specifies the duration of the lease, in seconds, or negative one (-1) for a lease that
+     *      never expires. A non-infinite lease can be between 15 and 60 seconds.
+     * @param httpAccessConditions
+     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     * @return
+     *      The {@link Single&lt;RestResponse&lt;ContainerLeaseHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> acquireLeaseAsync(
+            String proposedID, Integer duration, HttpAccessConditions httpAccessConditions) {
+        if (httpAccessConditions == null) {
+            httpAccessConditions = HttpAccessConditions.getDefault();
+        }
+        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)){
+            return Single.error(new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API."));
+        }
+
+        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.ACQUIRE,
+                null,null, null, duration, proposedID,
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                null);
+    }
+
+    /**
+     * RenewLease renews the container's previously-acquired lease.
+     * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-container.
+     *
+     * @param leaseID
+     *      A {@code String} representing the lease on the blob.
+     * @param httpAccessConditions
+     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     * @return
+     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> renewLeaseAsync(
+            String leaseID, HttpAccessConditions httpAccessConditions) {
+        if (httpAccessConditions == null) {
+            httpAccessConditions = HttpAccessConditions.getDefault();
+        }
+        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
+            return Single.error(new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API."));
+        }
+
+        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
+                leaseID, null, null, null,
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                null);
+    }
+
+    /**
+     * ReleaseLease releases the container's previously-acquired lease.
+     * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-container.
+     *
+     * @param leaseID
+     *      A {@code String} representing the lease on the blob.
+     * @param httpAccessConditions
+     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     * @return
+     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLeaseAsync(
+            String leaseID, HttpAccessConditions httpAccessConditions) {
+        if (httpAccessConditions == null) {
+            httpAccessConditions = HttpAccessConditions.getDefault();
+        }
+        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
+            return Single.error(new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API."));
+        }
+
+        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.RELEASE,
+                null, leaseID, null, null, null,
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                null);
+    }
+
+    /**
+     * BreakLease breaks the container's previously-acquired lease.
+     * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-container.
+     *
+     * @param leaseID
+     *      A {@code String} representing the lease on the blob.
+     * @param httpAccessConditions
+     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     * @return
+     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> breakLeaseAsync(
+            String leaseID, HttpAccessConditions httpAccessConditions) {
+        if (httpAccessConditions == null) {
+            httpAccessConditions = HttpAccessConditions.getDefault();
+        }
+        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
+            return Single.error(new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API."));
+        }
+
+        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.BREAK,
+                null, leaseID, null, null, null,
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                null);
+    }
+
+    /**
+     * ChangeLease changes the container's leaseID.
+     * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-container.
+     *
+     * @param leaseID
+     *      A {@code String} representing the lease on the blob.
+     * @param proposedID
+     *      A {@code String} in any valid GUID format.
+     * @param httpAccessConditions
+     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     * @return
+     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLeaseAsync(
+            String leaseID, String proposedID, HttpAccessConditions httpAccessConditions) {
+        if (httpAccessConditions == null) {
+            httpAccessConditions = HttpAccessConditions.getDefault();
+        }
+        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
+            return Single.error(new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API."));
+        }
+
+        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.RELEASE,
+                null, leaseID, null, null, proposedID,
+                new DateTime(httpAccessConditions.getIfModifiedSince()),
+                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                null);
+    }
+
     /**
      * ListBlobs returns a single segment of blobs starting from the specified Marker. Use an empty
      * marker to start enumeration from the beginning. Blob names are returned in lexicographic order.
      * After getting a segment, process it, and then call ListBlobs again (passing the the previously-returned
      * Marker) to get the next segment.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/list-blobs.
+     *
      * @param marker
      *      A {@code String} value that identifies the portion of the list to be returned with the next list operation.
      * @param listBlobsOptions
      *      A {@link ListBlobsOptions} object which one or more datasets to include in the response.
      * @return
+     *      The {@link Single&lt;RestResponse&lt;ContainerListBlobsHeaders, ListBlobsResponse&gt;&gt;} object if
+     *      successful.
      */
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobsAsync(
             String marker, ListBlobsOptions listBlobsOptions) {
@@ -248,6 +405,4 @@ public final class ContainerURL extends StorageURL {
                 listBlobsOptions.getDelimiter(), marker, listBlobsOptions.getMaxResults(),
                 listBlobsOptions.getDetails().toList(), null, null);
     }
-
-    
 }
