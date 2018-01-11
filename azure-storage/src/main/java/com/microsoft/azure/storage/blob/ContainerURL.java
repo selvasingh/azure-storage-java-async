@@ -180,6 +180,9 @@ public final class ContainerURL extends StorageURL {
             return Single.error(new IllegalArgumentException(
                     "If-Modified-Since is the only HTTP access condition supported for this API"));
         }
+        if (metadata == null) {
+            metadata = Metadata.getDefault();
+        }
 
         return this.storageClient.containers().setMetadataWithRestResponseAsync(null,
                 accessConditions.getLeaseID().toString(), metadata.toString(),
