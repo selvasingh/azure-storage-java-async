@@ -26,6 +26,31 @@ import com.microsoft.rest.v2.http.HttpPipeline;
  */
 public class StorageClientImpl extends ServiceClient implements StorageClient {
     /**
+     * The Azure Storage account to use.
+     */
+    private String url;
+
+    /**
+     * Gets The Azure Storage account to use.
+     *
+     * @return the url value.
+     */
+    public String url() {
+        return this.url;
+    }
+
+    /**
+     * Sets The Azure Storage account to use.
+     *
+     * @param url the url value.
+     * @return the service client itself
+     */
+    public StorageClientImpl withUrl(String url) {
+        this.url = url;
+        return this;
+    }
+
+    /**
      * Specifies the version of the operation to use for this request.
      */
     private String version;
@@ -148,7 +173,6 @@ public class StorageClientImpl extends ServiceClient implements StorageClient {
      */
     public StorageClientImpl(HttpPipeline httpPipeline) {
         super(httpPipeline);
-        this.version = "2016-05-31";
         this.services = new ServicesImpl(this);
         this.containers = new ContainersImpl(this);
         this.blobs = new BlobsImpl(this);

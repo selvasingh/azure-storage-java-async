@@ -12,6 +12,7 @@ package com.microsoft.azure.storage.implementation;
 
 import com.google.common.reflect.TypeToken;
 import com.microsoft.azure.storage.Blobs;
+import com.microsoft.azure.storage.models.AccessTier;
 import com.microsoft.azure.storage.models.BlobsAbortCopyHeaders;
 import com.microsoft.azure.storage.models.BlobsCopyHeaders;
 import com.microsoft.azure.storage.models.BlobsDeleteHeaders;
@@ -20,6 +21,7 @@ import com.microsoft.azure.storage.models.BlobsGetMetadataHeaders;
 import com.microsoft.azure.storage.models.BlobsGetPropertiesHeaders;
 import com.microsoft.azure.storage.models.BlobsLeaseHeaders;
 import com.microsoft.azure.storage.models.BlobsPutHeaders;
+import com.microsoft.azure.storage.models.BlobsSetBlobTierHeaders;
 import com.microsoft.azure.storage.models.BlobsSetMetadataHeaders;
 import com.microsoft.azure.storage.models.BlobsSetPropertiesHeaders;
 import com.microsoft.azure.storage.models.BlobsTakeSnapshotHeaders;
@@ -88,15 +90,15 @@ public class BlobsImpl implements Blobs {
     interface BlobsService {
         @GET("{containerName}/{blob}")
         @ExpectedResponses({200, 206})
-        Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> get(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-range-get-content-md5") Boolean rangeGetContentMD5, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
+        Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> get(@HostParam("url") String url, @QueryParam("snapshot") String snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-range-get-content-md5") Boolean rangeGetContentMD5, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
         @HEAD("{containerName}/{blob}")
         @ExpectedResponses({200})
-        Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getProperties(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
+        Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getProperties(@HostParam("url") String url, @QueryParam("snapshot") String snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
         @DELETE("{containerName}/{blob}")
         @ExpectedResponses({202})
-        Single<RestResponse<BlobsDeleteHeaders, Void>> delete(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-delete-snapshots") DeleteSnapshotsOptionType deleteSnapshots, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
+        Single<RestResponse<BlobsDeleteHeaders, Void>> delete(@HostParam("url") String url, @QueryParam("snapshot") String snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-delete-snapshots") DeleteSnapshotsOptionType deleteSnapshots, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
@@ -108,7 +110,7 @@ public class BlobsImpl implements Blobs {
 
         @GET("{containerName}/{blob}")
         @ExpectedResponses({200})
-        Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadata(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+        Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadata(@HostParam("url") String url, @QueryParam("snapshot") String snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({200})
@@ -129,45 +131,49 @@ public class BlobsImpl implements Blobs {
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({204})
         Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopy(@HostParam("url") String url, @QueryParam("copyid") String copyId, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-copy-action") String copyActionAbortConstant, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+
+        @PUT("{containerName}/{blob}")
+        @ExpectedResponses({200, 202})
+        Single<RestResponse<BlobsSetBlobTierHeaders, Void>> setBlobTier(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-access-tier") AccessTier tier, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
     }
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the AsyncInputStream object if successful.
      */
-    public AsyncInputStream get(String url) {
-        return getAsync(url).blockingGet();
+    public AsyncInputStream get() {
+        return getAsync().blockingGet();
     }
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<AsyncInputStream> getAsync(String url, final ServiceCallback<AsyncInputStream> serviceCallback) {
-        return ServiceFuture.fromBody(getAsync(url), serviceCallback);
+    public ServiceFuture<AsyncInputStream> getAsync(final ServiceCallback<AsyncInputStream> serviceCallback) {
+        return ServiceFuture.fromBody(getAsync(), serviceCallback);
     }
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetHeaders, AsyncInputStream&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync(String url) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync() {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
-        final DateTime snapshot = null;
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
+        }
+        final String snapshot = null;
         final Integer timeout = null;
         final String range = null;
         final String leaseId = null;
@@ -185,18 +191,17 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.get(url, snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
+        return service.get(this.client.url(), snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
     }
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, AsyncInputStream> object
      */
-    public Maybe<AsyncInputStream> getAsync(String url) {
-        return getWithRestResponseAsync(url)
+    public Maybe<AsyncInputStream> getAsync() {
+        return getWithRestResponseAsync()
             .flatMapMaybe(new Function<RestResponse<BlobsGetHeaders, AsyncInputStream>, Maybe<AsyncInputStream>>() {
                 public Maybe<AsyncInputStream> apply(RestResponse<BlobsGetHeaders, AsyncInputStream> restResponse) {
                     if (restResponse.body() == null) {
@@ -211,7 +216,6 @@ public class BlobsImpl implements Blobs {
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param range Return only the bytes of the blob in the specified range.
@@ -227,14 +231,13 @@ public class BlobsImpl implements Blobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the AsyncInputStream object if successful.
      */
-    public AsyncInputStream get(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        return getAsync(url, snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingGet();
+    public AsyncInputStream get(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        return getAsync(snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingGet();
     }
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param range Return only the bytes of the blob in the specified range.
@@ -249,14 +252,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<AsyncInputStream> getAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<AsyncInputStream> serviceCallback) {
-        return ServiceFuture.fromBody(getAsync(url, snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
+    public ServiceFuture<AsyncInputStream> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<AsyncInputStream> serviceCallback) {
+        return ServiceFuture.fromBody(getAsync(snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param range Return only the bytes of the blob in the specified range.
@@ -270,9 +272,12 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetHeaders, AsyncInputStream&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> getWithRestResponseAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -282,13 +287,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.get(url, snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
+        return service.get(this.client.url(), snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
     }
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param range Return only the bytes of the blob in the specified range.
@@ -302,8 +306,8 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsGetHeaders, AsyncInputStream> object
      */
-    public Maybe<AsyncInputStream> getAsync(String url, DateTime snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        return getWithRestResponseAsync(url, snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
+    public Maybe<AsyncInputStream> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        return getWithRestResponseAsync(snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .flatMapMaybe(new Function<RestResponse<BlobsGetHeaders, AsyncInputStream>, Maybe<AsyncInputStream>>() {
                 public Maybe<AsyncInputStream> apply(RestResponse<BlobsGetHeaders, AsyncInputStream> restResponse) {
                     if (restResponse.body() == null) {
@@ -318,39 +322,39 @@ public class BlobsImpl implements Blobs {
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void getProperties(String url) {
-        getPropertiesAsync(url).blockingAwait();
+    public void getProperties() {
+        getPropertiesAsync().blockingAwait();
     }
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> getPropertiesAsync(String url, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(getPropertiesAsync(url), serviceCallback);
+    public ServiceFuture<Void> getPropertiesAsync(final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(getPropertiesAsync(), serviceCallback);
     }
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync(String url) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync() {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
-        final DateTime snapshot = null;
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
+        }
+        final String snapshot = null;
         final Integer timeout = null;
         final String leaseId = null;
         final DateTime ifModifiedSince = null;
@@ -366,25 +370,23 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.getProperties(url, snapshot, timeout, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
+        return service.getProperties(this.client.url(), snapshot, timeout, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
     }
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsGetPropertiesHeaders, Void> object
      */
-    public Completable getPropertiesAsync(String url) {
-        return getPropertiesWithRestResponseAsync(url)
+    public Completable getPropertiesAsync() {
+        return getPropertiesWithRestResponseAsync()
             .toCompletable();
     }
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -397,14 +399,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void getProperties(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        getPropertiesAsync(url, snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
+    public void getProperties(String snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        getPropertiesAsync(snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
     }
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -417,14 +418,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> getPropertiesAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(getPropertiesAsync(url, snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
+    public ServiceFuture<Void> getPropertiesAsync(String snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(getPropertiesAsync(snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -436,9 +436,12 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync(String snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -448,13 +451,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.getProperties(url, snapshot, timeout, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
+        return service.getProperties(this.client.url(), snapshot, timeout, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
     }
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -466,47 +468,47 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsGetPropertiesHeaders, Void> object
      */
-    public Completable getPropertiesAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        return getPropertiesWithRestResponseAsync(url, snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
+    public Completable getPropertiesAsync(String snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        return getPropertiesWithRestResponseAsync(snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void delete(String url) {
-        deleteAsync(url).blockingAwait();
+    public void delete() {
+        deleteAsync().blockingAwait();
     }
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> deleteAsync(String url, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(deleteAsync(url), serviceCallback);
+    public ServiceFuture<Void> deleteAsync(final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(deleteAsync(), serviceCallback);
     }
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsDeleteHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsDeleteHeaders, Void>> deleteWithRestResponseAsync(String url) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsDeleteHeaders, Void>> deleteWithRestResponseAsync() {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
-        final DateTime snapshot = null;
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
+        }
+        final String snapshot = null;
         final Integer timeout = null;
         final String leaseId = null;
         final DeleteSnapshotsOptionType deleteSnapshots = null;
@@ -523,25 +525,23 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.delete(url, snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
+        return service.delete(this.client.url(), snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
     }
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsDeleteHeaders, Void> object
      */
-    public Completable deleteAsync(String url) {
-        return deleteWithRestResponseAsync(url)
+    public Completable deleteAsync() {
+        return deleteWithRestResponseAsync()
             .toCompletable();
     }
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -555,14 +555,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void delete(String url, DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        deleteAsync(url, snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
+    public void delete(String snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        deleteAsync(snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
     }
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -576,14 +575,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> deleteAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(deleteAsync(url, snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
+    public ServiceFuture<Void> deleteAsync(String snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(deleteAsync(snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -596,9 +594,12 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsDeleteHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsDeleteHeaders, Void>> deleteWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsDeleteHeaders, Void>> deleteWithRestResponseAsync(String snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -608,13 +609,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.delete(url, snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
+        return service.delete(this.client.url(), snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId);
     }
 
     /**
      * The Delete Blob operation marks the specified blob or snapshot for deletion. The blob is later deleted during garbage collection. Note that in order to delete a blob, you must delete all of its snapshots. You can delete both at the same time with the Delete Blob operation.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -627,51 +627,51 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsDeleteHeaders, Void> object
      */
-    public Completable deleteAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        return deleteWithRestResponseAsync(url, snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
+    public Completable deleteAsync(String snapshot, Integer timeout, String leaseId, DeleteSnapshotsOptionType deleteSnapshots, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        return deleteWithRestResponseAsync(snapshot, timeout, leaseId, deleteSnapshots, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void put(String url, BlobType blobType) {
-        putAsync(url, blobType).blockingAwait();
+    public void put(BlobType blobType) {
+        putAsync(blobType).blockingAwait();
     }
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> putAsync(String url, BlobType blobType, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(putAsync(url, blobType), serviceCallback);
+    public ServiceFuture<Void> putAsync(BlobType blobType, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(putAsync(blobType), serviceCallback);
     }
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(String url, BlobType blobType) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(BlobType blobType) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (blobType == null) {
             throw new IllegalArgumentException("Parameter blobType is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final AsyncInputStream optionalbody = null;
         final Integer timeout = null;
@@ -699,26 +699,24 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.put(url, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, blobType, metadata, leaseId, blobContentDisposition, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, this.client.version(), requestId);
+        return service.put(this.client.url(), optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, blobType, metadata, leaseId, blobContentDisposition, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, this.client.version(), requestId);
     }
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsPutHeaders, Void> object
      */
-    public Completable putAsync(String url, BlobType blobType) {
-        return putWithRestResponseAsync(url, blobType)
+    public Completable putAsync(BlobType blobType) {
+        return putWithRestResponseAsync(blobType)
             .toCompletable();
     }
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param optionalbody Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
@@ -742,14 +740,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void put(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
-        putAsync(url, blobType, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId).blockingAwait();
+    public void put(BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
+        putAsync(blobType, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId).blockingAwait();
     }
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param optionalbody Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
@@ -773,14 +770,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> putAsync(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(putAsync(url, blobType, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId), serviceCallback);
+    public ServiceFuture<Void> putAsync(BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(putAsync(blobType, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId), serviceCallback);
     }
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param optionalbody Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
@@ -803,12 +799,15 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsPutHeaders, Void>> putWithRestResponseAsync(BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (blobType == null) {
             throw new IllegalArgumentException("Parameter blobType is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
@@ -818,13 +817,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.put(url, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, blobType, metadata, leaseId, blobContentDisposition, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, this.client.version(), requestId);
+        return service.put(this.client.url(), optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, blobType, metadata, leaseId, blobContentDisposition, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, this.client.version(), requestId);
     }
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
-     * @param url The url to the resource.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'
      * @param optionalbody Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
@@ -847,45 +845,45 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsPutHeaders, Void> object
      */
-    public Completable putAsync(String url, BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
-        return putWithRestResponseAsync(url, blobType, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId)
+    public Completable putAsync(BlobType blobType, AsyncInputStream optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
+        return putWithRestResponseAsync(blobType, optionalbody, timeout, cacheControl, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId)
             .toCompletable();
     }
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void setProperties(String url) {
-        setPropertiesAsync(url).blockingAwait();
+    public void setProperties() {
+        setPropertiesAsync().blockingAwait();
     }
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> setPropertiesAsync(String url, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(setPropertiesAsync(url), serviceCallback);
+    public ServiceFuture<Void> setPropertiesAsync(final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(setPropertiesAsync(), serviceCallback);
     }
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(String url) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync() {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "properties";
         final Integer timeout = null;
@@ -912,25 +910,23 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.setProperties(url, timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, this.client.version(), requestId, comp);
+        return service.setProperties(this.client.url(), timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, this.client.version(), requestId, comp);
     }
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsSetPropertiesHeaders, Void> object
      */
-    public Completable setPropertiesAsync(String url) {
-        return setPropertiesWithRestResponseAsync(url)
+    public Completable setPropertiesAsync() {
+        return setPropertiesWithRestResponseAsync()
             .toCompletable();
     }
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param blobCacheControl Optional. Sets the blob's cache control. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
@@ -951,14 +947,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void setProperties(String url, Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId) {
-        setPropertiesAsync(url, timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, requestId).blockingAwait();
+    public void setProperties(Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId) {
+        setPropertiesAsync(timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, requestId).blockingAwait();
     }
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param blobCacheControl Optional. Sets the blob's cache control. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
@@ -979,14 +974,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> setPropertiesAsync(String url, Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(setPropertiesAsync(url, timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, requestId), serviceCallback);
+    public ServiceFuture<Void> setPropertiesAsync(Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(setPropertiesAsync(timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, requestId), serviceCallback);
     }
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param blobCacheControl Optional. Sets the blob's cache control. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
@@ -1006,9 +1000,12 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(String url, Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "properties";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -1019,13 +1016,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.setProperties(url, timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, this.client.version(), requestId, comp);
+        return service.setProperties(this.client.url(), timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, this.client.version(), requestId, comp);
     }
 
     /**
      * The Set Blob Properties operation sets system properties on the blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param blobCacheControl Optional. Sets the blob's cache control. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
@@ -1045,48 +1041,48 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsSetPropertiesHeaders, Void> object
      */
-    public Completable setPropertiesAsync(String url, Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId) {
-        return setPropertiesWithRestResponseAsync(url, timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, requestId)
+    public Completable setPropertiesAsync(Integer timeout, String blobCacheControl, String blobContentType, String blobContentMD5, String blobContentEncoding, String blobContentLanguage, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String blobContentDisposition, Long blobContentLength, SequenceNumberActionType sequenceNumberAction, Long blobSequenceNumber, String requestId) {
+        return setPropertiesWithRestResponseAsync(timeout, blobCacheControl, blobContentType, blobContentMD5, blobContentEncoding, blobContentLanguage, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentDisposition, blobContentLength, sequenceNumberAction, blobSequenceNumber, requestId)
             .toCompletable();
     }
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void getMetadata(String url) {
-        getMetadataAsync(url).blockingAwait();
+    public void getMetadata() {
+        getMetadataAsync().blockingAwait();
     }
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> getMetadataAsync(String url, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(getMetadataAsync(url), serviceCallback);
+    public ServiceFuture<Void> getMetadataAsync(final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(getMetadataAsync(), serviceCallback);
     }
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync(String url) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync() {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "metadata";
-        final DateTime snapshot = null;
+        final String snapshot = null;
         final Integer timeout = null;
         final String leaseId = null;
         final DateTime ifModifiedSince = null;
@@ -1102,25 +1098,23 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.getMetadata(url, snapshot, timeout, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
+        return service.getMetadata(this.client.url(), snapshot, timeout, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
     }
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsGetMetadataHeaders, Void> object
      */
-    public Completable getMetadataAsync(String url) {
-        return getMetadataWithRestResponseAsync(url)
+    public Completable getMetadataAsync() {
+        return getMetadataWithRestResponseAsync()
             .toCompletable();
     }
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1133,14 +1127,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void getMetadata(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        getMetadataAsync(url, snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
+    public void getMetadata(String snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        getMetadataAsync(snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
     }
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1153,14 +1146,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> getMetadataAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(getMetadataAsync(url, snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
+    public ServiceFuture<Void> getMetadataAsync(String snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(getMetadataAsync(snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1172,9 +1164,12 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsGetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync(String snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "metadata";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -1185,13 +1180,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.getMetadata(url, snapshot, timeout, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
+        return service.getMetadata(this.client.url(), snapshot, timeout, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
     }
 
     /**
      * The Get Blob Metadata operation returns all user-defined metadata for the specified blob or snapshot.
      *
-     * @param url The url to the resource.
      * @param snapshot The snapshot parameter is an opaque DateTime value that, when present, specifies the blob snapshot to retrieve. For more information on working with blob snapshots, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/creating-a-snapshot-of-a-blob"&gt;Creating a Snapshot of a Blob.&lt;/a&gt;
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1203,45 +1197,45 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsGetMetadataHeaders, Void> object
      */
-    public Completable getMetadataAsync(String url, DateTime snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        return getMetadataWithRestResponseAsync(url, snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
+    public Completable getMetadataAsync(String snapshot, Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        return getMetadataWithRestResponseAsync(snapshot, timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void setMetadata(String url) {
-        setMetadataAsync(url).blockingAwait();
+    public void setMetadata() {
+        setMetadataAsync().blockingAwait();
     }
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> setMetadataAsync(String url, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(setMetadataAsync(url), serviceCallback);
+    public ServiceFuture<Void> setMetadataAsync(final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(setMetadataAsync(), serviceCallback);
     }
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(String url) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync() {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "metadata";
         final Integer timeout = null;
@@ -1260,25 +1254,23 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.setMetadata(url, timeout, metadata, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
+        return service.setMetadata(this.client.url(), timeout, metadata, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
     }
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsSetMetadataHeaders, Void> object
      */
-    public Completable setMetadataAsync(String url) {
-        return setMetadataWithRestResponseAsync(url)
+    public Completable setMetadataAsync() {
+        return setMetadataWithRestResponseAsync()
             .toCompletable();
     }
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1291,14 +1283,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void setMetadata(String url, Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        setMetadataAsync(url, timeout, metadata, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
+    public void setMetadata(Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        setMetadataAsync(timeout, metadata, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
     }
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1311,14 +1302,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> setMetadataAsync(String url, Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(setMetadataAsync(url, timeout, metadata, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
+    public ServiceFuture<Void> setMetadataAsync(Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(setMetadataAsync(timeout, metadata, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1330,9 +1320,12 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(String url, Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "metadata";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -1343,13 +1336,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.setMetadata(url, timeout, metadata, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
+        return service.setMetadata(this.client.url(), timeout, metadata, leaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
     }
 
     /**
      * The Set Blob Metadata operation sets user-defined metadata for the specified blob as one or more name-value pairs.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1361,51 +1353,51 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsSetMetadataHeaders, Void> object
      */
-    public Completable setMetadataAsync(String url, Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        return setMetadataWithRestResponseAsync(url, timeout, metadata, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
+    public Completable setMetadataAsync(Integer timeout, String metadata, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        return setMetadataWithRestResponseAsync(timeout, metadata, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void lease(String url, LeaseActionType action) {
-        leaseAsync(url, action).blockingAwait();
+    public void lease(LeaseActionType action) {
+        leaseAsync(action).blockingAwait();
     }
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> leaseAsync(String url, LeaseActionType action, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(leaseAsync(url, action), serviceCallback);
+    public ServiceFuture<Void> leaseAsync(LeaseActionType action, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(leaseAsync(action), serviceCallback);
     }
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsLeaseHeaders, Void>> leaseWithRestResponseAsync(String url, LeaseActionType action) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsLeaseHeaders, Void>> leaseWithRestResponseAsync(LeaseActionType action) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (action == null) {
             throw new IllegalArgumentException("Parameter action is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "lease";
         final Integer timeout = null;
@@ -1426,26 +1418,24 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.lease(url, timeout, leaseId, action, breakPeriod, duration, proposedLeaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
+        return service.lease(this.client.url(), timeout, leaseId, action, breakPeriod, duration, proposedLeaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
     }
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsLeaseHeaders, Void> object
      */
-    public Completable leaseAsync(String url, LeaseActionType action) {
-        return leaseWithRestResponseAsync(url, action)
+    public Completable leaseAsync(LeaseActionType action) {
+        return leaseWithRestResponseAsync(action)
             .toCompletable();
     }
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1461,14 +1451,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void lease(String url, LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        leaseAsync(url, action, timeout, leaseId, breakPeriod, duration, proposedLeaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
+    public void lease(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        leaseAsync(action, timeout, leaseId, breakPeriod, duration, proposedLeaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
     }
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1484,14 +1473,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> leaseAsync(String url, LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(leaseAsync(url, action, timeout, leaseId, breakPeriod, duration, proposedLeaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
+    public ServiceFuture<Void> leaseAsync(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(leaseAsync(action, timeout, leaseId, breakPeriod, duration, proposedLeaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1506,12 +1494,15 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsLeaseHeaders, Void>> leaseWithRestResponseAsync(String url, LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsLeaseHeaders, Void>> leaseWithRestResponseAsync(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (action == null) {
             throw new IllegalArgumentException("Parameter action is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "lease";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -1522,13 +1513,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.lease(url, timeout, leaseId, action, breakPeriod, duration, proposedLeaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
+        return service.lease(this.client.url(), timeout, leaseId, action, breakPeriod, duration, proposedLeaseId, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
     }
 
     /**
      * The Lease Blob operation establishes and manages a lock on a blob for write and delete operations.
      *
-     * @param url The url to the resource.
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1543,45 +1533,45 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsLeaseHeaders, Void> object
      */
-    public Completable leaseAsync(String url, LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        return leaseWithRestResponseAsync(url, action, timeout, leaseId, breakPeriod, duration, proposedLeaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
+    public Completable leaseAsync(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        return leaseWithRestResponseAsync(action, timeout, leaseId, breakPeriod, duration, proposedLeaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void takeSnapshot(String url) {
-        takeSnapshotAsync(url).blockingAwait();
+    public void takeSnapshot() {
+        takeSnapshotAsync().blockingAwait();
     }
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> takeSnapshotAsync(String url, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(takeSnapshotAsync(url), serviceCallback);
+    public ServiceFuture<Void> takeSnapshotAsync(final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(takeSnapshotAsync(), serviceCallback);
     }
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsTakeSnapshotHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshotWithRestResponseAsync(String url) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshotWithRestResponseAsync() {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "snapshot";
         final Integer timeout = null;
@@ -1600,25 +1590,23 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.takeSnapshot(url, timeout, metadata, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, leaseId, this.client.version(), requestId, comp);
+        return service.takeSnapshot(this.client.url(), timeout, metadata, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, leaseId, this.client.version(), requestId, comp);
     }
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsTakeSnapshotHeaders, Void> object
      */
-    public Completable takeSnapshotAsync(String url) {
-        return takeSnapshotWithRestResponseAsync(url)
+    public Completable takeSnapshotAsync() {
+        return takeSnapshotWithRestResponseAsync()
             .toCompletable();
     }
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param ifModifiedSince Specify this header value to operate only on a blob if it has been modified since the specified date/time.
@@ -1631,14 +1619,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void takeSnapshot(String url, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId) {
-        takeSnapshotAsync(url, timeout, metadata, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, requestId).blockingAwait();
+    public void takeSnapshot(Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId) {
+        takeSnapshotAsync(timeout, metadata, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, requestId).blockingAwait();
     }
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param ifModifiedSince Specify this header value to operate only on a blob if it has been modified since the specified date/time.
@@ -1651,14 +1638,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> takeSnapshotAsync(String url, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(takeSnapshotAsync(url, timeout, metadata, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, requestId), serviceCallback);
+    public ServiceFuture<Void> takeSnapshotAsync(Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(takeSnapshotAsync(timeout, metadata, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, requestId), serviceCallback);
     }
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param ifModifiedSince Specify this header value to operate only on a blob if it has been modified since the specified date/time.
@@ -1670,9 +1656,12 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsTakeSnapshotHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshotWithRestResponseAsync(String url, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsTakeSnapshotHeaders, Void>> takeSnapshotWithRestResponseAsync(Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "snapshot";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -1683,13 +1672,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.takeSnapshot(url, timeout, metadata, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, leaseId, this.client.version(), requestId, comp);
+        return service.takeSnapshot(this.client.url(), timeout, metadata, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, leaseId, this.client.version(), requestId, comp);
     }
 
     /**
      * The Snapshot Blob operation creates a read-only snapshot of a blob.
      *
-     * @param url The url to the resource.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
      * @param ifModifiedSince Specify this header value to operate only on a blob if it has been modified since the specified date/time.
@@ -1701,51 +1689,51 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsTakeSnapshotHeaders, Void> object
      */
-    public Completable takeSnapshotAsync(String url, Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId) {
-        return takeSnapshotWithRestResponseAsync(url, timeout, metadata, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, requestId)
+    public Completable takeSnapshotAsync(Integer timeout, String metadata, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String requestId) {
+        return takeSnapshotWithRestResponseAsync(timeout, metadata, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, requestId)
             .toCompletable();
     }
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void copy(String url, String copySource) {
-        copyAsync(url, copySource).blockingAwait();
+    public void copy(String copySource) {
+        copyAsync(copySource).blockingAwait();
     }
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> copyAsync(String url, String copySource, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(copyAsync(url, copySource), serviceCallback);
+    public ServiceFuture<Void> copyAsync(String copySource, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(copyAsync(copySource), serviceCallback);
     }
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsCopyHeaders, Void>> copyWithRestResponseAsync(String url, String copySource) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsCopyHeaders, Void>> copyWithRestResponseAsync(String copySource) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (copySource == null) {
             throw new IllegalArgumentException("Parameter copySource is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final Integer timeout = null;
         final String metadata = null;
@@ -1776,26 +1764,24 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.copy(url, timeout, metadata, sourceIfModifiedSinceConverted, sourceIfUnmodifiedSinceConverted, sourceIfMatches, sourceIfNoneMatch, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, copySource, leaseId, sourceLeaseId, this.client.version(), requestId);
+        return service.copy(this.client.url(), timeout, metadata, sourceIfModifiedSinceConverted, sourceIfUnmodifiedSinceConverted, sourceIfMatches, sourceIfNoneMatch, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, copySource, leaseId, sourceLeaseId, this.client.version(), requestId);
     }
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsCopyHeaders, Void> object
      */
-    public Completable copyAsync(String url, String copySource) {
-        return copyWithRestResponseAsync(url, copySource)
+    public Completable copyAsync(String copySource) {
+        return copyWithRestResponseAsync(copySource)
             .toCompletable();
     }
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -1814,14 +1800,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void copy(String url, String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId) {
-        copyAsync(url, copySource, timeout, metadata, sourceIfModifiedSince, sourceIfUnmodifiedSince, sourceIfMatches, sourceIfNoneMatch, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, sourceLeaseId, requestId).blockingAwait();
+    public void copy(String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId) {
+        copyAsync(copySource, timeout, metadata, sourceIfModifiedSince, sourceIfUnmodifiedSince, sourceIfMatches, sourceIfNoneMatch, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, sourceLeaseId, requestId).blockingAwait();
     }
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -1840,14 +1825,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> copyAsync(String url, String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(copyAsync(url, copySource, timeout, metadata, sourceIfModifiedSince, sourceIfUnmodifiedSince, sourceIfMatches, sourceIfNoneMatch, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, sourceLeaseId, requestId), serviceCallback);
+    public ServiceFuture<Void> copyAsync(String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(copyAsync(copySource, timeout, metadata, sourceIfModifiedSince, sourceIfUnmodifiedSince, sourceIfMatches, sourceIfNoneMatch, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, sourceLeaseId, requestId), serviceCallback);
     }
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -1865,12 +1849,15 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsCopyHeaders, Void>> copyWithRestResponseAsync(String url, String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsCopyHeaders, Void>> copyWithRestResponseAsync(String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (copySource == null) {
             throw new IllegalArgumentException("Parameter copySource is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         DateTimeRfc1123 sourceIfModifiedSinceConverted = null;
         if (sourceIfModifiedSince != null) {
@@ -1888,13 +1875,12 @@ public class BlobsImpl implements Blobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.copy(url, timeout, metadata, sourceIfModifiedSinceConverted, sourceIfUnmodifiedSinceConverted, sourceIfMatches, sourceIfNoneMatch, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, copySource, leaseId, sourceLeaseId, this.client.version(), requestId);
+        return service.copy(this.client.url(), timeout, metadata, sourceIfModifiedSinceConverted, sourceIfUnmodifiedSinceConverted, sourceIfMatches, sourceIfNoneMatch, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, copySource, leaseId, sourceLeaseId, this.client.version(), requestId);
     }
 
     /**
      * The Copy Blob operation copies a blob or an internet resource to a new blob.
      *
-     * @param url The url to the resource.
      * @param copySource Specifies the name of the source page blob snapshot. This value is a URL of up to 2 KB in length that specifies a page blob snapshot. The value should be URL-encoded as it would appear in a request URI. The source blob must either be public or must be authenticated via a shared access signature.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param metadata Optional. Specifies a user-defined name-value pair associated with the blob. If no name-value pairs are specified, the operation will copy the metadata from the source blob or file to the destination blob. If one or more name-value pairs are specified, the destination blob is created with the specified metadata, and metadata is not copied from the source blob or file. Note that beginning with version 2009-09-19, metadata names must adhere to the naming rules for C# identifiers. See Naming and Referencing Containers, Blobs, and Metadata for more information.
@@ -1912,77 +1898,75 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsCopyHeaders, Void> object
      */
-    public Completable copyAsync(String url, String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId) {
-        return copyWithRestResponseAsync(url, copySource, timeout, metadata, sourceIfModifiedSince, sourceIfUnmodifiedSince, sourceIfMatches, sourceIfNoneMatch, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, sourceLeaseId, requestId)
+    public Completable copyAsync(String copySource, Integer timeout, String metadata, DateTime sourceIfModifiedSince, DateTime sourceIfUnmodifiedSince, String sourceIfMatches, String sourceIfNoneMatch, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String leaseId, String sourceLeaseId, String requestId) {
+        return copyWithRestResponseAsync(copySource, timeout, metadata, sourceIfModifiedSince, sourceIfUnmodifiedSince, sourceIfMatches, sourceIfNoneMatch, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, leaseId, sourceLeaseId, requestId)
             .toCompletable();
     }
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void abortCopy(String url, String copyId) {
-        abortCopyAsync(url, copyId).blockingAwait();
+    public void abortCopy(String copyId) {
+        abortCopyAsync(copyId).blockingAwait();
     }
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> abortCopyAsync(String url, String copyId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(abortCopyAsync(url, copyId), serviceCallback);
+    public ServiceFuture<Void> abortCopyAsync(String copyId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(abortCopyAsync(copyId), serviceCallback);
     }
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsAbortCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyWithRestResponseAsync(String url, String copyId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyWithRestResponseAsync(String copyId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (copyId == null) {
             throw new IllegalArgumentException("Parameter copyId is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String copyActionAbortConstant = "abort";
         final String comp = "copy";
         final Integer timeout = null;
         final String leaseId = null;
         final String requestId = null;
-        return service.abortCopy(url, copyId, timeout, leaseId, copyActionAbortConstant, this.client.version(), requestId, comp);
+        return service.abortCopy(this.client.url(), copyId, timeout, leaseId, copyActionAbortConstant, this.client.version(), requestId, comp);
     }
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsAbortCopyHeaders, Void> object
      */
-    public Completable abortCopyAsync(String url, String copyId) {
-        return abortCopyWithRestResponseAsync(url, copyId)
+    public Completable abortCopyAsync(String copyId) {
+        return abortCopyWithRestResponseAsync(copyId)
             .toCompletable();
     }
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -1991,14 +1975,13 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    public void abortCopy(String url, String copyId, Integer timeout, String leaseId, String requestId) {
-        abortCopyAsync(url, copyId, timeout, leaseId, requestId).blockingAwait();
+    public void abortCopy(String copyId, Integer timeout, String leaseId, String requestId) {
+        abortCopyAsync(copyId, timeout, leaseId, requestId).blockingAwait();
     }
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -2007,14 +1990,13 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<Void> abortCopyAsync(String url, String copyId, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(abortCopyAsync(url, copyId, timeout, leaseId, requestId), serviceCallback);
+    public ServiceFuture<Void> abortCopyAsync(String copyId, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(abortCopyAsync(copyId, timeout, leaseId, requestId), serviceCallback);
     }
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -2022,22 +2004,24 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;BlobsAbortCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyWithRestResponseAsync(String url, String copyId, Integer timeout, String leaseId, String requestId) {
-        if (url == null) {
-            throw new IllegalArgumentException("Parameter url is required and cannot be null.");
+    public Single<RestResponse<BlobsAbortCopyHeaders, Void>> abortCopyWithRestResponseAsync(String copyId, Integer timeout, String leaseId, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (copyId == null) {
             throw new IllegalArgumentException("Parameter copyId is required and cannot be null.");
         }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
+        }
         final String copyActionAbortConstant = "abort";
         final String comp = "copy";
-        return service.abortCopy(url, copyId, timeout, leaseId, copyActionAbortConstant, this.client.version(), requestId, comp);
+        return service.abortCopy(this.client.url(), copyId, timeout, leaseId, copyActionAbortConstant, this.client.version(), requestId, comp);
     }
 
     /**
      * The Abort Copy Blob operation aborts a pending Copy Blob operation, and leaves a destination blob with zero length and full metadata.
      *
-     * @param url The url to the resource.
      * @param copyId The copy identifier provided in the x-ms-copy-id header of the original Copy Blob operation.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -2045,8 +2029,132 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<BlobsAbortCopyHeaders, Void> object
      */
-    public Completable abortCopyAsync(String url, String copyId, Integer timeout, String leaseId, String requestId) {
-        return abortCopyWithRestResponseAsync(url, copyId, timeout, leaseId, requestId)
+    public Completable abortCopyAsync(String copyId, Integer timeout, String leaseId, String requestId) {
+        return abortCopyWithRestResponseAsync(copyId, timeout, leaseId, requestId)
+            .toCompletable();
+    }
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @throws RestException thrown if the request is rejected by server
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
+     */
+    public void setBlobTier(AccessTier tier) {
+        setBlobTierAsync(tier).blockingAwait();
+    }
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link ServiceFuture} object
+     */
+    public ServiceFuture<Void> setBlobTierAsync(AccessTier tier, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(setBlobTierAsync(tier), serviceCallback);
+    }
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link Single&lt;RestResponse&lt;BlobsSetBlobTierHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<BlobsSetBlobTierHeaders, Void>> setBlobTierWithRestResponseAsync(AccessTier tier) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (tier == null) {
+            throw new IllegalArgumentException("Parameter tier is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
+        }
+        final String comp = "tier";
+        final Integer timeout = null;
+        final String requestId = null;
+        return service.setBlobTier(this.client.url(), timeout, tier, this.client.version(), requestId, comp);
+    }
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return a {@link Single} emitting the RestResponse<BlobsSetBlobTierHeaders, Void> object
+     */
+    public Completable setBlobTierAsync(AccessTier tier) {
+        return setBlobTierWithRestResponseAsync(tier)
+            .toCompletable();
+    }
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
+     * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @throws RestException thrown if the request is rejected by server
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
+     */
+    public void setBlobTier(AccessTier tier, Integer timeout, String requestId) {
+        setBlobTierAsync(tier, timeout, requestId).blockingAwait();
+    }
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
+     * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
+     * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link ServiceFuture} object
+     */
+    public ServiceFuture<Void> setBlobTierAsync(AccessTier tier, Integer timeout, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(setBlobTierAsync(tier, timeout, requestId), serviceCallback);
+    }
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
+     * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return the {@link Single&lt;RestResponse&lt;BlobsSetBlobTierHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<BlobsSetBlobTierHeaders, Void>> setBlobTierWithRestResponseAsync(AccessTier tier, Integer timeout, String requestId) {
+        if (this.client.url() == null) {
+            throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
+        }
+        if (tier == null) {
+            throw new IllegalArgumentException("Parameter tier is required and cannot be null.");
+        }
+        if (this.client.version() == null) {
+            throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
+        }
+        final String comp = "tier";
+        return service.setBlobTier(this.client.url(), timeout, tier, this.client.version(), requestId, comp);
+    }
+
+    /**
+     * The Set Blob Tier operation sets the tier on a blob. The operation is allowed on a page blob in a premium storage account and on a block blob in a blob storage account (locally redundant storage only). A premium page blob's tier determines the allowed size, IOPS, and bandwidth of the blob. A block blob's tier determines Hot/Cool/Archive storage type. This operation does not update the blob's ETag.
+     *
+     * @param tier Indicates the tier to be set on the blob. Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50', 'Hot', 'Cool', 'Archive'
+     * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
+     * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
+     * @throws IllegalArgumentException thrown if parameters fail the validation
+     * @return a {@link Single} emitting the RestResponse<BlobsSetBlobTierHeaders, Void> object
+     */
+    public Completable setBlobTierAsync(AccessTier tier, Integer timeout, String requestId) {
+        return setBlobTierWithRestResponseAsync(tier, timeout, requestId)
             .toCompletable();
     }
 }

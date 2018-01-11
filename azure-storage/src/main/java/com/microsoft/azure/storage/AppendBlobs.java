@@ -30,49 +30,44 @@ public interface AppendBlobs {
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
-     * @param url The url to the resource.
      * @param body Initial data
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void appendBlock(String url, AsyncInputStream body);
+    void appendBlock(AsyncInputStream body);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
-     * @param url The url to the resource.
      * @param body Initial data
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> appendBlockAsync(String url, AsyncInputStream body, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> appendBlockAsync(AsyncInputStream body, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
-     * @param url The url to the resource.
      * @param body Initial data
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable appendBlockAsync(String url, AsyncInputStream body);
+    Completable appendBlockAsync(AsyncInputStream body);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
-     * @param url The url to the resource.
      * @param body Initial data
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;AppendBlobsAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<AppendBlobsAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(String url, AsyncInputStream body);
+    Single<RestResponse<AppendBlobsAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(AsyncInputStream body);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
-     * @param url The url to the resource.
      * @param body Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -87,12 +82,11 @@ public interface AppendBlobs {
      * @throws RestException thrown if the request is rejected by server
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      */
-    void appendBlock(String url, AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void appendBlock(AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
-     * @param url The url to the resource.
      * @param body Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -107,12 +101,11 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture&lt;Void&gt;} object
      */
-    ServiceFuture<Void> appendBlockAsync(String url, AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> appendBlockAsync(AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
-     * @param url The url to the resource.
      * @param body Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -126,12 +119,11 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Completable} object if successful.
      */
-    Completable appendBlockAsync(String url, AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable appendBlockAsync(AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
-     * @param url The url to the resource.
      * @param body Initial data
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -145,5 +137,5 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;AppendBlobsAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<AppendBlobsAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(String url, AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<AppendBlobsAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(AsyncInputStream body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 }
