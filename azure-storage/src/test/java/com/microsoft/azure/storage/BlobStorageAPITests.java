@@ -116,7 +116,7 @@ public class BlobStorageAPITests {
 
             // Create a snapshot of the blob and pull the snapshot ID out of the headers.
             String snapshot = bu.createSnapshotAsync(null, null).blockingGet()
-                    .headers().snapshot().toString();
+                    .headers().snapshot();
 
             // Create a reference to the blob snapshot. This returns a new BlockBlobURL object that references the same
             // path as the base blob with the query string including the snapshot value appended to the end.

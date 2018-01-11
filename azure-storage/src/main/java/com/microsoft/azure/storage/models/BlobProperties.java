@@ -157,7 +157,7 @@ public class BlobProperties {
      * The destinationSnapshot property.
      */
     @JsonProperty(value = "DestinationSnapshot")
-    private DateTime destinationSnapshot;
+    private String destinationSnapshot;
 
     /**
      * Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50',
@@ -638,7 +638,7 @@ public class BlobProperties {
      *
      * @return the destinationSnapshot value
      */
-    public DateTime destinationSnapshot() {
+    public String destinationSnapshot() {
         return this.destinationSnapshot;
     }
 
@@ -648,7 +648,7 @@ public class BlobProperties {
      * @param destinationSnapshot the destinationSnapshot value to set
      * @return the BlobProperties object itself.
      */
-    public BlobProperties withDestinationSnapshot(DateTime destinationSnapshot) {
+    public BlobProperties withDestinationSnapshot(String destinationSnapshot) {
         this.destinationSnapshot = destinationSnapshot;
         return this;
     }

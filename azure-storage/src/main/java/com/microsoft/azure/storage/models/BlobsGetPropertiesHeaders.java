@@ -114,7 +114,7 @@ public class BlobsGetPropertiesHeaders {
      * successful incremental copy snapshot for this blob.
      */
     @JsonProperty(value = "x-ms-copy-destination-snapshot")
-    private DateTime destinationSnapshot;
+    private String destinationSnapshot;
 
     /**
      * When a blob is leased, specifies whether the lease is of infinite or
@@ -495,7 +495,7 @@ public class BlobsGetPropertiesHeaders {
      *
      * @return the destinationSnapshot value
      */
-    public DateTime destinationSnapshot() {
+    public String destinationSnapshot() {
         return this.destinationSnapshot;
     }
 
@@ -505,7 +505,7 @@ public class BlobsGetPropertiesHeaders {
      * @param destinationSnapshot the destinationSnapshot value to set
      * @return the BlobsGetPropertiesHeaders object itself.
      */
-    public BlobsGetPropertiesHeaders withDestinationSnapshot(DateTime destinationSnapshot) {
+    public BlobsGetPropertiesHeaders withDestinationSnapshot(String destinationSnapshot) {
         this.destinationSnapshot = destinationSnapshot;
         return this;
     }

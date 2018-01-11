@@ -210,7 +210,7 @@ public final class PageBlobURL extends BlobURL {
      */
     //TODO: Get rid of joda time (use java.util.Date?)
     public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesDiffAsync(
-            BlobRange blobRange, DateTime prevSnapshot, BlobAccessConditions accessConditions) {
+            BlobRange blobRange, String prevSnapshot, BlobAccessConditions accessConditions) {
         if(blobRange == null) {
             blobRange = BlobRange.getDefault();
         }

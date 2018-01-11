@@ -80,7 +80,7 @@ public class PageBlobsImpl implements PageBlobs {
 
         @GET("{containerName}/{blob}")
         @ExpectedResponses({200})
-        Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRanges(@HostParam("url") String url, @QueryParam("snapshot") DateTime snapshot, @QueryParam("timeout") Integer timeout, @QueryParam("prevsnapshot") DateTime prevsnapshot, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+        Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRanges(@HostParam("url") String url, @QueryParam("snapshot") String snapshot, @QueryParam("timeout") Integer timeout, @QueryParam("prevsnapshot") String prevsnapshot, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({202})
@@ -330,9 +330,9 @@ public class PageBlobsImpl implements PageBlobs {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "pagelist";
-        final DateTime snapshot = null;
+        final String snapshot = null;
         final Integer timeout = null;
-        final DateTime prevsnapshot = null;
+        final String prevsnapshot = null;
         final String range = null;
         final String leaseId = null;
         final DateTime ifModifiedSince = null;
@@ -388,7 +388,7 @@ public class PageBlobsImpl implements PageBlobs {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent
      * @return the PageList object if successful.
      */
-    public PageList getPageRanges(DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public PageList getPageRanges(String snapshot, Integer timeout, String prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         return getPageRangesAsync(snapshot, timeout, prevsnapshot, range, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingGet();
     }
 
@@ -409,7 +409,7 @@ public class PageBlobsImpl implements PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link ServiceFuture} object
      */
-    public ServiceFuture<PageList> getPageRangesAsync(DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<PageList> serviceCallback) {
+    public ServiceFuture<PageList> getPageRangesAsync(String snapshot, Integer timeout, String prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<PageList> serviceCallback) {
         return ServiceFuture.fromBody(getPageRangesAsync(snapshot, timeout, prevsnapshot, range, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
@@ -429,7 +429,7 @@ public class PageBlobsImpl implements PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return the {@link Single&lt;RestResponse&lt;PageBlobsGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesWithRestResponseAsync(DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesWithRestResponseAsync(String snapshot, Integer timeout, String prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -464,7 +464,7 @@ public class PageBlobsImpl implements PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation
      * @return a {@link Single} emitting the RestResponse<PageBlobsGetPageRangesHeaders, PageList> object
      */
-    public Maybe<PageList> getPageRangesAsync(DateTime snapshot, Integer timeout, DateTime prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Maybe<PageList> getPageRangesAsync(String snapshot, Integer timeout, String prevsnapshot, String range, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         return getPageRangesWithRestResponseAsync(snapshot, timeout, prevsnapshot, range, leaseId, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .flatMapMaybe(new Function<RestResponse<PageBlobsGetPageRangesHeaders, PageList>, Maybe<PageList>>() {
                 public Maybe<PageList> apply(RestResponse<PageBlobsGetPageRangesHeaders, PageList> restResponse) {
