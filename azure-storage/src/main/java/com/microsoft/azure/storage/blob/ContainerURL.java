@@ -18,7 +18,6 @@ import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
-import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -105,6 +104,9 @@ public final class ContainerURL extends StorageURL {
      */
     public Single<RestResponse<ContainerCreateHeaders, Void>> createAsync(
             Metadata metadata, PublicAccessType accessType) {
+        if (metadata == null) {
+            metadata = Metadata.getDefault();
+        }
         return this.storageClient.containers().createWithRestResponseAsync(
                 super.url, null, metadata.toString(), accessType, null);
     }
@@ -128,8 +130,8 @@ public final class ContainerURL extends StorageURL {
 
         return this.storageClient.containers().deleteWithRestResponseAsync(super.url, null,
                 accessConditions.getLeaseID().toString(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 null);
     }
 
@@ -178,7 +180,7 @@ public final class ContainerURL extends StorageURL {
 
         return this.storageClient.containers().setMetadataWithRestResponseAsync(url, null,
                 accessConditions.getLeaseID().toString(), metadata.toString(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),null);
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),null);
     }
 
     /**
@@ -225,8 +227,8 @@ public final class ContainerURL extends StorageURL {
         }
         return this.storageClient.containers().setAclWithRestResponseAsync(this.url, identifiers, null,
                 accessConditions.getLeaseID().toString(), accessType,
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 null);
     }
 
@@ -265,8 +267,8 @@ public final class ContainerURL extends StorageURL {
 
         return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.ACQUIRE,
                 null,null, null, duration, proposedID,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 null);
     }
 
@@ -293,8 +295,8 @@ public final class ContainerURL extends StorageURL {
 
         return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
                 leaseID, null, null, null,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 null);
     }
 
@@ -321,8 +323,8 @@ public final class ContainerURL extends StorageURL {
 
         return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.RELEASE,
                 null, leaseID, null, null, null,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 null);
     }
 
@@ -349,8 +351,8 @@ public final class ContainerURL extends StorageURL {
 
         return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.BREAK,
                 null, leaseID, null, null, null,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 null);
     }
 
@@ -379,8 +381,8 @@ public final class ContainerURL extends StorageURL {
 
         return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.RELEASE,
                 null, leaseID, null, null, proposedID,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 null);
     }
 

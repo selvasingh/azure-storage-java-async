@@ -19,7 +19,6 @@ import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.RestResponse;
 import io.reactivex.Single;
-import org.joda.time.DateTime;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -104,8 +103,8 @@ public final class BlockBlobURL extends BlobURL {
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
                 accessConditions.getLeaseAccessConditions().toString(),
                 headers.getContentDisposition(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null, null, null);
@@ -189,8 +188,8 @@ public final class BlockBlobURL extends BlobURL {
                 httpHeaders.getCacheControl(), httpHeaders.getContentType(),httpHeaders.getContentEncoding(),
                 httpHeaders.getContentLanguage(), httpHeaders.getContentMD5(), metadata.toString(),
                 accessConditions.getLeaseAccessConditions().toString(), httpHeaders.getContentDisposition(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }

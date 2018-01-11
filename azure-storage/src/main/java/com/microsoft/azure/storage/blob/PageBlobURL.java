@@ -107,8 +107,8 @@ public final class PageBlobURL extends BlobURL {
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(),
                 metadata.toString(), accessConditions.getLeaseAccessConditions().toString(),
                 headers.getContentDisposition(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 size, sequenceNumber, null);
@@ -138,8 +138,8 @@ public final class PageBlobURL extends BlobURL {
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThanOrEqual(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThan(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberEqual(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }
@@ -166,8 +166,8 @@ public final class PageBlobURL extends BlobURL {
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThanOrEqual(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThan(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberEqual(),
-             new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-             new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+             accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+             accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
              accessConditions.getHttpAccessConditions().getIfMatch().toString(),
              accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }
@@ -196,8 +196,8 @@ public final class PageBlobURL extends BlobURL {
      return this.storageClient.pageBlobs().getPageRangesWithRestResponseAsync(this.url, null,
              null, null,
              blobRange.toString(), accessConditions.getLeaseAccessConditions().toString(),
-             new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-             new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+             accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+             accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
              accessConditions.getHttpAccessConditions().getIfMatch().toString(),
              accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
              null);
@@ -231,8 +231,8 @@ public final class PageBlobURL extends BlobURL {
         return this.storageClient.pageBlobs().getPageRangesWithRestResponseAsync(this.url, null,
                 null, prevSnapshot,
                 blobRange.toString(), accessConditions.getLeaseAccessConditions().toString(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null);
@@ -259,8 +259,8 @@ public final class PageBlobURL extends BlobURL {
         return this.storageClient.blobs().setPropertiesWithRestResponseAsync(this.url, null,
                 null, null, null, null,
                 null, accessConditions.getLeaseAccessConditions().toString(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null, length, null, null, null);
@@ -299,8 +299,8 @@ public final class PageBlobURL extends BlobURL {
                 headers.getCacheControl(), headers.getContentType(), headers.getContentMD5(),
                 headers.getContentEncoding(), headers.getContentLanguage(),
                 accessConditions.getLeaseAccessConditions().toString(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 headers.getContentDisposition(),
@@ -345,8 +345,8 @@ public final class PageBlobURL extends BlobURL {
                 source.getQuery(),null).toURL();
         return this.storageClient.pageBlobs().incrementalCopyWithRestResponseAsync(this.url, source.toString(),
                 null, null,
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }

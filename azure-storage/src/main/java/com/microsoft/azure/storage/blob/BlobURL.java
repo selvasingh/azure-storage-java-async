@@ -19,9 +19,7 @@ import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
-import org.joda.time.DateTime;
 
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 
@@ -126,12 +124,12 @@ public class BlobURL extends StorageURL {
         }
 
         return this.storageClient.blobs().copyWithRestResponseAsync(super.url, sourceURL, null, null,
-                new DateTime(sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 sourceAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
-                new DateTime(destAccessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(destAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                destAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                destAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 destAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 destAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 sourceAccessConditions.getLeaseAccessConditions().toString(),
@@ -180,8 +178,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().getWithRestResponseAsync(super.url, null, null,
                 range.toString(), accessConditions.getLeaseAccessConditions().toString(),
-                rangeGetContentMD5, new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                rangeGetContentMD5, accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null);
@@ -208,8 +206,8 @@ public class BlobURL extends StorageURL {
         return this.storageClient.blobs().deleteWithRestResponseAsync(super.url, null, null,
                 accessConditions.getLeaseAccessConditions().toString(),
                 deleteBlobSnapshotOptions,
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }
@@ -231,8 +229,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().getPropertiesWithRestResponseAsync(super.url, null, null,
                 accessConditions.getLeaseAccessConditions().toString(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }
@@ -259,8 +257,8 @@ public class BlobURL extends StorageURL {
                 headers.getCacheControl(), headers.getContentType(), headers.getContentMD5(),
                 headers.getContentEncoding(),
                 headers.getContentLanguage(), accessConditions.getLeaseAccessConditions().toString(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 headers.getContentDisposition(),
@@ -287,8 +285,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().setMetadataWithRestResponseAsync(super.url, null, metadata.toString(),
                 accessConditions.getLeaseAccessConditions().toString(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null);
@@ -313,8 +311,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().takeSnapshotWithRestResponseAsync(super.url, null,
                 metadata.toString(),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 accessConditions.getLeaseAccessConditions().toString(), null);
@@ -343,8 +341,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.ACQUIRE, null,
                 null, null, duration, proposedID,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(),
                 httpAccessConditions.getIfNoneMatch().toString(),
                 null);
@@ -368,8 +366,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
                 leaseID, null, null, null,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
                 null);
     }
@@ -393,8 +391,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RELEASE, null,
                 leaseID, null, null, null,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
                 null);
     }
@@ -424,8 +422,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
                 leaseID, breakPeriodInSeconds, null, null,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
                 null);
     }
@@ -451,8 +449,8 @@ public class BlobURL extends StorageURL {
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
                 leaseId, null, null, proposedID,
-                new DateTime(httpAccessConditions.getIfModifiedSince()),
-                new DateTime(httpAccessConditions.getIfUnmodifiedSince()),
+                httpAccessConditions.getIfModifiedSince(),
+                httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),
                 null);
     }
