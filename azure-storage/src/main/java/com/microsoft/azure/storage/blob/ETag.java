@@ -19,23 +19,23 @@ package com.microsoft.azure.storage.blob;
  */
 public final class ETag {
 
-    private static ETag defaultEtag;
     private final String eTagString;
 
     /**
-     * Used for matching with no ETag
+     * Used for matching with no ETag.
      */
     public static final ETag NONE = new ETag(Constants.EMPTY_STRING);
 
     /**
-     * Used for matching with any ETag
+     * Used for matching with any ETag.
      */
     public static final ETag ANY = new ETag("*");
 
     /**
      * Creates a {@link ETag} object.
+     *
      * @param eTagString
-     *      The {@code String} to convert to an ETag
+     *      The {@code String} to convert to an ETag.
      */
     public ETag(String eTagString) {
         this.eTagString = eTagString;

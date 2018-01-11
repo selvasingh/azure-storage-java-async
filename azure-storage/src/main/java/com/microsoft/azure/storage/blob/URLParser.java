@@ -23,8 +23,17 @@ import java.util.TreeMap;
 
 public final class URLParser {
 
-    // URLParser parses a URL initializing BlobURLParts' fields including any SAS-related & snapshot query parameters. Any other
-    // query parameters remain in the UnparsedParams field. This method overwrites all fields in the BlobURLParts object.
+    /**URLParser parses a URL initializing BlobURLParts' fields including any SAS-related & snapshot query parameters.
+     * Any other query parameters remain in the UnparsedParams field. This method overwrites all fields in the
+     * BlobURLParts object.
+     *
+     * @param urlString
+     *      A {@code String} of the URL to be parsed.
+     * @return
+     *      A {@link BlobURLParts} object containing all the components of a BlobURL.
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
     public static BlobURLParts ParseURL(String urlString) throws MalformedURLException, UnsupportedEncodingException {
 
         URL url = new URL(urlString);
@@ -74,8 +83,9 @@ public final class URLParser {
      * Parses a query string into a one to many hashmap.
      *
      * @param queryParams
-     *            the string to parse
-     * @return a HashMap<String, String[]> of the key values.
+     *      The string of query params to parse.
+     * @return
+     *      A {@code HashMap&lt;String, String[]&gt;} of the key values.
      * @throws UnsupportedEncodingException
      */
     private static TreeMap<String, String[]> parseQueryString(String queryParams, boolean lowerCaseKey) throws UnsupportedEncodingException {

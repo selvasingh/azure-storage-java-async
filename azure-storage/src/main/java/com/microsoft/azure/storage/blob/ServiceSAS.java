@@ -38,6 +38,37 @@ public final class ServiceSAS extends BaseSAS {
 
     private final String contentType;
 
+    /**
+     * Creates a service SAS for a container.
+     *
+     * @param version
+     *      The version of the service this SAS will target. If not specified, it will default to the version targeted
+     *      by the library.
+     * @param protocol
+     *      A {@link SASProtocol} object specifying which protocols may be used by this SAS.
+     * @param startTime
+     *      A {@code java.util.Date} specifying when the SAS will take effect.
+     * @param expiryTime
+     *      A {@code java.util.Date} specifying a time after which the SAS will no longer work.
+     * @param permissions
+     *      An {@code EnumSet&lt;ContainerSASPermission&gt;} specifying which operations the SAS user may perform.
+     * @param ipRange
+     *      An {@link IPRange} object specifying which IP addresses may validly use this SAS.
+     * @param containerName
+     *      A {@code String} specifying the name of the container the SAS user may access.
+     * @param identifier
+     *      A {@code String} specifying which access policy on the container this SAS references if any.
+     * @param cacheControl
+     *      A {@code String} specifying the control header for the SAS.
+     * @param contentDisposition
+     *      A {@code String} specifying the content-disposition header for the SAS.
+     * @param contentEncoding
+     *      A {@code String} specifying the content-encoding header for the SAS.
+     * @param contentLanguage
+     *      A {@code String} specifying the content-language header for the SAS.
+     * @param contentType
+     *      A {@code String} specifying the content-type header for the SAS.
+     */
     public ServiceSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime,
                       EnumSet<ContainerSASPermission> permissions,
                       IPRange ipRange, String containerName, String identifier, String cacheControl,
@@ -53,6 +84,39 @@ public final class ServiceSAS extends BaseSAS {
         this.contentType = contentType;
     }
 
+    /**
+     * Creates a service SAS for a blob.
+     *
+     * @param version
+     *      The version of the service this SAS will target. If not specified, it will default to the version targeted
+     *      by the library.
+     * @param protocol
+     *      A {@link SASProtocol} object specifying which protocols may be used by this SAS.
+     * @param startTime
+     *      A {@code java.util.Date} specifying when the SAS will take effect.
+     * @param expiryTime
+     *      A {@code java.util.Date} specifying a time after which the SAS will no longer work.
+     * @param permissions
+     *      An {@code EnumSet&lt;BlobSASPermission&gt;} specifying which operations the SAS user may perform.
+     * @param ipRange
+     *      An {@link IPRange} object specifying which IP addresses may validly use this SAS.
+     * @param containerName
+     *      A {@code String} specifying the name of the container containing the blob the SAS user may access.
+     * @param blobName
+     *      A {@code String} specifying the name of the blob the SAS user may access.
+     * @param identifier
+     *      A {@code String} specifying which access policy on the container this SAS references if any.
+     * @param cacheControl
+     *      A {@code String} specifying the control header for the SAS.
+     * @param contentDisposition
+     *      A {@code String} specifying the content-disposition header for the SAS.
+     * @param contentEncoding
+     *      A {@code String} specifying the content-encoding header for the SAS.
+     * @param contentLanguage
+     *      A {@code String} specifying the content-language header for the SAS.
+     * @param contentType
+     *      A {@code String} specifying the content-type header for the SAS.
+     */
     public ServiceSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime,
                       EnumSet<BlobSASPermission> permissions,
                       IPRange ipRange, String containerName, String blobName, String identifier, String cacheControl,
@@ -68,8 +132,19 @@ public final class ServiceSAS extends BaseSAS {
         this.contentType = contentType;
     }
 
+    /**
+     * Uses an account's shared key credential to sign these signature values to produce the proper SAS query
+     * parameters.
+     *
+     * @param sharedKeyCredentials
+     *      A {@link SharedKeyCredentials} object used to sign the SAS values.
+     * @return
+     *      A {@link SASQueryParameters} object containing the signed query parameters.
+     * @throws InvalidKeyException
+     */
     @Override
-    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials) throws InvalidKeyException {
+    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials)
+            throws InvalidKeyException {
         if (sharedKeyCredentials == null) {
             throw new IllegalArgumentException("SharedKeyCredentials cannot be null.");
         }

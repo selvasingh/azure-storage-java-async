@@ -19,67 +19,68 @@ import java.util.Map;
 
 /**
  * Represents the components that make up an Azure Storage SAS' query parameters.
- * <p>NOTE: Changing any field requires computing a new SAS signature using a XxxSASSignatureValues type.</p>
+ * NOTE: Changing any field requires computing a new SAS signature using a XxxSASSignatureValues type.
  */
 public final class SASQueryParameters {
 
     /**
-     * A {@code String} representing the storage version
+     * A {@code String} representing the storage version.
      */
     public String version;
 
     /**
-     * A {@code String} representing the storage services being accessed (only for Account SAS)
+     * A {@code String} representing the storage services being accessed (only for Account SAS).
      */
     public String services;
 
     /**
-     * A {@code String} representing the storage resource types being accessed (only for Account SAS)
+     * A {@code String} representing the storage resource types being accessed (only for Account SAS).
      */
     public String resourceTypes;
 
     /**
-     * A {@code String} representing the allowed HTTP protocol(s) or {@code null}
+     * A {@code String} representing the allowed HTTP protocol(s) or {@code null}.
      */
     public String protocol;
 
     /**
-     * A {@code java.util.Date} representing the start time for this SAS token or {@code null}
+     * A {@code java.util.Date} representing the start time for this SAS token or {@code null}.
      */
     public Date startTime;
 
     /**
-     * A {@code java.util.Date} representing the expiry time for this SAS token
+     * A {@code java.util.Date} representing the expiry time for this SAS token.
      */
     public Date expiryTime;
 
     /**
-     * A {@link IPRange} representing the range of valid IP addresses for this SAS token or {@code null}
+     * A {@link IPRange} representing the range of valid IP addresses for this SAS token or {@code null}.
      */
     public IPRange ipRange;
 
     /**
-     * A {@code String} representing the signed identifier (only for Service SAS) or {@code null}
+     * A {@code String} representing the signed identifier (only for Service SAS) or {@code null}.
      */
     public String identifier;
 
     /**
-     * A {@code String} representing the storage container or blob (only for Service SAS)
+     * A {@code String} representing the storage container or blob (only for Service SAS).
      */
     public String resource;
 
     /**
-     * A {@code String} representing the storage permissions or {@code null}
+     * A {@code String} representing the storage permissions or {@code null}.
      */
     public String permissions;
 
     /**
-     * A {@code String} representing the signature for the SAS token
+     * A {@code String} representing the signature for the SAS token.
      */
     public String signature;
 
     /**
-     * Creates a new {@link SASQueryParameters} object
+     * Creates a new {@link SASQueryParameters} object.
+     *
      * @param queryParamsMap
      *      A {@code java.util.Map} representing all query parameters for the request as key-value pairs
      * @param removeSASParams
@@ -209,7 +210,7 @@ public final class SASQueryParameters {
     }
 
     /**
-     * Creates a new {@link SASQueryParameters} object
+     * Creates a new {@link SASQueryParameters} object.
      */
     public SASQueryParameters() {
 
@@ -229,9 +230,10 @@ public final class SASQueryParameters {
 
 
     /**
-     * Encodes all SAS query parameters into a string that can be appended to a URL
+     * Encodes all SAS query parameters into a string that can be appended to a URL.
+     *
      * @return
-     *  A {@code String} representing all SAS query parameters
+     *      A {@code String} representing all SAS query parameters.
      */
     public String encode() {
         StringBuilder sb = new StringBuilder();

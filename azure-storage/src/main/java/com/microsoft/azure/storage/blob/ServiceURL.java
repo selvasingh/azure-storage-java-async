@@ -38,14 +38,15 @@ public final class ServiceURL extends StorageURL {
      * ListContainers returns a single segment of containers starting from the specified Marker.
      * Use an empty marker to start enumeration from the beginning. Container names are returned in lexicographic order.
      * After getting a segment, process it, and then call ListContainers again (passing the the previously-returned
-     * Marker) to get the next segment.
-     * For more information, see https://docs.microsoft.com/rest/api/storageservices/list-containers2.
+     * Marker) to get the next segment. For more information, see
+     * https://docs.microsoft.com/rest/api/storageservices/list-containers2.
+     *
      * @param prefix
      *      A {@code String} that represents the prefix of the container name.
      * @param marker
      *      A {@code String} that identifies the portion of the list of containers to be returned with the next listing operation.
      * @param maxresults
-     *      A {@code Integer} representing the maximum number of results to retrieve.  If {@code null} or greater
+     *      An {@code Integer} representing the maximum number of results to retrieve.  If {@code null} or greater
  *          than 5000, the server will return up to 5,000 items.  Must be at least 1.
      * @param include
      *      A {@code String} representing which details to include when listing the containers in this storage account.
@@ -59,8 +60,9 @@ public final class ServiceURL extends StorageURL {
 
     /**
      * Creates a new {@link ServiceURL} with the given pipeline.
+     *
      * @param pipeline
-     *      A {@link HttpPipeline} object to set.
+     *      An {@link HttpPipeline} object to set.
      * @return
      *      A {@link ServiceURL} object with the given pipeline.
      */

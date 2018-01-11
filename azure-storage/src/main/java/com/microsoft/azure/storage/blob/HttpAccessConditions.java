@@ -28,15 +28,16 @@ public final class HttpAccessConditions {
     private final ETag ifNoneMatch;
 
     /**
-     * Creates a {@link HttpAccessConditions} object
+     * Creates a {@link HttpAccessConditions} object.
+     *
      * @param ifModifiedSince
-     *      A {@code java.util.Date} if modified since condition
+     *      A {@code java.util.Date} if modified since condition.
      * @param ifUnmodifiedSince
-     *      A {@code java.util.Date} if unmodified since condition
+     *      A {@code java.util.Date} if unmodified since condition.
      * @param ifMatch
-     *      A {@link ETag} if match condition
+     *      An {@link ETag} if match condition.
      * @param ifNoneMatch
-     *      A {@link ETag} if none match condition
+     *      An {@link ETag} if none match condition.
      */
     public HttpAccessConditions(Date ifModifiedSince, Date ifUnmodifiedSince, ETag ifMatch, ETag ifNoneMatch) {
         this.ifModifiedSince = (ifModifiedSince != null) ? new Date(ifModifiedSince.getTime()) : null;

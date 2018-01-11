@@ -18,6 +18,7 @@ package com.microsoft.azure.storage.blob;
  * Defines options availble when calling ListBlobs.
  */
 public class ListBlobsOptions {
+
     private static ListBlobsOptions defaultListBlobsOptions;
 
     private BlobListingDetails details;
@@ -30,8 +31,9 @@ public class ListBlobsOptions {
 
     /**
      * A {@Link ListBlobsOptions} object.
+     *
      * @param details
-     *           A {@Link BlobListingDetails} object inidicating what additional information the service should return
+     *           A {@Link BlobListingDetails} object indicating what additional information the service should return
      *           with each blob.
      * @param prefix
      *           A {@code String} that filters the results to return only blobs whose names begin with the specified
@@ -53,7 +55,7 @@ public class ListBlobsOptions {
     }
 
     /**
-     * @return A {@Link BlobListingDetails} object inidicating what additional information the service should return
+     * @return A {@link BlobListingDetails} object indicating what additional information the service should return
      *           with each blob.
      */
     public BlobListingDetails getDetails() {

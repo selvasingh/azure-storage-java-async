@@ -24,8 +24,9 @@ public final class LeaseAccessConditions {
 
     /**
      * Creates a {@link ContainerAccessConditions} object.
+     *
      * @param leaseId
-     *      A {@code String} representing the lease access conditions for a container or blob
+     *      A {@code String} representing the lease access conditions for a container or blob.
      */
     public LeaseAccessConditions(String leaseId) {
         this.leaseId = leaseId;

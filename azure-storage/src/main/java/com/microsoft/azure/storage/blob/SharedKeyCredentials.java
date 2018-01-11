@@ -196,6 +196,7 @@ public final class SharedKeyCredentials implements ICredentials {
 
     /**
      * Canonicalized the resource to sign.
+     *
      * @param requestURL
      *      A string that represents the request URL.
      * @return
@@ -249,12 +250,11 @@ public final class SharedKeyCredentials implements ICredentials {
      * has been specified for the request.
      *
      * @param httpHeaders
-     *      A <code>HttpHeaders</code> object that represents the headers for the request.
+     *      A {@code HttpHeaders} object that represents the headers for the request.
      * @param headerName
      *      A {@code String} that represents the name of the header being requested.
-     *
-     * @return A {@code String} that represents the header value, or <code>null</code> if there is no corresponding
-     *      header value for <code>headerName</code>.
+     * @return A {@code String} that represents the header value, or {@code null} if there is no corresponding
+     *      header value for {@code headerName}.
      */
     private String getStandardHeaderValue(final HttpHeaders httpHeaders, final String headerName) {
         final String headerValue = httpHeaders.value(headerName);
@@ -267,10 +267,8 @@ public final class SharedKeyCredentials implements ICredentials {
      *
      * @param stringToSign
      *      The UTF-8-encoded string to sign.
-     *
      * @return
      *      A {@code String} that contains the HMAC-SHA256-encoded signature.
-     *
      * @throws InvalidKeyException
      *      If the key is not a valid Base64-encoded string.
      */

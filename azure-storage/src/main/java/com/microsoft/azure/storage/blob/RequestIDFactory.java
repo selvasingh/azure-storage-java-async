@@ -39,11 +39,12 @@ public final class RequestIDFactory implements RequestPolicyFactory {
         }
 
         /**
-         * Add the unique client request ID to the request
+         * Add the unique client request ID to the request.
+         *
          * @param request
          *      the request to populate with the client request ID
          * @return
-         *      A {@link Single} representing the HTTP response that will arrive asynchronously.
+         *      A {@link Single} representing the {@link HttpResponse} that will arrive asynchronously.
          */
         public Single<HttpResponse> sendAsync(HttpRequest request) {
             request.headers().set(Constants.HeaderConstants.CLIENT_REQUEST_ID_HEADER, UUID.randomUUID().toString());

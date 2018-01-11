@@ -54,7 +54,9 @@ public final class AnonymousCredentials implements ICredentials {
      * Creates a new {@code AnonymousCredentialsPolicy}.
      *
      * @param nextRequestPolicy
+     *      The next policy in the pipeline which will be called after this policy completes.
      * @return
+     *      A {@link RequestPolicy} object to be inserted into the {@link com.microsoft.rest.v2.http.HttpPipeline}.
      */
     @Override
     public RequestPolicy create(RequestPolicy nextRequestPolicy, RequestPolicyOptions options) {

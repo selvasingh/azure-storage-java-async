@@ -30,7 +30,7 @@ public enum DeleteBlobSnapshotOptions {
     INCLUDE("include"),
 
     /**
-     * Deletes all the base blob's snapshots but not the base blob itself
+     * Deletes all the base blob's snapshots but not the base blob itself.
      */
     ONLY("only");
 

@@ -34,6 +34,7 @@ public final class PageBlobURL extends BlobURL {
 
     /**
      * Creates a new {@link PageBlobURL} object.
+     *
      * @param url
      *      A {@code String} representing a URL to a page blob.
      * @param pipeline
@@ -45,6 +46,7 @@ public final class PageBlobURL extends BlobURL {
 
     /**
      * Creates a new {@link PageBlobURL} with the given pipeline.
+     *
      * @param pipeline
      *      A {@link HttpPipeline} object to set.
      * @return
@@ -56,8 +58,9 @@ public final class PageBlobURL extends BlobURL {
 
     /**
      * Creates a new {@link PageBlobURL} with the given snapshot.
+     *
      * @param snapshot
-     *      A <code>java.util.Date</code> to set.
+     *      A {@code java.util.Date} to set.
      * @return
      *      A {@link PageBlobURL} object with the given pipeline.
      */
@@ -70,56 +73,60 @@ public final class PageBlobURL extends BlobURL {
     /**
      * Create creates a page blob of the specified length. Call PutPage to upload data data to a page blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
+     *
      * @param size
-     *           Specifies the maximum size for the page blob, up to 8 TB. The page blob size must be aligned to a
-     *           512-byte boundary.
+     *      Specifies the maximum size for the page blob, up to 8 TB. The page blob size must be aligned to a
+     *      512-byte boundary.
      * @param sequenceNumber
-     *            A user-controlled value that you can use to track requests. The value of the sequence number must be
-     *            between 0 and 2^63 - 1.The default value is 0.
-     * @param blobHttpHeaders
-     *            A {@Link BlobHttpHeaders} object that specifies which properties to set on the blob.
+     *      A user-controlled value that you can use to track requests. The value of the sequence number must be
+     *      between 0 and 2^63 - 1.The default value is 0.
+     * @param headers
+     *      A {@link BlobHttpHeaders} object that specifies which properties to set on the blob.
      * @param metadata
-     *            A {@Link Metadata} object that specifies key value pairs to set on the blob.
-     * @param blobAccessConditions
-     *            A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *            complete.
-     * @return The {@link Single &lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
+     *      A {@link Metadata} object that specifies key value pairs to set on the blob.
+     * @param accessConditions
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
+     * @return
+     *       The {@link Single &lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobsPutHeaders, Void>> putBlobAsync(
-            Long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders blobHttpHeaders,
-            BlobAccessConditions blobAccessConditions) {
+            Long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders headers,
+            BlobAccessConditions accessConditions) {
         if(metadata == null) {
             metadata = Metadata.getDefault();
         }
-        if(blobHttpHeaders == null) {
-            blobHttpHeaders = BlobHttpHeaders.getDefault();
+        if(headers == null) {
+            headers = BlobHttpHeaders.getDefault();
         }
-        if(blobAccessConditions == null) {
-            blobAccessConditions = BlobAccessConditions.getDefault();
+        if(accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
         }
         return this.storageClient.blobs().putWithRestResponseAsync(this.url, BlobType.PAGE_BLOB, null,
-                null, null, blobHttpHeaders.getContentType(), blobHttpHeaders.getContentEncoding(),
-                blobHttpHeaders.getContentLanguage(), blobHttpHeaders.getContentMD5(), blobHttpHeaders.getCacheControl(),
-                metadata.toString(), blobAccessConditions.getLeaseAccessConditions().toString(),
-                blobHttpHeaders.getContentDisposition(),
-                new DateTime(blobAccessConditions.getHttpAccessConditions().getIfModifiedSince()),
-                new DateTime(blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
-                blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
+                null, null, headers.getContentType(), headers.getContentEncoding(),
+                headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(),
+                metadata.toString(), accessConditions.getLeaseAccessConditions().toString(),
+                headers.getContentDisposition(),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfModifiedSince()),
+                new DateTime(accessConditions.getHttpAccessConditions().getIfUnmodifiedSince()),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 size, sequenceNumber, null);
     }
 
     /**
      * PutPages writes 1 or more pages to the page blob. The start and end offsets must be a multiple of 512.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-page.
+     *
      * @param pageRange
-     *           A {@Link PageRange} object. Specifies the range of bytes to be written as a page.
+     *      A {@link PageRange} object. Specifies the range of bytes to be written as a page.
      * @param body
-     *           A {@Link AsyncInputStream} that contains the content of the page.
+     *      A {@link AsyncInputStream} that contains the content of the page.
      * @param accessConditions
-     *           A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *           complete.
-     * @return A {@link Single &lt;RestResponse&lt;PageBlobsPutPage, Void&gt;&gt;} object if successful.
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
+     * @return
+     *      A {@link Single &lt;RestResponse&lt;PageBlobsPutPage, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPagesAsync(
             PageRange pageRange, AsyncInputStream body, BlobAccessConditions accessConditions) {
@@ -140,12 +147,14 @@ public final class PageBlobURL extends BlobURL {
     /**
      * ClearPages frees the specified pages from the page blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-page.
+     *
      * @param pageRange
-     *           A {@Link PageRange} object. Specifies the range of bytes to be written as a page.
+     *      A {@link PageRange} object. Specifies the range of bytes to be written as a page.
      * @param accessConditions
-     *           A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *           complete.
-     * @return A {@link Single &lt;RestResponse&lt;PageBlobsPutPage, Void&gt;&gt;} object if successful.
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
+     * @return
+     *      A {@link Single &lt;RestResponse&lt;PageBlobsPutPage, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<PageBlobsPutPageHeaders, Void>> clearPagesAsync(
             PageRange pageRange, BlobAccessConditions accessConditions) {
@@ -166,13 +175,15 @@ public final class PageBlobURL extends BlobURL {
     /**
      * GetPageRanges returns the list of valid page ranges for a page blob or snapshot of a page blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges.
+     *
      * @param blobRange
-     *           A {@Link BlobRange} object specifies the range of bytes over which to list ranges, inclusively. If
-     *           omitted, then all ranges for the blob are returned.
+     *      A {@link BlobRange} object specifies the range of bytes over which to list ranges, inclusively. If
+     *      omitted, then all ranges for the blob are returned.
      * @param accessConditions
-     *           A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *           complete.
-     * @return A {@link Single &lt;RestResponse&lt;PageBlobsPutPage, PageList&gt;&gt;} object if successful.
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
+     * @return
+     *      A {@link Single &lt;RestResponse&lt;PageBlobsPutPage, PageList&gt;&gt;} object if successful.
      */
     public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesAsync(
             BlobRange blobRange, BlobAccessConditions accessConditions) {
@@ -195,16 +206,18 @@ public final class PageBlobURL extends BlobURL {
     /**
      * GetPageRangesDiff gets the collection of page ranges that differ between a specified snapshot and this page blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges.
+     *
      * @param blobRange
-     *          A {@Link PageRange} object. Specifies the range of bytes to be written as a page.
+     *     A {@link PageRange} object. Specifies the range of bytes to be written as a page.
      * @param prevSnapshot
-     *          A {@Code org.joda.time.DateTime} specifies that the response will contain only pages that were changed between target blob and previous
-     *          snapshot. Changed pages include both updated and cleared pages. The target blob may be a snapshot, as
-     *          long as the snapshot specified by prevsnapshot is the older of the two.
+     *     A {@code org.joda.time.DateTime} specifies that the response will contain only pages that were changed
+     *     between target blob and previous snapshot. Changed pages include both updated and cleared pages. The target
+     *     blob may be a snapshot, as long as the snapshot specified by prevsnapshot is the older of the two.
      * @param accessConditions
-     *          A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *          complete.
+     *     A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *     complete.
      * @return
+     *      The {@link Single&lt;RestResponse&lt;PageBlobsGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
      */
     //TODO: Get rid of joda time (use java.util.Date?)
     public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesDiffAsync(
@@ -228,13 +241,15 @@ public final class PageBlobURL extends BlobURL {
     /**
      * Resize resizes the page blob to the specified size (which must be a multiple of 512).
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/set-blob-properties.
+     *
      * @param length
-     *            Resizes a page blob to the specified size. If the specified value is less than the current size of the
-     *            blob, then all pages above the specified value are cleared.
+     *      Resizes a page blob to the specified size. If the specified value is less than the current size of the
+     *      blob, then all pages above the specified value are cleared.
      * @param accessConditions
-     *           A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *           complete.
-     * @return The {@link Single &lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
+     * @return
+     *      The {@link Single &lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> resizeAsync(
             Long length, BlobAccessConditions accessConditions) {
@@ -253,18 +268,19 @@ public final class PageBlobURL extends BlobURL {
 
     /**
      * SetSequenceNumber sets the page blob's sequence number.
+     *
      * @param action
-     *           Indicates how the service should modify the blob's sequence number.
+     *      Indicates how the service should modify the blob's sequence number.
      * @param sequenceNumber
-     *           The blob's sequence number.
-     *           The sequence number is a user-controlled property that you can use to track requests and manage
-     *           concurrency issues.
+     *      The blob's sequence number. The sequence number is a user-controlled property that you can use to track
+     *      requests and manage concurrency issues.
      * @param headers
-     *           A {@Link BlobHttpHeaders} object that specifies which properties to set on the blob.
+     *      A {@link BlobHttpHeaders} object that specifies which properties to set on the blob.
      * @param accessConditions
-     *           A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *           complete.
-     * @return A {@link Single &lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
+     * @return
+     *      The {@link Single &lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setSequenceNumber(
             SequenceNumberActionType action, Long sequenceNumber, BlobHttpHeaders headers,
@@ -292,19 +308,21 @@ public final class PageBlobURL extends BlobURL {
     }
 
     /**
-     * StartIncrementalCopy begins an operation to start an incremental copy from one page blob's snapshot to this page blob.
-     * The snapshot is copied such that only the differential changes between the previously copied snapshot are transferred to the destination.
-     * The copied snapshots are complete copies of the original snapshot and can be read or copied from as usual.
-     * For more information, see https://docs.microsoft.com/rest/api/storageservices/incremental-copy-blob and
+     * StartIncrementalCopy begins an operation to start an incremental copy from one page blob's snapshot to this page
+     * blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are
+     * transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read
+     * or copied from as usual. For more information, see
+     * https://docs.microsoft.com/rest/api/storageservices/incremental-copy-blob and
      * https://docs.microsoft.com/en-us/azure/virtual-machines/windows/incremental-snapshots.
      * @param source
-     *           A {@Code java.net.URL} which specifies the name of the source page blob.
+     *      A {@code java.net.URL} which specifies the name of the source page blob.
      * @param snapshot
-     *           A {@Code org.joda.time.DateTime} which specifies the snapshot on the copy source.
+     *      A {@code org.joda.time.DateTime} which specifies the snapshot on the copy source.
      * @param accessConditions
-     *           A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *           complete.
-     * @return A {@link Single &lt;RestResponse&lt;PageBlobsIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
+     * @return
+     *      A {@link Single &lt;RestResponse&lt;PageBlobsIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
      * @throws URISyntaxException
      * @throws MalformedURLException
      */

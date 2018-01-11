@@ -118,22 +118,18 @@ public enum ContainerSASPermission {
 
         for (final char c : permString.toLowerCase().toCharArray()) {
             boolean invalidCharacter = true;
-
             for (ContainerSASPermission perm : ContainerSASPermission.values()) {
                 if (c == perm.value) {
                     permissions.add(perm);
                     invalidCharacter = false;
                     break;
                 }
-
             }
-
             if (invalidCharacter) {
                 throw new IllegalArgumentException(
                         String.format(SR.ENUM_COULD_NOT_BE_PARSED, "Permissions", permString));
             }
         }
-
         return permissions;
     }
 }

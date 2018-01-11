@@ -32,7 +32,8 @@ public class BlobListingDetails {
     private boolean uncommittedBlobs;
 
     /**
-     * A {@Link BlobListingDetails} object.
+     * A {@link BlobListingDetails} object.
+     *
      * @param copy
      *      A {@code boolean} indicating if blob metadata related to any current or previous Copy Blob
      *      operation should be included in the response.

@@ -17,9 +17,6 @@ package com.microsoft.azure.storage.blob;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import static com.microsoft.azure.storage.blob.Utility.getGMTTime;
-import static com.microsoft.azure.storage.blob.Utility.getGMTTimeSnapshot;
-
 /**
  * A BlobURLParts object represents the components that make up an Azure Storage Container/Blob URL. You parse an
  * existing URL into its parts by calling NewBlobURLParts(). You construct a URL from parts by calling toURL().
