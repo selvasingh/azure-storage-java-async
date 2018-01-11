@@ -50,7 +50,7 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlockBlobURL} object with the given pipeline.
      */
     public BlockBlobURL withPipeline(HttpPipeline pipeline) {
-        return new BlockBlobURL(this.url, pipeline);
+        return new BlockBlobURL(this.storageClient.url(), pipeline);
     }
 
     /**
@@ -62,7 +62,7 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlockBlobURL} object with the given pipeline.
      */
     public BlockBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(super.url);
+        BlobURLParts blobURLParts = URLParser.ParseURL(this.storageClient.url());
         blobURLParts.setSnapshot(snapshot);
         return new BlockBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
@@ -98,7 +98,7 @@ public final class BlockBlobURL extends BlobURL {
         if(metadata == null) {
             metadata = Metadata.getDefault();
         }
-        return this.storageClient.blobs().putWithRestResponseAsync(this.url, BlobType.BLOCK_BLOB, data,
+        return this.storageClient.blobs().putWithRestResponseAsync(BlobType.BLOCK_BLOB, data,
                 null, null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
                 accessConditions.getLeaseAccessConditions().toString(),
@@ -128,7 +128,7 @@ public final class BlockBlobURL extends BlobURL {
         if(leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
-        return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(this.url, base64BlockID, data,
+        return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(base64BlockID, data,
                 null, leaseAccessConditions.toString(), null);
     }
 
@@ -147,7 +147,7 @@ public final class BlockBlobURL extends BlobURL {
         if(leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
-        return this.storageClient.blockBlobs().getBlockListWithRestResponseAsync(this.url, listType,
+        return this.storageClient.blockBlobs().getBlockListWithRestResponseAsync(listType,
                 null, null, leaseAccessConditions.toString(), null);
     }
 
@@ -183,7 +183,7 @@ public final class BlockBlobURL extends BlobURL {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
-        return this.storageClient.blockBlobs().putBlockListWithRestResponseAsync(this.url,
+        return this.storageClient.blockBlobs().putBlockListWithRestResponseAsync(
                 new BlockLookupList().withLatest(base64BlockIDs), null,
                 httpHeaders.getCacheControl(), httpHeaders.getContentType(),httpHeaders.getContentEncoding(),
                 httpHeaders.getContentLanguage(), httpHeaders.getContentMD5(), metadata.toString(),

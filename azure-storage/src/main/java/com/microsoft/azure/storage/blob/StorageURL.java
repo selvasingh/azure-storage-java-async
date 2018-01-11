@@ -32,8 +32,6 @@ import static com.microsoft.azure.storage.blob.Utility.getGMTTime;
 
 public abstract class StorageURL {
 
-    protected final String url;
-
     protected final StorageClientImpl storageClient;
 
     protected StorageURL(String url, HttpPipeline pipeline) {
@@ -44,8 +42,8 @@ public abstract class StorageURL {
             throw new IllegalArgumentException("pipeline cannot be null.");
         }
 
-        this.url = url;
         this.storageClient = new StorageClientImpl(pipeline).withVersion("2016-05-31");
+        this.storageClient.withUrl(url);
     }
 
     // TODO: ADD RETRY Factory
@@ -61,7 +59,7 @@ public abstract class StorageURL {
 
     @Override
     public String toString() {
-        return this.url;
+        return this.storageClient.url();
     }
 
     /**

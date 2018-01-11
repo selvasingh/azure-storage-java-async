@@ -39,7 +39,7 @@ public final class ContainerURL extends StorageURL {
      *      A {@link ContainerURL} object with the given pipeline.
      */
     public ContainerURL withPipeline(HttpPipeline pipeline) {
-        return new ContainerURL(this.url, pipeline);
+        return new ContainerURL(this.storageClient.url(), pipeline);
     }
 
     /**
@@ -55,7 +55,8 @@ public final class ContainerURL extends StorageURL {
      *      A new {@link BlockBlobURL} object which references the blob with the specified name in this container.
      */
     public BlockBlobURL createBlockBlobURL(String blobName) {
-        return new BlockBlobURL(super.appendToURLPath(this.url, blobName), this.storageClient.httpPipeline());
+        return new BlockBlobURL(super.appendToURLPath(this.storageClient.url(), blobName),
+                this.storageClient.httpPipeline());
     }
 
     /**
@@ -71,7 +72,8 @@ public final class ContainerURL extends StorageURL {
      *      A new {@link PageBlobURL} object which references the blob with the specified name in this container.
      */
     public PageBlobURL createPageBlobURL(String blobName) {
-        return new PageBlobURL(super.appendToURLPath(this.url, blobName), this.storageClient.httpPipeline());
+        return new PageBlobURL(super.appendToURLPath(this.storageClient.url(), blobName),
+                this.storageClient.httpPipeline());
     }
 
     /**
@@ -87,7 +89,8 @@ public final class ContainerURL extends StorageURL {
      *      A new {@link AppendBlobURL} object which references the blob with the specified name in this container.
      */
     public AppendBlobURL createAppendBlobURL(String blobName) {
-        return new AppendBlobURL(super.appendToURLPath(this.url, blobName), this.storageClient.httpPipeline());
+        return new AppendBlobURL(super.appendToURLPath(this.storageClient.url(), blobName),
+                this.storageClient.httpPipeline());
     }
 
     /**
@@ -108,7 +111,7 @@ public final class ContainerURL extends StorageURL {
             metadata = Metadata.getDefault();
         }
         return this.storageClient.containers().createWithRestResponseAsync(
-                super.url, null, metadata.toString(), accessType, null);
+                null, metadata.toString(), accessType, null);
     }
 
     /**
@@ -128,7 +131,7 @@ public final class ContainerURL extends StorageURL {
             accessConditions = ContainerAccessConditions.getDefault();
         }
 
-        return this.storageClient.containers().deleteWithRestResponseAsync(super.url, null,
+        return this.storageClient.containers().deleteWithRestResponseAsync(null,
                 accessConditions.getLeaseID().toString(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -150,7 +153,7 @@ public final class ContainerURL extends StorageURL {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
 
-        return this.storageClient.containers().getPropertiesWithRestResponseAsync(super.url, null,
+        return this.storageClient.containers().getPropertiesWithRestResponseAsync(null,
                 leaseAccessConditions.toString(), null);
     }
 
@@ -178,7 +181,7 @@ public final class ContainerURL extends StorageURL {
                     "If-Modified-Since is the only HTTP access condition supported for this API"));
         }
 
-        return this.storageClient.containers().setMetadataWithRestResponseAsync(url, null,
+        return this.storageClient.containers().setMetadataWithRestResponseAsync(null,
                 accessConditions.getLeaseID().toString(), metadata.toString(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),null);
     }
@@ -201,7 +204,7 @@ public final class ContainerURL extends StorageURL {
         }
 
         return this.storageClient.containers().getAclWithRestResponseAsync(
-                super.url, null, leaseAccessConditions.toString(), null);
+                null, leaseAccessConditions.toString(), null);
     }
 
     /**
@@ -225,7 +228,7 @@ public final class ContainerURL extends StorageURL {
         if(accessConditions == null) {
             accessConditions = ContainerAccessConditions.getDefault();
         }
-        return this.storageClient.containers().setAclWithRestResponseAsync(this.url, identifiers, null,
+        return this.storageClient.containers().setAclWithRestResponseAsync(identifiers, null,
                 accessConditions.getLeaseID().toString(), accessType,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -265,7 +268,7 @@ public final class ContainerURL extends StorageURL {
                     "ETag access conditions are not supported for this API."));
         }
 
-        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.ACQUIRE,
+        return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.ACQUIRE,
                 null,null, null, duration, proposedID,
                 httpAccessConditions.getIfModifiedSince(),
                 httpAccessConditions.getIfUnmodifiedSince(),
@@ -293,7 +296,7 @@ public final class ContainerURL extends StorageURL {
                     "ETag access conditions are not supported for this API."));
         }
 
-        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.RENEW, null,
+        return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.RENEW, null,
                 leaseID, null, null, null,
                 httpAccessConditions.getIfModifiedSince(),
                 httpAccessConditions.getIfUnmodifiedSince(),
@@ -321,7 +324,7 @@ public final class ContainerURL extends StorageURL {
                     "ETag access conditions are not supported for this API."));
         }
 
-        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.RELEASE,
+        return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.RELEASE,
                 null, leaseID, null, null, null,
                 httpAccessConditions.getIfModifiedSince(),
                 httpAccessConditions.getIfUnmodifiedSince(),
@@ -349,7 +352,7 @@ public final class ContainerURL extends StorageURL {
                     "ETag access conditions are not supported for this API."));
         }
 
-        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.BREAK,
+        return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.BREAK,
                 null, leaseID, null, null, null,
                 httpAccessConditions.getIfModifiedSince(),
                 httpAccessConditions.getIfUnmodifiedSince(),
@@ -379,7 +382,7 @@ public final class ContainerURL extends StorageURL {
                     "ETag access conditions are not supported for this API."));
         }
 
-        return this.storageClient.containers().leaseWithRestResponseAsync(super.url, LeaseActionType.RELEASE,
+        return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.RELEASE,
                 null, leaseID, null, null, proposedID,
                 httpAccessConditions.getIfModifiedSince(),
                 httpAccessConditions.getIfUnmodifiedSince(),
@@ -403,7 +406,7 @@ public final class ContainerURL extends StorageURL {
      */
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobsAsync(
             String marker, ListBlobsOptions listBlobsOptions) {
-        return this.storageClient.containers().listBlobsWithRestResponseAsync(this.url, listBlobsOptions.getPrefix(),
+        return this.storageClient.containers().listBlobsWithRestResponseAsync(listBlobsOptions.getPrefix(),
                 listBlobsOptions.getDelimiter(), marker, listBlobsOptions.getMaxResults(),
                 listBlobsOptions.getDetails().toList(), null, null);
     }

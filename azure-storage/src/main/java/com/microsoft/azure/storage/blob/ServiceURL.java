@@ -31,7 +31,7 @@ public final class ServiceURL extends StorageURL {
     }
 
     public ContainerURL createContainerURL(String containerName) {
-        return new ContainerURL(super.url + "/" + containerName, this.storageClient.httpPipeline());
+        return new ContainerURL(super.storageClient.url() + "/" + containerName, this.storageClient.httpPipeline());
     }
 
     /**
@@ -54,7 +54,7 @@ public final class ServiceURL extends StorageURL {
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listConatinersAsync(
             String prefix, String marker, Integer maxresults, ListContainersIncludeType include) {
-        return this.storageClient.services().listContainersWithRestResponseAsync(this.url, prefix, marker,
+        return this.storageClient.services().listContainersWithRestResponseAsync(prefix, marker,
                 maxresults, include, null, null);
     }
 
@@ -67,6 +67,6 @@ public final class ServiceURL extends StorageURL {
      *      A {@link ServiceURL} object with the given pipeline.
      */
     public ServiceURL withPipeline(HttpPipeline pipeline) {
-        return new ServiceURL(super.url, pipeline);
+        return new ServiceURL(super.storageClient.url(), pipeline);
     }
 }
