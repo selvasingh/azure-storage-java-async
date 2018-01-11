@@ -130,6 +130,10 @@ public final class ContainerURL extends StorageURL {
         if (accessConditions == null) {
             accessConditions = ContainerAccessConditions.getDefault();
         }
+        if (accessConditions.getHttpAccessConditions().getIfMatch() != null ||
+                accessConditions.getHttpAccessConditions().getIfNoneMatch() != null) {
+            return Single.error(new IllegalArgumentException("ETag access conditions are not supported for this API."));
+        }
 
         return this.storageClient.containers().deleteWithRestResponseAsync(null,
                 accessConditions.getLeaseID().toString(),

@@ -56,6 +56,9 @@ public final class AccountSAS extends BaseSAS {
                       EnumSet<AccountSASPermission> permissions, IPRange ipRange, EnumSet<AccountSASService> services,
                       EnumSet<AccountSASResourceType> resourceTypes) {
         super(version, protocol, startTime, expiryTime, AccountSASPermission.permissionsToString(permissions), ipRange);
+        if (services == null || resourceTypes == null) {
+            throw new IllegalArgumentException("Services and ResourceTypes cannot be null.");
+        }
         this.services = services;
         this.resourceTypes = resourceTypes;
     }
@@ -90,7 +93,7 @@ public final class AccountSAS extends BaseSAS {
                         super.permissions,
                         servicesString,
                         resourceTypesString,
-                        Utility.getUTCTimeOrEmpty(super.startTime), // TODO: Get rid of utility class
+                        Utility.getUTCTimeOrEmpty(super.startTime),
                         Utility.getUTCTimeOrEmpty(super.expiryTime),
                         ipRange.toString(),
                         super.protocol.toString(),

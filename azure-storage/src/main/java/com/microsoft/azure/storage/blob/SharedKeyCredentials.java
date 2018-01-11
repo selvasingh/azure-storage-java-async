@@ -204,7 +204,8 @@ public final class SharedKeyCredentials implements ICredentials {
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
-    private String getCanonicalizedResource(String requestURL) throws MalformedURLException, UnsupportedEncodingException {
+    private String getCanonicalizedResource(String requestURL)
+            throws MalformedURLException, UnsupportedEncodingException {
         requestURL = Utility.safeDecode(requestURL);
         // Resource path
         final StringBuilder canonicalizedResource = new StringBuilder("/");
@@ -212,8 +213,6 @@ public final class SharedKeyCredentials implements ICredentials {
 
         URL urlDecoder = new URL(requestURL);
         // Note that AbsolutePath starts with a '/'.
-        //QueryStringDecoder urlDecoder = new QueryStringDecoder(requestURL);
-        //if (urlDecoder.path().length() > 0) {
         if(urlDecoder.getPath().length() > 0) {
             canonicalizedResource.append(urlDecoder.getPath());
         }

@@ -54,6 +54,9 @@ public final class ServiceURL extends StorageURL {
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listConatinersAsync(
             String prefix, String marker, Integer maxresults, ListContainersIncludeType include) {
+        if (maxresults < 0) {
+            return Single.error(new IllegalArgumentException("MaxResults must be >= 0."));
+        }
         return this.storageClient.services().listContainersWithRestResponseAsync(prefix, marker,
                 maxresults, include, null, null);
     }

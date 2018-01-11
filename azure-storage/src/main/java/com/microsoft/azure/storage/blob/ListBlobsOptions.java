@@ -48,6 +48,9 @@ public class ListBlobsOptions {
      *           items.
      */
     public ListBlobsOptions(BlobListingDetails details, String prefix, String delimiter, Integer maxResults) {
+        if (maxResults < 0) {
+            throw new IllegalArgumentException("MaxResults must be greater than 0.");
+        }
         this.details = details;
         this.prefix = prefix;
         this.delimiter = delimiter;

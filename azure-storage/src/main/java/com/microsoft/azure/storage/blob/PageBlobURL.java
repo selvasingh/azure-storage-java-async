@@ -93,6 +93,9 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<BlobsPutHeaders, Void>> putBlobAsync(
             Long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
+        if (sequenceNumber < 0) {
+            throw new IllegalArgumentException("SequenceNumber must be greater than or equal to 0.");
+        }
         if(metadata == null) {
             metadata = Metadata.getDefault();
         }
@@ -134,8 +137,15 @@ public final class PageBlobURL extends BlobURL {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
+        String pageRangeStr;
+        try {
+            pageRangeStr = this.pageRangeToString(pageRange);
+        }
+        catch (IllegalArgumentException e) {
+            return Single.error(e);
+        }
         return this.storageClient.pageBlobs().putPageWithRestResponseAsync(PageWriteType.UPDATE, body,
-                null, this.pageRangeToString(pageRange), accessConditions.getLeaseAccessConditions().toString(),
+                null, pageRangeStr, accessConditions.getLeaseAccessConditions().toString(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThanOrEqual(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThan(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberEqual(),
@@ -162,8 +172,15 @@ public final class PageBlobURL extends BlobURL {
      if(accessConditions == null) {
          accessConditions = BlobAccessConditions.getDefault();
      }
+     String pageRangeStr;
+     try {
+         pageRangeStr = this.pageRangeToString(pageRange);
+     }
+     catch (IllegalArgumentException e) {
+         return Single.error(e);
+     }
      return this.storageClient.pageBlobs().putPageWithRestResponseAsync(PageWriteType.CLEAR, null,
-             null, this.pageRangeToString(pageRange), accessConditions.getLeaseAccessConditions().toString(),
+             null, pageRangeStr, accessConditions.getLeaseAccessConditions().toString(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThanOrEqual(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThan(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberEqual(),
@@ -254,6 +271,9 @@ public final class PageBlobURL extends BlobURL {
      */
     public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> resizeAsync(
             Long length, BlobAccessConditions accessConditions) {
+        if (length%512 != 0) {
+            throw new IllegalArgumentException("Length must be a multiple of a page size (512).");
+        }
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
@@ -286,13 +306,15 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setSequenceNumber(
             SequenceNumberActionType action, Long sequenceNumber, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
+        if (sequenceNumber < 0) {
+            throw new IllegalArgumentException("SequenceNumber must be greater than or equal to 0.");
+        }
         if(headers == null) {
             headers = BlobHttpHeaders.getDefault();
         }
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
-        // TODO: validate sequenceNumber
         if(action == SequenceNumberActionType.INCREMENT) {
            sequenceNumber = null;
         }
@@ -328,22 +350,25 @@ public final class PageBlobURL extends BlobURL {
      * @throws MalformedURLException
      */
     public Single<RestResponse<PageBlobsIncrementalCopyHeaders, Void>> startIncrementalCopyAsyn(
-            URL source, DateTime snapshot, BlobAccessConditions accessConditions) throws URISyntaxException, MalformedURLException {
+            URL source, String snapshot, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
 
-        // TODO: Should this be throwing?
-        // TODO: This is broken. This needs to be fixed once formatting and encoding snapshot dateTimes is figured out.
         String query = source.getQuery();
         if(query == null) {
-            query = "snapshot=" + snapshot.toString();
+            query = "snapshot=" + snapshot;
         }
         else {
-            query += "&snapshot=" + snapshot.toString();
+            query += "&snapshot=" + snapshot;
         }
-        source = new URI(source.getProtocol(), null, source.getHost(), source.getPort(), source.getPath(),
-                source.getQuery(),null).toURL();
+        try {
+            source = new URI(source.getProtocol(), null, source.getHost(), source.getPort(), source.getPath(),
+                    source.getQuery(), null).toURL();
+        } catch (MalformedURLException | URISyntaxException e) {
+            return Single.error(e);
+         }
+
         return this.storageClient.pageBlobs().incrementalCopyWithRestResponseAsync(source.toString(),
                 null, null,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
@@ -352,8 +377,21 @@ public final class PageBlobURL extends BlobURL {
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }
 
-    private String pageRangeToString(PageRange pageRange) {
-        // TODO: Validation on PageRange.
+    private String pageRangeToString(PageRange pageRange) throws IllegalArgumentException {
+        if (pageRange.start() < 0 || pageRange.end() <= 0) {
+            throw new IllegalArgumentException("PageRange's start and end values must be greater than or equal to " +
+                    "0 if specified.");
+        }
+        if (pageRange.start()%512 != 0 ) {
+            throw new IllegalArgumentException("PageRange's start value must be a multiple of 512.");
+        }
+        if (pageRange.end()%512 != 0) {
+            throw new IllegalArgumentException("PageRange's end value must be 1 less than a multiple of 512.");
+        }
+        if (pageRange.end() <= pageRange.start()) {
+            throw new IllegalArgumentException("PageRange's End value must be after the start.");
+        }
+
         StringBuilder range = new StringBuilder("bytes=");
         range.append(pageRange.start());
         range.append('-');

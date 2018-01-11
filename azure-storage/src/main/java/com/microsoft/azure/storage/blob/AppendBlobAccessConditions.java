@@ -35,6 +35,9 @@ public final class AppendBlobAccessConditions {
      *      equal to a value.
      */
     public AppendBlobAccessConditions(Integer ifAppendPositionEquals, Integer ifMaxSizeLessThanOrEqual) {
+        if (ifAppendPositionEquals < -1 || ifMaxSizeLessThanOrEqual < -1) {
+            throw new IllegalArgumentException("Append blob access conditions can't be less than -1.");
+        }
         this.ifAppendPositionEquals = ifAppendPositionEquals;
         this.ifMaxSizeLessThanOrEqual = ifMaxSizeLessThanOrEqual;
     }
