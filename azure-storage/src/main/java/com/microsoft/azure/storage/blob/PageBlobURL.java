@@ -18,6 +18,7 @@ import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
+import com.microsoft.rest.v2.http.UrlBuilder;
 import io.reactivex.Single;
 import org.joda.time.DateTime;
 
@@ -36,11 +37,11 @@ public final class PageBlobURL extends BlobURL {
      * Creates a new {@link PageBlobURL} object.
      *
      * @param url
-     *      A {@code String} representing a URL to a page blob.
+     *      A {@code java.net.URL} to a page blob.
      * @param pipeline
      *      A {@link HttpPipeline} object representing the pipeline for requests.
      */
-    public PageBlobURL(String url, HttpPipeline pipeline) {
+    public PageBlobURL(URL url, HttpPipeline pipeline) {
         super( url, pipeline);
     }
 
@@ -53,7 +54,12 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link PageBlobURL} object with the given pipeline.
      */
     public PageBlobURL withPipeline(HttpPipeline pipeline) {
-        return new PageBlobURL(this.storageClient.url(), pipeline);
+        try {
+            return new PageBlobURL(new URL(this.storageClient.url()), pipeline);
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -65,7 +71,7 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link PageBlobURL} object with the given pipeline.
      */
     public PageBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(this.storageClient.url());
+        BlobURLParts blobURLParts = URLParser.ParseURL(new URL(this.storageClient.url()));
         blobURLParts.setSnapshot(snapshot);
         return new PageBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
@@ -340,7 +346,7 @@ public final class PageBlobURL extends BlobURL {
      * @param source
      *      A {@code java.net.URL} which specifies the name of the source page blob.
      * @param snapshot
-     *      A {@code org.joda.time.DateTime} which specifies the snapshot on the copy source.
+     *      A {@code String} which specifies the snapshot on the copy source.
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
@@ -349,7 +355,7 @@ public final class PageBlobURL extends BlobURL {
      * @throws URISyntaxException
      * @throws MalformedURLException
      */
-    public Single<RestResponse<PageBlobsIncrementalCopyHeaders, Void>> startIncrementalCopyAsyn(
+    public Single<RestResponse<PageBlobsIncrementalCopyHeaders, Void>> startIncrementalCopyAsync(
             URL source, String snapshot, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
@@ -363,9 +369,10 @@ public final class PageBlobURL extends BlobURL {
             query += "&snapshot=" + snapshot;
         }
         try {
-            source = new URI(source.getProtocol(), null, source.getHost(), source.getPort(), source.getPath(),
-                    source.getQuery(), null).toURL();
-        } catch (MalformedURLException | URISyntaxException e) {
+            UrlBuilder builder = UrlBuilder.parse(source.toString());
+            builder.addQueryParameter("snapshot", snapshot);
+            source = new URL(builder.toString()); // TODO: update.
+        } catch (MalformedURLException e) {
             return Single.error(e);
          }
 

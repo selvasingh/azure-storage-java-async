@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +59,8 @@ public class BlobStorageAPITests {
         HttpPipeline pipeline = StorageURL.CreatePipeline(creds, new PipelineOptions());
 
         // Create a reference to the service.
-        ServiceURL su = new ServiceURL("http://" + System.getenv().get("ACCOUNT_NAME") + ".blob.core.windows.net", pipeline);
+        ServiceURL su = new ServiceURL(
+                new URL("http://" + System.getenv().get("ACCOUNT_NAME") + ".blob.core.windows.net"), pipeline);
 
         // Create a reference to a container. Using the ServiceURL to create the ContainerURL appends
         // the container name to the ServiceURL. A ContainerURL may also be created by calling its
@@ -93,7 +95,8 @@ public class BlobStorageAPITests {
             Assert.assertEquals(containerList.get(0).name(), containerName);
 
             // Create the blob with a single put. See below for the putBlock(List) scenario.
-            bu.putBlobAsync(AsyncInputStream.create(new byte[]{0, 0, 0}), null, null, null).blockingGet();
+            bu.putBlobAsync(AsyncInputStream.create(new byte[]{0, 0, 0}), null, null,
+                    null).blockingGet();
 
             // Download the blob contents.
             AsyncInputStream data = bu.getBlobAsync(new BlobRange(0L, 3L),
@@ -130,7 +133,7 @@ public class BlobStorageAPITests {
 
             // Create a reference to another blob within the same container and copies the first blob into this location.
             BlockBlobURL bu2 = cu.createBlockBlobURL("javablob2");
-            bu2.startCopyAsync(bu.toString(), null, null, null)
+            bu2.startCopyAsync(bu.toURL(), null, null, null)
                     .blockingGet();
 
             // Simple delay to wait for the copy. Inefficient buf effective. A better method would be to periodically
@@ -170,7 +173,7 @@ public class BlobStorageAPITests {
 
             // SAS -----------------------------
             // Parses a URL into its constituent components. This structure's URL fields may be modified.
-            BlobURLParts parts = URLParser.ParseURL(bu.toString());
+            BlobURLParts parts = URLParser.ParseURL(bu.toURL());
 
             // Construct the AccountSAS values object. This encapsulates all the values needed to create an AccountSAS.
             AccountSAS sas = new AccountSAS("2016-05-31", SASProtocol.HTTPS_HTTP,

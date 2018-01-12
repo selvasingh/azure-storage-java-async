@@ -22,6 +22,7 @@ import io.reactivex.Single;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Represents a URL to an Azure Storage blob; the blob may be a block blob, append blob, or page blob.
@@ -32,11 +33,11 @@ public class BlobURL extends StorageURL {
      * Creates a new {@link BlobURL} object.
      *
      * @param url
-     *      A {@code String} representing a URL
+     *      A {@code java.net.URL} to a blob.
      * @param pipeline
-     *      An {@link HttpPipeline} representing a pipeline for requests
+     *      An {@link HttpPipeline} representing a pipeline for requests.
      */
-    public BlobURL(String url, HttpPipeline pipeline) {
+    public BlobURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
     }
 
@@ -49,7 +50,12 @@ public class BlobURL extends StorageURL {
      *      A {@link BlobURL} object with the given pipeline.
      */
     public BlobURL withPipeline(HttpPipeline pipeline) {
-        return new BlobURL(this.storageClient.url(), pipeline);
+        try {
+            return new BlobURL(new URL(this.storageClient.url()), pipeline);
+        } catch (MalformedURLException e) {
+            // TODO: Remove
+        }
+        return null;
     }
 
     /**
@@ -61,7 +67,7 @@ public class BlobURL extends StorageURL {
      *      A {@link BlobURL} object with the given pipeline.
      */
     public BlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(this.storageClient.url());
+        BlobURLParts blobURLParts = URLParser.ParseURL(new URL(this.storageClient.url()));
         blobURLParts.setSnapshot(snapshot);
         return new BlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
@@ -72,7 +78,12 @@ public class BlobURL extends StorageURL {
      *      A {@link BlockBlobURL} object.
      */
     public BlockBlobURL toBlockBlobURL() {
-        return new BlockBlobURL(this.storageClient.url(), super.storageClient.httpPipeline());
+        try {
+            return new BlockBlobURL(new URL(this.storageClient.url()), super.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove.
+        }
+        return null;
     }
 
     /**
@@ -82,7 +93,12 @@ public class BlobURL extends StorageURL {
      *      An {@link AppendBlobURL} object.
      */
     public AppendBlobURL toAppendBlobURL() {
-        return new AppendBlobURL(this.storageClient.url(), super.storageClient.httpPipeline());
+        try {
+            return new AppendBlobURL(new URL(this.storageClient.url()), super.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -92,7 +108,12 @@ public class BlobURL extends StorageURL {
      *      A {@link PageBlobURL} object.
      */
     public PageBlobURL toPageBlobURL() {
-        return new PageBlobURL(this.storageClient.url(), super.storageClient.httpPipeline());
+        try {
+            return new PageBlobURL(new URL(this.storageClient.url()), super.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -112,7 +133,7 @@ public class BlobURL extends StorageURL {
      *      The {@link Single&lt;RestResponse&lt;BlobsCopyHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobsCopyHeaders, Void>> startCopyAsync(
-            String sourceURL, Metadata metadata, BlobAccessConditions sourceAccessConditions,
+            URL sourceURL, Metadata metadata, BlobAccessConditions sourceAccessConditions,
             BlobAccessConditions destAccessConditions) {
         if (sourceAccessConditions == null) {
             sourceAccessConditions = BlobAccessConditions.getDefault();
@@ -124,7 +145,7 @@ public class BlobURL extends StorageURL {
             metadata = Metadata.getDefault();
         }
 
-        return this.storageClient.blobs().copyWithRestResponseAsync(sourceURL, null, null,
+        return this.storageClient.blobs().copyWithRestResponseAsync(sourceURL.toString(), null, null,
                 sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -242,9 +263,9 @@ public class BlobURL extends StorageURL {
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/set-blob-properties.
      *
      * @param headers
-     *      A {@Link BlobHttpHeaders} object that specifies which properties to set on the blob.
+     *      A {@link BlobHttpHeaders} object that specifies which properties to set on the blob.
      * @param accessConditions
-     *      A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
@@ -274,7 +295,7 @@ public class BlobURL extends StorageURL {
      * @param metadata
      *      A {@link Metadata} object that specifies key value pairs to set on the blob.
      * @param accessConditions
-     *      A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsSetMetadataHeaders, Void&gt;&gt;} object if successful.

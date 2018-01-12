@@ -19,6 +19,8 @@ import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -26,7 +28,7 @@ import java.util.List;
  */
 public final class ContainerURL extends StorageURL {
 
-    public ContainerURL( String url, HttpPipeline pipeline) {
+    public ContainerURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
     }
 
@@ -39,7 +41,12 @@ public final class ContainerURL extends StorageURL {
      *      A {@link ContainerURL} object with the given pipeline.
      */
     public ContainerURL withPipeline(HttpPipeline pipeline) {
-        return new ContainerURL(this.storageClient.url(), pipeline);
+        try {
+            return new ContainerURL(new URL(this.storageClient.url()), pipeline);
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -55,8 +62,13 @@ public final class ContainerURL extends StorageURL {
      *      A new {@link BlockBlobURL} object which references the blob with the specified name in this container.
      */
     public BlockBlobURL createBlockBlobURL(String blobName) {
-        return new BlockBlobURL(super.appendToURLPath(this.storageClient.url(), blobName),
-                this.storageClient.httpPipeline());
+        try {
+            return new BlockBlobURL(super.appendToURLPath(new URL(this.storageClient.url()), blobName),
+                    this.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -72,8 +84,13 @@ public final class ContainerURL extends StorageURL {
      *      A new {@link PageBlobURL} object which references the blob with the specified name in this container.
      */
     public PageBlobURL createPageBlobURL(String blobName) {
-        return new PageBlobURL(super.appendToURLPath(this.storageClient.url(), blobName),
-                this.storageClient.httpPipeline());
+        try {
+            return new PageBlobURL(super.appendToURLPath(new URL(this.storageClient.url()), blobName),
+                    this.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -89,8 +106,13 @@ public final class ContainerURL extends StorageURL {
      *      A new {@link AppendBlobURL} object which references the blob with the specified name in this container.
      */
     public AppendBlobURL createAppendBlobURL(String blobName) {
-        return new AppendBlobURL(super.appendToURLPath(this.storageClient.url(), blobName),
-                this.storageClient.httpPipeline());
+        try {
+            return new AppendBlobURL(super.appendToURLPath(new URL(this.storageClient.url()), blobName),
+                    this.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -130,8 +152,8 @@ public final class ContainerURL extends StorageURL {
         if (accessConditions == null) {
             accessConditions = ContainerAccessConditions.getDefault();
         }
-        if (accessConditions.getHttpAccessConditions().getIfMatch() != null ||
-                accessConditions.getHttpAccessConditions().getIfNoneMatch() != null) {
+        if (!accessConditions.getHttpAccessConditions().getIfMatch().equals(ETag.getDefault()) ||
+                !accessConditions.getHttpAccessConditions().getIfNoneMatch().equals(ETag.getDefault())) {
             return Single.error(new IllegalArgumentException("ETag access conditions are not supported for this API."));
         }
 

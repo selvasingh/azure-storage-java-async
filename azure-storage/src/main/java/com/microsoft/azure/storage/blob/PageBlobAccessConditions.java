@@ -37,7 +37,9 @@ public final class PageBlobAccessConditions {
      */
     public PageBlobAccessConditions(Long ifSequenceNumberLessThan, Long ifSequenceNumberLessThanOrEqual,
                                     Long ifSequenceNumberEqual) {
-        if (ifSequenceNumberEqual < -1 || ifSequenceNumberLessThan < -1 || ifSequenceNumberLessThanOrEqual < -1) {
+        if ((ifSequenceNumberEqual != null && ifSequenceNumberEqual < -1) ||
+                (ifSequenceNumberLessThan != null && ifSequenceNumberLessThan < -1) ||
+                (ifSequenceNumberLessThanOrEqual != null && ifSequenceNumberLessThanOrEqual < -1)) {
             throw new IllegalArgumentException("Sequence number access conditions cannot be less than -1");
         }
         this.ifSequenceNumberLessThan = ifSequenceNumberLessThan;

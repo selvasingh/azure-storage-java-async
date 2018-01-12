@@ -27,16 +27,14 @@ public final class URLParser {
      * Any other query parameters remain in the UnparsedParams field. This method overwrites all fields in the
      * BlobURLParts object.
      *
-     * @param urlString
-     *      A {@code String} of the URL to be parsed.
+     * @param url
+     *      The {@code java.net.URL} to be parsed.
      * @return
      *      A {@link BlobURLParts} object containing all the components of a BlobURL.
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
-    public static BlobURLParts ParseURL(String urlString) throws MalformedURLException, UnsupportedEncodingException {
-
-        URL url = new URL(urlString);
+    public static BlobURLParts ParseURL(URL url) throws MalformedURLException, UnsupportedEncodingException {
 
         String scheme = url.getProtocol();
         String host = url.getHost();

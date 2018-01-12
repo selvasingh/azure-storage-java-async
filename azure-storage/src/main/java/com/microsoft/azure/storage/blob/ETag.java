@@ -43,10 +43,15 @@ public final class ETag {
 
     @Override
     public boolean equals(Object obj) {
-        if (this.eTagString == null) {
-            return obj == null;
+        if (this == obj) {
+            return true;
         }
-
+        if(!(obj instanceof ETag)) {
+            return false;
+        }
+        if (this.eTagString == null) {
+            return ((ETag) obj).eTagString == null;
+        }
         return this.eTagString.equals(obj);
     }
 

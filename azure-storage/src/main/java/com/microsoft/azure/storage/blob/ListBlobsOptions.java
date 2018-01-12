@@ -44,11 +44,11 @@ public class ListBlobsOptions {
      *           up to the appearance of the delimiter character. The delimiter may be a single character or a string.
      * @param maxResults
      *           Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does
-     *           not specify maxresults or specifies a value greater than 5,000, the server will return up to 5,000
+     *           not specify maxResults or specifies a value greater than 5,000, the server will return up to 5,000
      *           items.
      */
     public ListBlobsOptions(BlobListingDetails details, String prefix, String delimiter, Integer maxResults) {
-        if (maxResults < 0) {
+        if (maxResults != null && maxResults < 0) {
             throw new IllegalArgumentException("MaxResults must be greater than 0.");
         }
         this.details = details;

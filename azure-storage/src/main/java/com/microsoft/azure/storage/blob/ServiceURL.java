@@ -21,17 +21,26 @@ import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Represents a URL to an Azure Storage Blob Service
  */
 public final class ServiceURL extends StorageURL {
 
-    public ServiceURL(String url, HttpPipeline pipeline) {
+    public ServiceURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
     }
 
     public ContainerURL createContainerURL(String containerName) {
-        return new ContainerURL(super.storageClient.url() + "/" + containerName, this.storageClient.httpPipeline());
+        try {
+            return new ContainerURL(super.appendToURLPath(new URL(super.storageClient.url()), containerName),
+                    super.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -44,17 +53,20 @@ public final class ServiceURL extends StorageURL {
      * @param prefix
      *      A {@code String} that represents the prefix of the container name.
      * @param marker
-     *      A {@code String} that identifies the portion of the list of containers to be returned with the next listing operation.
+     *      A {@code String} that identifies the portion of the list of containers to be returned with the next listing
+     *      operation.
      * @param maxresults
      *      An {@code Integer} representing the maximum number of results to retrieve.  If {@code null} or greater
  *          than 5000, the server will return up to 5,000 items.  Must be at least 1.
      * @param include
      *      A {@code String} representing which details to include when listing the containers in this storage account.
      * @return
+     *      The {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if
+     *      successful.
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listConatinersAsync(
             String prefix, String marker, Integer maxresults, ListContainersIncludeType include) {
-        if (maxresults < 0) {
+        if (maxresults != null && maxresults < 0) {
             return Single.error(new IllegalArgumentException("MaxResults must be >= 0."));
         }
         return this.storageClient.services().listContainersWithRestResponseAsync(prefix, marker,
@@ -70,6 +82,11 @@ public final class ServiceURL extends StorageURL {
      *      A {@link ServiceURL} object with the given pipeline.
      */
     public ServiceURL withPipeline(HttpPipeline pipeline) {
-        return new ServiceURL(super.storageClient.url(), pipeline);
+        try {
+            return new ServiceURL(new URL(super.storageClient.url()), pipeline);
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 }

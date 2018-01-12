@@ -24,6 +24,7 @@ import io.reactivex.Single;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
@@ -35,11 +36,11 @@ public final class AppendBlobURL extends BlobURL {
      * Creates a new {@link AppendBlobURL} object.
      *
      * @param url
-     *      A {@code String} representing a URL to a page blob.
+     *      A {@code java.net.URL} to a page blob.
      * @param pipeline
      *      An {@link HttpPipeline} object representing the pipeline for requests.
      */
-    public AppendBlobURL(String url, HttpPipeline pipeline) {
+    public AppendBlobURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
     }
 
@@ -52,7 +53,13 @@ public final class AppendBlobURL extends BlobURL {
      *      An {@link AppendBlobURL} object with the given pipeline.
      */
     public AppendBlobURL withPipeline(HttpPipeline pipeline) {
-        return new AppendBlobURL(this.storageClient.url(), pipeline);
+        try {
+            return new AppendBlobURL(new URL(this.storageClient.url()), pipeline);
+        }
+        catch (MalformedURLException e) {
+            //TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -64,7 +71,7 @@ public final class AppendBlobURL extends BlobURL {
      *      A {@link BlobURL} object with the given pipeline.
      */
     public AppendBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(this.storageClient.url());
+        BlobURLParts blobURLParts = URLParser.ParseURL(new URL(this.storageClient.url()));
         blobURLParts.setSnapshot(snapshot);
         return new AppendBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
@@ -113,7 +120,7 @@ public final class AppendBlobURL extends BlobURL {
      * @param data
      *      A {@code byte} array which represents the data to write to the blob.
      * @param accessConditions
-     *      A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
      *      The {@link Single&lt;RestResponse&lt;AppendBlobsAppendBlockHeaders, Void&gt;&gt;} object if successful.

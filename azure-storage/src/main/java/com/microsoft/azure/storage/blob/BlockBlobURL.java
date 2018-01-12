@@ -22,6 +22,7 @@ import io.reactivex.Single;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -33,11 +34,11 @@ public final class BlockBlobURL extends BlobURL {
      * Creates a new {@link BlockBlobURL} object.
      *
      * @param url
-     *      A {@code String} representing a URL to a block blob.
+     *      A {@code java.net.URL} to a block blob.
      * @param pipeline
      *      An {@link HttpPipeline} object representing the pipeline for requests.
      */
-    public BlockBlobURL(String url, HttpPipeline pipeline) {
+    public BlockBlobURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
     }
 
@@ -50,7 +51,12 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlockBlobURL} object with the given pipeline.
      */
     public BlockBlobURL withPipeline(HttpPipeline pipeline) {
-        return new BlockBlobURL(this.storageClient.url(), pipeline);
+        try {
+            return new BlockBlobURL(new URL(this.storageClient.url()), pipeline);
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
@@ -62,7 +68,7 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlockBlobURL} object with the given pipeline.
      */
     public BlockBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(this.storageClient.url());
+        BlobURLParts blobURLParts = URLParser.ParseURL(new URL(this.storageClient.url()));
         blobURLParts.setSnapshot(snapshot);
         return new BlockBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }

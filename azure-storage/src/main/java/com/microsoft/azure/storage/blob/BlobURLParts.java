@@ -14,7 +14,12 @@
  */
 package com.microsoft.azure.storage.blob;
 
+import com.microsoft.rest.v2.http.UrlBuilder;
+import com.sun.javafx.fxml.builder.URLBuilder;
+
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -117,8 +122,8 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code Map&lt;String, String[]&gt;} representing query parameter vey value pairs aside from SAS parameters and
-     *      snapshot time or {@code null}.
+     *      A {@code Map&lt;String, String[]&gt;} representing query parameter vey value pairs aside from SAS parameters
+     *      and snapshot time or {@code null}.
      */
     public Map<String, String[]> getUnparsedParameters() {
         return unparsedParameters;
@@ -127,72 +132,37 @@ public final class BlobURLParts {
     /**
      * Converts the blob URL parts to {@code String} representing a URL.
      * @return
-     *      A {@code String} representing a URL.
+     *      A {@code java.net.URL} to the blob resource composed of all the elements in the object.
      */
-    public String toURL() throws UnsupportedEncodingException {
-        StringBuilder urlBuilder = new StringBuilder();
+    public URL toURL() throws UnsupportedEncodingException, MalformedURLException {
+        UrlBuilder url = new UrlBuilder();
+        url.withScheme(this.scheme);
+        url.withHost(this.host);
 
-        if(this.scheme != null) {
-            urlBuilder.append(scheme);
-            urlBuilder.append("://");
-        }
-        if(this.host != null) {
-            urlBuilder.append(host);
-        }
+        StringBuilder path = new StringBuilder();
         if (this.containerName != null) {
-            urlBuilder.append('/' + this.containerName);
+            path.append(this.containerName);
             if (this.blobName != null) {
-                urlBuilder.append('/' + this.blobName);
+                path.append('/');
+                path.append(this.blobName);
             }
         }
+        url.withPath(path.toString());
 
-        boolean isFirst = true;
-
-        if(this.unparsedParameters != null) {
-            for (Map.Entry<String, String[]> entry : this.unparsedParameters.entrySet()) {
-                if (isFirst) {
-                    urlBuilder.append('?');
-                    isFirst = false;
-                } else {
-                    urlBuilder.append('&');
-                }
-
-                urlBuilder.append(entry.getKey());
-                urlBuilder.append('=');
-                urlBuilder.append(Utility.join(entry.getValue(), ','));
-            }
+        for (Map.Entry<String, String[]> entry : this.unparsedParameters.entrySet()) {
+            url.addQueryParameter(entry.getKey(), Utility.join(entry.getValue(), ','));
         }
 
         if (this.snapshot != null) {
-            if (isFirst) {
-                urlBuilder.append('?');
-                isFirst = false;
-            }
-            else {
-                urlBuilder.append('&');
-            }
-
-            //urlBuilder.append("snapshot=" + URLEncoder.encode(getGMTTimeSnapshot(this.snapshot), "UTF-8"));
-            urlBuilder.append("snapshot=" + this.snapshot); // The snapshot should only be what is returned by the service and so formatted correctly
+            url.addQueryParameter("snapshot", this.snapshot);
         }
 
-        String sasEncoding = this.sasQueryParameters.encode();
-        if (!Utility.isNullOrEmpty(sasEncoding)) {
-            if (isFirst) {
-                urlBuilder.append('?');
-                isFirst = false;
-            }
-            else {
-                urlBuilder.append('&');
-            }
-
-            urlBuilder.append(sasEncoding);
-        }
-
-        return urlBuilder.toString();
+        String query = url.query() != null ?
+                url.query() + this.sasQueryParameters.encode() : this.sasQueryParameters.encode();
+        url.withQuery(query);
+        return new URL(url.toString()); // TODO: replace with toURL when new autorest publishes
     }
 
-    // TODO: Check that it is ok to remove final and make public setters
     public void setScheme(String scheme) {
         this.scheme = scheme;
     }

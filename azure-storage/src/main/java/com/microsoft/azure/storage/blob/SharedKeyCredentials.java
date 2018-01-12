@@ -154,7 +154,7 @@ public final class SharedKeyCredentials implements ICredentials {
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.IF_UNMODIFIED_SINCE),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.RANGE),
                         getAdditionalXmsHeaders(httpHeaders),
-                        getCanonicalizedResource(request.url())
+                        getCanonicalizedResource(new URL(request.url())) // TODO: remove when request returns URL.
                 }, '\n');
          return stringToSign;
     }
@@ -198,35 +198,34 @@ public final class SharedKeyCredentials implements ICredentials {
      * Canonicalized the resource to sign.
      *
      * @param requestURL
-     *      A string that represents the request URL.
+     *      A {@code java.net.URL} of the request.
      * @return
      *      The canonicalized resource to sign.
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
-    private String getCanonicalizedResource(String requestURL)
+    private String getCanonicalizedResource(URL requestURL)
             throws MalformedURLException, UnsupportedEncodingException {
-        requestURL = Utility.safeDecode(requestURL);
+
         // Resource path
         final StringBuilder canonicalizedResource = new StringBuilder("/");
         canonicalizedResource.append(this.accountName);
 
-        URL urlDecoder = new URL(requestURL);
         // Note that AbsolutePath starts with a '/'.
-        if(urlDecoder.getPath().length() > 0) {
-            canonicalizedResource.append(urlDecoder.getPath());
+        if(requestURL.getPath().length() > 0) {
+            canonicalizedResource.append(requestURL.getPath());
         }
         else {
             canonicalizedResource.append('/');
         }
 
         // check for no query params and return
-        if(urlDecoder.getQuery() == null) {
+        if(requestURL.getQuery() == null) {
             return canonicalizedResource.toString();
         }
 
         // The URL object's query field doesn't include the '?'. The QueryStringDecoder expects it.
-        QueryStringDecoder queryDecoder = new QueryStringDecoder("?" + urlDecoder.getQuery());
+        QueryStringDecoder queryDecoder = new QueryStringDecoder("?" + requestURL.getQuery());
         Map<String, List<String>> queryParams = queryDecoder.parameters();
 
         ArrayList<String> queryParamNames = new ArrayList<String>(queryParams.keySet());
