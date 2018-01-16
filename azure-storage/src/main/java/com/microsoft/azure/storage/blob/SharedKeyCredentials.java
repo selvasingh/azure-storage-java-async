@@ -43,7 +43,7 @@ public final class SharedKeyCredentials implements ICredentials {
     private final Mac hmacSha256;
 
     /**
-     * Initialized a new instance of SharedKeyCredentials contains an account's name and its primary or secondary key.
+     * Initializes a new instance of SharedKeyCredentials contains an account's name and its primary or secondary key.
      * @param accountName
      *      The account name associated with the request.
      * @param key
