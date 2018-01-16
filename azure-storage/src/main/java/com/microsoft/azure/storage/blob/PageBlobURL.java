@@ -96,7 +96,7 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *       The {@link Single &lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsPutHeaders, Void>> putBlobAsync(
+    public Single<RestResponse<BlobsPutHeaders, Void>> createBlobAsync(
             Long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
         if (sequenceNumber < 0) {
