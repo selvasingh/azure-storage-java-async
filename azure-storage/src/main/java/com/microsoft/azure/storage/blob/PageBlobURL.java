@@ -99,7 +99,7 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<BlobsPutHeaders, Void>> createBlobAsync(
             Long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
-        if (sequenceNumber < 0) {
+        if (sequenceNumber != null && sequenceNumber < 0) {
             throw new IllegalArgumentException("SequenceNumber must be greater than or equal to 0.");
         }
         if(metadata == null) {
@@ -243,7 +243,6 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;PageBlobsGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
      */
-    //TODO: Get rid of joda time (use java.util.Date?)
     public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesDiffAsync(
             BlobRange blobRange, String prevSnapshot, BlobAccessConditions accessConditions) {
         if(blobRange == null) {
@@ -312,7 +311,7 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setSequenceNumber(
             SequenceNumberActionType action, Long sequenceNumber, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
-        if (sequenceNumber < 0) {
+        if (sequenceNumber != null && sequenceNumber < 0) {
             throw new IllegalArgumentException("SequenceNumber must be greater than or equal to 0.");
         }
         if(headers == null) {
@@ -392,7 +391,7 @@ public final class PageBlobURL extends BlobURL {
         if (pageRange.start()%512 != 0 ) {
             throw new IllegalArgumentException("PageRange's start value must be a multiple of 512.");
         }
-        if (pageRange.end()%512 != 0) {
+        if (pageRange.end()%512 != 511) {
             throw new IllegalArgumentException("PageRange's end value must be 1 less than a multiple of 512.");
         }
         if (pageRange.end() <= pageRange.start()) {

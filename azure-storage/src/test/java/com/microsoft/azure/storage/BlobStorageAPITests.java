@@ -235,8 +235,8 @@ public class BlobStorageAPITests {
             pbu.clearPagesAsync(new PageRange().withStart(0).withEnd(511), null).blockingGet();
             PageRange pr = pbu.getPageRangesAsync(new BlobRange(0L, (512L * 3L)), null).blockingGet()
                     .body().pageRange().get(0);
-            Assert.assertEquals(pr.start(), 0);
-            Assert.assertEquals(512, 1023);
+            Assert.assertEquals(pr.start(), 512);
+            Assert.assertEquals(pr.end(), 1023);
             ClearRange cr = pbu.getPageRangesDiffAsync(null, pageSnap, null).blockingGet().body().clearRange().get(0);
             Assert.assertEquals(cr.start(), 0);
             Assert.assertEquals(cr.end(), 511);
@@ -244,7 +244,7 @@ public class BlobStorageAPITests {
             pbu.resizeAsync(512L * 4L, null).blockingGet();
             pbu.setSequenceNumber(SequenceNumberActionType.INCREMENT, null, null, null).blockingGet();
             BlobsGetPropertiesHeaders pageHeaders = pbu.getPropertiesAndMetadataAsync(null).blockingGet().headers();
-            Assert.assertEquals(true, pageHeaders.blobSequenceNumber());
+            Assert.assertEquals(1, pageHeaders.blobSequenceNumber().longValue());
             Assert.assertEquals((long)(512*4), pageHeaders.contentLength().longValue());
 
             PageBlobURL copyPbu = cu.createPageBlobURL("copyPage");
