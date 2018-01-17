@@ -209,6 +209,7 @@ public class BlobStorageAPITests {
         }
         catch(Exception e) {
             e.printStackTrace();
+            throw e;
         }
         finally {
             // Delete the blob and container. Deleting a container does not require deleting the blobs first.

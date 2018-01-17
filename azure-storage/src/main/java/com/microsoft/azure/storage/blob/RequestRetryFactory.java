@@ -56,11 +56,7 @@ public final class RequestRetryFactory implements RequestPolicyFactory {
 
         @Override
         public Single<HttpResponse> sendAsync(HttpRequest httpRequest) {
-            try {
-                this.httpRequest = httpRequest.buffer();
-            } catch (IOException e) {
-                return Single.error(e);
-            }
+            this.httpRequest = httpRequest.buffer();
 
             this.httpRequest = new HttpRequest(httpRequest.callerMethod(), httpRequest.httpMethod(), httpRequest.url(),
                     httpRequest.headers(), httpRequest.body());

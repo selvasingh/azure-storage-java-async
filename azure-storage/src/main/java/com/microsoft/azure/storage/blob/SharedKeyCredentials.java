@@ -17,7 +17,6 @@ package com.microsoft.azure.storage.blob;
 import com.microsoft.rest.v2.http.*;
 import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
-import com.microsoft.rest.v2.policy.RetryPolicy;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.reactivex.functions.Consumer;
@@ -145,7 +144,7 @@ public final class SharedKeyCredentials implements ICredentials {
         // TODO: Change to String.join when Java 7 support is removed
         return StringUtils.join(
                 new String[]{
-                        request.httpMethod(),
+                        request.httpMethod().toString(),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_ENCODING),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LANGUAGE),
                         contentLength,
@@ -159,7 +158,7 @@ public final class SharedKeyCredentials implements ICredentials {
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.IF_UNMODIFIED_SINCE),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.RANGE),
                         getAdditionalXmsHeaders(httpHeaders),
-                        getCanonicalizedResource(request.url())
+                        getCanonicalizedResource(request.url().toString())
                 },
                 '\n'
         );
