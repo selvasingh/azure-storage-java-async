@@ -19,23 +19,23 @@ package com.microsoft.azure.storage.blob;
  */
 public final class ETag {
 
-    private static ETag defaultEtag;
     private final String eTagString;
 
     /**
-     * Used for matching with no ETag
+     * Used for matching with no ETag.
      */
     public static final ETag NONE = new ETag(Constants.EMPTY_STRING);
 
     /**
-     * Used for matching with any ETag
+     * Used for matching with any ETag.
      */
     public static final ETag ANY = new ETag("*");
 
     /**
      * Creates a {@link ETag} object.
+     *
      * @param eTagString
-     *      The {@code String} to convert to an ETag
+     *      The {@code String} to convert to an ETag.
      */
     public ETag(String eTagString) {
         this.eTagString = eTagString;
@@ -43,10 +43,15 @@ public final class ETag {
 
     @Override
     public boolean equals(Object obj) {
-        if (this.eTagString == null) {
-            return obj == null;
+        if (this == obj) {
+            return true;
         }
-
+        if(!(obj instanceof ETag)) {
+            return false;
+        }
+        if (this.eTagString == null) {
+            return ((ETag) obj).eTagString == null;
+        }
         return this.eTagString.equals(obj);
     }
 

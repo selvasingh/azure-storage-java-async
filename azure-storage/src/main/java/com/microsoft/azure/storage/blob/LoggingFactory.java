@@ -14,23 +14,16 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.http.HttpPipelineLogLevel;
 import com.microsoft.rest.v2.http.HttpRequest;
 import com.microsoft.rest.v2.http.HttpResponse;
 import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
-import io.netty.handler.codec.http.HttpResponseStatus;
-//import org.apache.log4j.Level;
-import io.netty.handler.codec.http.HttpStatusClass;
 import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
 
 import java.net.HttpURLConnection;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
 
 /**
  * Factory for logging requests and responses
@@ -57,6 +50,18 @@ public final class LoggingFactory implements RequestPolicyFactory {
 
         private Long requestStartTime;
 
+        /**
+         * Creates a policy which configures the logging behavior within the         *
+         * {@link com.microsoft.rest.v2.http.HttpPipeline}.
+         *
+         * @param requestPolicy
+         *      A {@link RequestPolicy} object.
+         * @param options
+         *      A {@link RequestPolicyOptions} object.
+         * @param factory
+         *      A {@link LoggingFactory} object.
+         * TODO: docs.
+         */
         LoggingPolicy(RequestPolicy requestPolicy, RequestPolicyOptions options, LoggingFactory factory) {
             this.requestPolicy = requestPolicy;
             this.options = options;
@@ -64,11 +69,12 @@ public final class LoggingFactory implements RequestPolicyFactory {
         }
 
         /**
-         * Signed the request
+         * Signed the request.
+         *
          * @param request
          *      the request to sign
          * @return
-         *      A {@link Single} representing the HTTP response that will arrive asynchronously.
+         *      A {@link Single} representing the {@link HttpResponse} that will arrive asynchronously.
          */
         @Override
         public Single<HttpResponse> sendAsync(final HttpRequest request) {

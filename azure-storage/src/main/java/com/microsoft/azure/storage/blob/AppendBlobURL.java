@@ -14,7 +14,6 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import com.microsoft.azure.storage.implementation.StorageClientImpl;
 import com.microsoft.azure.storage.models.AppendBlobsAppendBlockHeaders;
 import com.microsoft.azure.storage.models.BlobType;
 import com.microsoft.azure.storage.models.BlobsPutHeaders;
@@ -25,7 +24,8 @@ import io.reactivex.Single;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.Date;
+import java.net.URL;
+
 
 /**
  * Represents a URL to a page blob.
@@ -34,35 +34,44 @@ public final class AppendBlobURL extends BlobURL {
 
     /**
      * Creates a new {@link AppendBlobURL} object.
+     *
      * @param url
-     *      A {@code String} representing a URL to a page blob.
+     *      A {@code java.net.URL} to a page blob.
      * @param pipeline
-     *      A {@link HttpPipeline} object representing the pipeline for requests.
+     *      An {@link HttpPipeline} object representing the pipeline for requests.
      */
-    public AppendBlobURL(String url, HttpPipeline pipeline) {
+    public AppendBlobURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
     }
 
     /**
      * Creates a new {@link AppendBlobURL} with the given pipeline.
+     *
      * @param pipeline
-     *      A {@link HttpPipeline} object to set.
+     *      An {@link HttpPipeline} object to set.
      * @return
-     *      A {@link AppendBlobURL} object with the given pipeline.
+     *      An {@link AppendBlobURL} object with the given pipeline.
      */
     public AppendBlobURL withPipeline(HttpPipeline pipeline) {
-        return new AppendBlobURL(this.storageClient.url(), pipeline);
+        try {
+            return new AppendBlobURL(new URL(this.storageClient.url()), pipeline);
+        }
+        catch (MalformedURLException e) {
+            //TODO: remove
+        }
+        return null;
     }
 
     /**
      * Creates a new {@link AppendBlobURL} with the given snapshot.
+     *
      * @param snapshot
-     *      A <code>java.util.Date</code> to set.
+     *      A {@code java.util.Date} to set.
      * @return
      *      A {@link BlobURL} object with the given pipeline.
      */
     public AppendBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(this.storageClient.url());
+        BlobURLParts blobURLParts = URLParser.ParseURL(new URL(this.storageClient.url()));
         blobURLParts.setSnapshot(snapshot);
         return new AppendBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
@@ -70,14 +79,16 @@ public final class AppendBlobURL extends BlobURL {
     /**
      * Create creates a 0-length append blob. Call AppendBlock to append data to an append blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
+     *
      * @param headers
-     *            A {@Link BlobHttpHeaders} object that specifies which properties to set on the blob.
+     *      A {@link BlobHttpHeaders} object that specifies which properties to set on the blob.
      * @param metadata
-     *            A {@Link Metadata} object that specifies key value pairs to set on the blob.
+     *      A {@link Metadata} object that specifies key value pairs to set on the blob.
      * @param accessConditions
-     *            A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *            complete.
-     * @return the {@link Single&lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
+     * @return
+     *      The {@link Single&lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobsPutHeaders, Void>> createBlobAsync(
             Metadata metadata, BlobHttpHeaders headers, BlobAccessConditions accessConditions) {
@@ -94,7 +105,8 @@ public final class AppendBlobURL extends BlobURL {
                 null, headers.getCacheControl(), headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
                 accessConditions.getLeaseAccessConditions().toString(),
-                headers.getContentDisposition(), accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                headers.getContentDisposition(),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
@@ -104,26 +116,29 @@ public final class AppendBlobURL extends BlobURL {
     /**
      * AppendBlock commits a new block of data to the end of the existing append blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/append-block.
+     *
      * @param data
-     *            A <code>byte</code> array which represents the data to write to the blob.
-     * @param blobAccessConditions
-     *            A {@Link BlobAccessConditions} object that specifies under which conditions the operation should
-     *            complete.
-     * @return the {@link Single&lt;RestResponse&lt;AppendBlobsAppendBlockHeaders, Void&gt;&gt;} object if successful.
+     *      A {@code byte} array which represents the data to write to the blob.
+     * @param accessConditions
+     *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
+     *      complete.
+     * @return
+     *      The {@link Single&lt;RestResponse&lt;AppendBlobsAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<AppendBlobsAppendBlockHeaders, Void>> appendBlockAsync(
-            AsyncInputStream data, BlobAccessConditions blobAccessConditions) {
-        if(blobAccessConditions == null) {
-            blobAccessConditions = BlobAccessConditions.getDefault();
+            AsyncInputStream data, BlobAccessConditions accessConditions) {
+        if(accessConditions == null) {
+            accessConditions = BlobAccessConditions.getDefault();
         }
+
         return this.storageClient.appendBlobs().appendBlockWithRestResponseAsync(data, null,
-                blobAccessConditions.getLeaseAccessConditions().toString(),
-                blobAccessConditions.getAppendBlobAccessConditions().getIfMaxSizeLessThanOrEqual(),
-                blobAccessConditions.getAppendBlobAccessConditions().getIfAppendPositionEquals(),
-                blobAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
-                blobAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
-                blobAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
+                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getAppendBlobAccessConditions().getIfMaxSizeLessThanOrEqual(),
+                accessConditions.getAppendBlobAccessConditions().getIfAppendPositionEquals(),
+                accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
+                accessConditions.getHttpAccessConditions().getIfMatch().toString(),
+                accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
                 null);
     }
 }

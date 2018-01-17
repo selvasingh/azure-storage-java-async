@@ -24,8 +24,9 @@ public final class LeaseAccessConditions {
 
     /**
      * Creates a {@link ContainerAccessConditions} object.
+     *
      * @param leaseId
-     *      A {@code String} representing the lease access conditions for a container or blob
+     *      A {@code String} representing the lease access conditions for a container or blob.
      */
     public LeaseAccessConditions(String leaseId) {
         this.leaseId = leaseId;
@@ -33,10 +34,15 @@ public final class LeaseAccessConditions {
 
     @Override
     public boolean equals(Object obj) {
-        if (this.leaseId == null) {
-            return obj == null;
+        if (this == obj) {
+            return true;
         }
-
+        if (!(obj instanceof LeaseAccessConditions)){
+            return false;
+        }
+        if (this.leaseId == null) {
+            return ((LeaseAccessConditions) obj).leaseId == null;
+        }
         return this.leaseId.equals(obj);
     }
 

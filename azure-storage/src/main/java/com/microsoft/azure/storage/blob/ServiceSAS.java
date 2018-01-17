@@ -14,8 +14,6 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
@@ -40,11 +38,90 @@ public final class ServiceSAS extends BaseSAS {
 
     private final String contentType;
 
-    public ServiceSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime, EnumSet<ContainerSASPermission> permissions,
+    /**
+     * Creates a service SAS for a container.
+     *
+     * @param version
+     *      The version of the service this SAS will target. If not specified, it will default to the version targeted
+     *      by the library.
+     * @param protocol
+     *      A {@link SASProtocol} object specifying which protocols may be used by this SAS.
+     * @param startTime
+     *      A {@code java.util.Date} specifying when the SAS will take effect.
+     * @param expiryTime
+     *      A {@code java.util.Date} specifying a time after which the SAS will no longer work.
+     * @param permissions
+     *      An {@code EnumSet&lt;ContainerSASPermission&gt;} specifying which operations the SAS user may perform.
+     * @param ipRange
+     *      An {@link IPRange} object specifying which IP addresses may validly use this SAS.
+     * @param containerName
+     *      A {@code String} specifying the name of the container the SAS user may access.
+     * @param identifier
+     *      A {@code String} specifying which access policy on the container this SAS references if any.
+     * @param cacheControl
+     *      A {@code String} specifying the control header for the SAS.
+     * @param contentDisposition
+     *      A {@code String} specifying the content-disposition header for the SAS.
+     * @param contentEncoding
+     *      A {@code String} specifying the content-encoding header for the SAS.
+     * @param contentLanguage
+     *      A {@code String} specifying the content-language header for the SAS.
+     * @param contentType
+     *      A {@code String} specifying the content-type header for the SAS.
+     */
+    public ServiceSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime,
+                      EnumSet<ContainerSASPermission> permissions,
+                      IPRange ipRange, String containerName, String identifier, String cacheControl,
+                      String contentDisposition, String contentEncoding, String contentLanguage, String contentType) {
+        super(version, protocol, startTime, expiryTime, ContainerSASPermission.permissionsToString(permissions), ipRange);
+        this.containerName = containerName;
+        this.blobName = null;
+        this.identifier = identifier;
+        this.cacheControl = cacheControl;
+        this.contentDisposition = contentDisposition;
+        this.contentEncoding = contentEncoding;
+        this.contentLanguage = contentLanguage;
+        this.contentType = contentType;
+    }
+
+    /**
+     * Creates a service SAS for a blob.
+     *
+     * @param version
+     *      The version of the service this SAS will target. If not specified, it will default to the version targeted
+     *      by the library.
+     * @param protocol
+     *      A {@link SASProtocol} object specifying which protocols may be used by this SAS.
+     * @param startTime
+     *      A {@code java.util.Date} specifying when the SAS will take effect.
+     * @param expiryTime
+     *      A {@code java.util.Date} specifying a time after which the SAS will no longer work.
+     * @param permissions
+     *      An {@code EnumSet&lt;BlobSASPermission&gt;} specifying which operations the SAS user may perform.
+     * @param ipRange
+     *      An {@link IPRange} object specifying which IP addresses may validly use this SAS.
+     * @param containerName
+     *      A {@code String} specifying the name of the container containing the blob the SAS user may access.
+     * @param blobName
+     *      A {@code String} specifying the name of the blob the SAS user may access.
+     * @param identifier
+     *      A {@code String} specifying which access policy on the container this SAS references if any.
+     * @param cacheControl
+     *      A {@code String} specifying the control header for the SAS.
+     * @param contentDisposition
+     *      A {@code String} specifying the content-disposition header for the SAS.
+     * @param contentEncoding
+     *      A {@code String} specifying the content-encoding header for the SAS.
+     * @param contentLanguage
+     *      A {@code String} specifying the content-language header for the SAS.
+     * @param contentType
+     *      A {@code String} specifying the content-type header for the SAS.
+     */
+    public ServiceSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime,
+                      EnumSet<BlobSASPermission> permissions,
                       IPRange ipRange, String containerName, String blobName, String identifier, String cacheControl,
                       String contentDisposition, String contentEncoding, String contentLanguage, String contentType) {
-        //permissions.getClass();
-        super(version, protocol, startTime, expiryTime, ContainerSASPermission.permissionsToString(permissions), ipRange);
+        super(version, protocol, startTime, expiryTime, BlobSASPermission.permissionsToString(permissions), ipRange);
         this.containerName = containerName;
         this.blobName = blobName;
         this.identifier = identifier;
@@ -55,8 +132,19 @@ public final class ServiceSAS extends BaseSAS {
         this.contentType = contentType;
     }
 
+    /**
+     * Uses an account's shared key credential to sign these signature values to produce the proper SAS query
+     * parameters.
+     *
+     * @param sharedKeyCredentials
+     *      A {@link SharedKeyCredentials} object used to sign the SAS values.
+     * @return
+     *      A {@link SASQueryParameters} object containing the signed query parameters.
+     * @throws InvalidKeyException
+     */
     @Override
-    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials) throws InvalidKeyException {
+    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials)
+            throws InvalidKeyException {
         if (sharedKeyCredentials == null) {
             throw new IllegalArgumentException("SharedKeyCredentials cannot be null.");
         }
@@ -66,8 +154,7 @@ public final class ServiceSAS extends BaseSAS {
             resource = "b";
         }
 
-        String stringToSign = StringUtils.join(
-                new String[]{
+         String stringToSign = Utility.join(new String[]{
                         super.permissions,
                         Utility.getUTCTimeOrEmpty(super.startTime),
                         Utility.getUTCTimeOrEmpty(super.expiryTime),
@@ -81,9 +168,7 @@ public final class ServiceSAS extends BaseSAS {
                         this.contentEncoding,
                         this.contentLanguage,
                         this.contentType
-                },
-                '\n'
-        );
+                }, '\n');
 
         String signature = sharedKeyCredentials.computeHmac256(stringToSign);
 
@@ -107,17 +192,16 @@ public final class ServiceSAS extends BaseSAS {
     private String getCanonicalName(String accountName) {
         // Container: "/blob/account/containername"
         // Blob:      "/blob/account/containername/blobname"
-        String canoncialName = StringUtils.join(
-                new String[]{
-                        "/blob",
-                        accountName,
-                        this.containerName
-                },
-                '/');
+        StringBuilder canonicalName = new StringBuilder("/blob");
+        canonicalName.append('/');
+        canonicalName.append(accountName);
+        canonicalName.append('/');
+        canonicalName.append(this.containerName);
+
         if (!Utility.isNullOrEmpty(this.blobName)) {
-            canoncialName += "/" + this.blobName.replace("\\", "/");
+            canonicalName.append("/" + this.blobName.replace("\\", "/"));
         }
 
-        return canoncialName;
+        return canonicalName.toString();
     }
 }

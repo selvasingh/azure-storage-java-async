@@ -25,8 +25,17 @@ public final class TelemetryFactory implements RequestPolicyFactory {
 
     final private String userAgent;
 
+    /**
+     * Creates a factory that can create telemetry policy objects which add telemetry information to the outgoing
+     * HTTP requests.
+     *
+     * @param telemetryOptions
+     *      A {@link TelemetryOptions} object which configures the behavior for the telemetry policies produced by this
+     *      factory.
+     */
     public TelemetryFactory(TelemetryOptions telemetryOptions) {
-        String userAgentPrefix = telemetryOptions.UserAgentPrefix() == null ? Constants.EMPTY_STRING : telemetryOptions.UserAgentPrefix();
+        String userAgentPrefix = telemetryOptions.UserAgentPrefix() == null ?
+                Constants.EMPTY_STRING : telemetryOptions.UserAgentPrefix();
         userAgent = userAgentPrefix + ' ' +
                 Constants.HeaderConstants.USER_AGENT_PREFIX + '/' + Constants.HeaderConstants.USER_AGENT_VERSION +
                 String.format(Utility.LOCALE_US, "(JavaJRE %s; %s %s)",

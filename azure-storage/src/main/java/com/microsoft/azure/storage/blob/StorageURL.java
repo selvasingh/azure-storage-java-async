@@ -16,9 +16,9 @@ package com.microsoft.azure.storage.blob;
 
 import com.microsoft.azure.storage.implementation.StorageClientImpl;
 import com.microsoft.rest.v2.http.HttpPipeline;
-import com.microsoft.rest.v2.http.HttpPipelineBuilder;
 import com.microsoft.rest.v2.http.HttpRequest;
 import com.microsoft.rest.v2.http.HttpResponse;
+import com.microsoft.rest.v2.http.UrlBuilder;
 import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
@@ -26,6 +26,8 @@ import io.reactivex.Single;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
 
@@ -35,7 +37,7 @@ public abstract class StorageURL {
 
     protected final StorageClientImpl storageClient;
 
-    protected StorageURL(String url, HttpPipeline pipeline) {
+    protected StorageURL(URL url, HttpPipeline pipeline) {
         if (url == null) {
             throw new IllegalArgumentException("url cannot be null.");
         }
@@ -44,7 +46,7 @@ public abstract class StorageURL {
         }
 
         this.storageClient = new StorageClientImpl(pipeline).withVersion("2016-05-31");
-        this.storageClient.withUrl(url);
+        this.storageClient.withUrl(url.toString());
     }
 
     // TODO: ADD RETRY Factory
@@ -63,17 +65,34 @@ public abstract class StorageURL {
         return this.storageClient.url();
     }
 
-    /**
-     * appends a string to the end of a URL's path (prefixing the string with a '/' if required)
-     * @param url
-     * @param name
-     * @return
-     */
-    protected String appendToURLPath(String url, String name) {
-        if (url.length() == 0 || url.charAt(url.length() - 1) != '/') {
-            url += '/';
+    public URL toURL() {
+        try {
+            return new URL(this.storageClient.url());
+        } catch (MalformedURLException e) {
+            // TODO: remove and update toString.
         }
-        return url + name;
+        return null;
+    }
+
+    /**
+     * Appends a string to the end of a URL's path (prefixing the string with a '/' if required).
+     * @param baseURL
+     *      A {@code java.net.URL} to which the name should be appended.
+     * @param name
+     *      A {@code String} with the name to be appended.
+     * @return
+     *      A {@code String} with the name appended to the URL.
+     */
+    protected URL appendToURLPath(URL baseURL, String name) throws MalformedURLException {
+        UrlBuilder url = UrlBuilder.parse(baseURL.toString());
+        if(url.path() == null) {
+            url.withPath("/"); // .path() will return null if it is empty, so we have to process separately from below.
+        }
+        else if (url.path().charAt(url.path().length() - 1) != '/') {
+            url.withPath(url.path() + '/');
+        }
+        url.withPath(url.path() + name);
+        return new URL(url.toString()); // TODO: modify when toURL is released.
     }
 
     static class AddDatePolicy implements RequestPolicyFactory {

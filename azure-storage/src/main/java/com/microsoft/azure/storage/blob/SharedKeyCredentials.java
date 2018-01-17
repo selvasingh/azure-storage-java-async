@@ -20,7 +20,6 @@ import com.microsoft.rest.v2.policy.RequestPolicyOptions;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.reactivex.functions.Consumer;
-import org.apache.commons.lang3.StringUtils;
 import io.reactivex.Single;
 
 import javax.crypto.Mac;
@@ -28,7 +27,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -45,7 +43,7 @@ public final class SharedKeyCredentials implements ICredentials {
     private final Mac hmacSha256;
 
     /**
-     * Initialized a new instance of SharedKeyCredentials contains an account's name and its primary or secondary key.
+     * Initializes a new instance of SharedKeyCredentials contains an account's name and its primary or secondary key.
      * @param accountName
      *      The account name associated with the request.
      * @param key
@@ -141,9 +139,7 @@ public final class SharedKeyCredentials implements ICredentials {
         String contentLength = getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LENGTH);
         contentLength = contentLength.equals("0") ? Constants.EMPTY_STRING : contentLength;
 
-        // TODO: Change to String.join when Java 7 support is removed
-        return StringUtils.join(
-                new String[]{
+        String stringToSign = Utility.join(new String[]{
                         request.httpMethod().toString(),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_ENCODING),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LANGUAGE),
@@ -158,10 +154,9 @@ public final class SharedKeyCredentials implements ICredentials {
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.IF_UNMODIFIED_SINCE),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.RANGE),
                         getAdditionalXmsHeaders(httpHeaders),
-                        getCanonicalizedResource(request.url().toString())
-                },
-                '\n'
-        );
+                        getCanonicalizedResource(request.url())
+                }, '\n');
+         return stringToSign;
     }
 
     private void appendCanonicalizedElement(final StringBuilder builder, final String element) {
@@ -201,37 +196,36 @@ public final class SharedKeyCredentials implements ICredentials {
 
     /**
      * Canonicalized the resource to sign.
+     *
      * @param requestURL
-     *      A string that represents the request URL.
+     *      A {@code java.net.URL} of the request.
      * @return
      *      The canonicalized resource to sign.
      * @throws MalformedURLException
      * @throws UnsupportedEncodingException
      */
-    private String getCanonicalizedResource(String requestURL) throws MalformedURLException, UnsupportedEncodingException {
-        requestURL = Utility.safeDecode(requestURL);
+    private String getCanonicalizedResource(URL requestURL)
+            throws MalformedURLException, UnsupportedEncodingException {
+
         // Resource path
         final StringBuilder canonicalizedResource = new StringBuilder("/");
         canonicalizedResource.append(this.accountName);
 
-        URL urlDecoder = new URL(requestURL);
         // Note that AbsolutePath starts with a '/'.
-        //QueryStringDecoder urlDecoder = new QueryStringDecoder(requestURL);
-        //if (urlDecoder.path().length() > 0) {
-        if(urlDecoder.getPath().length() > 0) {
-            canonicalizedResource.append(urlDecoder.getPath());
+        if(requestURL.getPath().length() > 0) {
+            canonicalizedResource.append(requestURL.getPath());
         }
         else {
             canonicalizedResource.append('/');
         }
 
         // check for no query params and return
-        if(urlDecoder.getQuery() == null) {
+        if(requestURL.getQuery() == null) {
             return canonicalizedResource.toString();
         }
 
         // The URL object's query field doesn't include the '?'. The QueryStringDecoder expects it.
-        QueryStringDecoder queryDecoder = new QueryStringDecoder("?" + urlDecoder.getQuery());
+        QueryStringDecoder queryDecoder = new QueryStringDecoder("?" + requestURL.getQuery());
         Map<String, List<String>> queryParams = queryDecoder.parameters();
 
         ArrayList<String> queryParamNames = new ArrayList<String>(queryParams.keySet());
@@ -241,10 +235,7 @@ public final class SharedKeyCredentials implements ICredentials {
             final String queryParamName = queryParamNames.get(i);
             final List<String> queryParamValues = queryParams.get(queryParamName);
             Collections.sort(queryParamValues);
-
-            String queryParamValuesStr = StringUtils.join(queryParamValues, ',');
-            //queryParamValuesStr = URLEncoder.encode(queryParamValuesStr, "UTF-8");
-            // concatenation of the query param name + colon + join of query param values which are commas separated
+            String queryParamValuesStr = Utility.join(queryParamValues.toArray(new String[]{}), ',');
             canonicalizedResource.append("\n" + queryParamName.toLowerCase(Locale.US) + ":" + queryParamValuesStr);
         }
 
@@ -257,12 +248,11 @@ public final class SharedKeyCredentials implements ICredentials {
      * has been specified for the request.
      *
      * @param httpHeaders
-     *      A <code>HttpHeaders</code> object that represents the headers for the request.
+     *      A {@code HttpHeaders} object that represents the headers for the request.
      * @param headerName
      *      A {@code String} that represents the name of the header being requested.
-     *
-     * @return A {@code String} that represents the header value, or <code>null</code> if there is no corresponding
-     *      header value for <code>headerName</code>.
+     * @return A {@code String} that represents the header value, or {@code null} if there is no corresponding
+     *      header value for {@code headerName}.
      */
     private String getStandardHeaderValue(final HttpHeaders httpHeaders, final String headerName) {
         final String headerValue = httpHeaders.value(headerName);
@@ -275,10 +265,8 @@ public final class SharedKeyCredentials implements ICredentials {
      *
      * @param stringToSign
      *      The UTF-8-encoded string to sign.
-     *
      * @return
      *      A {@code String} that contains the HMAC-SHA256-encoded signature.
-     *
      * @throws InvalidKeyException
      *      If the key is not a valid Base64-encoded string.
      */

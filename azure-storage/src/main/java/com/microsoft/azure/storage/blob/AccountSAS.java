@@ -14,8 +14,6 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
@@ -33,44 +31,50 @@ public final class AccountSAS extends BaseSAS {
 
     /**
      * AccountSAS is used to generate a Shared Access Signature (SAS) for an Azure Storage account.
+     *
      * @param version
-     *       If null or empty, this defaults to <code>Constants.HeaderConstants.TARGET_STORAGE_VERSION</code>
+     *       If null or empty, this defaults to {@code Constants.HeaderConstants.TARGET_STORAGE_VERSION}
      * @param protocol
      *      A {@link SASProtocol} representing the allowed Internet protocols.
      * @param startTime
-     *      A <code>java.util.Date</code> object which contains the shared access signature start time.
+     *      A {@code java.util.Date} object which contains the shared access signature start time.
      * @param expiryTime
-     *      A <code>java.util.Date</code> object which contains the shared access signature expiry time.
+     *      A {@code java.util.Date} object which contains the shared access signature expiry time.
      * @param permissions
-     *      A <code>java.util.EnumSet</code> object that contains {@link AccountSASPermission} values that indicates
-     *            the allowed permissions.
+     *      A {@code java.util.EnumSet} object that contains {@link AccountSASPermission} values that indicates
+     *      the allowed permissions.
      * @param ipRange
      *      A {@link IPRange} representing the allowed IP range.
      * @param services
-     *      A <code>java.util.EnumSet</code> object that contains {@link AccountSASService} values that indicates
-     *            the allowed services.
+     *      A {@code java.util.EnumSet} object that contains {@link AccountSASService} values that indicates
+     *      the allowed services.
      * @param resourceTypes
-     *      A <code>java.util.EnumSet</code> object that contains {@link AccountSASResourceType} values that indicates
-     *            the allowed resource types.
+     *      A {@code java.util.EnumSet} object that contains {@link AccountSASResourceType} values that indicates
+     *      the allowed resource types.
      */
     public AccountSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime,
                       EnumSet<AccountSASPermission> permissions, IPRange ipRange, EnumSet<AccountSASService> services,
                       EnumSet<AccountSASResourceType> resourceTypes) {
         super(version, protocol, startTime, expiryTime, AccountSASPermission.permissionsToString(permissions), ipRange);
+        if (services == null || resourceTypes == null) {
+            throw new IllegalArgumentException("Services and ResourceTypes cannot be null.");
+        }
         this.services = services;
         this.resourceTypes = resourceTypes;
     }
 
     /**
-     * Generates {@link SASQueryParameters} object which contains all SAS uery parameters
+     * Generates {@link SASQueryParameters} object which contains all SAS query parameters.
+     *
      * @param sharedKeyCredentials
      *      A (@link SharedKeyCredentials} object for the storage account and corresponding primary or secondary key
      * @return
-     *      A {@link SASQueryParameters} object which contains all SAS uery parameters
+     *      A {@link SASQueryParameters} object which contains all SAS query parameters
      * @throws InvalidKeyException
      */
     @Override
-    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials) throws InvalidKeyException {
+    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials)
+            throws InvalidKeyException {
         if (sharedKeyCredentials == null) {
             throw new IllegalArgumentException("SharedKeyCredentials cannot be null.");
         }
@@ -84,8 +88,7 @@ public final class AccountSAS extends BaseSAS {
 
         String servicesString = AccountSASService.servicesToString(this.services);
         String resourceTypesString = AccountSASResourceType.resourceTypesToString(this.resourceTypes);
-        String stringToSign = StringUtils.join(
-                new String[]{
+        String stringToSign = Utility.join(new String[]{
                         sharedKeyCredentials.getAccountName(),
                         super.permissions,
                         servicesString,
@@ -96,9 +99,7 @@ public final class AccountSAS extends BaseSAS {
                         super.protocol.toString(),
                         super.version,
                         Constants.EMPTY_STRING // Account SAS requires an additional newline character
-                },
-                '\n'
-        );
+                }, '\n');
 
         String signature = sharedKeyCredentials.computeHmac256(stringToSign);
 
@@ -112,7 +113,7 @@ public final class AccountSAS extends BaseSAS {
         sasParams.ipRange = super.ipRange;
         sasParams.permissions = super.permissions;
         try {
-            sasParams.signature = URLEncoder.encode(signature, "UTF-8");// TODO: use non depricated version
+            sasParams.signature = URLEncoder.encode(signature, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             // If UTF-8 is not supported, we have no idea what to do
         }

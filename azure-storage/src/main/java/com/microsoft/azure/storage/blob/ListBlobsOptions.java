@@ -18,6 +18,7 @@ package com.microsoft.azure.storage.blob;
  * Defines options availble when calling ListBlobs.
  */
 public class ListBlobsOptions {
+
     private static ListBlobsOptions defaultListBlobsOptions;
 
     private BlobListingDetails details;
@@ -30,8 +31,9 @@ public class ListBlobsOptions {
 
     /**
      * A {@Link ListBlobsOptions} object.
+     *
      * @param details
-     *           A {@Link BlobListingDetails} object inidicating what additional information the service should return
+     *           A {@Link BlobListingDetails} object indicating what additional information the service should return
      *           with each blob.
      * @param prefix
      *           A {@code String} that filters the results to return only blobs whose names begin with the specified
@@ -42,10 +44,13 @@ public class ListBlobsOptions {
      *           up to the appearance of the delimiter character. The delimiter may be a single character or a string.
      * @param maxResults
      *           Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does
-     *           not specify maxresults or specifies a value greater than 5,000, the server will return up to 5,000
+     *           not specify maxResults or specifies a value greater than 5,000, the server will return up to 5,000
      *           items.
      */
     public ListBlobsOptions(BlobListingDetails details, String prefix, String delimiter, Integer maxResults) {
+        if (maxResults != null && maxResults < 0) {
+            throw new IllegalArgumentException("MaxResults must be greater than 0.");
+        }
         this.details = details;
         this.prefix = prefix;
         this.delimiter = delimiter;
@@ -53,7 +58,7 @@ public class ListBlobsOptions {
     }
 
     /**
-     * @return A {@Link BlobListingDetails} object inidicating what additional information the service should return
+     * @return A {@link BlobListingDetails} object indicating what additional information the service should return
      *           with each blob.
      */
     public BlobListingDetails getDetails() {

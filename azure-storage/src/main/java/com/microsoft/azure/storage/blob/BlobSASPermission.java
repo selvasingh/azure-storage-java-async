@@ -19,7 +19,6 @@ import java.util.EnumSet;
 /**
  * Specifies the set of possible permissions for a blob shared access policy.
  */
-//TODO: Can only use container SAS Permissions?
 public enum BlobSASPermission {
     /**
      * Specifies Read access granted.
@@ -49,10 +48,10 @@ public enum BlobSASPermission {
     final private char value;
 
     /**
-     * Create a <code>BlobSASPermissions</code>.
+     * Create a {@code BlobSASPermissions}.
      *
      * @param c
-     *      The <code>char</code> which represents this permission.
+     *      The {@code char} which represents this permission.
      */
     private BlobSASPermission(char c) {
         this.value = c;
@@ -64,7 +63,7 @@ public enum BlobSASPermission {
      * @param permissions
      *            The permissions to convert to a {@code String}.
      *
-     * @return A {@code String} which represents the <code>BlobSASPermission</code>.
+     * @return A {@code String} which represents the {@code BlobSASPermission}.
      */
     static String permissionsToString(EnumSet<BlobSASPermission> permissions) {
         if (permissions == null) {
@@ -101,8 +100,9 @@ public enum BlobSASPermission {
      * Creates an {@link EnumSet<BlobSASPermission>} from the specified permissions string.
      *
      * @param permString
-     *            A {@code String} which represents the <code>BlobSASPermission</code>.
-     * @return A {@link EnumSet<BlobSASPermission>} generated from the given {@code String}.
+     *      A {@code String} which represents the {@code BlobSASPermission}.
+     * @return
+     *      A {@link EnumSet<BlobSASPermission>} generated from the given {@code String}.
      */
     static EnumSet<BlobSASPermission> permissionsFromString(String permString) {
         EnumSet<BlobSASPermission> permissions = EnumSet.noneOf(BlobSASPermission.class);
@@ -116,7 +116,6 @@ public enum BlobSASPermission {
                     invalidCharacter = false;
                     break;
                 }
-
             }
 
             if (invalidCharacter) {

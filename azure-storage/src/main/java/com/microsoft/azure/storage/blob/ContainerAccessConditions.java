@@ -25,8 +25,9 @@ public final class ContainerAccessConditions {
 
     /**
      * Creates a {@link ContainerAccessConditions} object.
+     *
      * @param httpAccessConditions
-     *      A {@link HttpAccessConditions} object.
+     *      An {@link HttpAccessConditions} object.
      * @param leaseID
      *      A {@LeaseAccessConditions} object.
      */

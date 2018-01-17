@@ -21,7 +21,6 @@ import java.util.Date;
  * RESERVED FOR INTERNAL USE
  * Common class for service and account SAS
  */
-// TODO look at how permissions work for derived classes
 abstract class BaseSAS {
     final String version;
 
@@ -35,7 +34,11 @@ abstract class BaseSAS {
 
     final IPRange ipRange;
 
-    BaseSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime, String permissions, IPRange ipRange) {
+    BaseSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime, String permissions,
+            IPRange ipRange) {
+        if (expiryTime == null || permissions == null) {
+            throw new IllegalArgumentException("ExpiryTime and Permissions cannot be null.");
+        }
         if (Utility.isNullOrEmpty(version)) {
             this.version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
         }
@@ -59,5 +62,6 @@ abstract class BaseSAS {
         return ipRangeString;
     }
 
-    public abstract SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials) throws InvalidKeyException;
+    public abstract SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials)
+            throws InvalidKeyException;
 }
