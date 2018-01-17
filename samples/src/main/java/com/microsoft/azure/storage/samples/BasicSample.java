@@ -35,6 +35,7 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.file.Path;
@@ -87,7 +88,8 @@ public class BasicSample {
         HttpPipeline pipeline = getPipeline(accountName, accountKey);
 
         // Objects representing the Azure Storage resources we're sending requests to.
-        final ServiceURL serviceURL = new ServiceURL("http://" + accountName + ".blob.core.windows.net", pipeline);
+        final ServiceURL serviceURL = new ServiceURL(new URL("http://" + accountName + ".blob.core.windows.net"),
+                pipeline);
         final ContainerURL containerURL = serviceURL.createContainerURL("javasdktest");
         final BlockBlobURL blobURL = containerURL.createBlockBlobURL("testBlob");
 

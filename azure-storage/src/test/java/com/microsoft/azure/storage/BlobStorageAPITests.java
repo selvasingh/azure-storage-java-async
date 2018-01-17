@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
+import java.nio.channels.Pipe;
 import java.security.InvalidKeyException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -249,6 +250,25 @@ public class BlobStorageAPITests {
             PageBlobURL copyPbu = cu.createPageBlobURL("copyPage");
             CopyStatusType status = copyPbu.startIncrementalCopyAsync(pbu.toURL(), pageSnap, null).blockingGet().headers().copyStatus();
             Assert.assertEquals(CopyStatusType.PENDING, status);
+
+            // ACCOUNT----------------------------
+            StorageServiceProperties props = new StorageServiceProperties();
+            Logging logging = new Logging().withRead(true).withVersion("1.0").
+                    withRetentionPolicy(new RetentionPolicy().withDays(1).withEnabled(true));
+            props = props.withLogging(logging);
+            su.setPropertiesAsync(props).blockingGet();
+
+            StorageServiceProperties receivedProps = su.getPropertiesAsync().blockingGet().body();
+            Assert.assertEquals(receivedProps.logging().read(), props.logging().read());
+
+            su.setPropertiesAsync(props.withLogging(logging.withRead(false).withRetentionPolicy(new RetentionPolicy()
+                    .withEnabled(false)))).blockingGet();
+
+            String secondaryAccount = System.getenv("ACCOUNT_NAME") + "-secondary";
+            pipeline = StorageURL.CreatePipeline(creds, new PipelineOptions());
+            ServiceURL secondary = new ServiceURL(new URL("http://" + secondaryAccount + ".blob.core.windows.net"),
+                    pipeline);
+            secondary.getStats().blockingGet();
         }
         catch (Exception e) {
             e.printStackTrace();

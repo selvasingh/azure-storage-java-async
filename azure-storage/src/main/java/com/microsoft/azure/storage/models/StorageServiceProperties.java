@@ -23,21 +23,21 @@ public class StorageServiceProperties {
     /**
      * Azure Analytics Logging settings.
      */
-    @JsonProperty(value = "Logging", required = true)
+    @JsonProperty(value = "Logging")
     private Logging logging;
 
     /**
      * A summary of request statistics grouped by API in hourly aggregates for
      * blobs.
      */
-    @JsonProperty(value = "HourMetrics", required = true)
+    @JsonProperty(value = "HourMetrics")
     private Metrics hourMetrics;
 
     /**
      * a summary of request statistics grouped by API in minute aggregates for
      * blobs.
      */
-    @JsonProperty(value = "MinuteMetrics", required = true)
+    @JsonProperty(value = "MinuteMetrics")
     private Metrics minuteMetrics;
 
     /**
@@ -51,7 +51,7 @@ public class StorageServiceProperties {
      * incoming request's version is not specified. Possible values include
      * version 2008-10-27 and all more recent versions.
      */
-    @JsonProperty(value = "DefaultServiceVersion", required = true)
+    @JsonProperty(value = "DefaultServiceVersion")
     private String defaultServiceVersion;
 
     /**

@@ -14,9 +14,7 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import com.microsoft.azure.storage.models.ListContainersIncludeType;
-import com.microsoft.azure.storage.models.ListContainersResponse;
-import com.microsoft.azure.storage.models.ServiceListContainersHeaders;
+import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
@@ -37,6 +35,23 @@ public final class ServiceURL extends StorageURL {
         try {
             return new ContainerURL(super.appendToURLPath(new URL(super.storageClient.url()), containerName),
                     super.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
+    }
+
+    /**
+     * Creates a new {@link ServiceURL} with the given pipeline.
+     *
+     * @param pipeline
+     *      An {@link HttpPipeline} object to set.
+     * @return
+     *      A {@link ServiceURL} object with the given pipeline.
+     */
+    public ServiceURL withPipeline(HttpPipeline pipeline) {
+        try {
+            return new ServiceURL(new URL(super.storageClient.url()), pipeline);
         } catch (MalformedURLException e) {
             // TODO: remove
         }
@@ -74,19 +89,42 @@ public final class ServiceURL extends StorageURL {
     }
 
     /**
-     * Creates a new {@link ServiceURL} with the given pipeline.
+     * GetProperties gets the properties of a storage account’s Blob service. For more information, see:
+     * https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties.
      *
-     * @param pipeline
-     *      An {@link HttpPipeline} object to set.
      * @return
-     *      A {@link ServiceURL} object with the given pipeline.
+     *      The {@link Single&lt;RestResponse&lt;ServiceGetPropertiesHeaders, StorageServiceProperties&gt;&gt;} object
+     *      if successful.
      */
-    public ServiceURL withPipeline(HttpPipeline pipeline) {
-        try {
-            return new ServiceURL(new URL(super.storageClient.url()), pipeline);
-        } catch (MalformedURLException e) {
-            // TODO: remove
-        }
-        return null;
+    public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getPropertiesAsync() {
+        return this.storageClient.services().getPropertiesWithRestResponseAsync(null, null);
+    }
+
+    /**
+     * SetProperties sets properties for a storage account's Blob service endpoint. For more information, see:
+     * https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties.
+     *
+     * @param properties
+     *      A {@link StorageServiceProperties} object containing the configurations for the service.
+     * @return
+     *      A {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesAsync(
+            StorageServiceProperties properties) {
+        return this.storageClient.services().setPropertiesWithRestResponseAsync(properties, null,
+                null);
+    }
+
+    /**
+     * GetStats  retrieves statistics related to replication for the Blob service. It is only available on the secondary
+     * location endpoint when read-access geo-redundant replication is enabled for the storage account. For more
+     * information, see: https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats.
+     *
+     * @return
+     *      A {@link Single&lt;RestResponse&lt;ServiceGetStatsHeaders, StorageServiceStats&gt;&gt;} object if
+     *      successful.
+     */
+    public Single<RestResponse<ServiceGetStatsHeaders, StorageServiceStats>> getStats() {
+        return this.storageClient.services().getStatsWithRestResponseAsync(null, null);
     }
 }
