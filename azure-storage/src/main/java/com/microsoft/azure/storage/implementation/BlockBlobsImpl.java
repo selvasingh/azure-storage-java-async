@@ -78,7 +78,7 @@ public class BlockBlobsImpl implements BlockBlobs {
     interface BlockBlobsService {
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
-        Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlock(@HostParam("url") String url, @QueryParam("blockid") String blockId, @BodyParam("application/xml; charset=utf-8") AsyncInputStream body, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+        Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlock(@HostParam("url") String url, @QueryParam("blockid") String blockId, @BodyParam("application/octet-stream") AsyncInputStream body, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})

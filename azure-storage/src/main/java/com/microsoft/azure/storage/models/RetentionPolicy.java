@@ -28,8 +28,8 @@ public class RetentionPolicy {
      * Indicates the number of days that metrics or logging data should be
      * retained. All data older than this value will be deleted.
      */
-    @JsonProperty(value = "Days", required = true)
-    private int days;
+    @JsonProperty(value = "Days")
+    private Integer days;
 
     /**
      * Get the enabled value.
@@ -56,7 +56,7 @@ public class RetentionPolicy {
      *
      * @return the days value
      */
-    public int days() {
+    public Integer days() {
         return this.days;
     }
 
@@ -66,7 +66,7 @@ public class RetentionPolicy {
      * @param days the days value to set
      * @return the RetentionPolicy object itself.
      */
-    public RetentionPolicy withDays(int days) {
+    public RetentionPolicy withDays(Integer days) {
         this.days = days;
         return this;
     }
