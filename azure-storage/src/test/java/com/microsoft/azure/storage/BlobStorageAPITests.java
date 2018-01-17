@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
+import java.nio.channels.Pipe;
 import java.security.InvalidKeyException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -219,8 +220,14 @@ public class BlobStorageAPITests {
             StorageServiceProperties receivedProps = su.getPropertiesAsync().blockingGet().body();
             Assert.assertEquals(receivedProps.logging().read(), props.logging().read());
 
-            su.setPropertiesAsync(props.withLogging(logging.withRead(false).withRetentionPolicy(new RetentionPolicy().withEnabled(false))));
-            // TODO: Setup a secondary
+            su.setPropertiesAsync(props.withLogging(logging.withRead(false).withRetentionPolicy(new RetentionPolicy()
+                    .withEnabled(false)))).blockingGet();
+
+            String secondaryAccount = System.getenv("ACCOUNT_NAME") + "-secondary";
+            pipeline = StorageURL.CreatePipeline(creds, new PipelineOptions());
+            ServiceURL secondary = new ServiceURL(new URL("http://" + secondaryAccount + ".blob.core.windows.net"),
+                    pipeline);
+            secondary.getStats().blockingGet();
         }
         catch (Exception e) {
             e.printStackTrace();
