@@ -209,6 +209,18 @@ public class BlobStorageAPITests {
             dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
+            // ACCOUNT----------------------------
+            StorageServiceProperties props = new StorageServiceProperties();
+            Logging logging = new Logging().withRead(true).withVersion("1.0").
+                    withRetentionPolicy(new RetentionPolicy().withDays(1).withEnabled(true));
+            props = props.withLogging(logging);
+            su.setPropertiesAsync(props).blockingGet();
+
+            StorageServiceProperties receivedProps = su.getPropertiesAsync().blockingGet().body();
+            Assert.assertEquals(receivedProps.logging().read(), props.logging().read());
+
+            su.setPropertiesAsync(props.withLogging(logging.withRead(false).withRetentionPolicy(new RetentionPolicy().withEnabled(false))));
+            // TODO: Setup a secondary
         }
         catch (Exception e) {
             e.printStackTrace();

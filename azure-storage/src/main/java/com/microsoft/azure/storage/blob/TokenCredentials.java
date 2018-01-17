@@ -63,19 +63,13 @@ public class TokenCredentials  implements ICredentials{
         }
 
         public Single<HttpResponse> sendAsync(HttpRequest request) {
-            try {
-                URL url = new URL(request.url());
-                if (url.getProtocol() != "https") {
-                    throw new IllegalArgumentException(
-                            "Token credentials require a URL using the https protocol scheme");
-                }
-                request.withHeader(Constants.HeaderConstants.AUTHORIZATION, "Bearer " +
-                        this.factory.getToken());
-                return this.requestPolicy.sendAsync(request);
-            } catch (MalformedURLException e) {
-                e.printStackTrace(); // TODO: remove
+            if (request.url().getProtocol() != "https") {
+                throw new IllegalArgumentException(
+                        "Token credentials require a URL using the https protocol scheme");
             }
-            return null;
+            request.withHeader(Constants.HeaderConstants.AUTHORIZATION, "Bearer " +
+                    this.factory.getToken());
+            return this.requestPolicy.sendAsync(request);
         }
     }
 }
