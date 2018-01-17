@@ -3141,7 +3141,6 @@ parameters:
     type: string
     in: path
     x-ms-skip-url-encoding: true
-    x-ms-parameter-location: method
   ApiVersionParameter:
     name: x-ms-version
     x-ms-client-name: version

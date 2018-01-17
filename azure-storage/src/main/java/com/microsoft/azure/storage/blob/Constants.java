@@ -24,27 +24,27 @@ public final class Constants {
     public static class AnalyticsConstants {
 
         /**
-         * The XML element for the CORS Rule AllowedHeaders
+         * The XML element for the CORS Rule AllowedHeaders.
          */
         public static final String ALLOWED_HEADERS_ELEMENT = "AllowedHeaders";
 
         /**
-         * The XML element for the CORS Rule AllowedMethods
+         * The XML element for the CORS Rule AllowedMethods.
          */
         public static final String ALLOWED_METHODS_ELEMENT = "AllowedMethods";
 
         /**
-         * The XML element for the CORS Rule AllowedOrigins
+         * The XML element for the CORS Rule AllowedOrigins.
          */
         public static final String ALLOWED_ORIGINS_ELEMENT = "AllowedOrigins";
 
         /**
-         * The XML element for the CORS
+         * The XML element for the CORS.
          */
         public static final String CORS_ELEMENT = "Cors";
 
         /**
-         * The XML element for the CORS Rules
+         * The XML element for the CORS Rules.
          */
         public static final String CORS_RULE_ELEMENT = "CorsRule";
 
@@ -69,12 +69,12 @@ public final class Constants {
         public static final String ENABLED_ELEMENT = "Enabled";
 
         /**
-         * The XML element for the CORS Rule ExposedHeaders
+         * The XML element for the CORS Rule ExposedHeaders.
          */
         public static final String EXPOSED_HEADERS_ELEMENT = "ExposedHeaders";
 
         /**
-         * The XML element for the Hour Metrics
+         * The XML element for the Hour Metrics.
          */
         public static final String HOUR_METRICS_ELEMENT = "HourMetrics";
 
@@ -89,12 +89,12 @@ public final class Constants {
         public static final String LOGS_CONTAINER = "$logs";
 
         /**
-         * The XML element for the Logging
+         * The XML element for the Logging.
          */
         public static final String LOGGING_ELEMENT = "Logging";
 
         /**
-         * The XML element for the CORS Rule MaxAgeInSeconds
+         * The XML element for the CORS Rule MaxAgeInSeconds.
          */
         public static final String MAX_AGE_IN_SECONDS_ELEMENT = "MaxAgeInSeconds";
 
@@ -184,7 +184,7 @@ public final class Constants {
         public static final String METRICS_MINUTE_SECONDARY_TRANSACTIONS_QUEUE = "$MetricsMinuteSecondaryTransactionsQueue";
 
         /**
-         * The XML element for the Minute Metrics
+         * The XML element for the Minute Metrics.
          */
         public static final String MINUTE_METRICS_ELEMENT = "MinuteMetrics";
 
@@ -199,17 +199,17 @@ public final class Constants {
         public static final String RETENTION_POLICY_ELEMENT = "RetentionPolicy";
 
         /**
-         * The XML element for the StorageServiceProperties
+         * The XML element for the StorageServiceProperties.
          */
         public static final String STORAGE_SERVICE_PROPERTIES_ELEMENT = "StorageServiceProperties";
 
         /**
-         * The XML element for the StorageServiceStats
+         * The XML element for the StorageServiceStats.
          */
         public static final String STORAGE_SERVICE_STATS = "StorageServiceStats";
 
         /**
-         * The XML element for the Version
+         * The XML element for the Version.
          */
         public static final String VERSION_ELEMENT = "Version";
 
@@ -218,72 +218,6 @@ public final class Constants {
          */
         public static final String WRITE_ELEMENT = "Write";
 
-    }
-
-    /**
-     * Defines constants for client encryption.
-     */
-    public static class EncryptionConstants
-    {
-        /**
-         * Metadata header to store encryption materials.
-         */
-        public static final String BLOB_ENCRYPTION_DATA = "encryptiondata";
-
-        /**
-         * Constant for the encryption protocol.
-         */
-        public static final String ENCRYPTION_PROTOCOL_V1 = "1.0";
-
-        /**
-         * Encryption metadata key for key wrapping IV.
-         */
-        public static final String KEY_WRAPPING_IV = "KeyWrappingIV";
-
-        /**
-         * Property name to store the encryption metadata.
-         */
-        public static final String TABLE_ENCRYPTION_KEY_DETAILS = "_ClientEncryptionMetadata1";
-
-        /**
-         * Additional property name to store the encryption metadata.
-         */
-        public static final String TABLE_ENCRYPTION_PROPERTY_DETAILS = "_ClientEncryptionMetadata2";
-
-        /**
-         * Constant for the key for the encryption mode.
-         */
-        public static final String ENCRYPTION_MODE = "EncryptionMode";
-
-        /**
-         * FullBlob string constant for the encryption mode.
-         */
-        public static final String FULL_BLOB = "FullBlob";
-
-        /**
-         * Constant for the key for the wrapped CEK.
-         */
-        public static final String WRAPPED_CONTENT_KEY = "WrappedContentKey";
-
-        /**
-         * Constant for the key for the encryption agent.
-         */
-        public static final String ENCRYPTION_AGENT = "EncryptionAgent";
-
-        /**
-         * Constant for the key for the IV.
-         */
-        public static final String CONTENT_ENCRYPTION_IV = "ContentEncryptionIV";
-
-        /**
-         * Constant for the key wrapping metadata.
-         */
-        public static final String KEY_WRAPPING_METADATA = "KeyWrappingMetadata";
-
-        /**
-         * Constant for the key for the encryption library in the key wrapping metadata.
-         */
-        public static final String ENCRYPTION_LIBRARY = "EncryptionLibrary";
     }
 
     /**
@@ -446,12 +380,6 @@ public final class Constants {
         public static final String ETAG = "ETag";
 
         /**
-         * An unused HTTP code used internally to indicate a non-http related failure when constructing
-         * {@link StorageException} objects
-         */
-        public static final int HTTP_UNUSED_306 = 306;
-
-        /**
          * The blob append position equal header.
          */
         public static final String IF_APPEND_POSITION_EQUAL_HEADER = PREFIX_FOR_STORAGE_HEADER + "blob-condition-appendpos";
@@ -552,7 +480,7 @@ public final class Constants {
         public static final String PREFIX_FOR_STORAGE_PROPERTIES = "x-ms-prop-";
 
         /**
-         * The header that specifies the proposed lease ID for a leasing operation
+         * The header that specifies the proposed lease ID for a leasing operation.
          */
         public static final String PROPOSED_LEASE_ID_HEADER = PREFIX_FOR_STORAGE_HEADER + "proposed-lease-id";
 
@@ -577,17 +505,17 @@ public final class Constants {
         public static final String REQUEST_ID_HEADER = PREFIX_FOR_STORAGE_HEADER + "request-id";
 
         /**
-         * The header field value received that indicates which server was accessed
+         * The header field value received that indicates which server was accessed.
          */
         public static final String SERVER = "Server";
 
         /**
-         * The header that specifies whether a resource is fully encrypted server-side
+         * The header that specifies whether a resource is fully encrypted server-side.
          */
         public static final String SERVER_ENCRYPTED = PREFIX_FOR_STORAGE_HEADER + "server-encrypted";
 
         /**
-         * The header that acknowledges data used for a write operation is encrypted server-side
+         * The header that acknowledges data used for a write operation is encrypted server-side.
          */
         public static final String SERVER_REQUEST_ENCRYPTED = PREFIX_FOR_STORAGE_HEADER + "request-server-encrypted";
 
@@ -665,206 +593,6 @@ public final class Constants {
     }
 
     /**
-     * Defines constants for use with query strings.
-     */
-    public static class QueryConstants {
-        /**
-         * The query component for the api version.
-         */
-        public static final String API_VERSION = "api-version";
-
-        /**
-         * Query component for SAS cache control.
-         */
-        public static final String CACHE_CONTROL = "rscc";
-
-        /**
-         * Query component for SAS content type.
-         */
-        public static final String CONTENT_TYPE = "rsct";
-
-        /**
-         * Query component for SAS content encoding.
-         */
-        public static final String CONTENT_ENCODING = "rsce";
-
-        /**
-         * Query component for SAS content language.
-         */
-        public static final String CONTENT_LANGUAGE = "rscl";
-
-        /**
-         * Query component for SAS content disposition.
-         */
-        public static final String CONTENT_DISPOSITION = "rscd";
-
-        /**
-         * Query component for the operation (component) to access.
-         */
-        public static final String COMPONENT = "comp";
-
-        /**
-         * Query component for copy.
-         */
-        public static final String COPY = "copy";
-
-        /**
-         * Query component for the copy ID.
-         */
-        public static final String COPY_ID = "copyid";
-
-        /**
-         * The query component for the SAS end partition key.
-         */
-        public static final String END_PARTITION_KEY = "epk";
-
-        /**
-         * The query component for the SAS end row key.
-         */
-        public static final String END_ROW_KEY = "erk";
-
-        /**
-         * Query component value for list.
-         */
-        public static final String LIST = "list";
-
-        /**
-         * Query component value for properties.
-         */
-        public static final String PROPERTIES = "properties";
-
-        /**
-         * Query component for resource type.
-         */
-        public static final String RESOURCETYPE = "restype";
-
-        /**
-         * The query component for the SAS table name.
-         */
-        public static final String SAS_TABLE_NAME = "tn";
-
-        /**
-         * The query component for the SAS signature.
-         */
-        public static final String SIGNATURE = "sig";
-
-        /**
-         * The query component for the signed SAS expiry time.
-         */
-        public static final String SIGNED_EXPIRY = "se";
-
-        /**
-         * The query component for the signed SAS identifier.
-         */
-        public static final String SIGNED_IDENTIFIER = "si";
-
-        /**
-         * The query component for the signed SAS IP address.
-         */
-        public static final String SIGNED_IP = "sip";
-
-        /**
-         * The query component for the signing SAS key.
-         */
-        public static final String SIGNED_KEY = "sk";
-
-        /**
-         * The query component for the signed SAS permissions.
-         */
-        public static final String SIGNED_PERMISSIONS = "sp";
-
-        /**
-         * The query component for the signed SAS Internet protocols.
-         */
-        public static final String SIGNED_PROTOCOLS = "spr";
-
-        /**
-         * The query component for the signed SAS resource.
-         */
-        public static final String SIGNED_RESOURCE = "sr";
-
-        /**
-         * The query component for the signed SAS resource type.
-         */
-        public static final String SIGNED_RESOURCE_TYPE = "srt";
-
-        /**
-         * The query component for the signed SAS service.
-         */
-        public static final String SIGNED_SERVICE = "ss";
-
-        /**
-         * The query component for the signed SAS start time.
-         */
-        public static final String SIGNED_START = "st";
-
-        /**
-         * The query component for the signed SAS version.
-         */
-        public static final String SIGNED_VERSION = "sv";
-
-        /**
-         * The query component for snapshot time.
-         */
-        public static final String SNAPSHOT = "snapshot";
-
-        /**
-         * The query component for snapshot time.
-         */
-        public static final String SHARE_SNAPSHOT = "sharesnapshot";
-
-        /**
-         * The query component for the SAS start partition key.
-         */
-        public static final String START_PARTITION_KEY = "spk";
-
-        /**
-         * The query component for the SAS start row key.
-         */
-        public static final String START_ROW_KEY = "srk";
-
-        /**
-         * The query component for stats.
-         */
-        public static final String STATS = "stats";
-
-        /**
-         * The query component for delimiter.
-         */
-        public static final String DELIMITER = "delimiter";
-
-        /**
-         * The query component for include.
-         */
-        public static final String INCLUDE = "include";
-
-        /**
-         * The query component for marker.
-         */
-        public static final String MARKER = "marker";
-
-        /**
-         * The query component for max results.
-         */
-        public static final String MAX_RESULTS = "maxresults";
-
-        /**
-         * The query component for metadata.
-         */
-        public static final String METADATA = "metadata";
-
-        /**
-         * The query component for prefix.
-         */
-        public static final String PREFIX = "prefix";
-
-        /**
-         * The query component for acl.
-         */
-        public static final String ACL = "acl";
-    }
-
-    /**
      * The master Microsoft Azure Storage header prefix.
      */
     public static final String PREFIX_FOR_STORAGE_HEADER = "x-ms-";
@@ -930,7 +658,7 @@ public final class Constants {
     public static final String COPY_PROGRESS_ELEMENT = "CopyProgress";
 
     /**
-     * XML element for the copy source .
+     * XML element for the copy source.
      */
     public static final String COPY_SOURCE_ELEMENT = "CopySource";
 
@@ -955,7 +683,7 @@ public final class Constants {
     public static final String COPY_DESTINATION_SNAPSHOT_ID_ELEMENT = "CopyDestinationSnapshot";
 
     /**
-     * Default read timeout. 5 min * 60 seconds * 1000 ms
+     * Default read timeout. 5 min * 60 seconds * 1000 ms.
      */
     public static final int DEFAULT_READ_TIMEOUT = 5 * 60 * 1000;
 
@@ -1183,27 +911,6 @@ public final class Constants {
      * The minimum size of a block for the large block upload strategy to be employed.
      */
     public static int MIN_LARGE_BLOCK_SIZE =  (4 * Constants.MB) + 1;
-
-    /**
-     * The default read buffer size used by the SubStream class.
-     */
-    public static final int SUBSTREAM_BUFFER_SIZE = 4 * Constants.MB;
-
-    /**
-     * The default write size, in bytes, used by {@link BlobOutputStream} or {@link FileOutputStream}.
-     */
-    public static final int DEFAULT_STREAM_WRITE_IN_BYTES =  4 * Constants.MB;
-
-    /**
-     * The default minimum read size, in bytes, for a {@link BlobInputStream} or {@link FileInputStream}.
-     */
-    public static final int DEFAULT_MINIMUM_READ_SIZE_IN_BYTES = 4 * Constants.MB;
-
-    /**
-     * The maximum size, in bytes, of a given stream mark operation.
-     */
-    // Note if BlobConstants.MAX_SINGLE_UPLOAD_BLOB_SIZE_IN_BYTES is updated then this needs to be as well.
-    public static final int MAX_MARK_LENGTH = 256 * MB;
 
     /**
      * XML element for maximum results.

@@ -14,19 +14,17 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import org.apache.commons.lang3.StringUtils;
+import com.microsoft.rest.v2.http.UrlBuilder;
+import com.sun.javafx.fxml.builder.URLBuilder;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Date;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
-
-import static com.microsoft.azure.storage.blob.Utility.getGMTTime;
-import static com.microsoft.azure.storage.blob.Utility.getGMTTimeSnapshot;
 
 /**
  * A BlobURLParts object represents the components that make up an Azure Storage Container/Blob URL. You parse an
- * existing URL into its parts by calling NewBlobURLParts(). You construct a URL from parts by calling URL().
+ * existing URL into its parts by calling NewBlobURLParts(). You construct a URL from parts by calling toURL().
  * NOTE: Changing any SAS-related field requires computing a new SAS signature.
  */
 public final class BlobURLParts {
@@ -45,22 +43,23 @@ public final class BlobURLParts {
     private Map<String, String[]> unparsedParameters;
 
     /**
-     * Creates a {@link BlobURLParts} object
+     * Creates a {@link BlobURLParts} object.
+     *
      * @param scheme
-     *      A {@code String} representing the scheme. Ex: "https://"
+     *      A {@code String} representing the scheme. Ex: "https://".
      * @param host
-     *      A {@code String} representing the host. Ex: "account.blob.core.windows.net"
+     *      A {@code String} representing the host. Ex: "account.blob.core.windows.net".
      * @param containerName
-     *      A {@code String} representing the container name or {@code null}
+     *      A {@code String} representing the container name or {@code null}.
      * @param blobName
-     *      A {@code String} representing the blob name or {@code null}
+     *      A {@code String} representing the blob name or {@code null}.
      * @param snapshot
-     *      A {@code java.util.Date} representing the snapshot time or {@code null}
+     *      A {@code java.util.Date} representing the snapshot time or {@code null}.
      * @param sasQueryParameters
-     *      A {@link SASQueryParameters} representing the SAS query parameters or {@code null}
+     *      A {@link SASQueryParameters} representing the SAS query parameters or {@code null}.
      * @param unparsedParameters
-     *      A {@code Map<String, String[]} representing query parameter vey value pairs aside from SAS parameters and
-     *      snapshot time or {@code null}
+     *      A {@code Map&lt;String, String[]&gt;} representing query parameter vey value pairs aside from SAS parameters
+     *      and snapshot time or {@code null}.
      */
     public BlobURLParts(String scheme, String host, String containerName, String blobName, String snapshot,
                         SASQueryParameters sasQueryParameters, Map<String, String[]> unparsedParameters) {
@@ -75,7 +74,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code String} representing the scheme. Ex: "https"
+     *      A {@code String} representing the scheme. Ex: "https".
      */
     public String getScheme() {
         return scheme;
@@ -83,7 +82,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code String} representing the host. Ex: "account.blob.core.windows.net"
+     *      A {@code String} representing the host. Ex: "account.blob.core.windows.net".
      */
     public String getHost() {
         return host;
@@ -91,7 +90,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code String} representing the container name or {@code null}
+     *      A {@code String} representing the container name or {@code null}.
      */
     public String getContainerName() {
         return containerName;
@@ -99,7 +98,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code String} representing the blob name or {@code null}
+     *      A {@code String} representing the blob name or {@code null}.
      */
     public String getBlobName() {
         return blobName;
@@ -107,7 +106,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code java.util.Date} representing the snapshot time or {@code null}
+     *      A {@code java.util.Date} representing the snapshot time or {@code null}.
      */
     public String getSnapshot() {
         return snapshot;
@@ -115,7 +114,7 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@link SASQueryParameters} representing the SAS query parameters or {@code null}
+     *      A {@link SASQueryParameters} representing the SAS query parameters or {@code null}.
      */
     public SASQueryParameters getSasQueryParameters() {
         return sasQueryParameters;
@@ -123,80 +122,47 @@ public final class BlobURLParts {
 
     /**
      * @return
-     *      A {@code Map<String, String[]} representing query parameter vey value pairs aside from SAS parameters and
-     *      snapshot time or {@code null}
+     *      A {@code Map&lt;String, String[]&gt;} representing query parameter vey value pairs aside from SAS parameters
+     *      and snapshot time or {@code null}.
      */
     public Map<String, String[]> getUnparsedParameters() {
         return unparsedParameters;
     }
 
     /**
-     * Converts the blob URL parts to {@code String} representing a URL
+     * Converts the blob URL parts to {@code String} representing a URL.
      * @return
-     *      A {@code String} representing a URL
+     *      A {@code java.net.URL} to the blob resource composed of all the elements in the object.
      */
-    public String toURL() throws UnsupportedEncodingException {
-        StringBuilder urlBuilder = new StringBuilder();
+    public URL toURL() throws UnsupportedEncodingException, MalformedURLException {
+        UrlBuilder url = new UrlBuilder();
+        url.withScheme(this.scheme);
+        url.withHost(this.host);
 
-        if(this.scheme != null) {
-            urlBuilder.append(scheme);
-            urlBuilder.append("://");
-        }
-        if(this.host != null) {
-            urlBuilder.append(host);
-        }
+        StringBuilder path = new StringBuilder();
         if (this.containerName != null) {
-            urlBuilder.append('/' + this.containerName);
+            path.append(this.containerName);
             if (this.blobName != null) {
-                urlBuilder.append('/' + this.blobName);
+                path.append('/');
+                path.append(this.blobName);
             }
         }
+        url.withPath(path.toString());
 
-        boolean isFirst = true;
-
-        if(this.unparsedParameters != null) {
-            for (Map.Entry<String, String[]> entry : this.unparsedParameters.entrySet()) {
-                if (isFirst) {
-                    urlBuilder.append('?');
-                    isFirst = false;
-                } else {
-                    urlBuilder.append('&');
-                }
-
-                urlBuilder.append(entry.getKey() + '=' + StringUtils.join(entry.getValue(), ','));
-            }
+        for (Map.Entry<String, String[]> entry : this.unparsedParameters.entrySet()) {
+            url.addQueryParameter(entry.getKey(), Utility.join(entry.getValue(), ','));
         }
 
         if (this.snapshot != null) {
-            if (isFirst) {
-                urlBuilder.append('?');
-                isFirst = false;
-            }
-            else {
-                urlBuilder.append('&');
-            }
-
-            //urlBuilder.append("snapshot=" + URLEncoder.encode(getGMTTimeSnapshot(this.snapshot), "UTF-8"));
-            urlBuilder.append("snapshot=" + this.snapshot); // The snapshot should only be what is returned by the service and so formatted correctly
+            url.addQueryParameter("snapshot", this.snapshot);
         }
 
-        String sasEncoding = this.sasQueryParameters.encode();
-        if (!Utility.isNullOrEmpty(sasEncoding)) {
-            if (isFirst) {
-                urlBuilder.append('?');
-                isFirst = false;
-            }
-            else {
-                urlBuilder.append('&');
-            }
-
-            urlBuilder.append(sasEncoding);
-        }
-
-        return urlBuilder.toString();
+        String query = url.query() != null ?
+                url.query() + this.sasQueryParameters.encode() : this.sasQueryParameters.encode();
+        url.withQuery(query);
+        return new URL(url.toString()); // TODO: replace with toURL when new autorest publishes
     }
 
-    // TODO: Check that it is ok to remove final and make public setters
     public void setScheme(String scheme) {
         this.scheme = scheme;
     }

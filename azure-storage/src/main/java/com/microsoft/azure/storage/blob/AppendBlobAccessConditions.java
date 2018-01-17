@@ -18,27 +18,34 @@ package com.microsoft.azure.storage.blob;
  * Access conditions specific to append blobs
  */
 public final class AppendBlobAccessConditions {
+
     private static AppendBlobAccessConditions defaultAppendBlobAccessConditions;
+
     private final Integer ifAppendPositionEquals;
 
     private final Integer ifMaxSizeLessThanOrEqual;
 
     /**
      * Creates a {@link AppendBlobAccessConditions} object
+     *
      * @param ifAppendPositionEquals
-     *      ensures that the AppendBlock operation succeeds only if the append position is equal to a value.
+     *      Ensures that the AppendBlock operation succeeds only if the append position is equal to a value.
      * @param ifMaxSizeLessThanOrEqual
-     *      ensures that the AppendBlock operation succeeds only if the append blob's size is less than or
+     *      Ensures that the AppendBlock operation succeeds only if the append blob's size is less than or
      *      equal to a value.
      */
     public AppendBlobAccessConditions(Integer ifAppendPositionEquals, Integer ifMaxSizeLessThanOrEqual) {
+        if ((ifAppendPositionEquals != null && ifAppendPositionEquals < -1) ||
+                (ifMaxSizeLessThanOrEqual != null && ifMaxSizeLessThanOrEqual < -1)) {
+            throw new IllegalArgumentException("Append blob access conditions can't be less than -1.");
+        }
         this.ifAppendPositionEquals = ifAppendPositionEquals;
         this.ifMaxSizeLessThanOrEqual = ifMaxSizeLessThanOrEqual;
     }
 
     /**
      * @return
-     *      An <code>Integer</code> for ensuring that the AppendBlock operation succeeds only if the append position
+     *      An {@code Integer} for ensuring that the AppendBlock operation succeeds only if the append position
      *      is equal to a value.
      */
     public Integer getIfAppendPositionEquals() {
@@ -47,7 +54,7 @@ public final class AppendBlobAccessConditions {
 
     /**
      * @return
-     *      An <code>Integer</code> for ensuring that the AppendBlock operation succeeds only if the append blob's size
+     *      An {@code Integer} for ensuring that the AppendBlock operation succeeds only if the append blob's size
      *      is less than or equal to a value.
      */
     public Integer getIfMaxSizeLessThanOrEqual() {
@@ -56,7 +63,8 @@ public final class AppendBlobAccessConditions {
 
     public static AppendBlobAccessConditions getDefault() {
         if (defaultAppendBlobAccessConditions == null) {
-            defaultAppendBlobAccessConditions = new AppendBlobAccessConditions(null, null);
+            defaultAppendBlobAccessConditions = new AppendBlobAccessConditions(null,
+                    null);
         }
 
         return defaultAppendBlobAccessConditions;

@@ -14,58 +14,117 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import com.microsoft.azure.storage.implementation.StorageClientImpl;
-import com.microsoft.azure.storage.models.ListContainersIncludeType;
-import com.microsoft.azure.storage.models.ListContainersResponse;
-import com.microsoft.azure.storage.models.ServiceListContainersHeaders;
+import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Single;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Represents a URL to an Azure Storage Blob Service
  */
 public final class ServiceURL extends StorageURL {
 
-    public ServiceURL(String url, HttpPipeline pipeline) {
+    public ServiceURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
     }
 
     public ContainerURL createContainerURL(String containerName) {
-        return new ContainerURL(super.url + "/" + containerName, this.storageClient.httpPipeline());
+        try {
+            return new ContainerURL(super.appendToURLPath(new URL(super.storageClient.url()), containerName),
+                    super.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
+    }
+
+    /**
+     * Creates a new {@link ServiceURL} with the given pipeline.
+     *
+     * @param pipeline
+     *      An {@link HttpPipeline} object to set.
+     * @return
+     *      A {@link ServiceURL} object with the given pipeline.
+     */
+    public ServiceURL withPipeline(HttpPipeline pipeline) {
+        try {
+            return new ServiceURL(new URL(super.storageClient.url()), pipeline);
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
     }
 
     /**
      * ListContainers returns a single segment of containers starting from the specified Marker.
      * Use an empty marker to start enumeration from the beginning. Container names are returned in lexicographic order.
      * After getting a segment, process it, and then call ListContainers again (passing the the previously-returned
-     * Marker) to get the next segment.
-     * For more information, see https://docs.microsoft.com/rest/api/storageservices/list-containers2.
+     * Marker) to get the next segment. For more information, see
+     * https://docs.microsoft.com/rest/api/storageservices/list-containers2.
+     *
      * @param prefix
      *      A {@code String} that represents the prefix of the container name.
      * @param marker
-     *      A {@code String} that identifies the portion of the list of containers to be returned with the next listing operation.
+     *      A {@code String} that identifies the portion of the list of containers to be returned with the next listing
+     *      operation.
      * @param maxresults
-     *      A {@code Integer} representing the maximum number of results to retrieve.  If {@code null} or greater
+     *      An {@code Integer} representing the maximum number of results to retrieve.  If {@code null} or greater
  *          than 5000, the server will return up to 5,000 items.  Must be at least 1.
      * @param include
      *      A {@code String} representing which details to include when listing the containers in this storage account.
      * @return
+     *      The {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if
+     *      successful.
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listConatinersAsync(
             String prefix, String marker, Integer maxresults, ListContainersIncludeType include) {
-        return this.storageClient.services().listContainersWithRestResponseAsync(this.url, prefix, marker,
+        if (maxresults != null && maxresults < 0) {
+            return Single.error(new IllegalArgumentException("MaxResults must be >= 0."));
+        }
+        return this.storageClient.services().listContainersWithRestResponseAsync(prefix, marker,
                 maxresults, include, null, null);
     }
 
     /**
-     * Creates a new {@link ServiceURL} with the given pipeline.
-     * @param pipeline
-     *      A {@link HttpPipeline} object to set.
+     * GetProperties gets the properties of a storage account’s Blob service. For more information, see:
+     * https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties.
+     *
      * @return
-     *      A {@link ServiceURL} object with the given pipeline.
+     *      The {@link Single&lt;RestResponse&lt;ServiceGetPropertiesHeaders, StorageServiceProperties&gt;&gt;} object
+     *      if successful.
      */
-    public ServiceURL withPipeline(HttpPipeline pipeline) {
-        return new ServiceURL(super.url, pipeline);
+    public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getPropertiesAsync() {
+        return this.storageClient.services().getPropertiesWithRestResponseAsync(null, null);
+    }
+
+    /**
+     * SetProperties sets properties for a storage account's Blob service endpoint. For more information, see:
+     * https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties.
+     *
+     * @param properties
+     *      A {@link StorageServiceProperties} object containing the configurations for the service.
+     * @return
+     *      A {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     */
+    public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesAsync(
+            StorageServiceProperties properties) {
+        return this.storageClient.services().setPropertiesWithRestResponseAsync(properties, null,
+                null);
+    }
+
+    /**
+     * GetStats  retrieves statistics related to replication for the Blob service. It is only available on the secondary
+     * location endpoint when read-access geo-redundant replication is enabled for the storage account. For more
+     * information, see: https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats.
+     *
+     * @return
+     *      A {@link Single&lt;RestResponse&lt;ServiceGetStatsHeaders, StorageServiceStats&gt;&gt;} object if
+     *      successful.
+     */
+    public Single<RestResponse<ServiceGetStatsHeaders, StorageServiceStats>> getStats() {
+        return this.storageClient.services().getStatsWithRestResponseAsync(null, null);
     }
 }

@@ -10,9 +10,14 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.URL;
+import java.nio.channels.Pipe;
 import java.security.InvalidKeyException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +63,8 @@ public class BlobStorageAPITests {
         HttpPipeline pipeline = StorageURL.CreatePipeline(creds, new PipelineOptions());
 
         // Create a reference to the service.
-        ServiceURL su = new ServiceURL("http://" + System.getenv().get("ACCOUNT_NAME") + ".blob.core.windows.net", pipeline);
+        ServiceURL su = new ServiceURL(
+                new URL("http://" + System.getenv().get("ACCOUNT_NAME") + ".blob.core.windows.net"), pipeline);
 
         // Create a reference to a container. Using the ServiceURL to create the ContainerURL appends
         // the container name to the ServiceURL. A ContainerURL may also be created by calling its
@@ -93,7 +99,8 @@ public class BlobStorageAPITests {
             Assert.assertEquals(containerList.get(0).name(), containerName);
 
             // Create the blob with a single put. See below for the putBlock(List) scenario.
-            bu.putBlobAsync(AsyncInputStream.create(new byte[]{0, 0, 0}), null, null, null).blockingGet();
+            bu.putBlobAsync(AsyncInputStream.create(new byte[]{0, 0, 0}), null, null,
+                    null).blockingGet();
 
             // Download the blob contents.
             AsyncInputStream data = bu.getBlobAsync(new BlobRange(0L, 3L),
@@ -130,7 +137,7 @@ public class BlobStorageAPITests {
 
             // Create a reference to another blob within the same container and copies the first blob into this location.
             BlockBlobURL bu2 = cu.createBlockBlobURL("javablob2");
-            bu2.startCopyAsync(bu.toString(), null, null, null)
+            bu2.startCopyAsync(bu.toURL(), null, null, null)
                     .blockingGet();
 
             // Simple delay to wait for the copy. Inefficient buf effective. A better method would be to periodically
@@ -170,7 +177,7 @@ public class BlobStorageAPITests {
 
             // SAS -----------------------------
             // Parses a URL into its constituent components. This structure's URL fields may be modified.
-            BlobURLParts parts = URLParser.ParseURL(bu.toString());
+            BlobURLParts parts = URLParser.ParseURL(bu.toURL());
 
             // Construct the AccountSAS values object. This encapsulates all the values needed to create an AccountSAS.
             AccountSAS sas = new AccountSAS("2016-05-31", SASProtocol.HTTPS_HTTP,
@@ -185,7 +192,7 @@ public class BlobStorageAPITests {
             /*ServiceSAS sas = new ServiceSAS("2016-05-31", SASProtocol.HTTPS_HTTP,
                     DateTime.now().minusDays(1).toDate(), DateTime.now().plusDays(1).toDate(),
                     EnumSet.of(ContainerSASPermission.READ, ContainerSASPermission.WRITE),
-                    null, containerName, "javatestblob", null, null,
+                    null, containerName, null, null,
                     null, null, null, null);*/
 
 
@@ -206,6 +213,66 @@ public class BlobStorageAPITests {
             dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
+            // --------------APPEND BLOBS-------------
+            AppendBlobURL abu = cu.createAppendBlobURL("appendblob");
+            abu.createBlobAsync(null, null, null).blockingGet();
+            abu.appendBlockAsync(AsyncInputStream.create(new byte[]{0,0,0}), null).blockingGet();
+
+            data = abu.getBlobAsync(new BlobRange(0L, 3L), null, false).blockingGet().body();
+            dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
+            assertArrayEquals(dataByte, new byte[]{0, 0, 0});
+
+            // ---------------PAGE BLOBS-------------
+            PageBlobURL pbu = cu.createPageBlobURL("pageblob");
+            pbu.createBlobAsync((512L * 3L), null, null, null, null).blockingGet();
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            for(int i=0; i<1024; i++) {
+                os.write(1);
+            }
+            pbu.putPagesAsync(new PageRange().withStart(0).withEnd(1023), AsyncInputStream.create(os.toByteArray()),
+                    null).blockingGet();
+            String pageSnap = pbu.createSnapshotAsync(null, null).blockingGet().headers().snapshot();
+            pbu.clearPagesAsync(new PageRange().withStart(0).withEnd(511), null).blockingGet();
+            PageRange pr = pbu.getPageRangesAsync(new BlobRange(0L, (512L * 3L)), null).blockingGet()
+                    .body().pageRange().get(0);
+            Assert.assertEquals(pr.start(), 512);
+            Assert.assertEquals(pr.end(), 1023);
+            ClearRange cr = pbu.getPageRangesDiffAsync(null, pageSnap, null).blockingGet().body().clearRange().get(0);
+            Assert.assertEquals(cr.start(), 0);
+            Assert.assertEquals(cr.end(), 511);
+
+            pbu.resizeAsync(512L * 4L, null).blockingGet();
+            pbu.setSequenceNumber(SequenceNumberActionType.INCREMENT, null, null, null).blockingGet();
+            BlobsGetPropertiesHeaders pageHeaders = pbu.getPropertiesAndMetadataAsync(null).blockingGet().headers();
+            Assert.assertEquals(1, pageHeaders.blobSequenceNumber().longValue());
+            Assert.assertEquals((long)(512*4), pageHeaders.contentLength().longValue());
+
+            PageBlobURL copyPbu = cu.createPageBlobURL("copyPage");
+            CopyStatusType status = copyPbu.startIncrementalCopyAsync(pbu.toURL(), pageSnap, null).blockingGet().headers().copyStatus();
+            Assert.assertEquals(CopyStatusType.PENDING, status);
+
+            // ACCOUNT----------------------------
+            StorageServiceProperties props = new StorageServiceProperties();
+            Logging logging = new Logging().withRead(true).withVersion("1.0").
+                    withRetentionPolicy(new RetentionPolicy().withDays(1).withEnabled(true));
+            props = props.withLogging(logging);
+            su.setPropertiesAsync(props).blockingGet();
+
+            StorageServiceProperties receivedProps = su.getPropertiesAsync().blockingGet().body();
+            Assert.assertEquals(receivedProps.logging().read(), props.logging().read());
+
+            su.setPropertiesAsync(props.withLogging(logging.withRead(false).withRetentionPolicy(new RetentionPolicy()
+                    .withEnabled(false)))).blockingGet();
+
+            String secondaryAccount = System.getenv("ACCOUNT_NAME") + "-secondary";
+            pipeline = StorageURL.CreatePipeline(creds, new PipelineOptions());
+            ServiceURL secondary = new ServiceURL(new URL("http://" + secondaryAccount + ".blob.core.windows.net"),
+                    pipeline);
+            secondary.getStats().blockingGet();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
         finally {
             // Delete the blob and container. Deleting a container does not require deleting the blobs first.

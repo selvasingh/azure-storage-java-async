@@ -15,6 +15,21 @@ package com.microsoft.azure.storage;
  */
 public interface StorageClient {
     /**
+     * Gets The Azure Storage account to use.
+     *
+     * @return the url value.
+     */
+    String url();
+
+    /**
+     * Sets The Azure Storage account to use.
+     *
+     * @param url the url value.
+     * @return the service client itself
+     */
+    StorageClient withUrl(String url);
+
+    /**
      * Gets Specifies the version of the operation to use for this request.
      *
      * @return the version value.

@@ -135,19 +135,6 @@ final class Utility {
     }
 
     /**
-     * Returns a value that indicates whether the specified string is <code>null</code>, empty, or whitespace.
-     *
-     * @param value
-     *            A {@code String} being examined for <code>null</code>, empty, or whitespace.
-     *
-     * @return <code>true</code> if the specified value is <code>null</code>, empty, or whitespace; otherwise,
-     *         <code>false</code>
-     */
-    public static boolean isNullOrEmptyOrWhitespace(final String value) {
-        return value == null || value.trim().length() == 0;
-    }
-
-    /**
      * Performs safe decoding of the specified string, taking care to preserve each <code>+</code> character, rather
      * than replacing it with a space character.
      *
@@ -212,12 +199,6 @@ final class Utility {
      * Stores a reference to the ISO8601 date/time pattern.
      */
     private static final String ISO8601_PATTERN_NO_SECONDS = "yyyy-MM-dd'T'HH:mm'Z'";
-
-    /**
-     * Stores a reference to the Java version of ISO8601_LONG date/time pattern.  The full version cannot be used
-     * because Java Dates have millisecond precision.
-     */
-    private static final String JAVA_ISO8601_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     /**
      * The length of a datestring that matches the MAX_PRECISION_PATTERN.
@@ -309,5 +290,15 @@ final class Utility {
         if (value < min || value > max) {
             throw new IllegalArgumentException(String.format(SR.PARAMETER_NOT_IN_RANGE, param, min, max));
         }
+    }
+
+    public static String join(String[] components, char delimiter) {
+        StringBuilder result = new StringBuilder();
+        for (String component : components) {
+            result.append(component);
+            result.append(delimiter);
+        }
+        result.deleteCharAt(result.length() - 1); // Delete the extra delimiter.
+        return result.toString();
     }
 }

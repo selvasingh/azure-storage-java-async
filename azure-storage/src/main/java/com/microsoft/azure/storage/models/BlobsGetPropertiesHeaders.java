@@ -113,8 +113,8 @@ public class BlobsGetPropertiesHeaders {
      * snapshot, if x-ms-copy-status is success. Snapshot time of the last
      * successful incremental copy snapshot for this blob.
      */
-    @JsonProperty(value = "x-ms-destination-snapshot")
-    private DateTime destinationSnapshot;
+    @JsonProperty(value = "x-ms-copy-destination-snapshot")
+    private String destinationSnapshot;
 
     /**
      * When a blob is leased, specifies whether the lease is of infinite or
@@ -203,7 +203,7 @@ public class BlobsGetPropertiesHeaders {
      * for block blobs or append blobs.
      */
     @JsonProperty(value = "x-ms-blob-sequence-number")
-    private String blobSequenceNumber;
+    private Long blobSequenceNumber;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -248,6 +248,33 @@ public class BlobsGetPropertiesHeaders {
      */
     @JsonProperty(value = "x-ms-server-encrypted")
     private Boolean isServerEncrypted;
+
+    /**
+     * The tier of page blob on a premium storage account or tier of block blob
+     * on blob storage LRS accounts. For a list of allowed premium page blob
+     * tiers, see
+     * https://docs.microsoft.com/en-us/azure/virtual-machines/windows/premium-storage#features.
+     * For blob storage LRS accounts, valid values are Hot/Cool/Archive.
+     */
+    @JsonProperty(value = "x-ms-access-tier")
+    private String accessTier;
+
+    /**
+     * For page blobs on a premium storage account only. If the access tier is
+     * not explicitly set on the blob, the tier is inferred based on its
+     * content length and this header will be returned with true value.
+     */
+    @JsonProperty(value = "x-ms-access-tier-inferred")
+    private Boolean accessTierInferred;
+
+    /**
+     * For blob storage LRS accounts, valid values are
+     * rehydrate-pending-to-hot/rehydrate-pending-to-cool. If the blob is being
+     * rehydrated and is not complete then this header is returned indicating
+     * that rehydrate is pending and also tells the destination tier.
+     */
+    @JsonProperty(value = "x-ms-archive-status")
+    private String archiveStatus;
 
     /**
      * Get the lastModified value.
@@ -468,7 +495,7 @@ public class BlobsGetPropertiesHeaders {
      *
      * @return the destinationSnapshot value
      */
-    public DateTime destinationSnapshot() {
+    public String destinationSnapshot() {
         return this.destinationSnapshot;
     }
 
@@ -478,7 +505,7 @@ public class BlobsGetPropertiesHeaders {
      * @param destinationSnapshot the destinationSnapshot value to set
      * @return the BlobsGetPropertiesHeaders object itself.
      */
-    public BlobsGetPropertiesHeaders withDestinationSnapshot(DateTime destinationSnapshot) {
+    public BlobsGetPropertiesHeaders withDestinationSnapshot(String destinationSnapshot) {
         this.destinationSnapshot = destinationSnapshot;
         return this;
     }
@@ -708,7 +735,7 @@ public class BlobsGetPropertiesHeaders {
      *
      * @return the blobSequenceNumber value
      */
-    public String blobSequenceNumber() {
+    public Long blobSequenceNumber() {
         return this.blobSequenceNumber;
     }
 
@@ -718,7 +745,7 @@ public class BlobsGetPropertiesHeaders {
      * @param blobSequenceNumber the blobSequenceNumber value to set
      * @return the BlobsGetPropertiesHeaders object itself.
      */
-    public BlobsGetPropertiesHeaders withBlobSequenceNumber(String blobSequenceNumber) {
+    public BlobsGetPropertiesHeaders withBlobSequenceNumber(Long blobSequenceNumber) {
         this.blobSequenceNumber = blobSequenceNumber;
         return this;
     }
@@ -847,6 +874,66 @@ public class BlobsGetPropertiesHeaders {
      */
     public BlobsGetPropertiesHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
         this.isServerEncrypted = isServerEncrypted;
+        return this;
+    }
+
+    /**
+     * Get the accessTier value.
+     *
+     * @return the accessTier value
+     */
+    public String accessTier() {
+        return this.accessTier;
+    }
+
+    /**
+     * Set the accessTier value.
+     *
+     * @param accessTier the accessTier value to set
+     * @return the BlobsGetPropertiesHeaders object itself.
+     */
+    public BlobsGetPropertiesHeaders withAccessTier(String accessTier) {
+        this.accessTier = accessTier;
+        return this;
+    }
+
+    /**
+     * Get the accessTierInferred value.
+     *
+     * @return the accessTierInferred value
+     */
+    public Boolean accessTierInferred() {
+        return this.accessTierInferred;
+    }
+
+    /**
+     * Set the accessTierInferred value.
+     *
+     * @param accessTierInferred the accessTierInferred value to set
+     * @return the BlobsGetPropertiesHeaders object itself.
+     */
+    public BlobsGetPropertiesHeaders withAccessTierInferred(Boolean accessTierInferred) {
+        this.accessTierInferred = accessTierInferred;
+        return this;
+    }
+
+    /**
+     * Get the archiveStatus value.
+     *
+     * @return the archiveStatus value
+     */
+    public String archiveStatus() {
+        return this.archiveStatus;
+    }
+
+    /**
+     * Set the archiveStatus value.
+     *
+     * @param archiveStatus the archiveStatus value to set
+     * @return the BlobsGetPropertiesHeaders object itself.
+     */
+    public BlobsGetPropertiesHeaders withArchiveStatus(String archiveStatus) {
+        this.archiveStatus = archiveStatus;
         return this;
     }
 }

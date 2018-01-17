@@ -16,21 +16,25 @@ package com.microsoft.azure.storage.blob;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
 public final class URLParser {
 
-    // URLParser parses a URL initializing BlobURLParts' fields including any SAS-related & snapshot query parameters. Any other
-    // query parameters remain in the UnparsedParams field. This method overwrites all fields in the BlobURLParts object.
-    public static BlobURLParts ParseURL(String urlString) throws MalformedURLException, UnsupportedEncodingException {
-
-        URL url = new URL(urlString);
+    /**URLParser parses a URL initializing BlobURLParts' fields including any SAS-related & snapshot query parameters.
+     * Any other query parameters remain in the UnparsedParams field. This method overwrites all fields in the
+     * BlobURLParts object.
+     *
+     * @param url
+     *      The {@code java.net.URL} to be parsed.
+     * @return
+     *      A {@link BlobURLParts} object containing all the components of a BlobURL.
+     * @throws MalformedURLException
+     * @throws UnsupportedEncodingException
+     */
+    public static BlobURLParts ParseURL(URL url) throws MalformedURLException, UnsupportedEncodingException {
 
         String scheme = url.getProtocol();
         String host = url.getHost();
@@ -77,8 +81,9 @@ public final class URLParser {
      * Parses a query string into a one to many hashmap.
      *
      * @param queryParams
-     *            the string to parse
-     * @return a HashMap<String, String[]> of the key values.
+     *      The string of query params to parse.
+     * @return
+     *      A {@code HashMap&lt;String, String[]&gt;} of the key values.
      * @throws UnsupportedEncodingException
      */
     private static TreeMap<String, String[]> parseQueryString(String queryParams, boolean lowerCaseKey) throws UnsupportedEncodingException {

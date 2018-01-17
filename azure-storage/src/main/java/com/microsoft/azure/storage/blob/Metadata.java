@@ -15,7 +15,6 @@
 package com.microsoft.azure.storage.blob;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Constains metadata key/value pairs

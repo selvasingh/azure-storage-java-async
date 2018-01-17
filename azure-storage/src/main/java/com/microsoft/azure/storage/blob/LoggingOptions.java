@@ -26,14 +26,15 @@ public final class LoggingOptions {
     private final Level loggingLevel;
 
     /**
-     * Creates a new {@link LoggingOptions} object
+     * Creates a new {@link LoggingOptions} object.
      */
     public LoggingOptions() {
         this(Level.SEVERE);
     }
 
     /**
-     * Creates a new {@link LoggingOptions} object
+     * Creates a new {@link LoggingOptions} object.
+     *
      * @param loggingLevel
      *      The minimum {@code java.util.logging.Level} to log requests
      */
@@ -42,11 +43,12 @@ public final class LoggingOptions {
     }
 
     /**
-     * Creates a new {@link LoggingOptions} object
+     * Creates a new {@link LoggingOptions} object.
+     *
      * @param loggingLevel
-     *      The minimum {@code java.util.logging.Level} to log requests
+     *      The minimum {@code java.util.logging.Level} to log requests.
      * @param minDurationToLogSlowRequestsInMs
-     *      A {@code Long} representing the minimum duration for a tried operation to log a warning
+     *      A {@code Long} representing the minimum duration for a tried operation to log a warning.
      */
     public LoggingOptions(Level loggingLevel, Long minDurationToLogSlowRequestsInMs) {
         this.loggingLevel = loggingLevel;
@@ -55,7 +57,7 @@ public final class LoggingOptions {
 
     /**
      * @return
-     *      The minimum {@code java.util.logging.Level} to log requests
+     *      The minimum {@code java.util.logging.Level} to log requests.
      */
     public Level getLoggingLevel() {
         return loggingLevel;
@@ -63,7 +65,7 @@ public final class LoggingOptions {
 
     /**
      * @return
-     *      A {@code Long} representing the minimum duration for a tried operation to log a warning
+     *      A {@code Long} representing the minimum duration for a tried operation to log a warning.
      */
     public Long getMinDurationToLogSlowRequestsInMs() {
         return minDurationToLogSlowRequestsInMs;

@@ -24,36 +24,37 @@ import java.util.Date;
 public final class HttpAccessConditions {
 
     private static HttpAccessConditions defaultHttpAccessConditions;
-    private final DateTime ifModifiedSince;
-    private final DateTime ifUnmodifiedSince;
+    private final Date ifModifiedSince;
+    private final Date ifUnmodifiedSince;
     private final ETag ifMatch;
     private final ETag ifNoneMatch;
 
     /**
-     * Creates a {@link HttpAccessConditions} object
+     * Creates a {@link HttpAccessConditions} object.
+     *
      * @param ifModifiedSince
-     *      A {@code java.util.Date} if modified since condition
+     *      A {@code java.util.Date} if modified since condition.
      * @param ifUnmodifiedSince
-     *      A {@code java.util.Date} if unmodified since condition
+     *      A {@code java.util.Date} if unmodified since condition.
      * @param ifMatch
-     *      A {@link ETag} if match condition
+     *      An {@link ETag} if match condition.
      * @param ifNoneMatch
-     *      A {@link ETag} if none match condition
+     *      An {@link ETag} if none match condition.
      */
     public HttpAccessConditions(Date ifModifiedSince, Date ifUnmodifiedSince, ETag ifMatch, ETag ifNoneMatch) {
-        this.ifModifiedSince = (ifModifiedSince != null) ? new DateTime(ifModifiedSince) : null;
-        this.ifUnmodifiedSince = (ifUnmodifiedSince != null) ? new DateTime(ifUnmodifiedSince) : null;
+        this.ifModifiedSince = (ifModifiedSince != null) ? new Date(ifModifiedSince.getTime()) : null;
+        this.ifUnmodifiedSince = (ifUnmodifiedSince != null) ? new Date(ifUnmodifiedSince.getTime()) : null;
 
         this.ifMatch = ifMatch == null ? ETag.getDefault() : ifMatch;
         this.ifNoneMatch = ifNoneMatch == null ? ETag.getDefault() : ifNoneMatch;
     }
 
     public DateTime getIfModifiedSince() {
-        return ifModifiedSince;
+        return ifModifiedSince == null ? null : new DateTime(ifModifiedSince);
     }
 
     public DateTime getIfUnmodifiedSince() {
-        return ifUnmodifiedSince;
+        return ifUnmodifiedSince == null ? null : new DateTime(ifUnmodifiedSince);
     }
 
     public ETag getIfMatch() {

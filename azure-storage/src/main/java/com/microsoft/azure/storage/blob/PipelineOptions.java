@@ -25,6 +25,7 @@ public final class PipelineOptions {
     // Telemetry configures the built-in telemetry policy behavior.
     public TelemetryOptions telemetryOptions;
 
+    // TODO:
     public PipelineOptions() {
         this.telemetryOptions = new TelemetryOptions();
         HttpClient.Configuration configuration = new HttpClient.Configuration(
