@@ -29,12 +29,12 @@ import java.util.UUID;
 public final class RequestIDFactory implements RequestPolicyFactory {
 
     private final class RequestIDPolicy implements RequestPolicy {
-        final RequestPolicy requestPolicy;
+        final RequestPolicy nextPolicy;
 
         final RequestPolicyOptions options;
 
-        public RequestIDPolicy(RequestPolicy requestPolicy, RequestPolicyOptions options) {
-            this.requestPolicy = requestPolicy;
+        public RequestIDPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options) {
+            this.nextPolicy = nextPolicy;
             this.options = options;
         }
 
@@ -48,7 +48,7 @@ public final class RequestIDFactory implements RequestPolicyFactory {
          */
         public Single<HttpResponse> sendAsync(HttpRequest request) {
             request.headers().set(Constants.HeaderConstants.CLIENT_REQUEST_ID_HEADER, UUID.randomUUID().toString());
-            return requestPolicy.sendAsync(request);
+            return nextPolicy.sendAsync(request);
         }
     }
 

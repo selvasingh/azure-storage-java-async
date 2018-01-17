@@ -26,9 +26,16 @@ public final class RequestRetryOptions {
      */
     private RetryPolicyType retryPolicyType = RetryPolicyType.EXPONENTIAL;
 
-    private int maxRetries = 4;
+    // MaxTries specifies the maximum number of attempts an operation will be tried before producing an error (0=default).
+    // A value of zero means that you accept our default policy. A value of 1 means 1 try and no retries.
+    int maxTries = 4;
 
-    private long tryTimeoutInMs = TimeUnit.SECONDS.toMillis(30);
+    // TryTimeout indicates the maximum time in seconds allowed for any single try of an HTTP request.
+    // A value of zero means that you accept our default timeout. NOTE: When transferring large amounts
+    // of data, the default TryTimeout will probably not be sufficient. You should override this value
+    // based on the bandwidth available to the host machine and proximity to the Storage service. A good
+    // starting point may be something like (60 seconds per MB of anticipated-payload-size).
+    int tryTimeout = 30;
 
     private long retryDelayInMs = TimeUnit.SECONDS.toMillis(4);
 
@@ -48,7 +55,7 @@ public final class RequestRetryOptions {
      *      Specifies the maximum number of attempts an operation will be tried before producing an error
      *      (0=default). A value of {@code null} means that you accept our default policy. A value of 1 means 1 try and no
      *      retries.
-     * @param tryTimeoutInMs
+     * @param tryTimeout
      *      Indicates the maximum time allowed for any single try of an HTTP request.
      *      A value of {@code null} means that you accept our default timeout. NOTE: When transferring large amounts
      *      of data, the default TryTimeout will probably not be sufficient. You should override this value
@@ -68,17 +75,17 @@ public final class RequestRetryOptions {
      *      potentially-inconsistent data at this webpage:
      *      https://docs.microsoft.com/en-us/azure/storage/common/storage-designing-ha-apps-with-ragrs
      */
-    public RequestRetryOptions(RetryPolicyType retryPolicyType, Integer maxTries, Long tryTimeoutInMs,
+    public RequestRetryOptions(RetryPolicyType retryPolicyType, int maxTries, int tryTimeout,
                                Long retryDelayInMs, Long maxRetryDelayInMs, String secondaryHost) {
         this.retryPolicyType = retryPolicyType;
-        if (maxTries != null) {
+        if (maxTries != 0) {
             Utility.assertInBounds("maxRetries", maxTries, 1, Integer.MAX_VALUE);
-            this.maxRetries = maxTries;
+            this.maxTries = maxTries;
         }
 
-        if (tryTimeoutInMs != null) {
-            Utility.assertInBounds("tryTimeoutInMs", tryTimeoutInMs, 1, Long.MAX_VALUE);
-            this.tryTimeoutInMs = tryTimeoutInMs;
+        if (tryTimeout != 0) {
+            Utility.assertInBounds("tryTimeoutInMs", tryTimeout, 1, Long.MAX_VALUE);
+            this.tryTimeout = tryTimeout;
         }
 
         if (retryDelayInMs != null && maxRetryDelayInMs != null) {

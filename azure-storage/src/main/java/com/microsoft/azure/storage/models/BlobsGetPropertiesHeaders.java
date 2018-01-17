@@ -203,7 +203,7 @@ public class BlobsGetPropertiesHeaders {
      * for block blobs or append blobs.
      */
     @JsonProperty(value = "x-ms-blob-sequence-number")
-    private String blobSequenceNumber;
+    private Long blobSequenceNumber;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -735,7 +735,7 @@ public class BlobsGetPropertiesHeaders {
      *
      * @return the blobSequenceNumber value
      */
-    public String blobSequenceNumber() {
+    public Long blobSequenceNumber() {
         return this.blobSequenceNumber;
     }
 
@@ -745,7 +745,7 @@ public class BlobsGetPropertiesHeaders {
      * @param blobSequenceNumber the blobSequenceNumber value to set
      * @return the BlobsGetPropertiesHeaders object itself.
      */
-    public BlobsGetPropertiesHeaders withBlobSequenceNumber(String blobSequenceNumber) {
+    public BlobsGetPropertiesHeaders withBlobSequenceNumber(Long blobSequenceNumber) {
         this.blobSequenceNumber = blobSequenceNumber;
         return this;
     }

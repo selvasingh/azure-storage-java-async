@@ -140,7 +140,7 @@ public final class SharedKeyCredentials implements ICredentials {
         contentLength = contentLength.equals("0") ? Constants.EMPTY_STRING : contentLength;
 
         String stringToSign = Utility.join(new String[]{
-                        request.httpMethod(),
+                        request.httpMethod().toString(),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_ENCODING),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LANGUAGE),
                         contentLength,
@@ -154,7 +154,7 @@ public final class SharedKeyCredentials implements ICredentials {
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.IF_UNMODIFIED_SINCE),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.RANGE),
                         getAdditionalXmsHeaders(httpHeaders),
-                        getCanonicalizedResource(new URL(request.url())) // TODO: remove when request returns URL.
+                        getCanonicalizedResource(request.url())
                 }, '\n');
          return stringToSign;
     }

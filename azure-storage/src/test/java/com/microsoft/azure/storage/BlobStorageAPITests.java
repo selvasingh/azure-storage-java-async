@@ -10,10 +10,14 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
+import java.nio.channels.Pipe;
 import java.security.InvalidKeyException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -119,7 +123,7 @@ public class BlobStorageAPITests {
 
             // Create a snapshot of the blob and pull the snapshot ID out of the headers.
             String snapshot = bu.createSnapshotAsync(null, null).blockingGet()
-                    .headers().snapshot();
+                    .headers().snapshot().toString();
 
             // Create a reference to the blob snapshot. This returns a new BlockBlobURL object that references the same
             // path as the base blob with the query string including the snapshot value appended to the end.
@@ -209,6 +213,62 @@ public class BlobStorageAPITests {
             dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
+            // --------------APPEND BLOBS-------------
+            AppendBlobURL abu = cu.createAppendBlobURL("appendblob");
+            abu.createBlobAsync(null, null, null).blockingGet();
+            abu.appendBlockAsync(AsyncInputStream.create(new byte[]{0,0,0}), null).blockingGet();
+
+            data = abu.getBlobAsync(new BlobRange(0L, 3L), null, false).blockingGet().body();
+            dataByte = FlowableUtil.collectBytes(data.content()).blockingGet();
+            assertArrayEquals(dataByte, new byte[]{0, 0, 0});
+
+            // ---------------PAGE BLOBS-------------
+            PageBlobURL pbu = cu.createPageBlobURL("pageblob");
+            pbu.createBlobAsync((512L * 3L), null, null, null, null).blockingGet();
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            for(int i=0; i<1024; i++) {
+                os.write(1);
+            }
+            pbu.putPagesAsync(new PageRange().withStart(0).withEnd(1023), AsyncInputStream.create(os.toByteArray()),
+                    null).blockingGet();
+            String pageSnap = pbu.createSnapshotAsync(null, null).blockingGet().headers().snapshot();
+            pbu.clearPagesAsync(new PageRange().withStart(0).withEnd(511), null).blockingGet();
+            PageRange pr = pbu.getPageRangesAsync(new BlobRange(0L, (512L * 3L)), null).blockingGet()
+                    .body().pageRange().get(0);
+            Assert.assertEquals(pr.start(), 512);
+            Assert.assertEquals(pr.end(), 1023);
+            ClearRange cr = pbu.getPageRangesDiffAsync(null, pageSnap, null).blockingGet().body().clearRange().get(0);
+            Assert.assertEquals(cr.start(), 0);
+            Assert.assertEquals(cr.end(), 511);
+
+            pbu.resizeAsync(512L * 4L, null).blockingGet();
+            pbu.setSequenceNumber(SequenceNumberActionType.INCREMENT, null, null, null).blockingGet();
+            BlobsGetPropertiesHeaders pageHeaders = pbu.getPropertiesAndMetadataAsync(null).blockingGet().headers();
+            Assert.assertEquals(1, pageHeaders.blobSequenceNumber().longValue());
+            Assert.assertEquals((long)(512*4), pageHeaders.contentLength().longValue());
+
+            PageBlobURL copyPbu = cu.createPageBlobURL("copyPage");
+            CopyStatusType status = copyPbu.startIncrementalCopyAsync(pbu.toURL(), pageSnap, null).blockingGet().headers().copyStatus();
+            Assert.assertEquals(CopyStatusType.PENDING, status);
+
+            // ACCOUNT----------------------------
+            StorageServiceProperties props = new StorageServiceProperties();
+            Logging logging = new Logging().withRead(true).withVersion("1.0").
+                    withRetentionPolicy(new RetentionPolicy().withDays(1).withEnabled(true));
+            props = props.withLogging(logging);
+            su.setPropertiesAsync(props).blockingGet();
+
+            StorageServiceProperties receivedProps = su.getPropertiesAsync().blockingGet().body();
+            Assert.assertEquals(receivedProps.logging().read(), props.logging().read());
+
+            su.setPropertiesAsync(props.withLogging(logging.withRead(false).withRetentionPolicy(new RetentionPolicy()
+                    .withEnabled(false)))).blockingGet();
+
+            String secondaryAccount = System.getenv("ACCOUNT_NAME") + "-secondary";
+            pipeline = StorageURL.CreatePipeline(creds, new PipelineOptions());
+            ServiceURL secondary = new ServiceURL(new URL("http://" + secondaryAccount + ".blob.core.windows.net"),
+                    pipeline);
+            secondary.getStats().blockingGet();
         }
         catch (Exception e) {
             e.printStackTrace();

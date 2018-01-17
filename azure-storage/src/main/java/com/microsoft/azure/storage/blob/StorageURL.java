@@ -49,15 +49,15 @@ public abstract class StorageURL {
         this.storageClient.withUrl(url.toString());
     }
 
-    // TODO: ADD RETRY Factory
     public static HttpPipeline CreatePipeline(ICredentials credentials, PipelineOptions pipelineOptions) {
         LoggingFactory loggingFactory = new LoggingFactory(pipelineOptions.loggingOptions);
         RequestIDFactory requestIDFactory = new RequestIDFactory();
-        //RequestRetryFactory requestRetryFactory = new RequestRetryFactory();
+        RequestRetryFactory requestRetryFactory = new RequestRetryFactory(new RequestRetryOptions());
         TelemetryFactory telemetryFactory = new TelemetryFactory(pipelineOptions.telemetryOptions);
         AddDatePolicy addDate = new AddDatePolicy();
         return HttpPipeline.build(
-                pipelineOptions.client, requestIDFactory, telemetryFactory, addDate, credentials, loggingFactory);
+                pipelineOptions.client, telemetryFactory, requestIDFactory, requestRetryFactory, addDate, credentials,
+                loggingFactory);
     }
 
     @Override
