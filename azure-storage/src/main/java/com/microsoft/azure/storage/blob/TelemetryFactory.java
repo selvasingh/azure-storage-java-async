@@ -45,15 +45,15 @@ public final class TelemetryFactory implements RequestPolicyFactory {
     }
 
     private final class TelemetryPolicy implements RequestPolicy {
-        final RequestPolicy requestPolicy;
+        final RequestPolicy nextPolicy;
 
-        TelemetryPolicy(RequestPolicy requestPolicy, RequestPolicyOptions options) {
-            this.requestPolicy = requestPolicy;
+        TelemetryPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options) {
+            this.nextPolicy = nextPolicy;
         }
 
         public Single<HttpResponse> sendAsync(HttpRequest request) {
             request.headers().set(Constants.HeaderConstants.USER_AGENT, userAgent);
-            return this.requestPolicy.sendAsync(request);
+            return this.nextPolicy.sendAsync(request);
         }
     }
 

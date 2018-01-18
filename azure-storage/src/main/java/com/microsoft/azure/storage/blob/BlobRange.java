@@ -9,10 +9,10 @@ public class BlobRange {
     public Long count;
 
     public BlobRange(Long offset, Long count) {
-        if (offset < 0) {
+        if (offset != null && offset < 0) {
             throw new IllegalArgumentException("BlobRange offset must be greater than or equal to 0 if specified.");
         }
-        if (count < 0) {
+        if (offset != null && count < 0) {
             throw new IllegalArgumentException("BlobRange count must be greater than or equal to 0 if specified.");
         }
         this.offset = offset;

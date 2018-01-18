@@ -44,7 +44,7 @@ public final class LoggingFactory implements RequestPolicyFactory {
 
         private RequestPolicyOptions options;
 
-        private final RequestPolicy requestPolicy;
+        private final RequestPolicy nextPolicy;
 
         final private LoggingFactory factory;
 
@@ -54,15 +54,15 @@ public final class LoggingFactory implements RequestPolicyFactory {
          * Creates a policy which configures the logging behavior within the
          * {@link com.microsoft.rest.v2.http.HttpPipeline}.
          *
-         * @param requestPolicy
+         * @param nextPolicy
          *      A {@link RequestPolicy} object.
          * @param options
          *      A {@link RequestPolicyOptions} object.
          * @param factory
          *      A {@link LoggingFactory} object.
          */
-        LoggingPolicy(RequestPolicy requestPolicy, RequestPolicyOptions options, LoggingFactory factory) {
-            this.requestPolicy = requestPolicy;
+        LoggingPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options, LoggingFactory factory) {
+            this.nextPolicy = nextPolicy;
             this.options = options;
             this.factory = factory;
         }
@@ -89,7 +89,7 @@ public final class LoggingFactory implements RequestPolicyFactory {
             }
 
             // TODO: Need to change logic slightly when support for writing to event log/sys log support is added
-            return requestPolicy.sendAsync(request)
+            return nextPolicy.sendAsync(request)
                     .doOnError(new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) {
