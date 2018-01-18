@@ -107,34 +107,38 @@ public final class LoggingFactory implements RequestPolicyFactory {
                             long requestCompletionTime = requestEndTime - requestStartTime;
                             long operationDuration = requestEndTime - operationStartTime;
                             HttpPipelineLogLevel currentLevel = HttpPipelineLogLevel.INFO;
-                            // check if error should be logged since there is nothing of higher priority
-//                            if (!options.logger().shouldLog(LogLevel.ERROR)) {
-//                                return;
-//                            }
+                            // Check if error should be logged since there is nothing of higher priority.
+                            if (!options.shouldLog(HttpPipelineLogLevel.ERROR)) {
+                                return;
+                            }
 
                             String logMessage = Constants.EMPTY_STRING;
-                            //if (options.logger().shouldLog(LogLevel.INFO)) {
-                                // assume success and default to informational logging
+                            if (options.shouldLog(HttpPipelineLogLevel.INFO)) {
+                                // Assume success and default to informational logging.
                                 logMessage = "Successfully Received Response" + System.lineSeparator();
-                            //}
+                            }
 
-                            // if the response took too long, we'll upgrade to warning.
-                            boolean forceLog = false;
+                            // If the response took too long, we'll upgrade to warning.
                             if (requestCompletionTime >=
                                     factory.loggingOptions.getMinDurationToLogSlowRequestsInMs()) {
-                                // log a warning if the try duration exceeded the specified threshold
-                                //if (options.logger().shouldLog(LogLevel.WARNING)) {
+                                // Log a warning if the try duration exceeded the specified threshold.
+                                if (options.shouldLog(HttpPipelineLogLevel.WARNING)) {
                                     currentLevel = HttpPipelineLogLevel.WARNING;
-                                    forceLog = true;
-                                    logMessage = String.format("SLOW OPERATION. Duration > %d ms.%n", factory.loggingOptions.getMinDurationToLogSlowRequestsInMs());
-                                //}
+                                    logMessage = String.format("SLOW OPERATION. Duration > %d ms.%n",
+                                            factory.loggingOptions.getMinDurationToLogSlowRequestsInMs());
+                                }
                             }
 
                             if (response.statusCode() >= HttpURLConnection.HTTP_INTERNAL_ERROR ||
-                                    (response.statusCode() >= HttpURLConnection.HTTP_BAD_REQUEST && response.statusCode() != HttpURLConnection.HTTP_NOT_FOUND &&
-                                     response.statusCode() != HttpURLConnection.HTTP_CONFLICT && response.statusCode() != HttpURLConnection.HTTP_PRECON_FAILED &&
-                                     response.statusCode() != 416 /* 416 is missing from the Enum but it is Range Not Satisfiable */)) {
-                                String errorString = String.format("REQUEST ERROR%nHTTP request failed with status code:'%d'%n", response.statusCode());
+                                    (response.statusCode() >= HttpURLConnection.HTTP_BAD_REQUEST &&
+                                            response.statusCode() != HttpURLConnection.HTTP_NOT_FOUND &&
+                                            response.statusCode() != HttpURLConnection.HTTP_CONFLICT &&
+                                            response.statusCode() != HttpURLConnection.HTTP_PRECON_FAILED &&
+                                            response.statusCode() != 416
+                                            /* 416 is missing from the Enum but it is Range Not Satisfiable */)) {
+                                String errorString = String.format(
+                                        "REQUEST ERROR%nHTTP request failed with status code:'%d'%n",
+                                        response.statusCode());
                                 if (currentLevel == HttpPipelineLogLevel.WARNING) {
                                     logMessage += errorString;
                                 }
@@ -143,16 +147,15 @@ public final class LoggingFactory implements RequestPolicyFactory {
                                 }
 
                                 currentLevel = HttpPipelineLogLevel.ERROR;
-                                forceLog = true;
                                 // TODO: LOG THIS TO WINDOWS EVENT LOG/SYS LOG
                             }
 
-                            //if (shouldlog(currentLevel) {
+                            if (options.shouldLog(currentLevel)) {
                                 String messageInfo = String.format(
                                         "Request try:'%d', request duration:'%d' ms, operation duration:'%d' ms%n",
                                         tryCount, requestCompletionTime, operationDuration);
                                 options.log(HttpPipelineLogLevel.INFO, logMessage + messageInfo);
-                            //}
+                            }
                         }
                     });
         }
