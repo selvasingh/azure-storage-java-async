@@ -148,7 +148,7 @@ public final class SharedKeyCredentials implements ICredentials {
         String contentLength = getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LENGTH);
         contentLength = contentLength.equals("0") ? Constants.EMPTY_STRING : contentLength;
 
-        String stringToSign = Utility.join(new String[]{
+        return Utility.join(new String[]{
                         request.httpMethod().toString(),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_ENCODING),
                         getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LANGUAGE),
@@ -165,7 +165,6 @@ public final class SharedKeyCredentials implements ICredentials {
                         getAdditionalXmsHeaders(httpHeaders),
                         getCanonicalizedResource(request.url())
                 }, '\n');
-         return stringToSign;
     }
 
     private void appendCanonicalizedElement(final StringBuilder builder, final String element) {
@@ -240,12 +239,12 @@ public final class SharedKeyCredentials implements ICredentials {
         ArrayList<String> queryParamNames = new ArrayList<String>(queryParams.keySet());
         Collections.sort(queryParamNames);
 
-        for (int i = 0; i < queryParamNames.size(); i++) {
-            final String queryParamName = queryParamNames.get(i);
+        for (String queryParamName : queryParamNames) {
             final List<String> queryParamValues = queryParams.get(queryParamName);
             Collections.sort(queryParamValues);
             String queryParamValuesStr = Utility.join(queryParamValues.toArray(new String[]{}), ',');
-            canonicalizedResource.append("\n" + queryParamName.toLowerCase(Locale.US) + ":" + queryParamValuesStr);
+            canonicalizedResource.append("\n").append(queryParamName.toLowerCase(Locale.US)).append(":")
+                    .append(queryParamValuesStr);
         }
 
         // append to main string builder the join of completed params with new line

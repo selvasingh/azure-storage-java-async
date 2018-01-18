@@ -265,11 +265,8 @@ public final class ContainerURL extends StorageURL {
     }
 
     private boolean validateLeaseOperationAccessConditions(HttpAccessConditions httpAccessConditions) {
-        if (httpAccessConditions.getIfMatch() == ETag.getDefault() &&
-                httpAccessConditions.getIfNoneMatch() == ETag.getDefault()) {
-            return true;
-        }
-        return false;
+        return (httpAccessConditions.getIfMatch() == ETag.getDefault() &&
+                httpAccessConditions.getIfNoneMatch() == ETag.getDefault());
     }
 
     /**

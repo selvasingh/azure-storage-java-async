@@ -15,7 +15,6 @@
 package com.microsoft.azure.storage.blob;
 
 import com.microsoft.rest.v2.http.UrlBuilder;
-import com.sun.javafx.fxml.builder.URLBuilder;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;

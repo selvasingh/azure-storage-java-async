@@ -30,10 +30,10 @@ public class ListBlobsOptions {
     private Integer maxResults;
 
     /**
-     * A {@Link ListBlobsOptions} object.
+     * A {@link ListBlobsOptions} object.
      *
      * @param details
-     *           A {@Link BlobListingDetails} object indicating what additional information the service should return
+     *           A {@link BlobListingDetails} object indicating what additional information the service should return
      *           with each blob.
      * @param prefix
      *           A {@code String} that filters the results to return only blobs whose names begin with the specified

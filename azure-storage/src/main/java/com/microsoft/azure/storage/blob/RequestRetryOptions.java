@@ -113,6 +113,7 @@ public final class RequestRetryOptions {
      * @param tryCount
      *      An {@code int} indicating which try we are on.
      * @return
+     *      A {@code long} value of how many milliseconds to delay.
      */
     public long calculatedDelayInMs(int tryCount) {
         long delay = 0;

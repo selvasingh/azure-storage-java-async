@@ -342,6 +342,7 @@ public final class PageBlobURL extends BlobURL {
      * or copied from as usual. For more information, see
      * https://docs.microsoft.com/rest/api/storageservices/incremental-copy-blob and
      * https://docs.microsoft.com/en-us/azure/virtual-machines/windows/incremental-snapshots.
+     *
      * @param source
      *      A {@code java.net.URL} which specifies the name of the source page blob.
      * @param snapshot
@@ -351,8 +352,6 @@ public final class PageBlobURL extends BlobURL {
      *      complete.
      * @return
      *      A {@link Single &lt;RestResponse&lt;PageBlobIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
-     * @throws URISyntaxException
-     * @throws MalformedURLException
      */
     public Single<RestResponse<PageBlobIncrementalCopyHeaders, Void>> startIncrementalCopyAsync(
             URL source, String snapshot, BlobAccessConditions accessConditions) {
@@ -360,17 +359,10 @@ public final class PageBlobURL extends BlobURL {
             accessConditions = BlobAccessConditions.getDefault();
         }
 
-        String query = source.getQuery();
-        if(query == null) {
-            query = "snapshot=" + snapshot;
-        }
-        else {
-            query += "&snapshot=" + snapshot;
-        }
         try {
             UrlBuilder builder = UrlBuilder.parse(source.toString());
-            builder.addQueryParameter("snapshot", snapshot);
-            source = new URL(builder.toString()); // TODO: update.
+            builder.addQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, snapshot);
+            source = builder.toURL();
         } catch (MalformedURLException e) {
             return Single.error(e);
          }
@@ -398,10 +390,7 @@ public final class PageBlobURL extends BlobURL {
             throw new IllegalArgumentException("PageRange's End value must be after the start.");
         }
 
-        StringBuilder range = new StringBuilder("bytes=");
-        range.append(pageRange.start());
-        range.append('-');
-        range.append(pageRange.end());
+        StringBuilder range = new StringBuilder("bytes=").append(pageRange.start()).append('-').append(pageRange.end());
         return range.toString();
     }
 }

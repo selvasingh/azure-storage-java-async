@@ -86,7 +86,8 @@ public final class URLParser {
      *      A {@code HashMap&lt;String, String[]&gt;} of the key values.
      * @throws UnsupportedEncodingException
      */
-    private static TreeMap<String, String[]> parseQueryString(String queryParams, boolean lowerCaseKey) throws UnsupportedEncodingException {
+    private static TreeMap<String, String[]> parseQueryString(String queryParams, boolean lowerCaseKey)
+            throws UnsupportedEncodingException {
         //Comparator<String> c = new Comparator.<String>naturalOrder();
         final TreeMap<String, String[]> retVals = new TreeMap<String, String[]>(new Comparator<String>() {
             @Override

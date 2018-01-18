@@ -49,6 +49,7 @@ public final class HttpAccessConditions {
         this.ifNoneMatch = ifNoneMatch == null ? ETag.getDefault() : ifNoneMatch;
     }
 
+    // TODO: Change to java.util.Date
     public DateTime getIfModifiedSince() {
         return ifModifiedSince == null ? null : new DateTime(ifModifiedSince);
     }

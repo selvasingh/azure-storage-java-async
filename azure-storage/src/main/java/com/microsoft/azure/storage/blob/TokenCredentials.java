@@ -6,8 +6,6 @@ import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
 import io.reactivex.Single;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -15,7 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class TokenCredentials  implements ICredentials{
 
-    AtomicReference<String> token;
+    private AtomicReference<String> token;
 
     /**
      * Creates a token credential for use with role-based access control (RBAC) access to Azure Storage resources.
@@ -63,7 +61,7 @@ public class TokenCredentials  implements ICredentials{
         }
 
         public Single<HttpResponse> sendAsync(HttpRequest request) {
-            if (request.url().getProtocol() != Constants.HTTPS) {
+            if (!request.url().getProtocol().equals(Constants.HTTPS)) {
                 throw new IllegalArgumentException(
                         "Token credentials require a URL using the https protocol scheme");
             }

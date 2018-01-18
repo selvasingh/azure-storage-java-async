@@ -46,7 +46,7 @@ public final class ETag {
         if (this == obj) {
             return true;
         }
-        if(!(obj instanceof ETag)) {
+        if (!(obj instanceof ETag)) {
             return false;
         }
         if (this.eTagString == null) {

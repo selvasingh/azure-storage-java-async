@@ -29,7 +29,7 @@ public final class ContainerAccessConditions {
      * @param httpAccessConditions
      *      An {@link HttpAccessConditions} object.
      * @param leaseID
-     *      A {@LeaseAccessConditions} object.
+     *      A {@link LeaseAccessConditions} object.
      */
     public ContainerAccessConditions(HttpAccessConditions httpAccessConditions, LeaseAccessConditions leaseID) {
         this.httpAccessConditions = httpAccessConditions;

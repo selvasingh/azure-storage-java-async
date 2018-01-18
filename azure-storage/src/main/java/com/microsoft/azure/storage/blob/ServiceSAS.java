@@ -193,13 +193,10 @@ public final class ServiceSAS extends BaseSAS {
         // Container: "/blob/account/containername"
         // Blob:      "/blob/account/containername/blobname"
         StringBuilder canonicalName = new StringBuilder("/blob");
-        canonicalName.append('/');
-        canonicalName.append(accountName);
-        canonicalName.append('/');
-        canonicalName.append(this.containerName);
+        canonicalName.append('/').append(accountName).append('/').append(this.containerName);
 
         if (!Utility.isNullOrEmpty(this.blobName)) {
-            canonicalName.append("/" + this.blobName.replace("\\", "/"));
+            canonicalName.append("/").append(this.blobName.replace("\\", "/"));
         }
 
         return canonicalName.toString();

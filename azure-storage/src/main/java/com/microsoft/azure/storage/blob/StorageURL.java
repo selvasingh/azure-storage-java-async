@@ -23,13 +23,10 @@ import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
 import io.reactivex.Single;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-import java.util.Locale;
 
 import static com.microsoft.azure.storage.blob.Utility.getGMTTime;
 
@@ -103,10 +100,6 @@ public abstract class StorageURL {
         }
 
         public final class AddDate implements RequestPolicy {
-            private final DateTimeFormatter format = DateTimeFormat
-                    .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'")
-                    .withZoneUTC()
-                    .withLocale(Locale.US);
 
             private final RequestPolicy next;
             public AddDate(RequestPolicy next) {

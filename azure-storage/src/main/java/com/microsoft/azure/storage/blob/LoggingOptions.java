@@ -15,6 +15,7 @@
 package com.microsoft.azure.storage.blob;
 
 import java.util.logging.Level;
+// TODO: Do we want to be using the HttpPipelineLoggingLevel here instead of that java.util?
 
 /**
  * Logging options

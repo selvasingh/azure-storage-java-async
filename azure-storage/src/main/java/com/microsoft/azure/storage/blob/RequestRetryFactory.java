@@ -21,7 +21,6 @@ import com.microsoft.rest.v2.policy.RequestPolicyOptions;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
-import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.Function;
 
 import java.io.IOException;
@@ -61,9 +60,9 @@ public final class RequestRetryFactory implements RequestPolicyFactory {
 
         @Override
         public Single<HttpResponse> sendAsync(HttpRequest httpRequest) {
-            boolean considerSecondary = (httpRequest.httpMethod().equals("GET") ||
-                    httpRequest.httpMethod().equals("HEAD"))
-                    && this.requestRetryOptions.secondaryHost != null;
+            boolean considerSecondary = (httpRequest.httpMethod().toString().equals("GET") ||
+                    httpRequest.httpMethod().toString().equals("HEAD"))
+                    && (this.requestRetryOptions.secondaryHost != null);
 
             return this.attemptAsync(httpRequest, 1, considerSecondary, 1);
         }

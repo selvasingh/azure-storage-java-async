@@ -240,7 +240,7 @@ public final class SASQueryParameters {
         boolean first = true;
         if (this.version != null) {
             first = false;
-            sb.append("sv=" + this.version);
+            sb.append("sv=").append(this.version);
         }
 
         if (this.services != null) {
@@ -251,7 +251,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("ss=" + this.services);
+            sb.append("ss=").append(this.services);
         }
 
         if (this.resourceTypes != null) {
@@ -262,7 +262,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("srt=" + this.resourceTypes);
+            sb.append("srt=").append(this.resourceTypes);
         }
 
         if (this.protocol != null) {
@@ -273,7 +273,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("spr=" + this.protocol);
+            sb.append("spr=").append(this.protocol);
         }
 
         if (this.startTime != null) {
@@ -284,7 +284,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("st=" + Utility.getUTCTimeOrEmpty(this.startTime));
+            sb.append("st=").append(Utility.getUTCTimeOrEmpty(this.startTime));
         }
 
         if (this.expiryTime != null) {
@@ -295,7 +295,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("se=" + Utility.getUTCTimeOrEmpty(this.expiryTime));
+            sb.append("se=").append(Utility.getUTCTimeOrEmpty(this.expiryTime));
         }
 
         if (this.ipRange != null) {
@@ -306,7 +306,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("sip=" + this.ipRange.toString());
+            sb.append("sip").append(this.ipRange.toString());
         }
 
         if (this.identifier != null) {
@@ -317,7 +317,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("si=" + this.identifier);
+            sb.append("si=").append(this.identifier);
         }
 
         if (this.resource != null) {
@@ -328,7 +328,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("sr=" + this.resource);
+            sb.append("sr=").append(this.resource);
         }
 
         if (this.permissions != null) {
@@ -339,7 +339,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("sp=" + this.permissions);
+            sb.append("sp=").append(this.permissions);
         }
 
         if (this.signature != null) {
@@ -350,7 +350,7 @@ public final class SASQueryParameters {
                 sb.append('&');
             }
 
-            sb.append("sig=" + this.signature);
+            sb.append("sig=").append(this.signature);
         }
 
         return sb.toString();

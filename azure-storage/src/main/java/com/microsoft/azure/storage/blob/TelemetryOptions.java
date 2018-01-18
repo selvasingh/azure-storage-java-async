@@ -33,6 +33,12 @@ public final class TelemetryOptions {
 
     @Override
     public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }
+        if (!(obj instanceof TelemetryOptions)) {
+            return false;
+        }
         if (this.userAgentPrefix == null) {
             return obj == null;
         }
