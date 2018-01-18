@@ -16,10 +16,10 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for AppendBlock operation.
+ * Defines headers for Copy operation.
  */
-@JacksonXmlRootElement(localName = "AppendBlobs-AppendBlock-Headers")
-public class AppendBlobsAppendBlockHeaders {
+@JacksonXmlRootElement(localName = "Blob-Copy-Headers")
+public class BlobCopyHeaders {
     /**
      * The ETag contains a value that you can use to perform operations
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
@@ -35,14 +35,6 @@ public class AppendBlobsAppendBlockHeaders {
      */
     @JsonProperty(value = "Last-Modified")
     private DateTimeRfc1123 lastModified;
-
-    /**
-     * If the blob has an MD5 hash and this operation is to read the full blob,
-     * this response header is returned so that the client can check for
-     * message content integrity.
-     */
-    @JsonProperty(value = "Content-MD5")
-    private String contentMD5;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -67,18 +59,19 @@ public class AppendBlobsAppendBlockHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * This response header is returned only for append operations. It returns
-     * the offset at which the block was committed, in bytes.
+     * String identifier for this copy operation. Use with Get Blob Properties
+     * to check the status of this copy operation, or pass to Abort Copy Blob
+     * to abort a pending copy.
      */
-    @JsonProperty(value = "x-ms-blob-append-offset")
-    private String blobAppendOffset;
+    @JsonProperty(value = "x-ms-copy-id")
+    private String copyId;
 
     /**
-     * The number of committed blocks present in the blob. This header is
-     * returned only for append blobs.
+     * State of the copy operation identified by x-ms-copy-id. Possible values
+     * include: 'pending', 'success', 'aborted', 'failed'.
      */
-    @JsonProperty(value = "x-ms-blob-committed-block-count")
-    private String blobCommittedBlockCount;
+    @JsonProperty(value = "x-ms-copy-status")
+    private CopyStatusType copyStatus;
 
     /**
      * Get the eTag value.
@@ -93,9 +86,9 @@ public class AppendBlobsAppendBlockHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the AppendBlobsAppendBlockHeaders object itself.
+     * @return the BlobCopyHeaders object itself.
      */
-    public AppendBlobsAppendBlockHeaders withETag(String eTag) {
+    public BlobCopyHeaders withETag(String eTag) {
         this.eTag = eTag;
         return this;
     }
@@ -116,34 +109,14 @@ public class AppendBlobsAppendBlockHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the AppendBlobsAppendBlockHeaders object itself.
+     * @return the BlobCopyHeaders object itself.
      */
-    public AppendBlobsAppendBlockHeaders withLastModified(DateTime lastModified) {
+    public BlobCopyHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
             this.lastModified = new DateTimeRfc1123(lastModified);
         }
-        return this;
-    }
-
-    /**
-     * Get the contentMD5 value.
-     *
-     * @return the contentMD5 value
-     */
-    public String contentMD5() {
-        return this.contentMD5;
-    }
-
-    /**
-     * Set the contentMD5 value.
-     *
-     * @param contentMD5 the contentMD5 value to set
-     * @return the AppendBlobsAppendBlockHeaders object itself.
-     */
-    public AppendBlobsAppendBlockHeaders withContentMD5(String contentMD5) {
-        this.contentMD5 = contentMD5;
         return this;
     }
 
@@ -160,9 +133,9 @@ public class AppendBlobsAppendBlockHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the AppendBlobsAppendBlockHeaders object itself.
+     * @return the BlobCopyHeaders object itself.
      */
-    public AppendBlobsAppendBlockHeaders withRequestId(String requestId) {
+    public BlobCopyHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -180,9 +153,9 @@ public class AppendBlobsAppendBlockHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the AppendBlobsAppendBlockHeaders object itself.
+     * @return the BlobCopyHeaders object itself.
      */
-    public AppendBlobsAppendBlockHeaders withVersion(String version) {
+    public BlobCopyHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -203,9 +176,9 @@ public class AppendBlobsAppendBlockHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the AppendBlobsAppendBlockHeaders object itself.
+     * @return the BlobCopyHeaders object itself.
      */
-    public AppendBlobsAppendBlockHeaders withDateProperty(DateTime dateProperty) {
+    public BlobCopyHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
@@ -215,42 +188,42 @@ public class AppendBlobsAppendBlockHeaders {
     }
 
     /**
-     * Get the blobAppendOffset value.
+     * Get the copyId value.
      *
-     * @return the blobAppendOffset value
+     * @return the copyId value
      */
-    public String blobAppendOffset() {
-        return this.blobAppendOffset;
+    public String copyId() {
+        return this.copyId;
     }
 
     /**
-     * Set the blobAppendOffset value.
+     * Set the copyId value.
      *
-     * @param blobAppendOffset the blobAppendOffset value to set
-     * @return the AppendBlobsAppendBlockHeaders object itself.
+     * @param copyId the copyId value to set
+     * @return the BlobCopyHeaders object itself.
      */
-    public AppendBlobsAppendBlockHeaders withBlobAppendOffset(String blobAppendOffset) {
-        this.blobAppendOffset = blobAppendOffset;
+    public BlobCopyHeaders withCopyId(String copyId) {
+        this.copyId = copyId;
         return this;
     }
 
     /**
-     * Get the blobCommittedBlockCount value.
+     * Get the copyStatus value.
      *
-     * @return the blobCommittedBlockCount value
+     * @return the copyStatus value
      */
-    public String blobCommittedBlockCount() {
-        return this.blobCommittedBlockCount;
+    public CopyStatusType copyStatus() {
+        return this.copyStatus;
     }
 
     /**
-     * Set the blobCommittedBlockCount value.
+     * Set the copyStatus value.
      *
-     * @param blobCommittedBlockCount the blobCommittedBlockCount value to set
-     * @return the AppendBlobsAppendBlockHeaders object itself.
+     * @param copyStatus the copyStatus value to set
+     * @return the BlobCopyHeaders object itself.
      */
-    public AppendBlobsAppendBlockHeaders withBlobCommittedBlockCount(String blobCommittedBlockCount) {
-        this.blobCommittedBlockCount = blobCommittedBlockCount;
+    public BlobCopyHeaders withCopyStatus(CopyStatusType copyStatus) {
+        this.copyStatus = copyStatus;
         return this;
     }
 }

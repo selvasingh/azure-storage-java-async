@@ -16,10 +16,10 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for SetMetadata operation.
+ * Defines headers for IncrementalCopy operation.
  */
-@JacksonXmlRootElement(localName = "Blobs-SetMetadata-Headers")
-public class BlobsSetMetadataHeaders {
+@JacksonXmlRootElement(localName = "PageBlob-IncrementalCopy-Headers")
+public class PageBlobIncrementalCopyHeaders {
     /**
      * The ETag contains a value that you can use to perform operations
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
@@ -59,12 +59,19 @@ public class BlobsSetMetadataHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * The value of this header is set to true if the contents of the request
-     * are successfully encrypted using the specified algorithm, and false
-     * otherwise.
+     * String identifier for this copy operation. Use with Get Blob Properties
+     * to check the status of this copy operation, or pass to Abort Copy Blob
+     * to abort a pending copy.
      */
-    @JsonProperty(value = "x-ms-request-server-encrypted")
-    private Boolean isServerEncrypted;
+    @JsonProperty(value = "x-ms-copy-id")
+    private String copyId;
+
+    /**
+     * State of the copy operation identified by x-ms-copy-id. Possible values
+     * include: 'pending', 'success', 'aborted', 'failed'.
+     */
+    @JsonProperty(value = "x-ms-copy-status")
+    private CopyStatusType copyStatus;
 
     /**
      * Get the eTag value.
@@ -79,9 +86,9 @@ public class BlobsSetMetadataHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the BlobsSetMetadataHeaders object itself.
+     * @return the PageBlobIncrementalCopyHeaders object itself.
      */
-    public BlobsSetMetadataHeaders withETag(String eTag) {
+    public PageBlobIncrementalCopyHeaders withETag(String eTag) {
         this.eTag = eTag;
         return this;
     }
@@ -102,9 +109,9 @@ public class BlobsSetMetadataHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the BlobsSetMetadataHeaders object itself.
+     * @return the PageBlobIncrementalCopyHeaders object itself.
      */
-    public BlobsSetMetadataHeaders withLastModified(DateTime lastModified) {
+    public PageBlobIncrementalCopyHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
@@ -126,9 +133,9 @@ public class BlobsSetMetadataHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlobsSetMetadataHeaders object itself.
+     * @return the PageBlobIncrementalCopyHeaders object itself.
      */
-    public BlobsSetMetadataHeaders withRequestId(String requestId) {
+    public PageBlobIncrementalCopyHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -146,9 +153,9 @@ public class BlobsSetMetadataHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlobsSetMetadataHeaders object itself.
+     * @return the PageBlobIncrementalCopyHeaders object itself.
      */
-    public BlobsSetMetadataHeaders withVersion(String version) {
+    public PageBlobIncrementalCopyHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -169,9 +176,9 @@ public class BlobsSetMetadataHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlobsSetMetadataHeaders object itself.
+     * @return the PageBlobIncrementalCopyHeaders object itself.
      */
-    public BlobsSetMetadataHeaders withDateProperty(DateTime dateProperty) {
+    public PageBlobIncrementalCopyHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
@@ -181,22 +188,42 @@ public class BlobsSetMetadataHeaders {
     }
 
     /**
-     * Get the isServerEncrypted value.
+     * Get the copyId value.
      *
-     * @return the isServerEncrypted value
+     * @return the copyId value
      */
-    public Boolean isServerEncrypted() {
-        return this.isServerEncrypted;
+    public String copyId() {
+        return this.copyId;
     }
 
     /**
-     * Set the isServerEncrypted value.
+     * Set the copyId value.
      *
-     * @param isServerEncrypted the isServerEncrypted value to set
-     * @return the BlobsSetMetadataHeaders object itself.
+     * @param copyId the copyId value to set
+     * @return the PageBlobIncrementalCopyHeaders object itself.
      */
-    public BlobsSetMetadataHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
-        this.isServerEncrypted = isServerEncrypted;
+    public PageBlobIncrementalCopyHeaders withCopyId(String copyId) {
+        this.copyId = copyId;
+        return this;
+    }
+
+    /**
+     * Get the copyStatus value.
+     *
+     * @return the copyStatus value
+     */
+    public CopyStatusType copyStatus() {
+        return this.copyStatus;
+    }
+
+    /**
+     * Set the copyStatus value.
+     *
+     * @param copyStatus the copyStatus value to set
+     * @return the PageBlobIncrementalCopyHeaders object itself.
+     */
+    public PageBlobIncrementalCopyHeaders withCopyStatus(CopyStatusType copyStatus) {
+        this.copyStatus = copyStatus;
         return this;
     }
 }

@@ -11,13 +11,15 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for AppendBlock operation.
+ * Defines headers for Lease operation.
  */
-public class BlobsAppendBlockHeaders {
+@JacksonXmlRootElement(localName = "Blob-Lease-Headers")
+public class BlobLeaseHeaders {
     /**
      * The ETag contains a value that you can use to perform operations
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
@@ -32,15 +34,19 @@ public class BlobsAppendBlockHeaders {
      * properties, changes the last-modified time of the blob.
      */
     @JsonProperty(value = "Last-Modified")
-    private String lastModified;
+    private DateTimeRfc1123 lastModified;
 
     /**
-     * If the blob has an MD5 hash and this operation is to read the full blob,
-     * this response header is returned so that the client can check for
-     * message content integrity.
+     * Uniquely identifies a container's lease.
      */
-    @JsonProperty(value = "Content-MD5")
-    private String contentMD5;
+    @JsonProperty(value = "x-ms-lease-id")
+    private String leaseId;
+
+    /**
+     * Approximate time remaining in the lease period, in seconds.
+     */
+    @JsonProperty(value = "x-ms-lease-time")
+    private Integer leaseTime;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -65,20 +71,6 @@ public class BlobsAppendBlockHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * This response header is returned only for append operations. It returns
-     * the offset at which the block was committed, in bytes.
-     */
-    @JsonProperty(value = "x-ms-blob-append-offset")
-    private String blobAppendOffset;
-
-    /**
-     * The number of committed blocks present in the blob. This header is
-     * returned only for append blobs.
-     */
-    @JsonProperty(value = "x-ms-blob-committed-block-count")
-    private String blobCommittedBlockCount;
-
-    /**
      * Get the eTag value.
      *
      * @return the eTag value
@@ -91,9 +83,9 @@ public class BlobsAppendBlockHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the BlobsAppendBlockHeaders object itself.
+     * @return the BlobLeaseHeaders object itself.
      */
-    public BlobsAppendBlockHeaders withETag(String eTag) {
+    public BlobLeaseHeaders withETag(String eTag) {
         this.eTag = eTag;
         return this;
     }
@@ -103,38 +95,65 @@ public class BlobsAppendBlockHeaders {
      *
      * @return the lastModified value
      */
-    public String lastModified() {
-        return this.lastModified;
+    public DateTime lastModified() {
+        if (this.lastModified == null) {
+            return null;
+        }
+        return this.lastModified.dateTime();
     }
 
     /**
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the BlobsAppendBlockHeaders object itself.
+     * @return the BlobLeaseHeaders object itself.
      */
-    public BlobsAppendBlockHeaders withLastModified(String lastModified) {
-        this.lastModified = lastModified;
+    public BlobLeaseHeaders withLastModified(DateTime lastModified) {
+        if (lastModified == null) {
+            this.lastModified = null;
+        } else {
+            this.lastModified = new DateTimeRfc1123(lastModified);
+        }
         return this;
     }
 
     /**
-     * Get the contentMD5 value.
+     * Get the leaseId value.
      *
-     * @return the contentMD5 value
+     * @return the leaseId value
      */
-    public String contentMD5() {
-        return this.contentMD5;
+    public String leaseId() {
+        return this.leaseId;
     }
 
     /**
-     * Set the contentMD5 value.
+     * Set the leaseId value.
      *
-     * @param contentMD5 the contentMD5 value to set
-     * @return the BlobsAppendBlockHeaders object itself.
+     * @param leaseId the leaseId value to set
+     * @return the BlobLeaseHeaders object itself.
      */
-    public BlobsAppendBlockHeaders withContentMD5(String contentMD5) {
-        this.contentMD5 = contentMD5;
+    public BlobLeaseHeaders withLeaseId(String leaseId) {
+        this.leaseId = leaseId;
+        return this;
+    }
+
+    /**
+     * Get the leaseTime value.
+     *
+     * @return the leaseTime value
+     */
+    public Integer leaseTime() {
+        return this.leaseTime;
+    }
+
+    /**
+     * Set the leaseTime value.
+     *
+     * @param leaseTime the leaseTime value to set
+     * @return the BlobLeaseHeaders object itself.
+     */
+    public BlobLeaseHeaders withLeaseTime(Integer leaseTime) {
+        this.leaseTime = leaseTime;
         return this;
     }
 
@@ -151,9 +170,9 @@ public class BlobsAppendBlockHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlobsAppendBlockHeaders object itself.
+     * @return the BlobLeaseHeaders object itself.
      */
-    public BlobsAppendBlockHeaders withRequestId(String requestId) {
+    public BlobLeaseHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -171,9 +190,9 @@ public class BlobsAppendBlockHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlobsAppendBlockHeaders object itself.
+     * @return the BlobLeaseHeaders object itself.
      */
-    public BlobsAppendBlockHeaders withVersion(String version) {
+    public BlobLeaseHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -194,9 +213,9 @@ public class BlobsAppendBlockHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlobsAppendBlockHeaders object itself.
+     * @return the BlobLeaseHeaders object itself.
      */
-    public BlobsAppendBlockHeaders withDateProperty(DateTime dateProperty) {
+    public BlobLeaseHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
@@ -204,45 +223,4 @@ public class BlobsAppendBlockHeaders {
         }
         return this;
     }
-
-    /**
-     * Get the blobAppendOffset value.
-     *
-     * @return the blobAppendOffset value
-     */
-    public String blobAppendOffset() {
-        return this.blobAppendOffset;
-    }
-
-    /**
-     * Set the blobAppendOffset value.
-     *
-     * @param blobAppendOffset the blobAppendOffset value to set
-     * @return the BlobsAppendBlockHeaders object itself.
-     */
-    public BlobsAppendBlockHeaders withBlobAppendOffset(String blobAppendOffset) {
-        this.blobAppendOffset = blobAppendOffset;
-        return this;
-    }
-
-    /**
-     * Get the blobCommittedBlockCount value.
-     *
-     * @return the blobCommittedBlockCount value
-     */
-    public String blobCommittedBlockCount() {
-        return this.blobCommittedBlockCount;
-    }
-
-    /**
-     * Set the blobCommittedBlockCount value.
-     *
-     * @param blobCommittedBlockCount the blobCommittedBlockCount value to set
-     * @return the BlobsAppendBlockHeaders object itself.
-     */
-    public BlobsAppendBlockHeaders withBlobCommittedBlockCount(String blobCommittedBlockCount) {
-        this.blobCommittedBlockCount = blobCommittedBlockCount;
-        return this;
-    }
-
 }

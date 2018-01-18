@@ -16,10 +16,10 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for Lease operation.
+ * Defines headers for SetMetadata operation.
  */
-@JacksonXmlRootElement(localName = "Blobs-Lease-Headers")
-public class BlobsLeaseHeaders {
+@JacksonXmlRootElement(localName = "Blob-SetMetadata-Headers")
+public class BlobSetMetadataHeaders {
     /**
      * The ETag contains a value that you can use to perform operations
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
@@ -35,18 +35,6 @@ public class BlobsLeaseHeaders {
      */
     @JsonProperty(value = "Last-Modified")
     private DateTimeRfc1123 lastModified;
-
-    /**
-     * Uniquely identifies a container's lease.
-     */
-    @JsonProperty(value = "x-ms-lease-id")
-    private String leaseId;
-
-    /**
-     * Approximate time remaining in the lease period, in seconds.
-     */
-    @JsonProperty(value = "x-ms-lease-time")
-    private Integer leaseTime;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -71,6 +59,14 @@ public class BlobsLeaseHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
+     * The value of this header is set to true if the contents of the request
+     * are successfully encrypted using the specified algorithm, and false
+     * otherwise.
+     */
+    @JsonProperty(value = "x-ms-request-server-encrypted")
+    private Boolean isServerEncrypted;
+
+    /**
      * Get the eTag value.
      *
      * @return the eTag value
@@ -83,9 +79,9 @@ public class BlobsLeaseHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the BlobsLeaseHeaders object itself.
+     * @return the BlobSetMetadataHeaders object itself.
      */
-    public BlobsLeaseHeaders withETag(String eTag) {
+    public BlobSetMetadataHeaders withETag(String eTag) {
         this.eTag = eTag;
         return this;
     }
@@ -106,54 +102,14 @@ public class BlobsLeaseHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the BlobsLeaseHeaders object itself.
+     * @return the BlobSetMetadataHeaders object itself.
      */
-    public BlobsLeaseHeaders withLastModified(DateTime lastModified) {
+    public BlobSetMetadataHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
             this.lastModified = new DateTimeRfc1123(lastModified);
         }
-        return this;
-    }
-
-    /**
-     * Get the leaseId value.
-     *
-     * @return the leaseId value
-     */
-    public String leaseId() {
-        return this.leaseId;
-    }
-
-    /**
-     * Set the leaseId value.
-     *
-     * @param leaseId the leaseId value to set
-     * @return the BlobsLeaseHeaders object itself.
-     */
-    public BlobsLeaseHeaders withLeaseId(String leaseId) {
-        this.leaseId = leaseId;
-        return this;
-    }
-
-    /**
-     * Get the leaseTime value.
-     *
-     * @return the leaseTime value
-     */
-    public Integer leaseTime() {
-        return this.leaseTime;
-    }
-
-    /**
-     * Set the leaseTime value.
-     *
-     * @param leaseTime the leaseTime value to set
-     * @return the BlobsLeaseHeaders object itself.
-     */
-    public BlobsLeaseHeaders withLeaseTime(Integer leaseTime) {
-        this.leaseTime = leaseTime;
         return this;
     }
 
@@ -170,9 +126,9 @@ public class BlobsLeaseHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlobsLeaseHeaders object itself.
+     * @return the BlobSetMetadataHeaders object itself.
      */
-    public BlobsLeaseHeaders withRequestId(String requestId) {
+    public BlobSetMetadataHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -190,9 +146,9 @@ public class BlobsLeaseHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlobsLeaseHeaders object itself.
+     * @return the BlobSetMetadataHeaders object itself.
      */
-    public BlobsLeaseHeaders withVersion(String version) {
+    public BlobSetMetadataHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -213,14 +169,34 @@ public class BlobsLeaseHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlobsLeaseHeaders object itself.
+     * @return the BlobSetMetadataHeaders object itself.
      */
-    public BlobsLeaseHeaders withDateProperty(DateTime dateProperty) {
+    public BlobSetMetadataHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
             this.dateProperty = new DateTimeRfc1123(dateProperty);
         }
+        return this;
+    }
+
+    /**
+     * Get the isServerEncrypted value.
+     *
+     * @return the isServerEncrypted value
+     */
+    public Boolean isServerEncrypted() {
+        return this.isServerEncrypted;
+    }
+
+    /**
+     * Set the isServerEncrypted value.
+     *
+     * @param isServerEncrypted the isServerEncrypted value to set
+     * @return the BlobSetMetadataHeaders object itself.
+     */
+    public BlobSetMetadataHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
+        this.isServerEncrypted = isServerEncrypted;
         return this;
     }
 }

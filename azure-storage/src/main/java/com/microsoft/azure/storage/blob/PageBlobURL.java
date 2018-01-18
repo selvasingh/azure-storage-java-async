@@ -94,9 +94,9 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *       The {@link Single &lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
+     *       The {@link Single &lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsPutHeaders, Void>> createBlobAsync(
+    public Single<RestResponse<BlobPutHeaders, Void>> createBlobAsync(
             Long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
         if (sequenceNumber != null && sequenceNumber < 0) {
@@ -136,9 +136,9 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      A {@link Single &lt;RestResponse&lt;PageBlobsPutPage, Void&gt;&gt;} object if successful.
+     *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobsPutPageHeaders, Void>> putPagesAsync(
+    public Single<RestResponse<PageBlobPutPageHeaders, Void>> putPagesAsync(
             PageRange pageRange, AsyncInputStream body, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
@@ -171,9 +171,9 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      A {@link Single &lt;RestResponse&lt;PageBlobsPutPage, Void&gt;&gt;} object if successful.
+     *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobsPutPageHeaders, Void>> clearPagesAsync(
+    public Single<RestResponse<PageBlobPutPageHeaders, Void>> clearPagesAsync(
             PageRange pageRange, BlobAccessConditions accessConditions) {
      if(accessConditions == null) {
          accessConditions = BlobAccessConditions.getDefault();
@@ -207,9 +207,9 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      A {@link Single &lt;RestResponse&lt;PageBlobsPutPage, PageList&gt;&gt;} object if successful.
+     *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, PageList&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesAsync(
+    public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRangesAsync(
             BlobRange blobRange, BlobAccessConditions accessConditions) {
      if(accessConditions == null) {
          accessConditions = BlobAccessConditions.getDefault();
@@ -241,9 +241,9 @@ public final class PageBlobURL extends BlobURL {
      *     A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *     complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;PageBlobsGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;PageBlobGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesDiffAsync(
+    public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRangesDiffAsync(
             BlobRange blobRange, String prevSnapshot, BlobAccessConditions accessConditions) {
         if(blobRange == null) {
             blobRange = BlobRange.getDefault();
@@ -272,9 +272,9 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single &lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single &lt;RestResponse&lt;BlobSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> resizeAsync(
+    public Single<RestResponse<BlobSetPropertiesHeaders, Void>> resizeAsync(
             Long length, BlobAccessConditions accessConditions) {
         if (length%512 != 0) {
             return Single.error(new IllegalArgumentException("Length must be a multiple of a page size (512)."));
@@ -306,9 +306,9 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single &lt;RestResponse&lt;BlobsSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single &lt;RestResponse&lt;BlobSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsSetPropertiesHeaders, Void>> setSequenceNumber(
+    public Single<RestResponse<BlobSetPropertiesHeaders, Void>> setSequenceNumber(
             SequenceNumberActionType action, Long sequenceNumber, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
         if (sequenceNumber != null && sequenceNumber < 0) {
@@ -350,11 +350,11 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      A {@link Single &lt;RestResponse&lt;PageBlobsIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
+     *      A {@link Single &lt;RestResponse&lt;PageBlobIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
      * @throws URISyntaxException
      * @throws MalformedURLException
      */
-    public Single<RestResponse<PageBlobsIncrementalCopyHeaders, Void>> startIncrementalCopyAsync(
+    public Single<RestResponse<PageBlobIncrementalCopyHeaders, Void>> startIncrementalCopyAsync(
             URL source, String snapshot, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();

@@ -113,7 +113,7 @@ public class BlobStorageAPITests {
                     "myContentEncoding", "myLanguage", null,
                     "myType");
             bu.setPropertiesAsync(headers, null).blockingGet();
-            BlobsGetPropertiesHeaders receivedHeaders = bu.getPropertiesAndMetadataAsync(
+            BlobGetPropertiesHeaders receivedHeaders = bu.getPropertiesAndMetadataAsync(
                     null).blockingGet().headers();
             Assert.assertEquals(headers.getCacheControl(), receivedHeaders.cacheControl());
             Assert.assertEquals(headers.getContentDisposition(), receivedHeaders.contentDisposition());
@@ -243,7 +243,7 @@ public class BlobStorageAPITests {
 
             pbu.resizeAsync(512L * 4L, null).blockingGet();
             pbu.setSequenceNumber(SequenceNumberActionType.INCREMENT, null, null, null).blockingGet();
-            BlobsGetPropertiesHeaders pageHeaders = pbu.getPropertiesAndMetadataAsync(null).blockingGet().headers();
+            BlobGetPropertiesHeaders pageHeaders = pbu.getPropertiesAndMetadataAsync(null).blockingGet().headers();
             Assert.assertEquals(1, pageHeaders.blobSequenceNumber().longValue());
             Assert.assertEquals((long)(512*4), pageHeaders.contentLength().longValue());
 

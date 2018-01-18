@@ -26,6 +26,12 @@ public class Blob {
     private String name;
 
     /**
+     * The deleted property.
+     */
+    @JsonProperty(value = "Deleted", required = true)
+    private boolean deleted;
+
+    /**
      * The snapshot property.
      */
     @JsonProperty(value = "Snapshot", required = true)
@@ -60,6 +66,26 @@ public class Blob {
      */
     public Blob withName(String name) {
         this.name = name;
+        return this;
+    }
+
+    /**
+     * Get the deleted value.
+     *
+     * @return the deleted value
+     */
+    public boolean deleted() {
+        return this.deleted;
+    }
+
+    /**
+     * Set the deleted value.
+     *
+     * @param deleted the deleted value to set
+     * @return the Blob object itself.
+     */
+    public Blob withDeleted(boolean deleted) {
+        this.deleted = deleted;
         return this;
     }
 

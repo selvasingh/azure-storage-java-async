@@ -160,6 +160,18 @@ public class BlobProperties {
     private String destinationSnapshot;
 
     /**
+     * The deletedTime property.
+     */
+    @JsonProperty(value = "DeletedTime")
+    private DateTimeRfc1123 deletedTime;
+
+    /**
+     * The remainingRetentionDays property.
+     */
+    @JsonProperty(value = "RemainingRetentionDays")
+    private Integer remainingRetentionDays;
+
+    /**
      * Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50',
      * 'Hot', 'Cool', 'Archive'.
      */
@@ -650,6 +662,53 @@ public class BlobProperties {
      */
     public BlobProperties withDestinationSnapshot(String destinationSnapshot) {
         this.destinationSnapshot = destinationSnapshot;
+        return this;
+    }
+
+    /**
+     * Get the deletedTime value.
+     *
+     * @return the deletedTime value
+     */
+    public DateTime deletedTime() {
+        if (this.deletedTime == null) {
+            return null;
+        }
+        return this.deletedTime.dateTime();
+    }
+
+    /**
+     * Set the deletedTime value.
+     *
+     * @param deletedTime the deletedTime value to set
+     * @return the BlobProperties object itself.
+     */
+    public BlobProperties withDeletedTime(DateTime deletedTime) {
+        if (deletedTime == null) {
+            this.deletedTime = null;
+        } else {
+            this.deletedTime = new DateTimeRfc1123(deletedTime);
+        }
+        return this;
+    }
+
+    /**
+     * Get the remainingRetentionDays value.
+     *
+     * @return the remainingRetentionDays value
+     */
+    public Integer remainingRetentionDays() {
+        return this.remainingRetentionDays;
+    }
+
+    /**
+     * Set the remainingRetentionDays value.
+     *
+     * @param remainingRetentionDays the remainingRetentionDays value to set
+     * @return the BlobProperties object itself.
+     */
+    public BlobProperties withRemainingRetentionDays(Integer remainingRetentionDays) {
+        this.remainingRetentionDays = remainingRetentionDays;
         return this;
     }
 

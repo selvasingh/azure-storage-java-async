@@ -160,9 +160,14 @@ public final class Constants {
     public static final String ID = "Id";
 
     /**
-     * The default type for content-type and accept
+     * The default type for content-type and accept.
      */
     public static final String UTF8_CHARSET = "UTF-8";
+
+    /**
+     * The query parameter for snapshots.
+     */
+    public static final String SNAPSHOT_QUERY_PARAMETER = "snapshot";
 
     /**
      * Private Default Ctor

@@ -18,8 +18,8 @@ import org.joda.time.DateTime;
 /**
  * Defines headers for PutBlock operation.
  */
-@JacksonXmlRootElement(localName = "BlockBlobs-PutBlock-Headers")
-public class BlockBlobsPutBlockHeaders {
+@JacksonXmlRootElement(localName = "BlockBlob-PutBlock-Headers")
+public class BlockBlobPutBlockHeaders {
     /**
      * If the blob has an MD5 hash and this operation is to read the full blob,
      * this response header is returned so that the client can check for
@@ -71,9 +71,9 @@ public class BlockBlobsPutBlockHeaders {
      * Set the contentMD5 value.
      *
      * @param contentMD5 the contentMD5 value to set
-     * @return the BlockBlobsPutBlockHeaders object itself.
+     * @return the BlockBlobPutBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockHeaders withContentMD5(String contentMD5) {
+    public BlockBlobPutBlockHeaders withContentMD5(String contentMD5) {
         this.contentMD5 = contentMD5;
         return this;
     }
@@ -91,9 +91,9 @@ public class BlockBlobsPutBlockHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlockBlobsPutBlockHeaders object itself.
+     * @return the BlockBlobPutBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockHeaders withRequestId(String requestId) {
+    public BlockBlobPutBlockHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -111,9 +111,9 @@ public class BlockBlobsPutBlockHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlockBlobsPutBlockHeaders object itself.
+     * @return the BlockBlobPutBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockHeaders withVersion(String version) {
+    public BlockBlobPutBlockHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -134,9 +134,9 @@ public class BlockBlobsPutBlockHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlockBlobsPutBlockHeaders object itself.
+     * @return the BlockBlobPutBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockHeaders withDateProperty(DateTime dateProperty) {
+    public BlockBlobPutBlockHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
@@ -158,9 +158,9 @@ public class BlockBlobsPutBlockHeaders {
      * Set the isServerEncrypted value.
      *
      * @param isServerEncrypted the isServerEncrypted value to set
-     * @return the BlockBlobsPutBlockHeaders object itself.
+     * @return the BlockBlobPutBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
+    public BlockBlobPutBlockHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
         this.isServerEncrypted = isServerEncrypted;
         return this;
     }

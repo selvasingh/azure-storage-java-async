@@ -10,9 +10,9 @@
 
 package com.microsoft.azure.storage;
 
-import com.microsoft.azure.storage.models.BlockBlobsGetBlockListHeaders;
-import com.microsoft.azure.storage.models.BlockBlobsPutBlockHeaders;
-import com.microsoft.azure.storage.models.BlockBlobsPutBlockListHeaders;
+import com.microsoft.azure.storage.models.BlockBlobGetBlockListHeaders;
+import com.microsoft.azure.storage.models.BlockBlobPutBlockHeaders;
+import com.microsoft.azure.storage.models.BlockBlobPutBlockListHeaders;
 import com.microsoft.azure.storage.models.BlockList;
 import com.microsoft.azure.storage.models.BlockListType;
 import com.microsoft.azure.storage.models.BlockLookupList;
@@ -71,9 +71,9 @@ public interface BlockBlobs {
      * @param blockId A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block.
      * @param body Initial data
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return the {@link Single&lt;RestResponse&lt;BlockBlobsPutBlockHeaders, Void&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, AsyncInputStream body);
+    Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, AsyncInputStream body);
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
@@ -125,9 +125,9 @@ public interface BlockBlobs {
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return the {@link Single&lt;RestResponse&lt;BlockBlobsPutBlockHeaders, Void&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, AsyncInputStream body, Integer timeout, String leaseId, String requestId);
+    Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, AsyncInputStream body, Integer timeout, String leaseId, String requestId);
 
     /**
      * The Put Block List operation writes a blob by specifying the list of block IDs that make up the blob. In order to be written as part of a blob, a block must have been successfully written to the server in a prior Put Block operation. You can call Put Block List to update a blob by uploading only those blocks that have changed, then committing the new and existing blocks together. You can do this by specifying whether to commit a block from the committed block list or from the uncommitted block list, or to commit the most recently uploaded version of the block, whichever list it may belong to.
@@ -163,9 +163,9 @@ public interface BlockBlobs {
      *
      * @param blocks the BlockLookupList value
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return the {@link Single&lt;RestResponse&lt;BlockBlobsPutBlockListHeaders, Void&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockListHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlockBlobsPutBlockListHeaders, Void>> putBlockListWithRestResponseAsync(BlockLookupList blocks);
+    Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockListWithRestResponseAsync(BlockLookupList blocks);
 
     /**
      * The Put Block List operation writes a blob by specifying the list of block IDs that make up the blob. In order to be written as part of a blob, a block must have been successfully written to the server in a prior Put Block operation. You can call Put Block List to update a blob by uploading only those blocks that have changed, then committing the new and existing blocks together. You can do this by specifying whether to commit a block from the committed block list or from the uncommitted block list, or to commit the most recently uploaded version of the block, whichever list it may belong to.
@@ -257,9 +257,9 @@ public interface BlockBlobs {
      * @param ifNoneMatch Specify an ETag value to operate only on blobs without a matching value.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return the {@link Single&lt;RestResponse&lt;BlockBlobsPutBlockListHeaders, Void&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockListHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlockBlobsPutBlockListHeaders, Void>> putBlockListWithRestResponseAsync(BlockLookupList blocks, Integer timeout, String blobCacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockListWithRestResponseAsync(BlockLookupList blocks, Integer timeout, String blobCacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Block List operation retrieves the list of blocks that have been uploaded as part of a block blob.
@@ -296,9 +296,9 @@ public interface BlockBlobs {
      *
      * @param listType Specifies whether to return the list of committed blocks, the list of uncommitted blocks, or both lists together. Possible values include: 'committed', 'uncommitted', 'all'
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return the {@link Single&lt;RestResponse&lt;BlockBlobsGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlockBlobGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockListWithRestResponseAsync(BlockListType listType);
+    Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockListWithRestResponseAsync(BlockListType listType);
 
     /**
      * The Get Block List operation retrieves the list of blocks that have been uploaded as part of a block blob.
@@ -351,7 +351,7 @@ public interface BlockBlobs {
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation
-     * @return the {@link Single&lt;RestResponse&lt;BlockBlobsGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlockBlobGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockListWithRestResponseAsync(BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId);
+    Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockListWithRestResponseAsync(BlockListType listType, String snapshot, Integer timeout, String leaseId, String requestId);
 }

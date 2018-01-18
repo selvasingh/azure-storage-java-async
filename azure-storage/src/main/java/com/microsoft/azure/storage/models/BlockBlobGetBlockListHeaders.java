@@ -13,20 +13,13 @@ package com.microsoft.azure.storage.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
-import java.util.Map;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for GetMetadata operation.
+ * Defines headers for GetBlockList operation.
  */
-@JacksonXmlRootElement(localName = "Blobs-GetMetadata-Headers")
-public class BlobsGetMetadataHeaders {
-    /**
-     * The metadata property.
-     */
-    @JsonProperty(value = "x-ms-meta")
-    private Map<String, String> metadata;
-
+@JacksonXmlRootElement(localName = "BlockBlob-GetBlockList-Headers")
+public class BlockBlobGetBlockListHeaders {
     /**
      * Returns the date and time the container was last modified. Any operation
      * that modifies the blob, including an update of the blob's metadata or
@@ -42,6 +35,19 @@ public class BlobsGetMetadataHeaders {
      */
     @JsonProperty(value = "ETag")
     private String eTag;
+
+    /**
+     * The content type specified for the blob. The default content type is
+     * 'application/octet-stream'.
+     */
+    @JsonProperty(value = "Content-Type")
+    private String contentType;
+
+    /**
+     * The size of the blob in bytes.
+     */
+    @JsonProperty(value = "x-ms-blob-content-length")
+    private Long blobContentLength;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -66,26 +72,6 @@ public class BlobsGetMetadataHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * Get the metadata value.
-     *
-     * @return the metadata value
-     */
-    public Map<String, String> metadata() {
-        return this.metadata;
-    }
-
-    /**
-     * Set the metadata value.
-     *
-     * @param metadata the metadata value to set
-     * @return the BlobsGetMetadataHeaders object itself.
-     */
-    public BlobsGetMetadataHeaders withMetadata(Map<String, String> metadata) {
-        this.metadata = metadata;
-        return this;
-    }
-
-    /**
      * Get the lastModified value.
      *
      * @return the lastModified value
@@ -101,9 +87,9 @@ public class BlobsGetMetadataHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the BlobsGetMetadataHeaders object itself.
+     * @return the BlockBlobGetBlockListHeaders object itself.
      */
-    public BlobsGetMetadataHeaders withLastModified(DateTime lastModified) {
+    public BlockBlobGetBlockListHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
@@ -125,10 +111,50 @@ public class BlobsGetMetadataHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the BlobsGetMetadataHeaders object itself.
+     * @return the BlockBlobGetBlockListHeaders object itself.
      */
-    public BlobsGetMetadataHeaders withETag(String eTag) {
+    public BlockBlobGetBlockListHeaders withETag(String eTag) {
         this.eTag = eTag;
+        return this;
+    }
+
+    /**
+     * Get the contentType value.
+     *
+     * @return the contentType value
+     */
+    public String contentType() {
+        return this.contentType;
+    }
+
+    /**
+     * Set the contentType value.
+     *
+     * @param contentType the contentType value to set
+     * @return the BlockBlobGetBlockListHeaders object itself.
+     */
+    public BlockBlobGetBlockListHeaders withContentType(String contentType) {
+        this.contentType = contentType;
+        return this;
+    }
+
+    /**
+     * Get the blobContentLength value.
+     *
+     * @return the blobContentLength value
+     */
+    public Long blobContentLength() {
+        return this.blobContentLength;
+    }
+
+    /**
+     * Set the blobContentLength value.
+     *
+     * @param blobContentLength the blobContentLength value to set
+     * @return the BlockBlobGetBlockListHeaders object itself.
+     */
+    public BlockBlobGetBlockListHeaders withBlobContentLength(Long blobContentLength) {
+        this.blobContentLength = blobContentLength;
         return this;
     }
 
@@ -145,9 +171,9 @@ public class BlobsGetMetadataHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlobsGetMetadataHeaders object itself.
+     * @return the BlockBlobGetBlockListHeaders object itself.
      */
-    public BlobsGetMetadataHeaders withRequestId(String requestId) {
+    public BlockBlobGetBlockListHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -165,9 +191,9 @@ public class BlobsGetMetadataHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlobsGetMetadataHeaders object itself.
+     * @return the BlockBlobGetBlockListHeaders object itself.
      */
-    public BlobsGetMetadataHeaders withVersion(String version) {
+    public BlockBlobGetBlockListHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -188,9 +214,9 @@ public class BlobsGetMetadataHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlobsGetMetadataHeaders object itself.
+     * @return the BlockBlobGetBlockListHeaders object itself.
      */
-    public BlobsGetMetadataHeaders withDateProperty(DateTime dateProperty) {
+    public BlockBlobGetBlockListHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {

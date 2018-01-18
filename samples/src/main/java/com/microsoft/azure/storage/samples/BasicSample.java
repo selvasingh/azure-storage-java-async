@@ -16,8 +16,8 @@ import com.microsoft.azure.storage.blob.ServiceURL;
 import com.microsoft.azure.storage.blob.SharedKeyCredentials;
 import com.microsoft.azure.storage.blob.StorageURL;
 import com.microsoft.azure.storage.blob.TelemetryOptions;
-import com.microsoft.azure.storage.models.BlobsGetHeaders;
-import com.microsoft.azure.storage.models.BlobsPutHeaders;
+import com.microsoft.azure.storage.models.BlobGetHeaders;
+import com.microsoft.azure.storage.models.BlobPutHeaders;
 import com.microsoft.rest.v2.RestException;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.AsyncInputStream;
@@ -127,17 +127,17 @@ public class BasicSample {
                 }
             }) // blobURL.putBlobAsync will be performed unless the container create fails with an unrecoverable error.
             .andThen(blobURL.putBlobAsync(asyncStream, null, null, null))
-            .flatMap(new Function<RestResponse<BlobsPutHeaders, Void>, Single<RestResponse<BlobsGetHeaders, AsyncInputStream>>>() {
+            .flatMap(new Function<RestResponse<BlobPutHeaders, Void>, Single<RestResponse<BlobGetHeaders, AsyncInputStream>>>() {
             @Override
-            public Single<RestResponse<BlobsGetHeaders, AsyncInputStream>> apply(RestResponse<BlobsPutHeaders, Void> response) throws Exception {
+            public Single<RestResponse<BlobGetHeaders, AsyncInputStream>> apply(RestResponse<BlobPutHeaders, Void> response) throws Exception {
                 // This method is called after the blob is uploaded successfully.
 
                 // Now let's download the blob.
                 return blobURL.getBlobAsync(new BlobRange(0L, new Long(data.length)), null, false);
             }
-            }).flatMapCompletable(new Function<RestResponse<BlobsGetHeaders, AsyncInputStream>, Completable>() {
+            }).flatMapCompletable(new Function<RestResponse<BlobGetHeaders, AsyncInputStream>, Completable>() {
                 @Override
-                public Completable apply(RestResponse<BlobsGetHeaders, AsyncInputStream> response) throws Exception {
+                public Completable apply(RestResponse<BlobGetHeaders, AsyncInputStream> response) throws Exception {
                     // This method is called after getBlobAsync response headers have come back from the service.
                     // We now need to download the blob's contents.
 

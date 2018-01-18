@@ -16,10 +16,18 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for IncrementalCopy operation.
+ * Defines headers for GetPageRanges operation.
  */
-@JacksonXmlRootElement(localName = "PageBlobs-IncrementalCopy-Headers")
-public class PageBlobsIncrementalCopyHeaders {
+@JacksonXmlRootElement(localName = "PageBlob-GetPageRanges-Headers")
+public class PageBlobGetPageRangesHeaders {
+    /**
+     * Returns the date and time the container was last modified. Any operation
+     * that modifies the blob, including an update of the blob's metadata or
+     * properties, changes the last-modified time of the blob.
+     */
+    @JsonProperty(value = "Last-Modified")
+    private DateTimeRfc1123 lastModified;
+
     /**
      * The ETag contains a value that you can use to perform operations
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
@@ -29,12 +37,10 @@ public class PageBlobsIncrementalCopyHeaders {
     private String eTag;
 
     /**
-     * Returns the date and time the container was last modified. Any operation
-     * that modifies the blob, including an update of the blob's metadata or
-     * properties, changes the last-modified time of the blob.
+     * The size of the blob in bytes.
      */
-    @JsonProperty(value = "Last-Modified")
-    private DateTimeRfc1123 lastModified;
+    @JsonProperty(value = "x-ms-blob-content-length")
+    private Long blobContentLength;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -59,41 +65,6 @@ public class PageBlobsIncrementalCopyHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * String identifier for this copy operation. Use with Get Blob Properties
-     * to check the status of this copy operation, or pass to Abort Copy Blob
-     * to abort a pending copy.
-     */
-    @JsonProperty(value = "x-ms-copy-id")
-    private String copyId;
-
-    /**
-     * State of the copy operation identified by x-ms-copy-id. Possible values
-     * include: 'pending', 'success', 'aborted', 'failed'.
-     */
-    @JsonProperty(value = "x-ms-copy-status")
-    private CopyStatusType copyStatus;
-
-    /**
-     * Get the eTag value.
-     *
-     * @return the eTag value
-     */
-    public String eTag() {
-        return this.eTag;
-    }
-
-    /**
-     * Set the eTag value.
-     *
-     * @param eTag the eTag value to set
-     * @return the PageBlobsIncrementalCopyHeaders object itself.
-     */
-    public PageBlobsIncrementalCopyHeaders withETag(String eTag) {
-        this.eTag = eTag;
-        return this;
-    }
-
-    /**
      * Get the lastModified value.
      *
      * @return the lastModified value
@@ -109,14 +80,54 @@ public class PageBlobsIncrementalCopyHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the PageBlobsIncrementalCopyHeaders object itself.
+     * @return the PageBlobGetPageRangesHeaders object itself.
      */
-    public PageBlobsIncrementalCopyHeaders withLastModified(DateTime lastModified) {
+    public PageBlobGetPageRangesHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
             this.lastModified = new DateTimeRfc1123(lastModified);
         }
+        return this;
+    }
+
+    /**
+     * Get the eTag value.
+     *
+     * @return the eTag value
+     */
+    public String eTag() {
+        return this.eTag;
+    }
+
+    /**
+     * Set the eTag value.
+     *
+     * @param eTag the eTag value to set
+     * @return the PageBlobGetPageRangesHeaders object itself.
+     */
+    public PageBlobGetPageRangesHeaders withETag(String eTag) {
+        this.eTag = eTag;
+        return this;
+    }
+
+    /**
+     * Get the blobContentLength value.
+     *
+     * @return the blobContentLength value
+     */
+    public Long blobContentLength() {
+        return this.blobContentLength;
+    }
+
+    /**
+     * Set the blobContentLength value.
+     *
+     * @param blobContentLength the blobContentLength value to set
+     * @return the PageBlobGetPageRangesHeaders object itself.
+     */
+    public PageBlobGetPageRangesHeaders withBlobContentLength(Long blobContentLength) {
+        this.blobContentLength = blobContentLength;
         return this;
     }
 
@@ -133,9 +144,9 @@ public class PageBlobsIncrementalCopyHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the PageBlobsIncrementalCopyHeaders object itself.
+     * @return the PageBlobGetPageRangesHeaders object itself.
      */
-    public PageBlobsIncrementalCopyHeaders withRequestId(String requestId) {
+    public PageBlobGetPageRangesHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -153,9 +164,9 @@ public class PageBlobsIncrementalCopyHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the PageBlobsIncrementalCopyHeaders object itself.
+     * @return the PageBlobGetPageRangesHeaders object itself.
      */
-    public PageBlobsIncrementalCopyHeaders withVersion(String version) {
+    public PageBlobGetPageRangesHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -176,54 +187,14 @@ public class PageBlobsIncrementalCopyHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the PageBlobsIncrementalCopyHeaders object itself.
+     * @return the PageBlobGetPageRangesHeaders object itself.
      */
-    public PageBlobsIncrementalCopyHeaders withDateProperty(DateTime dateProperty) {
+    public PageBlobGetPageRangesHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
             this.dateProperty = new DateTimeRfc1123(dateProperty);
         }
-        return this;
-    }
-
-    /**
-     * Get the copyId value.
-     *
-     * @return the copyId value
-     */
-    public String copyId() {
-        return this.copyId;
-    }
-
-    /**
-     * Set the copyId value.
-     *
-     * @param copyId the copyId value to set
-     * @return the PageBlobsIncrementalCopyHeaders object itself.
-     */
-    public PageBlobsIncrementalCopyHeaders withCopyId(String copyId) {
-        this.copyId = copyId;
-        return this;
-    }
-
-    /**
-     * Get the copyStatus value.
-     *
-     * @return the copyStatus value
-     */
-    public CopyStatusType copyStatus() {
-        return this.copyStatus;
-    }
-
-    /**
-     * Set the copyStatus value.
-     *
-     * @param copyStatus the copyStatus value to set
-     * @return the PageBlobsIncrementalCopyHeaders object itself.
-     */
-    public PageBlobsIncrementalCopyHeaders withCopyStatus(CopyStatusType copyStatus) {
-        this.copyStatus = copyStatus;
         return this;
     }
 }

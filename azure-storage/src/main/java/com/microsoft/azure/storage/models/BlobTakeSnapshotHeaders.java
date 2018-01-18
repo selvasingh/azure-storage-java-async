@@ -16,17 +16,16 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for GetBlockList operation.
+ * Defines headers for TakeSnapshot operation.
  */
-@JacksonXmlRootElement(localName = "BlockBlobs-GetBlockList-Headers")
-public class BlockBlobsGetBlockListHeaders {
+@JacksonXmlRootElement(localName = "Blob-TakeSnapshot-Headers")
+public class BlobTakeSnapshotHeaders {
     /**
-     * Returns the date and time the container was last modified. Any operation
-     * that modifies the blob, including an update of the blob's metadata or
-     * properties, changes the last-modified time of the blob.
+     * Uniquely identifies the snapshot and indicates the snapshot version. It
+     * may be used in subsequent requests to access the snapshot.
      */
-    @JsonProperty(value = "Last-Modified")
-    private DateTimeRfc1123 lastModified;
+    @JsonProperty(value = "x-ms-snapshot")
+    private String snapshot;
 
     /**
      * The ETag contains a value that you can use to perform operations
@@ -37,17 +36,12 @@ public class BlockBlobsGetBlockListHeaders {
     private String eTag;
 
     /**
-     * The content type specified for the blob. The default content type is
-     * 'application/octet-stream'.
+     * Returns the date and time the container was last modified. Any operation
+     * that modifies the blob, including an update of the blob's metadata or
+     * properties, changes the last-modified time of the blob.
      */
-    @JsonProperty(value = "Content-Type")
-    private String contentType;
-
-    /**
-     * The size of the blob in bytes.
-     */
-    @JsonProperty(value = "x-ms-blob-content-length")
-    private Long blobContentLength;
+    @JsonProperty(value = "Last-Modified")
+    private DateTimeRfc1123 lastModified;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -72,29 +66,22 @@ public class BlockBlobsGetBlockListHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * Get the lastModified value.
+     * Get the snapshot value.
      *
-     * @return the lastModified value
+     * @return the snapshot value
      */
-    public DateTime lastModified() {
-        if (this.lastModified == null) {
-            return null;
-        }
-        return this.lastModified.dateTime();
+    public String snapshot() {
+        return this.snapshot;
     }
 
     /**
-     * Set the lastModified value.
+     * Set the snapshot value.
      *
-     * @param lastModified the lastModified value to set
-     * @return the BlockBlobsGetBlockListHeaders object itself.
+     * @param snapshot the snapshot value to set
+     * @return the BlobTakeSnapshotHeaders object itself.
      */
-    public BlockBlobsGetBlockListHeaders withLastModified(DateTime lastModified) {
-        if (lastModified == null) {
-            this.lastModified = null;
-        } else {
-            this.lastModified = new DateTimeRfc1123(lastModified);
-        }
+    public BlobTakeSnapshotHeaders withSnapshot(String snapshot) {
+        this.snapshot = snapshot;
         return this;
     }
 
@@ -111,50 +98,37 @@ public class BlockBlobsGetBlockListHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the BlockBlobsGetBlockListHeaders object itself.
+     * @return the BlobTakeSnapshotHeaders object itself.
      */
-    public BlockBlobsGetBlockListHeaders withETag(String eTag) {
+    public BlobTakeSnapshotHeaders withETag(String eTag) {
         this.eTag = eTag;
         return this;
     }
 
     /**
-     * Get the contentType value.
+     * Get the lastModified value.
      *
-     * @return the contentType value
+     * @return the lastModified value
      */
-    public String contentType() {
-        return this.contentType;
+    public DateTime lastModified() {
+        if (this.lastModified == null) {
+            return null;
+        }
+        return this.lastModified.dateTime();
     }
 
     /**
-     * Set the contentType value.
+     * Set the lastModified value.
      *
-     * @param contentType the contentType value to set
-     * @return the BlockBlobsGetBlockListHeaders object itself.
+     * @param lastModified the lastModified value to set
+     * @return the BlobTakeSnapshotHeaders object itself.
      */
-    public BlockBlobsGetBlockListHeaders withContentType(String contentType) {
-        this.contentType = contentType;
-        return this;
-    }
-
-    /**
-     * Get the blobContentLength value.
-     *
-     * @return the blobContentLength value
-     */
-    public Long blobContentLength() {
-        return this.blobContentLength;
-    }
-
-    /**
-     * Set the blobContentLength value.
-     *
-     * @param blobContentLength the blobContentLength value to set
-     * @return the BlockBlobsGetBlockListHeaders object itself.
-     */
-    public BlockBlobsGetBlockListHeaders withBlobContentLength(Long blobContentLength) {
-        this.blobContentLength = blobContentLength;
+    public BlobTakeSnapshotHeaders withLastModified(DateTime lastModified) {
+        if (lastModified == null) {
+            this.lastModified = null;
+        } else {
+            this.lastModified = new DateTimeRfc1123(lastModified);
+        }
         return this;
     }
 
@@ -171,9 +145,9 @@ public class BlockBlobsGetBlockListHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlockBlobsGetBlockListHeaders object itself.
+     * @return the BlobTakeSnapshotHeaders object itself.
      */
-    public BlockBlobsGetBlockListHeaders withRequestId(String requestId) {
+    public BlobTakeSnapshotHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -191,9 +165,9 @@ public class BlockBlobsGetBlockListHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlockBlobsGetBlockListHeaders object itself.
+     * @return the BlobTakeSnapshotHeaders object itself.
      */
-    public BlockBlobsGetBlockListHeaders withVersion(String version) {
+    public BlobTakeSnapshotHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -214,9 +188,9 @@ public class BlockBlobsGetBlockListHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlockBlobsGetBlockListHeaders object itself.
+     * @return the BlobTakeSnapshotHeaders object itself.
      */
-    public BlockBlobsGetBlockListHeaders withDateProperty(DateTime dateProperty) {
+    public BlobTakeSnapshotHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {

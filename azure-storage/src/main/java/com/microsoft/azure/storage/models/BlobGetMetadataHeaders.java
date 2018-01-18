@@ -13,20 +13,19 @@ package com.microsoft.azure.storage.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
+import java.util.Map;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for PutPage operation.
+ * Defines headers for GetMetadata operation.
  */
-@JacksonXmlRootElement(localName = "PageBlobs-PutPage-Headers")
-public class PageBlobsPutPageHeaders {
+@JacksonXmlRootElement(localName = "Blob-GetMetadata-Headers")
+public class BlobGetMetadataHeaders {
     /**
-     * The ETag contains a value that you can use to perform operations
-     * conditionally. If the request version is 2011-08-18 or newer, the ETag
-     * value will be in quotes.
+     * The metadata property.
      */
-    @JsonProperty(value = "ETag")
-    private String eTag;
+    @JsonProperty(value = "x-ms-meta")
+    private Map<String, String> metadata;
 
     /**
      * Returns the date and time the container was last modified. Any operation
@@ -37,18 +36,12 @@ public class PageBlobsPutPageHeaders {
     private DateTimeRfc1123 lastModified;
 
     /**
-     * If the blob has an MD5 hash and this operation is to read the full blob,
-     * this response header is returned so that the client can check for
-     * message content integrity.
+     * The ETag contains a value that you can use to perform operations
+     * conditionally. If the request version is 2011-08-18 or newer, the ETag
+     * value will be in quotes.
      */
-    @JsonProperty(value = "Content-MD5")
-    private String contentMD5;
-
-    /**
-     * The current sequence number for the page blob.
-     */
-    @JsonProperty(value = "x-ms-blob-sequence-number")
-    private Integer blobSequenceNumber;
+    @JsonProperty(value = "ETag")
+    private String eTag;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -73,30 +66,22 @@ public class PageBlobsPutPageHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * The value of this header is set to true if the contents of the request
-     * are successfully encrypted using the specified algorithm, and false
-     * otherwise.
-     */
-    @JsonProperty(value = "x-ms-request-server-encrypted")
-    private Boolean isServerEncrypted;
-
-    /**
-     * Get the eTag value.
+     * Get the metadata value.
      *
-     * @return the eTag value
+     * @return the metadata value
      */
-    public String eTag() {
-        return this.eTag;
+    public Map<String, String> metadata() {
+        return this.metadata;
     }
 
     /**
-     * Set the eTag value.
+     * Set the metadata value.
      *
-     * @param eTag the eTag value to set
-     * @return the PageBlobsPutPageHeaders object itself.
+     * @param metadata the metadata value to set
+     * @return the BlobGetMetadataHeaders object itself.
      */
-    public PageBlobsPutPageHeaders withETag(String eTag) {
-        this.eTag = eTag;
+    public BlobGetMetadataHeaders withMetadata(Map<String, String> metadata) {
+        this.metadata = metadata;
         return this;
     }
 
@@ -116,9 +101,9 @@ public class PageBlobsPutPageHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the PageBlobsPutPageHeaders object itself.
+     * @return the BlobGetMetadataHeaders object itself.
      */
-    public PageBlobsPutPageHeaders withLastModified(DateTime lastModified) {
+    public BlobGetMetadataHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
@@ -128,42 +113,22 @@ public class PageBlobsPutPageHeaders {
     }
 
     /**
-     * Get the contentMD5 value.
+     * Get the eTag value.
      *
-     * @return the contentMD5 value
+     * @return the eTag value
      */
-    public String contentMD5() {
-        return this.contentMD5;
+    public String eTag() {
+        return this.eTag;
     }
 
     /**
-     * Set the contentMD5 value.
+     * Set the eTag value.
      *
-     * @param contentMD5 the contentMD5 value to set
-     * @return the PageBlobsPutPageHeaders object itself.
+     * @param eTag the eTag value to set
+     * @return the BlobGetMetadataHeaders object itself.
      */
-    public PageBlobsPutPageHeaders withContentMD5(String contentMD5) {
-        this.contentMD5 = contentMD5;
-        return this;
-    }
-
-    /**
-     * Get the blobSequenceNumber value.
-     *
-     * @return the blobSequenceNumber value
-     */
-    public Integer blobSequenceNumber() {
-        return this.blobSequenceNumber;
-    }
-
-    /**
-     * Set the blobSequenceNumber value.
-     *
-     * @param blobSequenceNumber the blobSequenceNumber value to set
-     * @return the PageBlobsPutPageHeaders object itself.
-     */
-    public PageBlobsPutPageHeaders withBlobSequenceNumber(Integer blobSequenceNumber) {
-        this.blobSequenceNumber = blobSequenceNumber;
+    public BlobGetMetadataHeaders withETag(String eTag) {
+        this.eTag = eTag;
         return this;
     }
 
@@ -180,9 +145,9 @@ public class PageBlobsPutPageHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the PageBlobsPutPageHeaders object itself.
+     * @return the BlobGetMetadataHeaders object itself.
      */
-    public PageBlobsPutPageHeaders withRequestId(String requestId) {
+    public BlobGetMetadataHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -200,9 +165,9 @@ public class PageBlobsPutPageHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the PageBlobsPutPageHeaders object itself.
+     * @return the BlobGetMetadataHeaders object itself.
      */
-    public PageBlobsPutPageHeaders withVersion(String version) {
+    public BlobGetMetadataHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -223,34 +188,14 @@ public class PageBlobsPutPageHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the PageBlobsPutPageHeaders object itself.
+     * @return the BlobGetMetadataHeaders object itself.
      */
-    public PageBlobsPutPageHeaders withDateProperty(DateTime dateProperty) {
+    public BlobGetMetadataHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
             this.dateProperty = new DateTimeRfc1123(dateProperty);
         }
-        return this;
-    }
-
-    /**
-     * Get the isServerEncrypted value.
-     *
-     * @return the isServerEncrypted value
-     */
-    public Boolean isServerEncrypted() {
-        return this.isServerEncrypted;
-    }
-
-    /**
-     * Set the isServerEncrypted value.
-     *
-     * @param isServerEncrypted the isServerEncrypted value to set
-     * @return the PageBlobsPutPageHeaders object itself.
-     */
-    public PageBlobsPutPageHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
-        this.isServerEncrypted = isServerEncrypted;
         return this;
     }
 }

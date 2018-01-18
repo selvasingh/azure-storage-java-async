@@ -16,10 +16,10 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for Copy operation.
+ * Defines headers for Put operation.
  */
-@JacksonXmlRootElement(localName = "Blobs-Copy-Headers")
-public class BlobsCopyHeaders {
+@JacksonXmlRootElement(localName = "Blob-Put-Headers")
+public class BlobPutHeaders {
     /**
      * The ETag contains a value that you can use to perform operations
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
@@ -35,6 +35,14 @@ public class BlobsCopyHeaders {
      */
     @JsonProperty(value = "Last-Modified")
     private DateTimeRfc1123 lastModified;
+
+    /**
+     * If the blob has an MD5 hash and this operation is to read the full blob,
+     * this response header is returned so that the client can check for
+     * message content integrity.
+     */
+    @JsonProperty(value = "Content-MD5")
+    private String contentMD5;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -59,19 +67,12 @@ public class BlobsCopyHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * String identifier for this copy operation. Use with Get Blob Properties
-     * to check the status of this copy operation, or pass to Abort Copy Blob
-     * to abort a pending copy.
+     * The value of this header is set to true if the contents of the request
+     * are successfully encrypted using the specified algorithm, and false
+     * otherwise.
      */
-    @JsonProperty(value = "x-ms-copy-id")
-    private String copyId;
-
-    /**
-     * State of the copy operation identified by x-ms-copy-id. Possible values
-     * include: 'pending', 'success', 'aborted', 'failed'.
-     */
-    @JsonProperty(value = "x-ms-copy-status")
-    private CopyStatusType copyStatus;
+    @JsonProperty(value = "x-ms-request-server-encrypted")
+    private Boolean isServerEncrypted;
 
     /**
      * Get the eTag value.
@@ -86,9 +87,9 @@ public class BlobsCopyHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the BlobsCopyHeaders object itself.
+     * @return the BlobPutHeaders object itself.
      */
-    public BlobsCopyHeaders withETag(String eTag) {
+    public BlobPutHeaders withETag(String eTag) {
         this.eTag = eTag;
         return this;
     }
@@ -109,14 +110,34 @@ public class BlobsCopyHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the BlobsCopyHeaders object itself.
+     * @return the BlobPutHeaders object itself.
      */
-    public BlobsCopyHeaders withLastModified(DateTime lastModified) {
+    public BlobPutHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
             this.lastModified = new DateTimeRfc1123(lastModified);
         }
+        return this;
+    }
+
+    /**
+     * Get the contentMD5 value.
+     *
+     * @return the contentMD5 value
+     */
+    public String contentMD5() {
+        return this.contentMD5;
+    }
+
+    /**
+     * Set the contentMD5 value.
+     *
+     * @param contentMD5 the contentMD5 value to set
+     * @return the BlobPutHeaders object itself.
+     */
+    public BlobPutHeaders withContentMD5(String contentMD5) {
+        this.contentMD5 = contentMD5;
         return this;
     }
 
@@ -133,9 +154,9 @@ public class BlobsCopyHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlobsCopyHeaders object itself.
+     * @return the BlobPutHeaders object itself.
      */
-    public BlobsCopyHeaders withRequestId(String requestId) {
+    public BlobPutHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -153,9 +174,9 @@ public class BlobsCopyHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlobsCopyHeaders object itself.
+     * @return the BlobPutHeaders object itself.
      */
-    public BlobsCopyHeaders withVersion(String version) {
+    public BlobPutHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -176,9 +197,9 @@ public class BlobsCopyHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlobsCopyHeaders object itself.
+     * @return the BlobPutHeaders object itself.
      */
-    public BlobsCopyHeaders withDateProperty(DateTime dateProperty) {
+    public BlobPutHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
@@ -188,42 +209,22 @@ public class BlobsCopyHeaders {
     }
 
     /**
-     * Get the copyId value.
+     * Get the isServerEncrypted value.
      *
-     * @return the copyId value
+     * @return the isServerEncrypted value
      */
-    public String copyId() {
-        return this.copyId;
+    public Boolean isServerEncrypted() {
+        return this.isServerEncrypted;
     }
 
     /**
-     * Set the copyId value.
+     * Set the isServerEncrypted value.
      *
-     * @param copyId the copyId value to set
-     * @return the BlobsCopyHeaders object itself.
+     * @param isServerEncrypted the isServerEncrypted value to set
+     * @return the BlobPutHeaders object itself.
      */
-    public BlobsCopyHeaders withCopyId(String copyId) {
-        this.copyId = copyId;
-        return this;
-    }
-
-    /**
-     * Get the copyStatus value.
-     *
-     * @return the copyStatus value
-     */
-    public CopyStatusType copyStatus() {
-        return this.copyStatus;
-    }
-
-    /**
-     * Set the copyStatus value.
-     *
-     * @param copyStatus the copyStatus value to set
-     * @return the BlobsCopyHeaders object itself.
-     */
-    public BlobsCopyHeaders withCopyStatus(CopyStatusType copyStatus) {
-        this.copyStatus = copyStatus;
+    public BlobPutHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
+        this.isServerEncrypted = isServerEncrypted;
         return this;
     }
 }

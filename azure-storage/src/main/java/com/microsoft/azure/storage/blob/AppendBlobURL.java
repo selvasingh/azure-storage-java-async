@@ -14,9 +14,9 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import com.microsoft.azure.storage.models.AppendBlobsAppendBlockHeaders;
+import com.microsoft.azure.storage.models.AppendBlobAppendBlockHeaders;
 import com.microsoft.azure.storage.models.BlobType;
-import com.microsoft.azure.storage.models.BlobsPutHeaders;
+import com.microsoft.azure.storage.models.BlobPutHeaders;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
@@ -88,9 +88,9 @@ public final class AppendBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsPutHeaders, Void>> createBlobAsync(
+    public Single<RestResponse<BlobPutHeaders, Void>> createBlobAsync(
             Metadata metadata, BlobHttpHeaders headers, BlobAccessConditions accessConditions) {
         if(metadata == null) {
             metadata = Metadata.getDefault();
@@ -123,9 +123,9 @@ public final class AppendBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;AppendBlobsAppendBlockHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<AppendBlobsAppendBlockHeaders, Void>> appendBlockAsync(
+    public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockAsync(
             AsyncInputStream data, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();

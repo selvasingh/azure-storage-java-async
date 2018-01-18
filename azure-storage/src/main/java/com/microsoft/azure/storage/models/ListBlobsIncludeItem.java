@@ -27,7 +27,10 @@ public enum ListBlobsIncludeItem {
     UNCOMMITTEDBLOBS("uncommittedblobs"),
 
     /** Enum value copy. */
-    COPY("copy");
+    COPY("copy"),
+
+    /** Enum value deleted. */
+    DELETED("deleted");
 
     /** The actual serialized value for a ListBlobsIncludeItem instance. */
     private String value;

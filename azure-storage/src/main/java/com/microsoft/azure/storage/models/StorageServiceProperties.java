@@ -55,6 +55,12 @@ public class StorageServiceProperties {
     private String defaultServiceVersion;
 
     /**
+     * The Delete Retention Policy for the service.
+     */
+    @JsonProperty(value = "DeleteRetentionPolicy")
+    private RetentionPolicy deleteRetentionPolicy;
+
+    /**
      * Get the logging value.
      *
      * @return the logging value
@@ -151,6 +157,26 @@ public class StorageServiceProperties {
      */
     public StorageServiceProperties withDefaultServiceVersion(String defaultServiceVersion) {
         this.defaultServiceVersion = defaultServiceVersion;
+        return this;
+    }
+
+    /**
+     * Get the deleteRetentionPolicy value.
+     *
+     * @return the deleteRetentionPolicy value
+     */
+    public RetentionPolicy deleteRetentionPolicy() {
+        return this.deleteRetentionPolicy;
+    }
+
+    /**
+     * Set the deleteRetentionPolicy value.
+     *
+     * @param deleteRetentionPolicy the deleteRetentionPolicy value to set
+     * @return the StorageServiceProperties object itself.
+     */
+    public StorageServiceProperties withDeleteRetentionPolicy(RetentionPolicy deleteRetentionPolicy) {
+        this.deleteRetentionPolicy = deleteRetentionPolicy;
         return this;
     }
 }

@@ -18,8 +18,8 @@ import org.joda.time.DateTime;
 /**
  * Defines headers for AbortCopy operation.
  */
-@JacksonXmlRootElement(localName = "Blobs-AbortCopy-Headers")
-public class BlobsAbortCopyHeaders {
+@JacksonXmlRootElement(localName = "Blob-AbortCopy-Headers")
+public class BlobAbortCopyHeaders {
     /**
      * This header uniquely identifies the request that was made and can be
      * used for troubleshooting the request.
@@ -55,9 +55,9 @@ public class BlobsAbortCopyHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlobsAbortCopyHeaders object itself.
+     * @return the BlobAbortCopyHeaders object itself.
      */
-    public BlobsAbortCopyHeaders withRequestId(String requestId) {
+    public BlobAbortCopyHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -75,9 +75,9 @@ public class BlobsAbortCopyHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlobsAbortCopyHeaders object itself.
+     * @return the BlobAbortCopyHeaders object itself.
      */
-    public BlobsAbortCopyHeaders withVersion(String version) {
+    public BlobAbortCopyHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -98,9 +98,9 @@ public class BlobsAbortCopyHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlobsAbortCopyHeaders object itself.
+     * @return the BlobAbortCopyHeaders object itself.
      */
-    public BlobsAbortCopyHeaders withDateProperty(DateTime dateProperty) {
+    public BlobAbortCopyHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {

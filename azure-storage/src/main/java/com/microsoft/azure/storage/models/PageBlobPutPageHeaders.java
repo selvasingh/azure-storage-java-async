@@ -16,17 +16,10 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for TakeSnapshot operation.
+ * Defines headers for PutPage operation.
  */
-@JacksonXmlRootElement(localName = "Blobs-TakeSnapshot-Headers")
-public class BlobsTakeSnapshotHeaders {
-    /**
-     * Uniquely identifies the snapshot and indicates the snapshot version. It
-     * may be used in subsequent requests to access the snapshot.
-     */
-    @JsonProperty(value = "x-ms-snapshot")
-    private String snapshot;
-
+@JacksonXmlRootElement(localName = "PageBlob-PutPage-Headers")
+public class PageBlobPutPageHeaders {
     /**
      * The ETag contains a value that you can use to perform operations
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
@@ -42,6 +35,20 @@ public class BlobsTakeSnapshotHeaders {
      */
     @JsonProperty(value = "Last-Modified")
     private DateTimeRfc1123 lastModified;
+
+    /**
+     * If the blob has an MD5 hash and this operation is to read the full blob,
+     * this response header is returned so that the client can check for
+     * message content integrity.
+     */
+    @JsonProperty(value = "Content-MD5")
+    private String contentMD5;
+
+    /**
+     * The current sequence number for the page blob.
+     */
+    @JsonProperty(value = "x-ms-blob-sequence-number")
+    private Integer blobSequenceNumber;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -66,24 +73,12 @@ public class BlobsTakeSnapshotHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * Get the snapshot value.
-     *
-     * @return the snapshot value
+     * The value of this header is set to true if the contents of the request
+     * are successfully encrypted using the specified algorithm, and false
+     * otherwise.
      */
-    public String snapshot() {
-        return this.snapshot;
-    }
-
-    /**
-     * Set the snapshot value.
-     *
-     * @param snapshot the snapshot value to set
-     * @return the BlobsTakeSnapshotHeaders object itself.
-     */
-    public BlobsTakeSnapshotHeaders withSnapshot(String snapshot) {
-        this.snapshot = snapshot;
-        return this;
-    }
+    @JsonProperty(value = "x-ms-request-server-encrypted")
+    private Boolean isServerEncrypted;
 
     /**
      * Get the eTag value.
@@ -98,9 +93,9 @@ public class BlobsTakeSnapshotHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the BlobsTakeSnapshotHeaders object itself.
+     * @return the PageBlobPutPageHeaders object itself.
      */
-    public BlobsTakeSnapshotHeaders withETag(String eTag) {
+    public PageBlobPutPageHeaders withETag(String eTag) {
         this.eTag = eTag;
         return this;
     }
@@ -121,14 +116,54 @@ public class BlobsTakeSnapshotHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the BlobsTakeSnapshotHeaders object itself.
+     * @return the PageBlobPutPageHeaders object itself.
      */
-    public BlobsTakeSnapshotHeaders withLastModified(DateTime lastModified) {
+    public PageBlobPutPageHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
             this.lastModified = new DateTimeRfc1123(lastModified);
         }
+        return this;
+    }
+
+    /**
+     * Get the contentMD5 value.
+     *
+     * @return the contentMD5 value
+     */
+    public String contentMD5() {
+        return this.contentMD5;
+    }
+
+    /**
+     * Set the contentMD5 value.
+     *
+     * @param contentMD5 the contentMD5 value to set
+     * @return the PageBlobPutPageHeaders object itself.
+     */
+    public PageBlobPutPageHeaders withContentMD5(String contentMD5) {
+        this.contentMD5 = contentMD5;
+        return this;
+    }
+
+    /**
+     * Get the blobSequenceNumber value.
+     *
+     * @return the blobSequenceNumber value
+     */
+    public Integer blobSequenceNumber() {
+        return this.blobSequenceNumber;
+    }
+
+    /**
+     * Set the blobSequenceNumber value.
+     *
+     * @param blobSequenceNumber the blobSequenceNumber value to set
+     * @return the PageBlobPutPageHeaders object itself.
+     */
+    public PageBlobPutPageHeaders withBlobSequenceNumber(Integer blobSequenceNumber) {
+        this.blobSequenceNumber = blobSequenceNumber;
         return this;
     }
 
@@ -145,9 +180,9 @@ public class BlobsTakeSnapshotHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlobsTakeSnapshotHeaders object itself.
+     * @return the PageBlobPutPageHeaders object itself.
      */
-    public BlobsTakeSnapshotHeaders withRequestId(String requestId) {
+    public PageBlobPutPageHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -165,9 +200,9 @@ public class BlobsTakeSnapshotHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlobsTakeSnapshotHeaders object itself.
+     * @return the PageBlobPutPageHeaders object itself.
      */
-    public BlobsTakeSnapshotHeaders withVersion(String version) {
+    public PageBlobPutPageHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -188,14 +223,34 @@ public class BlobsTakeSnapshotHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlobsTakeSnapshotHeaders object itself.
+     * @return the PageBlobPutPageHeaders object itself.
      */
-    public BlobsTakeSnapshotHeaders withDateProperty(DateTime dateProperty) {
+    public PageBlobPutPageHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
             this.dateProperty = new DateTimeRfc1123(dateProperty);
         }
+        return this;
+    }
+
+    /**
+     * Get the isServerEncrypted value.
+     *
+     * @return the isServerEncrypted value
+     */
+    public Boolean isServerEncrypted() {
+        return this.isServerEncrypted;
+    }
+
+    /**
+     * Set the isServerEncrypted value.
+     *
+     * @param isServerEncrypted the isServerEncrypted value to set
+     * @return the PageBlobPutPageHeaders object itself.
+     */
+    public PageBlobPutPageHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
+        this.isServerEncrypted = isServerEncrypted;
         return this;
     }
 }

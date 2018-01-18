@@ -16,10 +16,10 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for SetProperties operation.
+ * Defines headers for PutBlockList operation.
  */
-@JacksonXmlRootElement(localName = "Blobs-SetProperties-Headers")
-public class BlobsSetPropertiesHeaders {
+@JacksonXmlRootElement(localName = "BlockBlob-PutBlockList-Headers")
+public class BlockBlobPutBlockListHeaders {
     /**
      * The ETag contains a value that you can use to perform operations
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
@@ -37,11 +37,12 @@ public class BlobsSetPropertiesHeaders {
     private DateTimeRfc1123 lastModified;
 
     /**
-     * The current sequence number for a page blob. This header is not returned
-     * for block blobs or append blobs.
+     * If the blob has an MD5 hash and this operation is to read the full blob,
+     * this response header is returned so that the client can check for
+     * message content integrity.
      */
-    @JsonProperty(value = "x-ms-blob-sequence-number")
-    private String blobSequenceNumber;
+    @JsonProperty(value = "Content-MD5")
+    private String contentMD5;
 
     /**
      * This header uniquely identifies the request that was made and can be
@@ -66,6 +67,14 @@ public class BlobsSetPropertiesHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
+     * The value of this header is set to true if the contents of the request
+     * are successfully encrypted using the specified algorithm, and false
+     * otherwise.
+     */
+    @JsonProperty(value = "x-ms-request-server-encrypted")
+    private Boolean isServerEncrypted;
+
+    /**
      * Get the eTag value.
      *
      * @return the eTag value
@@ -78,9 +87,9 @@ public class BlobsSetPropertiesHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the BlobsSetPropertiesHeaders object itself.
+     * @return the BlockBlobPutBlockListHeaders object itself.
      */
-    public BlobsSetPropertiesHeaders withETag(String eTag) {
+    public BlockBlobPutBlockListHeaders withETag(String eTag) {
         this.eTag = eTag;
         return this;
     }
@@ -101,9 +110,9 @@ public class BlobsSetPropertiesHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the BlobsSetPropertiesHeaders object itself.
+     * @return the BlockBlobPutBlockListHeaders object itself.
      */
-    public BlobsSetPropertiesHeaders withLastModified(DateTime lastModified) {
+    public BlockBlobPutBlockListHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
@@ -113,22 +122,22 @@ public class BlobsSetPropertiesHeaders {
     }
 
     /**
-     * Get the blobSequenceNumber value.
+     * Get the contentMD5 value.
      *
-     * @return the blobSequenceNumber value
+     * @return the contentMD5 value
      */
-    public String blobSequenceNumber() {
-        return this.blobSequenceNumber;
+    public String contentMD5() {
+        return this.contentMD5;
     }
 
     /**
-     * Set the blobSequenceNumber value.
+     * Set the contentMD5 value.
      *
-     * @param blobSequenceNumber the blobSequenceNumber value to set
-     * @return the BlobsSetPropertiesHeaders object itself.
+     * @param contentMD5 the contentMD5 value to set
+     * @return the BlockBlobPutBlockListHeaders object itself.
      */
-    public BlobsSetPropertiesHeaders withBlobSequenceNumber(String blobSequenceNumber) {
-        this.blobSequenceNumber = blobSequenceNumber;
+    public BlockBlobPutBlockListHeaders withContentMD5(String contentMD5) {
+        this.contentMD5 = contentMD5;
         return this;
     }
 
@@ -145,9 +154,9 @@ public class BlobsSetPropertiesHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlobsSetPropertiesHeaders object itself.
+     * @return the BlockBlobPutBlockListHeaders object itself.
      */
-    public BlobsSetPropertiesHeaders withRequestId(String requestId) {
+    public BlockBlobPutBlockListHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -165,9 +174,9 @@ public class BlobsSetPropertiesHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlobsSetPropertiesHeaders object itself.
+     * @return the BlockBlobPutBlockListHeaders object itself.
      */
-    public BlobsSetPropertiesHeaders withVersion(String version) {
+    public BlockBlobPutBlockListHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -188,14 +197,34 @@ public class BlobsSetPropertiesHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlobsSetPropertiesHeaders object itself.
+     * @return the BlockBlobPutBlockListHeaders object itself.
      */
-    public BlobsSetPropertiesHeaders withDateProperty(DateTime dateProperty) {
+    public BlockBlobPutBlockListHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
             this.dateProperty = new DateTimeRfc1123(dateProperty);
         }
+        return this;
+    }
+
+    /**
+     * Get the isServerEncrypted value.
+     *
+     * @return the isServerEncrypted value
+     */
+    public Boolean isServerEncrypted() {
+        return this.isServerEncrypted;
+    }
+
+    /**
+     * Set the isServerEncrypted value.
+     *
+     * @param isServerEncrypted the isServerEncrypted value to set
+     * @return the BlockBlobPutBlockListHeaders object itself.
+     */
+    public BlockBlobPutBlockListHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
+        this.isServerEncrypted = isServerEncrypted;
         return this;
     }
 }

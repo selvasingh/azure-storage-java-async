@@ -18,8 +18,8 @@ import org.joda.time.DateTime;
 /**
  * Defines headers for Delete operation.
  */
-@JacksonXmlRootElement(localName = "Blobs-Delete-Headers")
-public class BlobsDeleteHeaders {
+@JacksonXmlRootElement(localName = "Blob-Delete-Headers")
+public class BlobDeleteHeaders {
     /**
      * This header uniquely identifies the request that was made and can be
      * used for troubleshooting the request.
@@ -55,9 +55,9 @@ public class BlobsDeleteHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlobsDeleteHeaders object itself.
+     * @return the BlobDeleteHeaders object itself.
      */
-    public BlobsDeleteHeaders withRequestId(String requestId) {
+    public BlobDeleteHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -75,9 +75,9 @@ public class BlobsDeleteHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlobsDeleteHeaders object itself.
+     * @return the BlobDeleteHeaders object itself.
      */
-    public BlobsDeleteHeaders withVersion(String version) {
+    public BlobDeleteHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -98,9 +98,9 @@ public class BlobsDeleteHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlobsDeleteHeaders object itself.
+     * @return the BlobDeleteHeaders object itself.
      */
-    public BlobsDeleteHeaders withDateProperty(DateTime dateProperty) {
+    public BlobDeleteHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {

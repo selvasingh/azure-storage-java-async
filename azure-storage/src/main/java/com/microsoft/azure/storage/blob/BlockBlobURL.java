@@ -90,9 +90,9 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlobsPutHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobsPutHeaders, Void>> putBlobAsync(
+    public Single<RestResponse<BlobPutHeaders, Void>> putBlobAsync(
             AsyncInputStream data, BlobHttpHeaders headers, Metadata metadata, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
@@ -127,9 +127,9 @@ public final class BlockBlobURL extends BlobURL {
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the blob if there is one.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlockBlobsPutBlockHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobsPutBlockHeaders, Void>> putBlockAsync(
+    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockAsync(
             String base64BlockID, AsyncInputStream data, LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
@@ -146,9 +146,9 @@ public final class BlockBlobURL extends BlobURL {
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the blob if there is one.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlockBlobsGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlockBlobGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobsGetBlockListHeaders, BlockList>> getBlockListAsync(
+    public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockListAsync(
             BlockListType listType, LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
@@ -175,9 +175,9 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlockBlobsPutBlockListHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockListHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobsPutBlockListHeaders, Void>> putBlockListAsync(
+    public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockListAsync(
             List<String> base64BlockIDs, Metadata metadata, BlobHttpHeaders httpHeaders,
             BlobAccessConditions accessConditions) {
         if(metadata == null) {

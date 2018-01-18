@@ -154,7 +154,7 @@ public final class BlobURLParts {
         }
 
         if (this.snapshot != null) {
-            url.addQueryParameter("snapshot", this.snapshot);
+            url.addQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, this.snapshot);
         }
 
         String query = url.query() != null ?

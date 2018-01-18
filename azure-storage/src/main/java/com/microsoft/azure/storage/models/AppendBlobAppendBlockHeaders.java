@@ -16,10 +16,10 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for PutBlockList operation.
+ * Defines headers for AppendBlock operation.
  */
-@JacksonXmlRootElement(localName = "BlockBlobs-PutBlockList-Headers")
-public class BlockBlobsPutBlockListHeaders {
+@JacksonXmlRootElement(localName = "AppendBlob-AppendBlock-Headers")
+public class AppendBlobAppendBlockHeaders {
     /**
      * The ETag contains a value that you can use to perform operations
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
@@ -67,12 +67,18 @@ public class BlockBlobsPutBlockListHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * The value of this header is set to true if the contents of the request
-     * are successfully encrypted using the specified algorithm, and false
-     * otherwise.
+     * This response header is returned only for append operations. It returns
+     * the offset at which the block was committed, in bytes.
      */
-    @JsonProperty(value = "x-ms-request-server-encrypted")
-    private Boolean isServerEncrypted;
+    @JsonProperty(value = "x-ms-blob-append-offset")
+    private String blobAppendOffset;
+
+    /**
+     * The number of committed blocks present in the blob. This header is
+     * returned only for append blobs.
+     */
+    @JsonProperty(value = "x-ms-blob-committed-block-count")
+    private String blobCommittedBlockCount;
 
     /**
      * Get the eTag value.
@@ -87,9 +93,9 @@ public class BlockBlobsPutBlockListHeaders {
      * Set the eTag value.
      *
      * @param eTag the eTag value to set
-     * @return the BlockBlobsPutBlockListHeaders object itself.
+     * @return the AppendBlobAppendBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockListHeaders withETag(String eTag) {
+    public AppendBlobAppendBlockHeaders withETag(String eTag) {
         this.eTag = eTag;
         return this;
     }
@@ -110,9 +116,9 @@ public class BlockBlobsPutBlockListHeaders {
      * Set the lastModified value.
      *
      * @param lastModified the lastModified value to set
-     * @return the BlockBlobsPutBlockListHeaders object itself.
+     * @return the AppendBlobAppendBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockListHeaders withLastModified(DateTime lastModified) {
+    public AppendBlobAppendBlockHeaders withLastModified(DateTime lastModified) {
         if (lastModified == null) {
             this.lastModified = null;
         } else {
@@ -134,9 +140,9 @@ public class BlockBlobsPutBlockListHeaders {
      * Set the contentMD5 value.
      *
      * @param contentMD5 the contentMD5 value to set
-     * @return the BlockBlobsPutBlockListHeaders object itself.
+     * @return the AppendBlobAppendBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockListHeaders withContentMD5(String contentMD5) {
+    public AppendBlobAppendBlockHeaders withContentMD5(String contentMD5) {
         this.contentMD5 = contentMD5;
         return this;
     }
@@ -154,9 +160,9 @@ public class BlockBlobsPutBlockListHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set
-     * @return the BlockBlobsPutBlockListHeaders object itself.
+     * @return the AppendBlobAppendBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockListHeaders withRequestId(String requestId) {
+    public AppendBlobAppendBlockHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -174,9 +180,9 @@ public class BlockBlobsPutBlockListHeaders {
      * Set the version value.
      *
      * @param version the version value to set
-     * @return the BlockBlobsPutBlockListHeaders object itself.
+     * @return the AppendBlobAppendBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockListHeaders withVersion(String version) {
+    public AppendBlobAppendBlockHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -197,9 +203,9 @@ public class BlockBlobsPutBlockListHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set
-     * @return the BlockBlobsPutBlockListHeaders object itself.
+     * @return the AppendBlobAppendBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockListHeaders withDateProperty(DateTime dateProperty) {
+    public AppendBlobAppendBlockHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {
@@ -209,22 +215,42 @@ public class BlockBlobsPutBlockListHeaders {
     }
 
     /**
-     * Get the isServerEncrypted value.
+     * Get the blobAppendOffset value.
      *
-     * @return the isServerEncrypted value
+     * @return the blobAppendOffset value
      */
-    public Boolean isServerEncrypted() {
-        return this.isServerEncrypted;
+    public String blobAppendOffset() {
+        return this.blobAppendOffset;
     }
 
     /**
-     * Set the isServerEncrypted value.
+     * Set the blobAppendOffset value.
      *
-     * @param isServerEncrypted the isServerEncrypted value to set
-     * @return the BlockBlobsPutBlockListHeaders object itself.
+     * @param blobAppendOffset the blobAppendOffset value to set
+     * @return the AppendBlobAppendBlockHeaders object itself.
      */
-    public BlockBlobsPutBlockListHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
-        this.isServerEncrypted = isServerEncrypted;
+    public AppendBlobAppendBlockHeaders withBlobAppendOffset(String blobAppendOffset) {
+        this.blobAppendOffset = blobAppendOffset;
+        return this;
+    }
+
+    /**
+     * Get the blobCommittedBlockCount value.
+     *
+     * @return the blobCommittedBlockCount value
+     */
+    public String blobCommittedBlockCount() {
+        return this.blobCommittedBlockCount;
+    }
+
+    /**
+     * Set the blobCommittedBlockCount value.
+     *
+     * @param blobCommittedBlockCount the blobCommittedBlockCount value to set
+     * @return the AppendBlobAppendBlockHeaders object itself.
+     */
+    public AppendBlobAppendBlockHeaders withBlobCommittedBlockCount(String blobCommittedBlockCount) {
+        this.blobCommittedBlockCount = blobCommittedBlockCount;
         return this;
     }
 }
