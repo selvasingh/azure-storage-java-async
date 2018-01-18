@@ -36,7 +36,7 @@ public final class TelemetryFactory implements RequestPolicyFactory {
     public TelemetryFactory(TelemetryOptions telemetryOptions) {
         String userAgentPrefix = telemetryOptions.UserAgentPrefix() == null ?
                 Constants.EMPTY_STRING : telemetryOptions.UserAgentPrefix();
-        userAgent = userAgentPrefix + ' ' +
+        this.userAgent = userAgentPrefix + ' ' +
                 Constants.HeaderConstants.USER_AGENT_PREFIX + '/' + Constants.HeaderConstants.USER_AGENT_VERSION +
                 String.format(Utility.LOCALE_US, "(JavaJRE %s; %s %s)",
                     System.getProperty("java.version"),

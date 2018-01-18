@@ -243,7 +243,6 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;PageBlobsGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
      */
-    //TODO: Get rid of joda time (use java.util.Date?)
     public Single<RestResponse<PageBlobsGetPageRangesHeaders, PageList>> getPageRangesDiffAsync(
             BlobRange blobRange, String prevSnapshot, BlobAccessConditions accessConditions) {
         if(blobRange == null) {

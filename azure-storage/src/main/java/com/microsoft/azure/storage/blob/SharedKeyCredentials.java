@@ -44,12 +44,14 @@ public final class SharedKeyCredentials implements ICredentials {
 
     /**
      * Initializes a new instance of SharedKeyCredentials contains an account's name and its primary or secondary key.
+     *
      * @param accountName
      *      The account name associated with the request.
      * @param key
      *      A string that represent the account access key.
      */
-    public SharedKeyCredentials(String accountName, String key) throws UnsupportedEncodingException, InvalidKeyException {
+    public SharedKeyCredentials(String accountName, String key)
+            throws UnsupportedEncodingException, InvalidKeyException {
         this.accountName = accountName;
         this.key = Base64.decode(key);
 
@@ -65,6 +67,7 @@ public final class SharedKeyCredentials implements ICredentials {
 
     /**
      * Gets the account name associated with the request.
+     *
      * @return
      *      The account name.
      */
@@ -80,14 +83,16 @@ public final class SharedKeyCredentials implements ICredentials {
 
         private final SharedKeyCredentials factory;
 
-        SharedKeyCredentialsPolicy(RequestPolicy requestPolicy, RequestPolicyOptions options, SharedKeyCredentials factory) {
+        SharedKeyCredentialsPolicy(RequestPolicy requestPolicy, RequestPolicyOptions options,
+                                   SharedKeyCredentials factory) {
             this.requestPolicy = requestPolicy;
             this.options = options;
             this.factory = factory;
         }
 
         /**
-         * Sign the request
+         * Sign the request.
+         *
          * @param request
          *      the request to sign
          * @return
@@ -102,8 +107,9 @@ public final class SharedKeyCredentials implements ICredentials {
             final AtomicReference<String> stringToSign = new AtomicReference<>();
             try {
                 stringToSign.set(this.factory.buildStringToSign(request));
-                final String computedBase64Signature = this.factory.computeHmac256(stringToSign.get());//.computeHmac256(stringToSign.get());
-                request.headers().set(Constants.HeaderConstants.AUTHORIZATION, "SharedKey " + this.factory.accountName + ":"  + computedBase64Signature);
+                final String computedBase64Signature = this.factory.computeHmac256(stringToSign.get());
+                request.headers().set(Constants.HeaderConstants.AUTHORIZATION, "SharedKey " + this.factory.accountName +
+                        ":"  + computedBase64Signature);
             } catch (Exception e) {
                 return Single.error(e);
             }
@@ -114,7 +120,9 @@ public final class SharedKeyCredentials implements ICredentials {
                 public void accept(HttpResponse response) {
                     if (response.statusCode() == HttpResponseStatus.FORBIDDEN.code()) {
                         if (options.shouldLog(HttpPipelineLogLevel.ERROR)) {
-                            options.log(HttpPipelineLogLevel.ERROR, "===== HTTP Forbidden status, String-to-Sign:%n'%s'%n===============================%n", stringToSign.get());
+                            options.log(HttpPipelineLogLevel.ERROR,
+                                    "===== HTTP Forbidden status, String-to-Sign:%n'%s'%n==================%n",
+                                    stringToSign.get());
                         }
                     }
                 }
@@ -131,8 +139,9 @@ public final class SharedKeyCredentials implements ICredentials {
      * Constructs a canonicalized string for signing a request.
      *
      * @param request
-     *  the request to canonicalize
-     * @return a canonicalized string.
+     *      The request to canonicalize.
+     * @return
+     *      A canonicalized string.
      */
     private String buildStringToSign(final HttpRequest request) throws Exception {
         final HttpHeaders httpHeaders = request.headers();

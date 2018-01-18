@@ -63,7 +63,7 @@ public class TokenCredentials  implements ICredentials{
         }
 
         public Single<HttpResponse> sendAsync(HttpRequest request) {
-            if (request.url().getProtocol() != "https") {
+            if (request.url().getProtocol() != Constants.HTTPS) {
                 throw new IllegalArgumentException(
                         "Token credentials require a URL using the https protocol scheme");
             }
