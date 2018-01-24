@@ -16,13 +16,13 @@ public final class CommonRestResponse {
 
     private RestResponse<BlockBlobPutBlockListHeaders, Void> putBlockListResponse;
 
-    private static CommonRestResponse createFromPutBlobResponse(RestResponse<BlobPutHeaders, Void> response) {
+    static CommonRestResponse createFromPutBlobResponse(RestResponse<BlobPutHeaders, Void> response) {
         CommonRestResponse commonRestResponse = new CommonRestResponse();
         commonRestResponse.putBlobResponse = response;
         return commonRestResponse;
     }
 
-    private static CommonRestResponse createFromPutBlockListResponse(
+    static CommonRestResponse createFromPutBlockListResponse(
             RestResponse<BlockBlobPutBlockListHeaders, Void> response) {
         CommonRestResponse commonRestResponse = new CommonRestResponse();
         commonRestResponse.putBlockListResponse = response;
