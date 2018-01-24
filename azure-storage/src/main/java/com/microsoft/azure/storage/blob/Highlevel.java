@@ -123,6 +123,9 @@ public class Highlevel {
         ArrayList<String> blockIdList = new ArrayList<>(numBlocks);
         long blockSize = options.blockSize;
 
+        final String[] blockIds = new String[numBlocks];
+
+        // TODO: Off by one
         Observable.range(0, numBlocks)
                 .flatMap(new Function<Integer, ObservableSource<?>>() {
                     @Override
@@ -138,18 +141,19 @@ public class Highlevel {
                         // TODO: progress
 
                         final String blockId = Base64.encode(/* TODO: generate uuid */);
+                        blockIds[blockNum] = blockId;
 
-                        // TODO: Is it ok to block on the call here to ensure the block is uploaded? It seems ok to me.
                         // TODO: What happens if one of the calls fails?
-                        blockBlobURL.putBlockAsync(blockId, null, null).blockingGet();
-
-                        return new ObservableSource<Pair<Integer, String>>() {
+                        // TODO: This returns an Observable that subscribes to the completable then subscribes
+                        // to the observable source. Does the completable emit a *value* that will pollute the collectInto call?
+                        return blockBlobURL.putBlockAsync(blockId, null, null)
+                                .toCompletable().andThen(new ObservableSource<Pair<Integer, String>>() {
                             @Override
                             public void subscribe(Observer<? super Pair<Integer, String>> observer) {
                                 observer.onNext(new Pair<Integer, String>(blockNum, blockId));
                                 observer.onComplete();
                             }
-                        };
+                        });
                         // Call blocking get to ensure that this putBlock finishes before we move on?
                         // "map" the numbers to rest calls. Return an observable that emits the blockIds and block number
 
@@ -208,6 +212,13 @@ public class Highlevel {
          * Create an observable that emits [0-numBlocks]
          * Flat map that with maxConcurrency=parallelism. The function actually makes the network request.
          * .andThen or subscribe and onComplete call putBlockList and return that response.
+         */
+
+        /**
+         * Can call repeat(numBlocks) times then turn it into a completable then say onComplete upload the blockList
+         * because I only care when all the blocks are done uploading, but how do I compose the list of blockIds in the
+         * right order? I can generate the list of Ids up front, so I can turn the Flowable into a list (returns a single)
+         * then turn that into a completable, then andThen pass a Single that calls putBlockList then does the mapping stuff I'm doing here.
          */
     }
 }
