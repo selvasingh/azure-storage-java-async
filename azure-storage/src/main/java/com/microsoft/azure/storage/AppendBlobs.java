@@ -30,44 +30,49 @@ public interface AppendBlobs {
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void appendBlock(Flowable<byte[]> body);
+    void appendBlock(Flowable<byte[]> body, long contentLength);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, long contentLength, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body);
+    Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body, long contentLength);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable appendBlockAsync(Flowable<byte[]> body);
+    Completable appendBlockAsync(Flowable<byte[]> body, long contentLength);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param maxSize Optional conditional header. The max length in bytes permitted for the append blob. If the Append Block operation would cause the blob to exceed that limit or if the blob size is already greater than the value specified in this header, the request will fail with MaxBlobSizeConditionNotMet error (HTTP status code 412 - Precondition Failed).
@@ -81,12 +86,13 @@ public interface AppendBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void appendBlock(Flowable<byte[]> body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void appendBlock(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param maxSize Optional conditional header. The max length in bytes permitted for the append blob. If the Append Block operation would cause the blob to exceed that limit or if the blob size is already greater than the value specified in this header, the request will fail with MaxBlobSizeConditionNotMet error (HTTP status code 412 - Precondition Failed).
@@ -100,12 +106,13 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param maxSize Optional conditional header. The max length in bytes permitted for the append blob. If the Append Block operation would cause the blob to exceed that limit or if the blob size is already greater than the value specified in this header, the request will fail with MaxBlobSizeConditionNotMet error (HTTP status code 412 - Precondition Failed).
@@ -118,12 +125,13 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param maxSize Optional conditional header. The max length in bytes permitted for the append blob. If the Append Block operation would cause the blob to exceed that limit or if the blob size is already greater than the value specified in this header, the request will fail with MaxBlobSizeConditionNotMet error (HTTP status code 412 - Precondition Failed).
@@ -136,5 +144,5 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable appendBlockAsync(Flowable<byte[]> body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable appendBlockAsync(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 }

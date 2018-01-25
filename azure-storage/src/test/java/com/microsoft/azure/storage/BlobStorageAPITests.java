@@ -93,7 +93,7 @@ public class BlobStorageAPITests {
             Assert.assertEquals(containerList.get(0).name(), containerName);
 
             // Create the blob with a single put. See below for the putBlock(List) scenario.
-            bu.putBlobAsync(Flowable.just(new byte[]{0, 0, 0}), null, null,
+            bu.putBlobAsync(Flowable.just(new byte[]{0, 0, 0}), 3, null, null,
                     null).blockingGet();
 
             // Download the blob contents.
@@ -147,7 +147,8 @@ public class BlobStorageAPITests {
             BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
             ArrayList<String> blockIDs = new ArrayList<>();
             blockIDs.add(Base64.encode(new Byte[]{0}));
-            bu3.putBlockAsync(blockIDs.get(0), Flowable.just(new byte[]{0,0,0}), null).blockingGet();
+            bu3.putBlockAsync(blockIDs.get(0), Flowable.just(new byte[]{0,0,0}), 3,
+                    null).blockingGet();
 
             // Get the list of blocks on this blob. For demonstration purposes.
             BlockList blockList = bu3.getBlockListAsync(BlockListType.ALL, null)

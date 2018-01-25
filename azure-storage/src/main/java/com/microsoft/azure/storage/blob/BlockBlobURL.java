@@ -93,7 +93,8 @@ public final class BlockBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobPutHeaders, Void>> putBlobAsync(
-            Flowable<byte[]> data, BlobHttpHeaders headers, Metadata metadata, BlobAccessConditions accessConditions) {
+            Flowable<byte[]> data, long contentLength, BlobHttpHeaders headers, Metadata metadata,
+            BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
@@ -104,8 +105,8 @@ public final class BlockBlobURL extends BlobURL {
         if(metadata == null) {
             metadata = Metadata.getDefault();
         }
-        return this.storageClient.blobs().putWithRestResponseAsync(BlobType.BLOCK_BLOB, data,
-                null, null, headers.getContentType(), headers.getContentEncoding(),
+        return this.storageClient.blobs().putWithRestResponseAsync(contentLength, BlobType.BLOCK_BLOB, data,
+                null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
                 accessConditions.getLeaseAccessConditions().toString(),
                 headers.getContentDisposition(),
@@ -130,11 +131,12 @@ public final class BlockBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockAsync(
-            String base64BlockID, Flowable<byte[]> data, LeaseAccessConditions leaseAccessConditions) {
+            String base64BlockID, Flowable<byte[]> data, long contentLength,
+            LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }
-        return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(base64BlockID, data,
+        return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(base64BlockID, contentLength, data,
                 null, leaseAccessConditions.toString(), null);
     }
 
@@ -177,6 +179,7 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockListHeaders, Void&gt;&gt;} object if successful.
      */
+    // TODO: Add Content-Length to swagger once the modeler knows to hide (or whatever solution).
     public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockListAsync(
             List<String> base64BlockIDs, Metadata metadata, BlobHttpHeaders httpHeaders,
             BlobAccessConditions accessConditions) {

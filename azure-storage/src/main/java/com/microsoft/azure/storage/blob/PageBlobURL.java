@@ -109,8 +109,8 @@ public final class PageBlobURL extends BlobURL {
             accessConditions = BlobAccessConditions.getDefault();
         }
 
-        return this.storageClient.blobs().putWithRestResponseAsync(BlobType.PAGE_BLOB, null,
-                null, null, headers.getContentType(), headers.getContentEncoding(),
+        return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.PAGE_BLOB, null,
+                null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(),
                 metadata.toString(), accessConditions.getLeaseAccessConditions().toString(),
                 headers.getContentDisposition(),
@@ -147,7 +147,7 @@ public final class PageBlobURL extends BlobURL {
         catch (IllegalArgumentException e) {
             return Single.error(e);
         }
-        return this.storageClient.pageBlobs().putPageWithRestResponseAsync(PageWriteType.UPDATE, body,
+        return this.storageClient.pageBlobs().putPageWithRestResponseAsync(0, PageWriteType.UPDATE, body,
                 null, pageRangeStr, accessConditions.getLeaseAccessConditions().toString(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThanOrEqual(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThan(),
@@ -182,8 +182,8 @@ public final class PageBlobURL extends BlobURL {
      catch (IllegalArgumentException e) {
          return Single.error(e);
      }
-     return this.storageClient.pageBlobs().putPageWithRestResponseAsync(PageWriteType.CLEAR, null,
-             null, pageRangeStr, accessConditions.getLeaseAccessConditions().toString(),
+     return this.storageClient.pageBlobs().putPageWithRestResponseAsync(0, PageWriteType.CLEAR,
+             null,null, pageRangeStr, accessConditions.getLeaseAccessConditions().toString(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThanOrEqual(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThan(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberEqual(),

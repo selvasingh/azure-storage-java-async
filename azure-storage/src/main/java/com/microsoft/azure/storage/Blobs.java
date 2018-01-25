@@ -361,48 +361,52 @@ public interface Blobs {
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
+     * @param contentLength The length of the request.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void put(BlobType blobType);
+    void put(long contentLength, BlobType blobType);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
+     * @param contentLength The length of the request.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> putAsync(BlobType blobType, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putAsync(long contentLength, BlobType blobType, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
+     * @param contentLength The length of the request.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobPutHeaders, Void>> putWithRestResponseAsync(BlobType blobType);
+    Single<RestResponse<BlobPutHeaders, Void>> putWithRestResponseAsync(long contentLength, BlobType blobType);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
+     * @param contentLength The length of the request.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable putAsync(BlobType blobType);
+    Completable putAsync(long contentLength, BlobType blobType);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
+     * @param contentLength The length of the request.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'.
      * @param optionalbody Initial data.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
-     * @param cacheControl Cache control for given resource.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentEncoding Optional. Sets the blob's content encoding. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentLanguage Optional. Set the blob's content language. If specified, this property is stored with the blob and returned with a read request.
@@ -422,15 +426,15 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void put(BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
+    void put(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
+     * @param contentLength The length of the request.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'.
      * @param optionalbody Initial data.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
-     * @param cacheControl Cache control for given resource.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentEncoding Optional. Sets the blob's content encoding. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentLanguage Optional. Set the blob's content language. If specified, this property is stored with the blob and returned with a read request.
@@ -450,15 +454,15 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> putAsync(BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putAsync(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
+     * @param contentLength The length of the request.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'.
      * @param optionalbody Initial data.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
-     * @param cacheControl Cache control for given resource.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentEncoding Optional. Sets the blob's content encoding. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentLanguage Optional. Set the blob's content language. If specified, this property is stored with the blob and returned with a read request.
@@ -477,15 +481,15 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobPutHeaders, Void>> putWithRestResponseAsync(BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
+    Single<RestResponse<BlobPutHeaders, Void>> putWithRestResponseAsync(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
      *
+     * @param contentLength The length of the request.
      * @param blobType Specifies the type of blob to create: block blob, page blob, or append blob. Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'.
      * @param optionalbody Initial data.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
-     * @param cacheControl Cache control for given resource.
      * @param blobContentType Optional. Sets the blob's content type. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentEncoding Optional. Sets the blob's content encoding. If specified, this property is stored with the blob and returned with a read request.
      * @param blobContentLanguage Optional. Set the blob's content language. If specified, this property is stored with the blob and returned with a read request.
@@ -504,7 +508,7 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable putAsync(BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String cacheControl, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
+    Completable putAsync(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
 
     /**
      * Undelete a blob that was previously soft deleted.

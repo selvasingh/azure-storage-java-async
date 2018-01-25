@@ -66,41 +66,44 @@ public class AppendBlobsImpl implements AppendBlobs {
     interface AppendBlobsService {
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
-        Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlock(@HostParam("url") String url, @BodyParam("application/xml; charset=utf-8") Flowable<byte[]> body, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-blob-condition-maxsize") Integer maxSize, @HeaderParam("x-ms-blob-condition-appendpos") Integer appendPosition, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+        Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlock(@HostParam("url") String url, @BodyParam("application/xml; charset=utf-8") Flowable<byte[]> body, @QueryParam("timeout") Integer timeout, @HeaderParam("Content-Length") long contentLength, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-blob-condition-maxsize") Integer maxSize, @HeaderParam("x-ms-blob-condition-appendpos") Integer appendPosition, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
     }
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void appendBlock(Flowable<byte[]> body) {
-        appendBlockAsync(body).blockingAwait();
+    public void appendBlock(Flowable<byte[]> body, long contentLength) {
+        appendBlockAsync(body, contentLength).blockingAwait();
     }
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(appendBlockAsync(body), serviceCallback);
+    public ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, long contentLength, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(appendBlockAsync(body, contentLength), serviceCallback);
     }
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body) {
+    public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body, long contentLength) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -128,18 +131,19 @@ public class AppendBlobsImpl implements AppendBlobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.appendBlock(this.client.url(), body, timeout, leaseId, maxSize, appendPosition, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
+        return service.appendBlock(this.client.url(), body, timeout, contentLength, leaseId, maxSize, appendPosition, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
     }
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable appendBlockAsync(Flowable<byte[]> body) {
-        return appendBlockWithRestResponseAsync(body)
+    public Completable appendBlockAsync(Flowable<byte[]> body, long contentLength) {
+        return appendBlockWithRestResponseAsync(body, contentLength)
             .toCompletable();
     }
 
@@ -147,6 +151,7 @@ public class AppendBlobsImpl implements AppendBlobs {
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param maxSize Optional conditional header. The max length in bytes permitted for the append blob. If the Append Block operation would cause the blob to exceed that limit or if the blob size is already greater than the value specified in this header, the request will fail with MaxBlobSizeConditionNotMet error (HTTP status code 412 - Precondition Failed).
@@ -160,14 +165,15 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void appendBlock(Flowable<byte[]> body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        appendBlockAsync(body, timeout, leaseId, maxSize, appendPosition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
+    public void appendBlock(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        appendBlockAsync(body, contentLength, timeout, leaseId, maxSize, appendPosition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingAwait();
     }
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param maxSize Optional conditional header. The max length in bytes permitted for the append blob. If the Append Block operation would cause the blob to exceed that limit or if the blob size is already greater than the value specified in this header, the request will fail with MaxBlobSizeConditionNotMet error (HTTP status code 412 - Precondition Failed).
@@ -181,14 +187,15 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(appendBlockAsync(body, timeout, leaseId, maxSize, appendPosition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
+    public ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(appendBlockAsync(body, contentLength, timeout, leaseId, maxSize, appendPosition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param maxSize Optional conditional header. The max length in bytes permitted for the append blob. If the Append Block operation would cause the blob to exceed that limit or if the blob size is already greater than the value specified in this header, the request will fail with MaxBlobSizeConditionNotMet error (HTTP status code 412 - Precondition Failed).
@@ -201,7 +208,7 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -220,13 +227,14 @@ public class AppendBlobsImpl implements AppendBlobs {
         if (ifUnmodifiedSince != null) {
             ifUnmodifiedSinceConverted = new DateTimeRfc1123(ifUnmodifiedSince);
         }
-        return service.appendBlock(this.client.url(), body, timeout, leaseId, maxSize, appendPosition, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
+        return service.appendBlock(this.client.url(), body, timeout, contentLength, leaseId, maxSize, appendPosition, ifModifiedSinceConverted, ifUnmodifiedSinceConverted, ifMatches, ifNoneMatch, this.client.version(), requestId, comp);
     }
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
      *
      * @param body Initial data.
+     * @param contentLength The length of the request.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param maxSize Optional conditional header. The max length in bytes permitted for the append blob. If the Append Block operation would cause the blob to exceed that limit or if the blob size is already greater than the value specified in this header, the request will fail with MaxBlobSizeConditionNotMet error (HTTP status code 412 - Precondition Failed).
@@ -239,8 +247,8 @@ public class AppendBlobsImpl implements AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable appendBlockAsync(Flowable<byte[]> body, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
-        return appendBlockWithRestResponseAsync(body, timeout, leaseId, maxSize, appendPosition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
+    public Completable appendBlockAsync(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+        return appendBlockWithRestResponseAsync(body, contentLength, timeout, leaseId, maxSize, appendPosition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
             .toCompletable();
     }
 }

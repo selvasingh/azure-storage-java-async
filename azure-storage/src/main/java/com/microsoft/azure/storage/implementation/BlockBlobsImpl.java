@@ -74,7 +74,7 @@ public class BlockBlobsImpl implements BlockBlobs {
     interface BlockBlobsService {
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
-        Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlock(@HostParam("url") String url, @QueryParam("blockid") String blockId, @BodyParam("application/octet-stream") Flowable<byte[]> body, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+        Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlock(@HostParam("url") String url, @QueryParam("blockid") String blockId, @HeaderParam("Content-Length") long contentLength, @BodyParam("application/octet-stream") Flowable<byte[]> body, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
@@ -89,37 +89,40 @@ public class BlockBlobsImpl implements BlockBlobs {
      * The Put Block operation creates a new block to be committed as part of a blob.
      *
      * @param blockId A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block.
+     * @param contentLength The length of the request.
      * @param body Initial data.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void putBlock(String blockId, Flowable<byte[]> body) {
-        putBlockAsync(blockId, body).blockingAwait();
+    public void putBlock(String blockId, long contentLength, Flowable<byte[]> body) {
+        putBlockAsync(blockId, contentLength, body).blockingAwait();
     }
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
      *
      * @param blockId A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block.
+     * @param contentLength The length of the request.
      * @param body Initial data.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> putBlockAsync(String blockId, Flowable<byte[]> body, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(putBlockAsync(blockId, body), serviceCallback);
+    public ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(putBlockAsync(blockId, contentLength, body), serviceCallback);
     }
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
      *
      * @param blockId A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block.
+     * @param contentLength The length of the request.
      * @param body Initial data.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, Flowable<byte[]> body) {
+    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<byte[]> body) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -136,19 +139,20 @@ public class BlockBlobsImpl implements BlockBlobs {
         final Integer timeout = null;
         final String leaseId = null;
         final String requestId = null;
-        return service.putBlock(this.client.url(), blockId, body, timeout, leaseId, this.client.version(), requestId, comp);
+        return service.putBlock(this.client.url(), blockId, contentLength, body, timeout, leaseId, this.client.version(), requestId, comp);
     }
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
      *
      * @param blockId A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block.
+     * @param contentLength The length of the request.
      * @param body Initial data.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable putBlockAsync(String blockId, Flowable<byte[]> body) {
-        return putBlockWithRestResponseAsync(blockId, body)
+    public Completable putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body) {
+        return putBlockWithRestResponseAsync(blockId, contentLength, body)
             .toCompletable();
     }
 
@@ -156,6 +160,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * The Put Block operation creates a new block to be committed as part of a blob.
      *
      * @param blockId A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block.
+     * @param contentLength The length of the request.
      * @param body Initial data.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -164,14 +169,15 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void putBlock(String blockId, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId) {
-        putBlockAsync(blockId, body, timeout, leaseId, requestId).blockingAwait();
+    public void putBlock(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId) {
+        putBlockAsync(blockId, contentLength, body, timeout, leaseId, requestId).blockingAwait();
     }
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
      *
      * @param blockId A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block.
+     * @param contentLength The length of the request.
      * @param body Initial data.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -180,14 +186,15 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> putBlockAsync(String blockId, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
-        return ServiceFuture.fromBody(putBlockAsync(blockId, body, timeout, leaseId, requestId), serviceCallback);
+    public ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
+        return ServiceFuture.fromBody(putBlockAsync(blockId, contentLength, body, timeout, leaseId, requestId), serviceCallback);
     }
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
      *
      * @param blockId A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block.
+     * @param contentLength The length of the request.
      * @param body Initial data.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -195,7 +202,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId) {
+    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -209,13 +216,14 @@ public class BlockBlobsImpl implements BlockBlobs {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
         final String comp = "block";
-        return service.putBlock(this.client.url(), blockId, body, timeout, leaseId, this.client.version(), requestId, comp);
+        return service.putBlock(this.client.url(), blockId, contentLength, body, timeout, leaseId, this.client.version(), requestId, comp);
     }
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
      *
      * @param blockId A valid Base64 string value that identifies the block. Prior to encoding, the string must be less than or equal to 64 bytes in size. For a given blob, the length of the value specified for the blockid parameter must be the same size for each block.
+     * @param contentLength The length of the request.
      * @param body Initial data.
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
@@ -223,8 +231,8 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable putBlockAsync(String blockId, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId) {
-        return putBlockWithRestResponseAsync(blockId, body, timeout, leaseId, requestId)
+    public Completable putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId) {
+        return putBlockWithRestResponseAsync(blockId, contentLength, body, timeout, leaseId, requestId)
             .toCompletable();
     }
 

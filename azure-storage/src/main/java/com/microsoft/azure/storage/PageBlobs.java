@@ -34,6 +34,7 @@ public interface PageBlobs {
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
+     * @param contentLength The length of the request.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'.
@@ -41,11 +42,12 @@ public interface PageBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void putPage(PageWriteType pageWrite);
+    void putPage(long contentLength, PageWriteType pageWrite);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
+     * @param contentLength The length of the request.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'.
@@ -53,33 +55,36 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> putPageAsync(PageWriteType pageWrite, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putPageAsync(long contentLength, PageWriteType pageWrite, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
+     * @param contentLength The length of the request.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;PageBlobPutPageHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<PageBlobPutPageHeaders, Void>> putPageWithRestResponseAsync(PageWriteType pageWrite);
+    Single<RestResponse<PageBlobPutPageHeaders, Void>> putPageWithRestResponseAsync(long contentLength, PageWriteType pageWrite);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
+     * @param contentLength The length of the request.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable putPageAsync(PageWriteType pageWrite);
+    Completable putPageAsync(long contentLength, PageWriteType pageWrite);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
+     * @param contentLength The length of the request.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'.
@@ -99,11 +104,12 @@ public interface PageBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void putPage(PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void putPage(long contentLength, PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
+     * @param contentLength The length of the request.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'.
@@ -123,11 +129,12 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> putPageAsync(PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putPageAsync(long contentLength, PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
+     * @param contentLength The length of the request.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'.
@@ -146,11 +153,12 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;PageBlobPutPageHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<PageBlobPutPageHeaders, Void>> putPageWithRestResponseAsync(PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<PageBlobPutPageHeaders, Void>> putPageWithRestResponseAsync(long contentLength, PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
      *
+     * @param contentLength The length of the request.
      * @param pageWrite Required. You may specify one of the following options:
      *   - Update: Writes the bytes specified by the request body into the specified range. The Range and Content-Length headers must match to perform the update.
      *   - Clear: Clears the specified range and releases the space used in storage for that range. To clear a range, set the Content-Length header to zero, and the Range header to a value that indicates the range to clear, up to maximum blob size. Possible values include: 'update', 'clear'.
@@ -169,7 +177,7 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable putPageAsync(PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable putPageAsync(long contentLength, PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
