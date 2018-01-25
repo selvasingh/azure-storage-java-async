@@ -63,7 +63,7 @@ public class Highlevel {
                 this.blockSize = Constants.MAX_BLOCK_SIZE;
             }
             else {
-                this.blockSize = blockSize.longValue();
+                this.blockSize = blockSize;
             }
             if (parallelism == null) {
                 this.parallelism = 5;
@@ -124,8 +124,6 @@ public class Highlevel {
         // TODO: context with cancel?
         long blockSize = options.blockSize;
 
-        final String[] blockIds = new String[numBlocks];
-
         // TODO: Off by one
         return Observable.range(0, numBlocks)
                 .concatMapEager(new Function<Integer, ObservableSource<String>>() {
@@ -142,7 +140,6 @@ public class Highlevel {
                         // TODO: progress
 
                         final String blockId = "";// TODO: Base64.encode(/* TODO: generate uuid */);
-                        blockIds[blockNum] = blockId;
 
                         // TODO: What happens if one of the calls fails?
                         // TODO: This returns an Observable that subscribes to the completable then subscribes
@@ -179,54 +176,6 @@ public class Highlevel {
                     }
                 });
 
-                /*.isEmpty().toCompletable() // We know the list won't be empty. isEmpty is a quick way to transition to a Single so we can get a Completable.
-                .andThen(blockBlobURL.putBlockListAsync(Arrays.asList(blockIds), options.metadata, options.httpHeaders,
-                        options.accessConditions))
-                .map(new Function<RestResponse<BlockBlobPutBlockListHeaders,Void>, CommonRestResponse>() {
-                    @Override
-                    public CommonRestResponse apply(RestResponse<BlockBlobPutBlockListHeaders, Void> response) throws Exception {
-                        return CommonRestResponse.createFromPutBlockListResponse(response);
-                    }
-                });*/
-
-
-                /*.collectInto(new Object(), new BiConsumer<Object, Object>() {
-                    @Override
-                    public void accept(Object ids, Object p) throws Exception {
-
-                    }
-                })
-                .flatMap(new Function<ArrayList<String>, SingleSource<?>>() {
-                    @Override
-                    public SingleSource<?> apply(ArrayList<String> ids) throws Exception {
-                        return blockBlobURL.putBlockListAsync(blockIds, options.metadata, options.httpHeaders,
-                                options.accessConditions);
-                    }
-                })
-                .map(new Function<RestResponse<BlockBlobPutBlockListHeaders, Void>, CommonRestResponse>() {
-                @Override
-                public CommonRestResponse apply(RestResponse<BlockBlobPutBlockListHeaders, Void> response) throws Exception {
-                    return CommonRestResponse.createFromPutBlockListResponse(response);
-                }
-        })*/
-
-
-            /*    .doFinally(new Action() {
-            @Override
-            public void run() throws Exception {
-                // can call collect to collect all the ids into the list? Then "map" that list into a rest call
-                // that returns a Single<BlockListHeaders> then "map" that into a Single<CommonRestResponse>
-
-                // When does flatMap call doFinally? I'm assuming the .range will call complete when it runs out of numbers
-                // and flatmap will call complete when it has mapped all the numbers? So none of this actually happens until
-                // a user subscribes to it, right? So this all needs to return a Single<BlockListHeaders>. Also, finally
-                // doesn't work because it won't emit the result. It's like cleanUp.
-
-                // Declare a CommonRestResponse in the larger scope and then assign the result of putBlockList to it here.
-                // But will the outer function terminate before this gets called and so return garbage?
-            }
-        });*/
-
 
         /**
          * Should take in a ByteBuffer.
@@ -239,17 +188,6 @@ public class Highlevel {
          * TODO: Have to read from the Flowable and buffer until I get a block length or it is done. Or just take a
          * raw byte array but make sure it can work with Files primarily.
          *
-         * Generate immutable list of encoded blockIDs to be read from (not necessary. Can just index into the list to set).
-         * Create an observable that emits [0-numBlocks]
-         * Flat map that with maxConcurrency=parallelism. The function actually makes the network request.
-         * .andThen or subscribe and onComplete call putBlockList and return that response.
-         */
-
-        /**
-         * Can call repeat(numBlocks) times then turn it into a completable then say onComplete upload the blockList
-         * because I only care when all the blocks are done uploading, but how do I compose the list of blockIds in the
-         * right order? I can generate the list of Ids up front, so I can turn the Flowable into a list (returns a single)
-         * then turn that into a completable, then andThen pass a Single that calls putBlockList then does the mapping stuff I'm doing here.
          */
     }
 }
