@@ -158,7 +158,7 @@ public class Highlevel {
                         // "map" the numbers to rest calls. Return an observable that emits the blockIds and block number
 
                     }
-                }, numBlocks, options.parallelism)
+                }, options.parallelism, 1)
                 .collectInto(new ArrayList<String>(numBlocks), new BiConsumer<ArrayList<String>, String>() {
                     @Override
                     public void accept(ArrayList<String> ids, String id) throws Exception {
