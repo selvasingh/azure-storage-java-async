@@ -17,13 +17,19 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Defines values for LeaseDurationType.
  */
 public enum LeaseDurationType {
-    /** Enum value infinite. */
+    /**
+     * Enum value infinite.
+     */
     INFINITE("infinite"),
 
-    /** Enum value fixed. */
+    /**
+     * Enum value fixed.
+     */
     FIXED("fixed");
 
-    /** The actual serialized value for a LeaseDurationType instance. */
+    /**
+     * The actual serialized value for a LeaseDurationType instance.
+     */
     private String value;
 
     LeaseDurationType(String value) {

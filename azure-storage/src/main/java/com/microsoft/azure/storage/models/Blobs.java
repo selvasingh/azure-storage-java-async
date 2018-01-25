@@ -34,7 +34,7 @@ public class Blobs {
     /**
      * Get the blobPrefix value.
      *
-     * @return the blobPrefix value
+     * @return the blobPrefix value.
      */
     public List<BlobPrefix> blobPrefix() {
         return this.blobPrefix;
@@ -43,7 +43,7 @@ public class Blobs {
     /**
      * Set the blobPrefix value.
      *
-     * @param blobPrefix the blobPrefix value to set
+     * @param blobPrefix the blobPrefix value to set.
      * @return the Blobs object itself.
      */
     public Blobs withBlobPrefix(List<BlobPrefix> blobPrefix) {
@@ -54,7 +54,7 @@ public class Blobs {
     /**
      * Get the blob value.
      *
-     * @return the blob value
+     * @return the blob value.
      */
     public List<Blob> blob() {
         return this.blob;
@@ -63,7 +63,7 @@ public class Blobs {
     /**
      * Set the blob value.
      *
-     * @param blob the blob value to set
+     * @param blob the blob value to set.
      * @return the Blobs object itself.
      */
     public Blobs withBlob(List<Blob> blob) {

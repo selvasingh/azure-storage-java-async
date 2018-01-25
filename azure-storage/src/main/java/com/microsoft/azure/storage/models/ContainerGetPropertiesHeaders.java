@@ -96,7 +96,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the metadata value.
      *
-     * @return the metadata value
+     * @return the metadata value.
      */
     public Map<String, String> metadata() {
         return this.metadata;
@@ -105,7 +105,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the metadata value.
      *
-     * @param metadata the metadata value to set
+     * @param metadata the metadata value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withMetadata(Map<String, String> metadata) {
@@ -116,7 +116,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -125,7 +125,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withETag(String eTag) {
@@ -136,7 +136,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -148,7 +148,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withLastModified(DateTime lastModified) {
@@ -163,7 +163,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the leaseDuration value.
      *
-     * @return the leaseDuration value
+     * @return the leaseDuration value.
      */
     public LeaseDurationType leaseDuration() {
         return this.leaseDuration;
@@ -172,7 +172,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the leaseDuration value.
      *
-     * @param leaseDuration the leaseDuration value to set
+     * @param leaseDuration the leaseDuration value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withLeaseDuration(LeaseDurationType leaseDuration) {
@@ -183,7 +183,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the leaseState value.
      *
-     * @return the leaseState value
+     * @return the leaseState value.
      */
     public LeaseStateType leaseState() {
         return this.leaseState;
@@ -192,7 +192,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the leaseState value.
      *
-     * @param leaseState the leaseState value to set
+     * @param leaseState the leaseState value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withLeaseState(LeaseStateType leaseState) {
@@ -203,7 +203,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the leaseStatus value.
      *
-     * @return the leaseStatus value
+     * @return the leaseStatus value.
      */
     public LeaseStatusType leaseStatus() {
         return this.leaseStatus;
@@ -212,7 +212,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the leaseStatus value.
      *
-     * @param leaseStatus the leaseStatus value to set
+     * @param leaseStatus the leaseStatus value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withLeaseStatus(LeaseStatusType leaseStatus) {
@@ -223,7 +223,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -232,7 +232,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withRequestId(String requestId) {
@@ -243,7 +243,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -252,7 +252,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withVersion(String version) {
@@ -263,7 +263,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -275,7 +275,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withDateProperty(DateTime dateProperty) {
@@ -290,7 +290,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Get the blobPublicAccess value.
      *
-     * @return the blobPublicAccess value
+     * @return the blobPublicAccess value.
      */
     public PublicAccessType blobPublicAccess() {
         return this.blobPublicAccess;
@@ -299,7 +299,7 @@ public class ContainerGetPropertiesHeaders {
     /**
      * Set the blobPublicAccess value.
      *
-     * @param blobPublicAccess the blobPublicAccess value to set
+     * @param blobPublicAccess the blobPublicAccess value to set.
      * @return the ContainerGetPropertiesHeaders object itself.
      */
     public ContainerGetPropertiesHeaders withBlobPublicAccess(PublicAccessType blobPublicAccess) {

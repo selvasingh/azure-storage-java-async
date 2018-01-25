@@ -34,7 +34,7 @@ public class Block {
     /**
      * Get the name value.
      *
-     * @return the name value
+     * @return the name value.
      */
     public String name() {
         return this.name;
@@ -43,7 +43,7 @@ public class Block {
     /**
      * Set the name value.
      *
-     * @param name the name value to set
+     * @param name the name value to set.
      * @return the Block object itself.
      */
     public Block withName(String name) {
@@ -54,7 +54,7 @@ public class Block {
     /**
      * Get the size value.
      *
-     * @return the size value
+     * @return the size value.
      */
     public int size() {
         return this.size;
@@ -63,7 +63,7 @@ public class Block {
     /**
      * Set the size value.
      *
-     * @param size the size value to set
+     * @param size the size value to set.
      * @return the Block object itself.
      */
     public Block withSize(int size) {

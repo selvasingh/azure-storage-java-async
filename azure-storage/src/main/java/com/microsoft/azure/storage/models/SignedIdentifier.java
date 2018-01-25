@@ -33,7 +33,7 @@ public class SignedIdentifier {
     /**
      * Get the id value.
      *
-     * @return the id value
+     * @return the id value.
      */
     public String id() {
         return this.id;
@@ -42,7 +42,7 @@ public class SignedIdentifier {
     /**
      * Set the id value.
      *
-     * @param id the id value to set
+     * @param id the id value to set.
      * @return the SignedIdentifier object itself.
      */
     public SignedIdentifier withId(String id) {
@@ -53,7 +53,7 @@ public class SignedIdentifier {
     /**
      * Get the accessPolicy value.
      *
-     * @return the accessPolicy value
+     * @return the accessPolicy value.
      */
     public AccessPolicy accessPolicy() {
         return this.accessPolicy;
@@ -62,7 +62,7 @@ public class SignedIdentifier {
     /**
      * Set the accessPolicy value.
      *
-     * @param accessPolicy the accessPolicy value to set
+     * @param accessPolicy the accessPolicy value to set.
      * @return the SignedIdentifier object itself.
      */
     public SignedIdentifier withAccessPolicy(AccessPolicy accessPolicy) {

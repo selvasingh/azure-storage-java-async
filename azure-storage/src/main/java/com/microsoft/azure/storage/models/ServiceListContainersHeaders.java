@@ -36,7 +36,7 @@ public class ServiceListContainersHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -45,7 +45,7 @@ public class ServiceListContainersHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the ServiceListContainersHeaders object itself.
      */
     public ServiceListContainersHeaders withRequestId(String requestId) {
@@ -56,7 +56,7 @@ public class ServiceListContainersHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -65,7 +65,7 @@ public class ServiceListContainersHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the ServiceListContainersHeaders object itself.
      */
     public ServiceListContainersHeaders withVersion(String version) {

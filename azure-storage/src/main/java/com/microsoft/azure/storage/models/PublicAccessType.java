@@ -31,8 +31,8 @@ public final class PublicAccessType extends ExpandableStringEnum<PublicAccessTyp
     /**
      * Creates or finds a PublicAccessType from its string representation.
      *
-     * @param name a name to look for
-     * @return the corresponding PublicAccessType
+     * @param name a name to look for.
+     * @return the corresponding PublicAccessType.
      */
     @JsonCreator
     public static PublicAccessType fromString(String name) {
@@ -40,7 +40,7 @@ public final class PublicAccessType extends ExpandableStringEnum<PublicAccessTyp
     }
 
     /**
-     * @return known PublicAccessType values
+     * @return known PublicAccessType values.
      */
     public static Collection<PublicAccessType> values() {
         return values(PublicAccessType.class);

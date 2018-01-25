@@ -24,18 +24,20 @@ public class BlockList {
      * The committedBlocks property.
      */
     @JacksonXmlElementWrapper(localName = "CommittedBlocks")
+    @JsonProperty("Block")
     private List<Block> committedBlocks;
 
     /**
      * The uncommittedBlocks property.
      */
     @JacksonXmlElementWrapper(localName = "UncommittedBlocks")
+    @JsonProperty("Block")
     private List<Block> uncommittedBlocks;
 
     /**
      * Get the committedBlocks value.
      *
-     * @return the committedBlocks value
+     * @return the committedBlocks value.
      */
     public List<Block> committedBlocks() {
         return this.committedBlocks;
@@ -44,7 +46,7 @@ public class BlockList {
     /**
      * Set the committedBlocks value.
      *
-     * @param committedBlocks the committedBlocks value to set
+     * @param committedBlocks the committedBlocks value to set.
      * @return the BlockList object itself.
      */
     public BlockList withCommittedBlocks(List<Block> committedBlocks) {
@@ -55,7 +57,7 @@ public class BlockList {
     /**
      * Get the uncommittedBlocks value.
      *
-     * @return the uncommittedBlocks value
+     * @return the uncommittedBlocks value.
      */
     public List<Block> uncommittedBlocks() {
         return this.uncommittedBlocks;
@@ -64,7 +66,7 @@ public class BlockList {
     /**
      * Set the uncommittedBlocks value.
      *
-     * @param uncommittedBlocks the uncommittedBlocks value to set
+     * @param uncommittedBlocks the uncommittedBlocks value to set.
      * @return the BlockList object itself.
      */
     public BlockList withUncommittedBlocks(List<Block> uncommittedBlocks) {

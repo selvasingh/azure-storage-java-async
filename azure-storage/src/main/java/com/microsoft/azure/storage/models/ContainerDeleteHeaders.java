@@ -45,7 +45,7 @@ public class ContainerDeleteHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -54,7 +54,7 @@ public class ContainerDeleteHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the ContainerDeleteHeaders object itself.
      */
     public ContainerDeleteHeaders withRequestId(String requestId) {
@@ -65,7 +65,7 @@ public class ContainerDeleteHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -74,7 +74,7 @@ public class ContainerDeleteHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the ContainerDeleteHeaders object itself.
      */
     public ContainerDeleteHeaders withVersion(String version) {
@@ -85,7 +85,7 @@ public class ContainerDeleteHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -97,7 +97,7 @@ public class ContainerDeleteHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the ContainerDeleteHeaders object itself.
      */
     public ContainerDeleteHeaders withDateProperty(DateTime dateProperty) {

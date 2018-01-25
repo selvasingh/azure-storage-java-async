@@ -17,22 +17,34 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Defines values for LeaseActionType.
  */
 public enum LeaseActionType {
-    /** Enum value acquire. */
+    /**
+     * Enum value acquire.
+     */
     ACQUIRE("acquire"),
 
-    /** Enum value renew. */
+    /**
+     * Enum value renew.
+     */
     RENEW("renew"),
 
-    /** Enum value change. */
+    /**
+     * Enum value change.
+     */
     CHANGE("change"),
 
-    /** Enum value release. */
+    /**
+     * Enum value release.
+     */
     RELEASE("release"),
 
-    /** Enum value break. */
+    /**
+     * Enum value break.
+     */
     BREAK("break");
 
-    /** The actual serialized value for a LeaseActionType instance. */
+    /**
+     * The actual serialized value for a LeaseActionType instance.
+     */
     private String value;
 
     LeaseActionType(String value) {

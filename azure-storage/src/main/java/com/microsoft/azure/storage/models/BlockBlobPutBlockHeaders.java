@@ -61,7 +61,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Get the contentMD5 value.
      *
-     * @return the contentMD5 value
+     * @return the contentMD5 value.
      */
     public String contentMD5() {
         return this.contentMD5;
@@ -70,7 +70,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Set the contentMD5 value.
      *
-     * @param contentMD5 the contentMD5 value to set
+     * @param contentMD5 the contentMD5 value to set.
      * @return the BlockBlobPutBlockHeaders object itself.
      */
     public BlockBlobPutBlockHeaders withContentMD5(String contentMD5) {
@@ -81,7 +81,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -90,7 +90,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the BlockBlobPutBlockHeaders object itself.
      */
     public BlockBlobPutBlockHeaders withRequestId(String requestId) {
@@ -101,7 +101,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -110,7 +110,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the BlockBlobPutBlockHeaders object itself.
      */
     public BlockBlobPutBlockHeaders withVersion(String version) {
@@ -121,7 +121,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -133,7 +133,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the BlockBlobPutBlockHeaders object itself.
      */
     public BlockBlobPutBlockHeaders withDateProperty(DateTime dateProperty) {
@@ -148,7 +148,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Get the isServerEncrypted value.
      *
-     * @return the isServerEncrypted value
+     * @return the isServerEncrypted value.
      */
     public Boolean isServerEncrypted() {
         return this.isServerEncrypted;
@@ -157,7 +157,7 @@ public class BlockBlobPutBlockHeaders {
     /**
      * Set the isServerEncrypted value.
      *
-     * @param isServerEncrypted the isServerEncrypted value to set
+     * @param isServerEncrypted the isServerEncrypted value to set.
      * @return the BlockBlobPutBlockHeaders object itself.
      */
     public BlockBlobPutBlockHeaders withIsServerEncrypted(Boolean isServerEncrypted) {

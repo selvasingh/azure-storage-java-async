@@ -18,8 +18,8 @@ import com.microsoft.azure.storage.models.AppendBlobAppendBlockHeaders;
 import com.microsoft.azure.storage.models.BlobType;
 import com.microsoft.azure.storage.models.BlobPutHeaders;
 import com.microsoft.rest.v2.RestResponse;
-import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 import java.io.UnsupportedEncodingException;
@@ -118,7 +118,7 @@ public final class AppendBlobURL extends BlobURL {
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/append-block.
      *
      * @param data
-     *      A {@code byte} array which represents the data to write to the blob.
+     *      A {@code Flowable&lt;byte[]&gt;} which represents the data to write to the blob.
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
@@ -126,7 +126,7 @@ public final class AppendBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockAsync(
-            AsyncInputStream data, BlobAccessConditions accessConditions) {
+            Flowable<byte[]> data, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }

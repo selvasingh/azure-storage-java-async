@@ -69,7 +69,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -78,7 +78,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the BlobSetMetadataHeaders object itself.
      */
     public BlobSetMetadataHeaders withETag(String eTag) {
@@ -89,7 +89,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -101,7 +101,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the BlobSetMetadataHeaders object itself.
      */
     public BlobSetMetadataHeaders withLastModified(DateTime lastModified) {
@@ -116,7 +116,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -125,7 +125,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the BlobSetMetadataHeaders object itself.
      */
     public BlobSetMetadataHeaders withRequestId(String requestId) {
@@ -136,7 +136,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -145,7 +145,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the BlobSetMetadataHeaders object itself.
      */
     public BlobSetMetadataHeaders withVersion(String version) {
@@ -156,7 +156,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -168,7 +168,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the BlobSetMetadataHeaders object itself.
      */
     public BlobSetMetadataHeaders withDateProperty(DateTime dateProperty) {
@@ -183,7 +183,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Get the isServerEncrypted value.
      *
-     * @return the isServerEncrypted value
+     * @return the isServerEncrypted value.
      */
     public Boolean isServerEncrypted() {
         return this.isServerEncrypted;
@@ -192,7 +192,7 @@ public class BlobSetMetadataHeaders {
     /**
      * Set the isServerEncrypted value.
      *
-     * @param isServerEncrypted the isServerEncrypted value to set
+     * @param isServerEncrypted the isServerEncrypted value to set.
      * @return the BlobSetMetadataHeaders object itself.
      */
     public BlobSetMetadataHeaders withIsServerEncrypted(Boolean isServerEncrypted) {

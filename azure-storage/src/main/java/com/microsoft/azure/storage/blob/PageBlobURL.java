@@ -16,16 +16,13 @@ package com.microsoft.azure.storage.blob;
 
 import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
-import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.http.UrlBuilder;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
-import org.joda.time.DateTime;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -131,7 +128,7 @@ public final class PageBlobURL extends BlobURL {
      * @param pageRange
      *      A {@link PageRange} object. Specifies the range of bytes to be written as a page.
      * @param body
-     *      A {@link AsyncInputStream} that contains the content of the page.
+     *      A {@code Flowable&lt;byte[]&gt;} that contains the content of the page.
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
@@ -139,7 +136,7 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<PageBlobPutPageHeaders, Void>> putPagesAsync(
-            PageRange pageRange, AsyncInputStream body, BlobAccessConditions accessConditions) {
+            PageRange pageRange, Flowable<byte[]> body, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }

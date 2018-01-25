@@ -60,7 +60,7 @@ public class ContainerProperties {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -72,7 +72,7 @@ public class ContainerProperties {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the ContainerProperties object itself.
      */
     public ContainerProperties withLastModified(DateTime lastModified) {
@@ -87,7 +87,7 @@ public class ContainerProperties {
     /**
      * Get the etag value.
      *
-     * @return the etag value
+     * @return the etag value.
      */
     public String etag() {
         return this.etag;
@@ -96,7 +96,7 @@ public class ContainerProperties {
     /**
      * Set the etag value.
      *
-     * @param etag the etag value to set
+     * @param etag the etag value to set.
      * @return the ContainerProperties object itself.
      */
     public ContainerProperties withEtag(String etag) {
@@ -107,7 +107,7 @@ public class ContainerProperties {
     /**
      * Get the leaseStatus value.
      *
-     * @return the leaseStatus value
+     * @return the leaseStatus value.
      */
     public LeaseStatusType leaseStatus() {
         return this.leaseStatus;
@@ -116,7 +116,7 @@ public class ContainerProperties {
     /**
      * Set the leaseStatus value.
      *
-     * @param leaseStatus the leaseStatus value to set
+     * @param leaseStatus the leaseStatus value to set.
      * @return the ContainerProperties object itself.
      */
     public ContainerProperties withLeaseStatus(LeaseStatusType leaseStatus) {
@@ -127,7 +127,7 @@ public class ContainerProperties {
     /**
      * Get the leaseState value.
      *
-     * @return the leaseState value
+     * @return the leaseState value.
      */
     public LeaseStateType leaseState() {
         return this.leaseState;
@@ -136,7 +136,7 @@ public class ContainerProperties {
     /**
      * Set the leaseState value.
      *
-     * @param leaseState the leaseState value to set
+     * @param leaseState the leaseState value to set.
      * @return the ContainerProperties object itself.
      */
     public ContainerProperties withLeaseState(LeaseStateType leaseState) {
@@ -147,7 +147,7 @@ public class ContainerProperties {
     /**
      * Get the leaseDuration value.
      *
-     * @return the leaseDuration value
+     * @return the leaseDuration value.
      */
     public LeaseDurationType leaseDuration() {
         return this.leaseDuration;
@@ -156,7 +156,7 @@ public class ContainerProperties {
     /**
      * Set the leaseDuration value.
      *
-     * @param leaseDuration the leaseDuration value to set
+     * @param leaseDuration the leaseDuration value to set.
      * @return the ContainerProperties object itself.
      */
     public ContainerProperties withLeaseDuration(LeaseDurationType leaseDuration) {
@@ -167,7 +167,7 @@ public class ContainerProperties {
     /**
      * Get the publicAccess value.
      *
-     * @return the publicAccess value
+     * @return the publicAccess value.
      */
     public PublicAccessType publicAccess() {
         return this.publicAccess;
@@ -176,7 +176,7 @@ public class ContainerProperties {
     /**
      * Set the publicAccess value.
      *
-     * @param publicAccess the publicAccess value to set
+     * @param publicAccess the publicAccess value to set.
      * @return the ContainerProperties object itself.
      */
     public ContainerProperties withPublicAccess(PublicAccessType publicAccess) {

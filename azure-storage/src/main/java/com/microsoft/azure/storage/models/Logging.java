@@ -51,7 +51,7 @@ public class Logging {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -60,7 +60,7 @@ public class Logging {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the Logging object itself.
      */
     public Logging withVersion(String version) {
@@ -71,7 +71,7 @@ public class Logging {
     /**
      * Get the delete value.
      *
-     * @return the delete value
+     * @return the delete value.
      */
     public boolean delete() {
         return this.delete;
@@ -80,7 +80,7 @@ public class Logging {
     /**
      * Set the delete value.
      *
-     * @param delete the delete value to set
+     * @param delete the delete value to set.
      * @return the Logging object itself.
      */
     public Logging withDelete(boolean delete) {
@@ -91,7 +91,7 @@ public class Logging {
     /**
      * Get the read value.
      *
-     * @return the read value
+     * @return the read value.
      */
     public boolean read() {
         return this.read;
@@ -100,7 +100,7 @@ public class Logging {
     /**
      * Set the read value.
      *
-     * @param read the read value to set
+     * @param read the read value to set.
      * @return the Logging object itself.
      */
     public Logging withRead(boolean read) {
@@ -111,7 +111,7 @@ public class Logging {
     /**
      * Get the write value.
      *
-     * @return the write value
+     * @return the write value.
      */
     public boolean write() {
         return this.write;
@@ -120,7 +120,7 @@ public class Logging {
     /**
      * Set the write value.
      *
-     * @param write the write value to set
+     * @param write the write value to set.
      * @return the Logging object itself.
      */
     public Logging withWrite(boolean write) {
@@ -131,7 +131,7 @@ public class Logging {
     /**
      * Get the retentionPolicy value.
      *
-     * @return the retentionPolicy value
+     * @return the retentionPolicy value.
      */
     public RetentionPolicy retentionPolicy() {
         return this.retentionPolicy;
@@ -140,7 +140,7 @@ public class Logging {
     /**
      * Set the retentionPolicy value.
      *
-     * @param retentionPolicy the retentionPolicy value to set
+     * @param retentionPolicy the retentionPolicy value to set.
      * @return the Logging object itself.
      */
     public Logging withRetentionPolicy(RetentionPolicy retentionPolicy) {

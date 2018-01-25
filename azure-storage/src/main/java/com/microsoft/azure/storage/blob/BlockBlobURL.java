@@ -15,9 +15,9 @@
 package com.microsoft.azure.storage.blob;
 
 import com.microsoft.azure.storage.models.*;
-import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.RestResponse;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 import java.io.UnsupportedEncodingException;
@@ -81,7 +81,7 @@ public final class BlockBlobURL extends BlobURL {
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
      *
      * @param data
-     *      An {@link AsyncInputStream} which contains the data to write to the blob.
+     *      A {@code Flowable&lt;byte[]&gt;} which contains the data to write to the blob.
      * @param headers
      *      A {@link BlobHttpHeaders} object that specifies which properties to set on the blob.
      * @param metadata
@@ -93,7 +93,7 @@ public final class BlockBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobPutHeaders, Void>> putBlobAsync(
-            AsyncInputStream data, BlobHttpHeaders headers, Metadata metadata, BlobAccessConditions accessConditions) {
+            Flowable<byte[]> data, BlobHttpHeaders headers, Metadata metadata, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
@@ -123,14 +123,14 @@ public final class BlockBlobURL extends BlobURL {
      * @param base64BlockID
      *      A Base64 encoded {@code String} that specifies the ID for this block.
      * @param data
-     *      An {@link AsyncInputStream} which contains the data to write to the block.
+     *      A {@code Flowable&lt;byte[]&gt;} which contains the data to write to the block.
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the blob if there is one.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockAsync(
-            String base64BlockID, AsyncInputStream data, LeaseAccessConditions leaseAccessConditions) {
+            String base64BlockID, Flowable<byte[]> data, LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.getDefault();
         }

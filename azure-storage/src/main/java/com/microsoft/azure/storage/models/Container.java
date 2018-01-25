@@ -40,7 +40,7 @@ public class Container {
     /**
      * Get the name value.
      *
-     * @return the name value
+     * @return the name value.
      */
     public String name() {
         return this.name;
@@ -49,7 +49,7 @@ public class Container {
     /**
      * Set the name value.
      *
-     * @param name the name value to set
+     * @param name the name value to set.
      * @return the Container object itself.
      */
     public Container withName(String name) {
@@ -60,7 +60,7 @@ public class Container {
     /**
      * Get the properties value.
      *
-     * @return the properties value
+     * @return the properties value.
      */
     public ContainerProperties properties() {
         return this.properties;
@@ -69,7 +69,7 @@ public class Container {
     /**
      * Set the properties value.
      *
-     * @param properties the properties value to set
+     * @param properties the properties value to set.
      * @return the Container object itself.
      */
     public Container withProperties(ContainerProperties properties) {
@@ -80,7 +80,7 @@ public class Container {
     /**
      * Get the metadata value.
      *
-     * @return the metadata value
+     * @return the metadata value.
      */
     public Map<String, String> metadata() {
         return this.metadata;
@@ -89,7 +89,7 @@ public class Container {
     /**
      * Set the metadata value.
      *
-     * @param metadata the metadata value to set
+     * @param metadata the metadata value to set.
      * @return the Container object itself.
      */
     public Container withMetadata(Map<String, String> metadata) {

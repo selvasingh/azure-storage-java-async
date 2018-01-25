@@ -40,7 +40,7 @@ public class AccessPolicy {
     /**
      * Get the start value.
      *
-     * @return the start value
+     * @return the start value.
      */
     public DateTime start() {
         return this.start;
@@ -49,7 +49,7 @@ public class AccessPolicy {
     /**
      * Set the start value.
      *
-     * @param start the start value to set
+     * @param start the start value to set.
      * @return the AccessPolicy object itself.
      */
     public AccessPolicy withStart(DateTime start) {
@@ -60,7 +60,7 @@ public class AccessPolicy {
     /**
      * Get the expiry value.
      *
-     * @return the expiry value
+     * @return the expiry value.
      */
     public DateTime expiry() {
         return this.expiry;
@@ -69,7 +69,7 @@ public class AccessPolicy {
     /**
      * Set the expiry value.
      *
-     * @param expiry the expiry value to set
+     * @param expiry the expiry value to set.
      * @return the AccessPolicy object itself.
      */
     public AccessPolicy withExpiry(DateTime expiry) {
@@ -80,7 +80,7 @@ public class AccessPolicy {
     /**
      * Get the permission value.
      *
-     * @return the permission value
+     * @return the permission value.
      */
     public String permission() {
         return this.permission;
@@ -89,7 +89,7 @@ public class AccessPolicy {
     /**
      * Set the permission value.
      *
-     * @param permission the permission value to set
+     * @param permission the permission value to set.
      * @return the AccessPolicy object itself.
      */
     public AccessPolicy withPermission(String permission) {

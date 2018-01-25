@@ -44,6 +44,7 @@ public class StorageServiceProperties {
      * The set of CORS rules.
      */
     @JacksonXmlElementWrapper(localName = "Cors")
+    @JsonProperty("CorsRule")
     private List<CorsRule> cors;
 
     /**
@@ -63,7 +64,7 @@ public class StorageServiceProperties {
     /**
      * Get the logging value.
      *
-     * @return the logging value
+     * @return the logging value.
      */
     public Logging logging() {
         return this.logging;
@@ -72,7 +73,7 @@ public class StorageServiceProperties {
     /**
      * Set the logging value.
      *
-     * @param logging the logging value to set
+     * @param logging the logging value to set.
      * @return the StorageServiceProperties object itself.
      */
     public StorageServiceProperties withLogging(Logging logging) {
@@ -83,7 +84,7 @@ public class StorageServiceProperties {
     /**
      * Get the hourMetrics value.
      *
-     * @return the hourMetrics value
+     * @return the hourMetrics value.
      */
     public Metrics hourMetrics() {
         return this.hourMetrics;
@@ -92,7 +93,7 @@ public class StorageServiceProperties {
     /**
      * Set the hourMetrics value.
      *
-     * @param hourMetrics the hourMetrics value to set
+     * @param hourMetrics the hourMetrics value to set.
      * @return the StorageServiceProperties object itself.
      */
     public StorageServiceProperties withHourMetrics(Metrics hourMetrics) {
@@ -103,7 +104,7 @@ public class StorageServiceProperties {
     /**
      * Get the minuteMetrics value.
      *
-     * @return the minuteMetrics value
+     * @return the minuteMetrics value.
      */
     public Metrics minuteMetrics() {
         return this.minuteMetrics;
@@ -112,7 +113,7 @@ public class StorageServiceProperties {
     /**
      * Set the minuteMetrics value.
      *
-     * @param minuteMetrics the minuteMetrics value to set
+     * @param minuteMetrics the minuteMetrics value to set.
      * @return the StorageServiceProperties object itself.
      */
     public StorageServiceProperties withMinuteMetrics(Metrics minuteMetrics) {
@@ -123,7 +124,7 @@ public class StorageServiceProperties {
     /**
      * Get the cors value.
      *
-     * @return the cors value
+     * @return the cors value.
      */
     public List<CorsRule> cors() {
         return this.cors;
@@ -132,7 +133,7 @@ public class StorageServiceProperties {
     /**
      * Set the cors value.
      *
-     * @param cors the cors value to set
+     * @param cors the cors value to set.
      * @return the StorageServiceProperties object itself.
      */
     public StorageServiceProperties withCors(List<CorsRule> cors) {
@@ -143,7 +144,7 @@ public class StorageServiceProperties {
     /**
      * Get the defaultServiceVersion value.
      *
-     * @return the defaultServiceVersion value
+     * @return the defaultServiceVersion value.
      */
     public String defaultServiceVersion() {
         return this.defaultServiceVersion;
@@ -152,7 +153,7 @@ public class StorageServiceProperties {
     /**
      * Set the defaultServiceVersion value.
      *
-     * @param defaultServiceVersion the defaultServiceVersion value to set
+     * @param defaultServiceVersion the defaultServiceVersion value to set.
      * @return the StorageServiceProperties object itself.
      */
     public StorageServiceProperties withDefaultServiceVersion(String defaultServiceVersion) {
@@ -163,7 +164,7 @@ public class StorageServiceProperties {
     /**
      * Get the deleteRetentionPolicy value.
      *
-     * @return the deleteRetentionPolicy value
+     * @return the deleteRetentionPolicy value.
      */
     public RetentionPolicy deleteRetentionPolicy() {
         return this.deleteRetentionPolicy;
@@ -172,7 +173,7 @@ public class StorageServiceProperties {
     /**
      * Set the deleteRetentionPolicy value.
      *
-     * @param deleteRetentionPolicy the deleteRetentionPolicy value to set
+     * @param deleteRetentionPolicy the deleteRetentionPolicy value to set.
      * @return the StorageServiceProperties object itself.
      */
     public StorageServiceProperties withDeleteRetentionPolicy(RetentionPolicy deleteRetentionPolicy) {

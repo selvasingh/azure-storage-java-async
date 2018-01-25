@@ -17,10 +17,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Defines values for ListContainersIncludeType.
  */
 public enum ListContainersIncludeType {
-    /** Enum value metadata. */
+    /**
+     * Enum value metadata.
+     */
     METADATA("metadata");
 
-    /** The actual serialized value for a ListContainersIncludeType instance. */
+    /**
+     * The actual serialized value for a ListContainersIncludeType instance.
+     */
     private String value;
 
     ListContainersIncludeType(String value) {

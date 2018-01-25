@@ -77,7 +77,7 @@ public class BlobPutHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -86,7 +86,7 @@ public class BlobPutHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the BlobPutHeaders object itself.
      */
     public BlobPutHeaders withETag(String eTag) {
@@ -97,7 +97,7 @@ public class BlobPutHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -109,7 +109,7 @@ public class BlobPutHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the BlobPutHeaders object itself.
      */
     public BlobPutHeaders withLastModified(DateTime lastModified) {
@@ -124,7 +124,7 @@ public class BlobPutHeaders {
     /**
      * Get the contentMD5 value.
      *
-     * @return the contentMD5 value
+     * @return the contentMD5 value.
      */
     public String contentMD5() {
         return this.contentMD5;
@@ -133,7 +133,7 @@ public class BlobPutHeaders {
     /**
      * Set the contentMD5 value.
      *
-     * @param contentMD5 the contentMD5 value to set
+     * @param contentMD5 the contentMD5 value to set.
      * @return the BlobPutHeaders object itself.
      */
     public BlobPutHeaders withContentMD5(String contentMD5) {
@@ -144,7 +144,7 @@ public class BlobPutHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -153,7 +153,7 @@ public class BlobPutHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the BlobPutHeaders object itself.
      */
     public BlobPutHeaders withRequestId(String requestId) {
@@ -164,7 +164,7 @@ public class BlobPutHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -173,7 +173,7 @@ public class BlobPutHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the BlobPutHeaders object itself.
      */
     public BlobPutHeaders withVersion(String version) {
@@ -184,7 +184,7 @@ public class BlobPutHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -196,7 +196,7 @@ public class BlobPutHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the BlobPutHeaders object itself.
      */
     public BlobPutHeaders withDateProperty(DateTime dateProperty) {
@@ -211,7 +211,7 @@ public class BlobPutHeaders {
     /**
      * Get the isServerEncrypted value.
      *
-     * @return the isServerEncrypted value
+     * @return the isServerEncrypted value.
      */
     public Boolean isServerEncrypted() {
         return this.isServerEncrypted;
@@ -220,7 +220,7 @@ public class BlobPutHeaders {
     /**
      * Set the isServerEncrypted value.
      *
-     * @param isServerEncrypted the isServerEncrypted value to set
+     * @param isServerEncrypted the isServerEncrypted value to set.
      * @return the BlobPutHeaders object itself.
      */
     public BlobPutHeaders withIsServerEncrypted(Boolean isServerEncrypted) {

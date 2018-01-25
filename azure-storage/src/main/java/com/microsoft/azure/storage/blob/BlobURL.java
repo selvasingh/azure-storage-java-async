@@ -16,8 +16,8 @@ package com.microsoft.azure.storage.blob;
 
 import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
-import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 import java.io.UnsupportedEncodingException;
@@ -190,9 +190,9 @@ public class BlobURL extends StorageURL {
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that represents the access conditions for the blob.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlobGetHeaders, AsyncInputStream&gt;&gt;} object if successful.
+     *      The {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;byte[]&gt;&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobGetHeaders, AsyncInputStream>> getBlobAsync(
+    public Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> getBlobAsync(
             BlobRange range, BlobAccessConditions accessConditions, boolean rangeGetContentMD5) {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();

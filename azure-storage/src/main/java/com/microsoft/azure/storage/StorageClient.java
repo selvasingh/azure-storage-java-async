@@ -15,17 +15,17 @@ package com.microsoft.azure.storage;
  */
 public interface StorageClient {
     /**
-     * Gets The Azure Storage account to use.
+     * Gets The URL of the service account, container, or blob that is the targe of the desired operation.
      *
      * @return the url value.
      */
     String url();
 
     /**
-     * Sets The Azure Storage account to use.
+     * Sets The URL of the service account, container, or blob that is the targe of the desired operation.
      *
      * @param url the url value.
-     * @return the service client itself
+     * @return the service client itself.
      */
     StorageClient withUrl(String url);
 
@@ -40,42 +40,48 @@ public interface StorageClient {
      * Sets Specifies the version of the operation to use for this request.
      *
      * @param version the version value.
-     * @return the service client itself
+     * @return the service client itself.
      */
     StorageClient withVersion(String version);
 
     /**
      * Gets the Services object to access its operations.
+     *
      * @return the Services object.
      */
     Services services();
 
     /**
      * Gets the Containers object to access its operations.
+     *
      * @return the Containers object.
      */
     Containers containers();
 
     /**
      * Gets the Blobs object to access its operations.
+     *
      * @return the Blobs object.
      */
     Blobs blobs();
 
     /**
      * Gets the BlockBlobs object to access its operations.
+     *
      * @return the BlockBlobs object.
      */
     BlockBlobs blockBlobs();
 
     /**
      * Gets the PageBlobs object to access its operations.
+     *
      * @return the PageBlobs object.
      */
     PageBlobs pageBlobs();
 
     /**
      * Gets the AppendBlobs object to access its operations.
+     *
      * @return the AppendBlobs object.
      */
     AppendBlobs appendBlobs();
