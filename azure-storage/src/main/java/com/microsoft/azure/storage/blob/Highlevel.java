@@ -11,6 +11,7 @@ import io.reactivex.functions.Function;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Highlevel {
 
@@ -120,13 +121,12 @@ public class Highlevel {
         }
 
         // TODO: context with cancel?
-        ArrayList<String> blockIdList = new ArrayList<>(numBlocks);
         long blockSize = options.blockSize;
 
         final String[] blockIds = new String[numBlocks];
 
         // TODO: Off by one
-        Observable.range(0, numBlocks)
+        return Observable.range(0, numBlocks)
                 .flatMap(new Function<Integer, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<?> apply(final Integer blockNum) throws Exception {
@@ -140,35 +140,39 @@ public class Highlevel {
 
                         // TODO: progress
 
-                        final String blockId = Base64.encode(/* TODO: generate uuid */);
+                        final String blockId = "";// TODO: Base64.encode(/* TODO: generate uuid */);
                         blockIds[blockNum] = blockId;
 
                         // TODO: What happens if one of the calls fails?
                         // TODO: This returns an Observable that subscribes to the completable then subscribes
                         // to the observable source. Does the completable emit a *value* that will pollute the collectInto call?
-                        return blockBlobURL.putBlockAsync(blockId, null, null)
-                                .toCompletable().andThen(new ObservableSource<Pair<Integer, String>>() {
-                            @Override
-                            public void subscribe(Observer<? super Pair<Integer, String>> observer) {
-                                observer.onNext(new Pair<Integer, String>(blockNum, blockId));
-                                observer.onComplete();
-                            }
-                        });
+                        return blockBlobURL.putBlockAsync(blockId, null, null).toObservable();
                         // Call blocking get to ensure that this putBlock finishes before we move on?
                         // "map" the numbers to rest calls. Return an observable that emits the blockIds and block number
 
                     }
                 }, false, options.parallelism)
-                .collectInto(new ArrayList<String>(), new BiConsumer<ArrayList<String>, Pair<Integer, String>>() {
+                .isEmpty().toCompletable() // We know the list won't be empty. isEmpty is a quick way to transition to a Single so we can get a Completable.
+                .andThen(blockBlobURL.putBlockListAsync(Arrays.asList(blockIds), options.metadata, options.httpHeaders,
+                        options.accessConditions))
+                .map(new Function<RestResponse<BlockBlobPutBlockListHeaders,Void>, CommonRestResponse>() {
                     @Override
-                    public void accept(ArrayList<String> ids, Pair<Integer, String> p) throws Exception {
-                        ids.add(p.getKey(), p.getValue());
+                    public CommonRestResponse apply(RestResponse<BlockBlobPutBlockListHeaders, Void> response) throws Exception {
+                        return CommonRestResponse.createFromPutBlockListResponse(response);
+                    }
+                });
+
+
+                /*.collectInto(new Object(), new BiConsumer<Object, Object>() {
+                    @Override
+                    public void accept(Object ids, Object p) throws Exception {
+
                     }
                 })
                 .flatMap(new Function<ArrayList<String>, SingleSource<?>>() {
                     @Override
                     public SingleSource<?> apply(ArrayList<String> ids) throws Exception {
-                        return blockBlobURL.putBlockListAsync(ids, options.metadata, options.httpHeaders,
+                        return blockBlobURL.putBlockListAsync(blockIds, options.metadata, options.httpHeaders,
                                 options.accessConditions);
                     }
                 })
@@ -177,10 +181,10 @@ public class Highlevel {
                 public CommonRestResponse apply(RestResponse<BlockBlobPutBlockListHeaders, Void> response) throws Exception {
                     return CommonRestResponse.createFromPutBlockListResponse(response);
                 }
-        })
+        })*/
 
 
-                .doFinally(new Action() {
+            /*    .doFinally(new Action() {
             @Override
             public void run() throws Exception {
                 // can call collect to collect all the ids into the list? Then "map" that list into a rest call
@@ -194,7 +198,7 @@ public class Highlevel {
                 // Declare a CommonRestResponse in the larger scope and then assign the result of putBlockList to it here.
                 // But will the outer function terminate before this gets called and so return garbage?
             }
-        });
+        });*/
 
 
         /**
