@@ -211,7 +211,7 @@ public class BlobStorageAPITests {
             // --------------APPEND BLOBS-------------
             AppendBlobURL abu = cu.createAppendBlobURL("appendblob");
             abu.createBlobAsync(null, null, null).blockingGet();
-            abu.appendBlockAsync(Flowable.just(new byte[]{0,0,0}), null).blockingGet();
+            abu.appendBlockAsync(Flowable.just(new byte[]{0,0,0}), 3,  null).blockingGet();
 
             data = abu.getBlobAsync(new BlobRange(0L, 3L), null, false).blockingGet().body();
             dataByte = FlowableUtil.collectBytes(data).blockingGet();
@@ -272,8 +272,12 @@ public class BlobStorageAPITests {
         finally {
             // Delete the blob and container. Deleting a container does not require deleting the blobs first.
             // This is just for demonstration purposes.
-            bu.deleteAsync(DeleteSnapshotsOptionType.INCLUDE, null).blockingGet();
-            cu.deleteAsync(null).blockingGet();
+            try {
+                bu.deleteAsync(DeleteSnapshotsOptionType.INCLUDE, null).blockingGet();
+            }
+            catch (Exception e) {
+                cu.deleteAsync(null).blockingGet();
+            }
         }
     }
 

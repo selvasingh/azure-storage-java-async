@@ -126,12 +126,12 @@ public final class AppendBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockAsync(
-            Flowable<byte[]> data, BlobAccessConditions accessConditions) {
+            Flowable<byte[]> data, long length, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
 
-        return this.storageClient.appendBlobs().appendBlockWithRestResponseAsync(data,0, null,
+        return this.storageClient.appendBlobs().appendBlockWithRestResponseAsync(data, length, null,
                 accessConditions.getLeaseAccessConditions().toString(),
                 accessConditions.getAppendBlobAccessConditions().getIfMaxSizeLessThanOrEqual(),
                 accessConditions.getAppendBlobAccessConditions().getIfAppendPositionEquals(),

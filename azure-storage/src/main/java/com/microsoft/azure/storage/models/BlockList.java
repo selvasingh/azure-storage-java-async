@@ -24,14 +24,12 @@ public class BlockList {
      * The committedBlocks property.
      */
     @JacksonXmlElementWrapper(localName = "CommittedBlocks")
-    @JsonProperty("Block")
     private List<Block> committedBlocks;
 
     /**
      * The uncommittedBlocks property.
      */
     @JacksonXmlElementWrapper(localName = "UncommittedBlocks")
-    @JsonProperty("Block")
     private List<Block> uncommittedBlocks;
 
     /**
