@@ -1,6 +1,7 @@
 package com.microsoft.azure.storage.blob;
 
 import com.microsoft.azure.storage.models.BlobPutHeaders;
+import com.microsoft.azure.storage.models.BlockBlobPutBlockHeaders;
 import com.microsoft.azure.storage.models.BlockBlobPutBlockListHeaders;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.AsyncInputStream;
@@ -127,9 +128,9 @@ public class Highlevel {
 
         // TODO: Off by one
         return Observable.range(0, numBlocks)
-                .flatMap(new Function<Integer, ObservableSource<?>>() {
+                .concatMapEager(new Function<Integer, ObservableSource<String>>() {
                     @Override
-                    public ObservableSource<?> apply(final Integer blockNum) throws Exception {
+                    public ObservableSource<String> apply(final Integer blockNum) throws Exception {
                         long currentBlockSize = options.blockSize;
                         if (blockNum == numBlocks-1) {
                             currentBlockSize = size - (blockNum & options.blockSize);
@@ -146,13 +147,39 @@ public class Highlevel {
                         // TODO: What happens if one of the calls fails?
                         // TODO: This returns an Observable that subscribes to the completable then subscribes
                         // to the observable source. Does the completable emit a *value* that will pollute the collectInto call?
-                        return blockBlobURL.putBlockAsync(blockId, null, null).toObservable();
+                        return blockBlobURL.putBlockAsync(blockId, null, null)
+                                .map(new Function<RestResponse<BlockBlobPutBlockHeaders,Void>, String>() {
+                                    @Override
+                                    public String apply(RestResponse<BlockBlobPutBlockHeaders, Void> _) throws Exception {
+                                        return blockId;
+                                    }
+                                }).toObservable();
                         // Call blocking get to ensure that this putBlock finishes before we move on?
                         // "map" the numbers to rest calls. Return an observable that emits the blockIds and block number
 
                     }
-                }, false, options.parallelism)
-                .isEmpty().toCompletable() // We know the list won't be empty. isEmpty is a quick way to transition to a Single so we can get a Completable.
+                }, numBlocks, options.parallelism)
+                .collectInto(new ArrayList<String>(numBlocks), new BiConsumer<ArrayList<String>, String>() {
+                    @Override
+                    public void accept(ArrayList<String> ids, String id) throws Exception {
+                        ids.add(id);
+                    }
+                })
+                .flatMap(new Function<ArrayList<String>, SingleSource<RestResponse<BlockBlobPutBlockListHeaders, Void>>>() {
+                    @Override
+                    public SingleSource<RestResponse<BlockBlobPutBlockListHeaders, Void>> apply(ArrayList<String> ids) throws Exception {
+                        return blockBlobURL.putBlockListAsync(ids, options.metadata, options.httpHeaders,
+                                options.accessConditions);
+                    }
+                })
+                .map(new Function<RestResponse<BlockBlobPutBlockListHeaders, Void>, CommonRestResponse>() {
+                    @Override
+                    public CommonRestResponse apply(RestResponse<BlockBlobPutBlockListHeaders, Void> response) throws Exception {
+                        return CommonRestResponse.createFromPutBlockListResponse(response);
+                    }
+                });
+
+                /*.isEmpty().toCompletable() // We know the list won't be empty. isEmpty is a quick way to transition to a Single so we can get a Completable.
                 .andThen(blockBlobURL.putBlockListAsync(Arrays.asList(blockIds), options.metadata, options.httpHeaders,
                         options.accessConditions))
                 .map(new Function<RestResponse<BlockBlobPutBlockListHeaders,Void>, CommonRestResponse>() {
@@ -160,7 +187,7 @@ public class Highlevel {
                     public CommonRestResponse apply(RestResponse<BlockBlobPutBlockListHeaders, Void> response) throws Exception {
                         return CommonRestResponse.createFromPutBlockListResponse(response);
                     }
-                });
+                });*/
 
 
                 /*.collectInto(new Object(), new BiConsumer<Object, Object>() {
