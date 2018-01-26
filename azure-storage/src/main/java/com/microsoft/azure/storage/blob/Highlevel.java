@@ -124,15 +124,23 @@ public class Highlevel {
         // TODO: context with cancel?
         long blockSize = options.blockSize;
 
-        // TODO: Off by one
+        // Generate a list of numbers [0-numBlocks). This determines how many times we call putBlock.
         return Observable.range(0, numBlocks)
+                /*
+                 For each number in the range, make a call to putBlock as follows. concatMap ensures that the items
+                 emitted by this Observable are in the same sequence as they are begun, which will be important for
+                 composing the list of Ids later.
+                 */
                 .concatMapEager(new Function<Integer, ObservableSource<String>>() {
                     @Override
                     public ObservableSource<String> apply(final Integer blockNum) throws Exception {
                         long currentBlockSize = options.blockSize;
+                        // Check if we are on the last block and adjust the size accordingly.
                         if (blockNum == numBlocks-1) {
                             currentBlockSize = size - (blockNum & options.blockSize);
                         }
+
+                        // Determine where in the original data to begin reading based on the block number.
                         long offset = blockNum * options.blockSize;
 
                         // TODO: Grab data out of the buffer.
@@ -142,33 +150,55 @@ public class Highlevel {
                         final String blockId = "";// TODO: Base64.encode(/* TODO: generate uuid */);
 
                         // TODO: What happens if one of the calls fails?
-                        // TODO: This returns an Observable that subscribes to the completable then subscribes
-                        // to the observable source. Does the completable emit a *value* that will pollute the collectInto call?
+                        /*
+                         Make a call to putBlock. Instead of emitting the RestResponse, which we don't care about,
+                         emit the blockId for this request. These will be collected below. Turn that into an Observable
+                         which emits one item to comply with the signature of concatMapEager.
+                         */
                         return blockBlobURL.putBlockAsync(blockId, null, null)
                                 .map(new Function<RestResponse<BlockBlobPutBlockHeaders,Void>, String>() {
                                     @Override
-                                    public String apply(RestResponse<BlockBlobPutBlockHeaders, Void> _) throws Exception {
+                                    public String apply(RestResponse<BlockBlobPutBlockHeaders, Void> x) throws Exception {
                                         return blockId;
                                     }
                                 }).toObservable();
-                        // Call blocking get to ensure that this putBlock finishes before we move on?
-                        // "map" the numbers to rest calls. Return an observable that emits the blockIds and block number
+
+                /*
+                 Specify the number of concurrent subscribers to this map. This determines how many concurrent rest
+                 calls are made. This is so because maxConcurrency is the number of internal subscribers available to
+                 subscribe to the Observables emitted by the source. A subscriber is not released for a new subscription
+                 until its Observable calls onComplete, which here means that the call to putBlock is finished. Prefetch
+                 is a hint that each of the Observables emitted by the source will emit only one value, which is true
+                 here because we have converted from a Single.
+                 */
 
                     }
                 }, options.parallelism, 1)
+                /*
+                collectInto will gather each of the emitted blockIds into a list. Because we used concatMap, the Ids
+                will be emitted according to their block number, which means the list generated here will be properly
+                ordered. This also converts into a Single.
+                */
                 .collectInto(new ArrayList<String>(numBlocks), new BiConsumer<ArrayList<String>, String>() {
                     @Override
                     public void accept(ArrayList<String> ids, String id) throws Exception {
                         ids.add(id);
                     }
                 })
+                /*
+                collectInto will not emit the list until its source calls onComplete. This means that by the time we
+                call putBlock list, all of the putBlock calls will have finished. By flatMapping the list, we can
+                "map" it into a call to putBlockList.
+                 */
                 .flatMap(new Function<ArrayList<String>, SingleSource<RestResponse<BlockBlobPutBlockListHeaders, Void>>>() {
-                    @Override
                     public SingleSource<RestResponse<BlockBlobPutBlockListHeaders, Void>> apply(ArrayList<String> ids) throws Exception {
                         return blockBlobURL.putBlockListAsync(ids, options.metadata, options.httpHeaders,
                                 options.accessConditions);
                     }
                 })
+                /*
+                Finally, we must turn the specific response type into a CommonRestResponse by mapping.
+                 */
                 .map(new Function<RestResponse<BlockBlobPutBlockListHeaders, Void>, CommonRestResponse>() {
                     @Override
                     public CommonRestResponse apply(RestResponse<BlockBlobPutBlockListHeaders, Void> response) throws Exception {
@@ -177,7 +207,7 @@ public class Highlevel {
                 });
 
 
-        /**
+        /*
          * Should take in a ByteBuffer.
          * Get FileChannel from FileInputStream and call map to get MappedByteBuffer.
          * Duplicate/slice the buffer for each network call (backed by the same data)
