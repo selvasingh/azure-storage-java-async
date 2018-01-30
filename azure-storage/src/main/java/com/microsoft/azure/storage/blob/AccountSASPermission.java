@@ -142,7 +142,6 @@ public enum AccountSASPermission {
                     invalidCharacter = false;
                     break;
                 }
-
             }
 
             if (invalidCharacter) {

@@ -28,7 +28,7 @@ import java.net.URL;
 
 
 /**
- * Represents a URL to a page blob.
+ * Represents a URL to a append blob.
  */
 public final class AppendBlobURL extends BlobURL {
 
@@ -66,7 +66,7 @@ public final class AppendBlobURL extends BlobURL {
      * Creates a new {@link AppendBlobURL} with the given snapshot.
      *
      * @param snapshot
-     *      A {@code java.util.Date} to set.
+     *      A {@code String} to set.
      * @return
      *      A {@link BlobURL} object with the given pipeline.
      */
@@ -90,7 +90,7 @@ public final class AppendBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobPutHeaders, Void>> createBlobAsync(
+    public Single<RestResponse<BlobPutHeaders, Void>> createAsync(
             Metadata metadata, BlobHttpHeaders headers, BlobAccessConditions accessConditions) {
         if(metadata == null) {
             metadata = Metadata.getDefault();
@@ -101,8 +101,8 @@ public final class AppendBlobURL extends BlobURL {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
-        return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.APPEND_BLOB, null,
-                null, headers.getContentType(), headers.getContentEncoding(),
+        return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.APPEND_BLOB,
+                null,null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
                 accessConditions.getLeaseAccessConditions().toString(),
                 headers.getContentDisposition(),

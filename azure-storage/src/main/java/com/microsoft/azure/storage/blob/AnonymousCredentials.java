@@ -28,6 +28,19 @@ import io.reactivex.Single;
 public final class AnonymousCredentials implements ICredentials {
 
     /**
+     * Creates a new {@code AnonymousCredentialsPolicy}.
+     *
+     * @param nextRequestPolicy
+     *      The next policy in the pipeline which will be called after this policy completes.
+     * @return
+     *      A {@link RequestPolicy} object to be inserted into the {@link com.microsoft.rest.v2.http.HttpPipeline}.
+     */
+    @Override
+    public RequestPolicy create(RequestPolicy nextRequestPolicy, RequestPolicyOptions options) {
+        return new AnonymousCredentialsPolicy(nextRequestPolicy);
+    }
+
+    /**
      * Anonymous credentials are to be used with with HTTP(S) requests
      * that read blobs from public containers or requests that use a
      * Shared Access Signature (SAS).
@@ -48,18 +61,5 @@ public final class AnonymousCredentials implements ICredentials {
          *      The {@link Single&lt;HttpResponse&gt;} containing the response if successful.
          */
         public Single<HttpResponse> sendAsync(HttpRequest request) { return requestPolicy.sendAsync(request); }
-    }
-
-    /**
-     * Creates a new {@code AnonymousCredentialsPolicy}.
-     *
-     * @param nextRequestPolicy
-     *      The next policy in the pipeline which will be called after this policy completes.
-     * @return
-     *      A {@link RequestPolicy} object to be inserted into the {@link com.microsoft.rest.v2.http.HttpPipeline}.
-     */
-    @Override
-    public RequestPolicy create(RequestPolicy nextRequestPolicy, RequestPolicyOptions options) {
-        return new AnonymousCredentialsPolicy(nextRequestPolicy);
     }
 }

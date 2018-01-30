@@ -19,9 +19,11 @@ import java.util.Date;
 
 /**
  * RESERVED FOR INTERNAL USE
+ * This is package private, so the only
  * Common class for service and account SAS
  */
 abstract class BaseSAS {
+
     final String version;
 
     final SASProtocol protocol;
@@ -34,6 +36,15 @@ abstract class BaseSAS {
 
     final IPRange ipRange;
 
+    /**
+     * TODO: docs.
+     * @param version
+     * @param protocol
+     * @param startTime
+     * @param expiryTime
+     * @param permissions
+     * @param ipRange
+     */
     BaseSAS(String version, SASProtocol protocol, Date startTime, Date expiryTime, String permissions,
             IPRange ipRange) {
         if (expiryTime == null || permissions == null) {

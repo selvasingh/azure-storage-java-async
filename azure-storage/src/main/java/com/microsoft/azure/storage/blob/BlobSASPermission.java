@@ -104,7 +104,7 @@ public enum BlobSASPermission {
      * @return
      *      A {@link EnumSet<BlobSASPermission>} generated from the given {@code String}.
      */
-    static EnumSet<BlobSASPermission> permissionsFromString(String permString) {
+    public static EnumSet<BlobSASPermission> permissionsFromString(String permString) {
         EnumSet<BlobSASPermission> permissions = EnumSet.noneOf(BlobSASPermission.class);
 
         for (final char c : permString.toLowerCase().toCharArray()) {

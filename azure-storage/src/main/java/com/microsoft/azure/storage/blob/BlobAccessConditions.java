@@ -19,7 +19,9 @@ package com.microsoft.azure.storage.blob;
  */
 public final class BlobAccessConditions {
 
-    private static BlobAccessConditions defaultBlobAccessConditions;
+    private static BlobAccessConditions defaultBlobAccessConditions =
+            new BlobAccessConditions(null, null, null,
+                    null);
 
     // Optional standard HTTP access conditions which are optionally set
     private final HttpAccessConditions httpAccessConditions;
@@ -51,10 +53,14 @@ public final class BlobAccessConditions {
             LeaseAccessConditions leaseAccessConditions,
             AppendBlobAccessConditions appendBlobAccessConditions,
             PageBlobAccessConditions pageBlobAccessConditions) {
-        this.httpAccessConditions = httpAccessConditions == null ? HttpAccessConditions.getDefault() : httpAccessConditions;
-        this.leaseAccessConditions = leaseAccessConditions == null ? LeaseAccessConditions.getDefault() : leaseAccessConditions;
-        this.appendBlobAccessConditions = appendBlobAccessConditions == null ? AppendBlobAccessConditions.getDefault() : appendBlobAccessConditions;
-        this.pageBlobAccessConditions = pageBlobAccessConditions == null ? PageBlobAccessConditions.getDefault() : pageBlobAccessConditions;
+        this.httpAccessConditions = httpAccessConditions == null ?
+                HttpAccessConditions.getDefault() : httpAccessConditions;
+        this.leaseAccessConditions = leaseAccessConditions == null ?
+                LeaseAccessConditions.getDefault() : leaseAccessConditions;
+        this.appendBlobAccessConditions = appendBlobAccessConditions == null ?
+                AppendBlobAccessConditions.getDefault() : appendBlobAccessConditions;
+        this.pageBlobAccessConditions = pageBlobAccessConditions == null ?
+                PageBlobAccessConditions.getDefault() : pageBlobAccessConditions;
     }
 
     HttpAccessConditions getHttpAccessConditions() {

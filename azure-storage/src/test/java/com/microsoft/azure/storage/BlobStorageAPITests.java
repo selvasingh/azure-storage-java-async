@@ -146,7 +146,7 @@ public class BlobStorageAPITests {
             // Create a reference to a new blob within the same container to upload blocks. Upload a single block.
             BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
             ArrayList<String> blockIDs = new ArrayList<>();
-            blockIDs.add(Base64.encode(new Byte[]{0}));
+            blockIDs.add(Base64.encode(new byte[]{0}));
             bu3.putBlockAsync(blockIDs.get(0), Flowable.just(new byte[]{0,0,0}), 3,
                     null).blockingGet();
 

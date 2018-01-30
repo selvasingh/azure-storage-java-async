@@ -47,6 +47,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BasicSample {
+    private void test(){
+
+    }
     static HttpPipeline getPipeline(String accountName, String accountKey) throws UnsupportedEncodingException, InvalidKeyException {
         HttpPipelineLogger logger = new HttpPipelineLogger() {
             @Override

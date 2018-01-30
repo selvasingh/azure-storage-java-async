@@ -145,6 +145,7 @@ public class BlobURL extends StorageURL {
             metadata = Metadata.getDefault();
         }
 
+        // TODO: Remove sourceURL.toString when runtime updates
         return this.storageClient.blobs().copyWithRestResponseAsync(sourceURL.toString(), null, null,
                 sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -159,9 +160,8 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * AbortCopy stops a pending copy that was previously started
-     * and leaves a destination blob with 0 length and metadata.
-     * For more information, see https://docs.microsoft.com/rest/api/storageservices/abort-copy-blob.
+     * AbortCopy stops a pending copy that was previously started and leaves a destination blob with 0 length and
+     * metadata. For more information, see https://docs.microsoft.com/rest/api/storageservices/abort-copy-blob.
      *
      * @param copyId
      *      A {@code String} representing the copy identifier provided in the x-ms-copy-id header of
@@ -300,7 +300,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobSetMetadataHeaders, Void>> setMetadaAsync(
+    public Single<RestResponse<BlobSetMetadataHeaders, Void>> setMetadataAsync(
             Metadata metadata, BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
@@ -363,9 +363,12 @@ public class BlobURL extends StorageURL {
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobLeaseHeaders, Void>> acquireLeaseAsync(
-            String proposedID, Integer duration, HttpAccessConditions httpAccessConditions) {
+            String proposedID, int duration, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.getDefault();
+        }
+        if (!(duration == -1 || (duration >= 15 && duration <=60))) {
+            return Single.error(new IllegalArgumentException("Duration must be -1 or between 15 and 60."));
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.ACQUIRE, null,
@@ -431,8 +434,6 @@ public class BlobURL extends StorageURL {
      * to break a fixed-duration lease when it expires or an infinite lease immediately.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
      *
-     * @param leaseID
-     *      A {@code String} representing the lease ID to break.
      * @param breakPeriodInSeconds
      *      An optional {@code Integer} representing the proposed duration of seconds that the lease should continue
      *      before it is broken, between 0 and 60 seconds. This break period is only used if it is shorter than the time
@@ -443,14 +444,14 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobLeaseHeaders, Void>> breakLeaseAsync(String leaseID, Integer breakPeriodInSeconds,
+    public Single<RestResponse<BlobLeaseHeaders, Void>> breakLeaseAsync(Integer breakPeriodInSeconds,
                                         HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.getDefault();
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.RENEW, null,
-                leaseID, breakPeriodInSeconds, null, null,
+                null, breakPeriodInSeconds, null, null,
                 httpAccessConditions.getIfModifiedSince(),
                 httpAccessConditions.getIfUnmodifiedSince(),
                 httpAccessConditions.getIfMatch().toString(), httpAccessConditions.getIfNoneMatch().toString(),

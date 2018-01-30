@@ -46,17 +46,6 @@ public abstract class StorageURL {
         this.storageClient.withUrl(url.toString());
     }
 
-    public static HttpPipeline CreatePipeline(ICredentials credentials, PipelineOptions pipelineOptions) {
-        LoggingFactory loggingFactory = new LoggingFactory(pipelineOptions.loggingOptions);
-        RequestIDFactory requestIDFactory = new RequestIDFactory();
-        RequestRetryFactory requestRetryFactory = new RequestRetryFactory(new RequestRetryOptions());
-        TelemetryFactory telemetryFactory = new TelemetryFactory(pipelineOptions.telemetryOptions);
-        AddDatePolicy addDate = new AddDatePolicy();
-        return HttpPipeline.build(
-                pipelineOptions.client, telemetryFactory, requestIDFactory, requestRetryFactory, addDate, credentials,
-                loggingFactory);
-    }
-
     @Override
     public String toString() {
         return this.storageClient.url();
@@ -92,6 +81,19 @@ public abstract class StorageURL {
         return new URL(url.toString()); // TODO: modify when toURL is released.
     }
 
+    // TODO: Move this? Not discoverable.
+    public static HttpPipeline CreatePipeline(ICredentials credentials, PipelineOptions pipelineOptions) {
+        LoggingFactory loggingFactory = new LoggingFactory(pipelineOptions.loggingOptions);
+        RequestIDFactory requestIDFactory = new RequestIDFactory();
+        RequestRetryFactory requestRetryFactory = new RequestRetryFactory(new RequestRetryOptions());
+        TelemetryFactory telemetryFactory = new TelemetryFactory(pipelineOptions.telemetryOptions);
+        AddDatePolicy addDate = new AddDatePolicy();
+        return HttpPipeline.build(
+                pipelineOptions.client, telemetryFactory, requestIDFactory, requestRetryFactory, addDate, credentials,
+                loggingFactory);
+    }
+
+    // TODO: revisit.
     static class AddDatePolicy implements RequestPolicyFactory {
 
         @Override
