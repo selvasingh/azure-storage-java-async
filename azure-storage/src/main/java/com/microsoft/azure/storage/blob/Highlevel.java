@@ -6,13 +6,11 @@ import com.microsoft.azure.storage.models.BlockBlobPutBlockListHeaders;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.AsyncInputStream;
 import io.reactivex.*;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.Function;
-import javafx.util.Pair;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Highlevel {
 
@@ -94,7 +92,7 @@ public class Highlevel {
      *      A {@code Single} that will return a {@link CommonRestResponse} if successful.
      */
     public static Single<CommonRestResponse> uploadBufferToBlockBlob(
-            Flowable<byte[]> data, final long size, final BlockBlobURL blockBlobURL, final UploadToBlockBlobOptions options) {
+            final ByteBuffer data, final long size, final BlockBlobURL blockBlobURL, final UploadToBlockBlobOptions options) {
         if (size <= Constants.MAX_PUT_BLOB_BYTES) {
             // If the size can fit in 1 putBlob call, do it this way.
             if (options.progressReceiver != null) {
@@ -102,7 +100,7 @@ public class Highlevel {
             }
 
             //TODO: Get rid of AsyncInputStream
-            return blockBlobURL.putBlobAsync(new AsyncInputStream(data, size, true), options.httpHeaders,
+            return blockBlobURL.putBlobAsync(Flowable.just(data), options.httpHeaders,
                     options.metadata, options.accessConditions)
                     .map(new Function<RestResponse<BlobPutHeaders, Void>, CommonRestResponse>() {
                         // Transform the specific RestResponse into a CommonRestResponse.
@@ -143,7 +141,13 @@ public class Highlevel {
                         // Determine where in the original data to begin reading based on the block number.
                         long offset = blockNum * options.blockSize;
 
-                        // TODO: Grab data out of the buffer.
+                        //TODO: Validate the sizes. Use constants
+                        // Check if its an iterable. If so, cast to a List interface. If successful, grab size.
+                        // If not, walk over to count numBlocks. Use .fromIterable instead of .range because
+                        // We don't need the sequence number here any more because we don't have to index in to
+                        // get the data
+                        ByteBuffer blockBuffer = data.duplicate();
+                        blockBuffer.position(offset);
 
                         // TODO: progress
 
@@ -214,9 +218,6 @@ public class Highlevel {
          * Set the position and limit on the new buffer (independent per buffer object).
          * Can convert to flowable by get()-ing some relative section of the array or the whole thing. This will read
          * those bytes into memory. Create using Flowable.just(byte[]).
-         *
-         * TODO: Have to read from the Flowable and buffer until I get a block length or it is done. Or just take a
-         * raw byte array but make sure it can work with Files primarily.
          *
          */
     }
