@@ -16,13 +16,13 @@ package com.microsoft.azure.storage.blob;
 
 public final class PageBlobAccessConditions {
 
-    private static PageBlobAccessConditions defaultPageBlobAccessConditions;
+    private final static PageBlobAccessConditions defaultPageBlobAccessConditions;
 
-    private Long ifSequenceNumberLessThan;
+    private final Long ifSequenceNumberLessThan;
 
-    private Long ifSequenceNumberLessThanOrEqual;
+    private final Long ifSequenceNumberLessThanOrEqual;
 
-    private Long ifSequenceNumberEqual;
+    private final Long ifSequenceNumberEqual;
 
     /**
      * Creates a set of conditions under which a request to a PageBlob will succeed.

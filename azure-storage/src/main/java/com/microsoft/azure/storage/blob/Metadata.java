@@ -17,7 +17,7 @@ package com.microsoft.azure.storage.blob;
 import java.util.HashMap;
 
 /**
- * Constains metadata key/value pairs
+ * Contains metadata key/value pairs
  */
 public final class Metadata extends HashMap<String, String> {
     private static Metadata defaultMetadata;

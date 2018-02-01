@@ -86,6 +86,7 @@ public final class AccountSAS extends BaseSAS {
             ipRange = super.ipRange;
         }
 
+        // TODO: parse and then toString on permissions to ensure correct order
         String servicesString = AccountSASService.servicesToString(this.services);
         String resourceTypesString = AccountSASResourceType.resourceTypesToString(this.resourceTypes);
         String stringToSign = Utility.join(new String[]{

@@ -29,9 +29,9 @@ import java.util.UUID;
 public final class RequestIDFactory implements RequestPolicyFactory {
 
     private final class RequestIDPolicy implements RequestPolicy {
-        final RequestPolicy nextPolicy;
+        private final RequestPolicy nextPolicy;
 
-        final RequestPolicyOptions options;
+        private final RequestPolicyOptions options;
 
         public RequestIDPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options) {
             this.nextPolicy = nextPolicy;

@@ -27,6 +27,8 @@ import java.util.Map;
  * NOTE: Changing any SAS-related field requires computing a new SAS signature.
  */
 public final class BlobURLParts {
+    // Fields are intentionally not final because they are mutable.
+
     private String scheme;
 
     private String host;

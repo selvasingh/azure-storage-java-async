@@ -22,7 +22,7 @@ import java.util.logging.Level;
  */
 public final class LoggingOptions {
 
-    private final Long minDurationToLogSlowRequestsInMs;
+    private final long minDurationToLogSlowRequestsInMs;
 
     private final Level loggingLevel;
 
@@ -49,9 +49,9 @@ public final class LoggingOptions {
      * @param loggingLevel
      *      The minimum {@code java.util.logging.Level} to log requests.
      * @param minDurationToLogSlowRequestsInMs
-     *      A {@code Long} representing the minimum duration for a tried operation to log a warning.
+     *      A {@code long} representing the minimum duration for a tried operation to log a warning.
      */
-    public LoggingOptions(Level loggingLevel, Long minDurationToLogSlowRequestsInMs) {
+    public LoggingOptions(Level loggingLevel, long minDurationToLogSlowRequestsInMs) {
         this.loggingLevel = loggingLevel;
         this.minDurationToLogSlowRequestsInMs = minDurationToLogSlowRequestsInMs;
     }
@@ -66,9 +66,9 @@ public final class LoggingOptions {
 
     /**
      * @return
-     *      A {@code Long} representing the minimum duration for a tried operation to log a warning.
+     *      A {@code long} representing the minimum duration for a tried operation to log a warning.
      */
-    public Long getMinDurationToLogSlowRequestsInMs() {
+    public long getMinDurationToLogSlowRequestsInMs() {
         return minDurationToLogSlowRequestsInMs;
     }
 

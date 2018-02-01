@@ -116,6 +116,28 @@ public final class ContainerURL extends StorageURL {
     }
 
     /**
+     * createBlobURL creates a new BlobURL object by concatenating blobName to the end of
+     * ContainerURL's URL. The new BlobURL uses the same request policy pipeline as the ContainerURL.
+     * To change the pipeline, create the BlobURL and then call its WithPipeline method passing in the
+     * desired pipeline object. Or, call this package's createBlobURL instead of calling this object's
+     * createBlobURL method.
+     *
+     * @param blobName
+     *      A {@code String} representing the name of the blob.
+     * @return
+     *      A new {@link BlobURL} object which references the blob with the specified name in this container.
+     */
+    public BlobURL createBlobURL(String blobName) {
+        try {
+            return new BlobURL(super.appendToURLPath(new URL(this.storageClient.url()), blobName),
+                    this.storageClient.httpPipeline());
+        } catch (MalformedURLException e) {
+            // TODO: remove
+        }
+        return null;
+    }
+
+    /**
      * Create creates a new container within a storage account.
      * If a container with the same name already exists, the operation fails.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/create-container.
@@ -242,7 +264,7 @@ public final class ContainerURL extends StorageURL {
      * https://docs.microsoft.com/rest/api/storageservices/set-container-acl.
      *
      * @param accessType
-     *      A value of the class {@link PublicAccessType}.
+     *      A value of the class {@link PublicAccessType}. Passing null turns off public access.
      * @param identifiers
      *      A {@code java.util.List} of {@link SignedIdentifier} objects that specify the permissions for the container.
      * @param accessConditions
@@ -257,6 +279,8 @@ public final class ContainerURL extends StorageURL {
         if(accessConditions == null) {
             accessConditions = ContainerAccessConditions.getDefault();
         }
+
+        // TODO: validate that empty list clears permissions and null list does not change list. Document behavior.
         return this.storageClient.containers().setAclWithRestResponseAsync(identifiers, null,
                 accessConditions.getLeaseID().toString(), accessType,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),

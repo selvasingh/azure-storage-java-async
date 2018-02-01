@@ -31,7 +31,7 @@ public final class BlobHttpHeaders {
 
     private final String contentMD5;
 
-    private String contentType;
+    private final String contentType;
 
     /**
      * A {@link BlobHttpHeaders} object.

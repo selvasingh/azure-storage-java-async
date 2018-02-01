@@ -17,17 +17,17 @@ package com.microsoft.azure.storage.blob;
 /**
  * Defines options availble when calling ListBlobs.
  */
-public class ListBlobsOptions {
+public final class ListBlobsOptions {
 
     private static ListBlobsOptions defaultListBlobsOptions;
 
-    private BlobListingDetails details;
+    private final BlobListingDetails details;
 
-    private String prefix;
+    private final String prefix;
 
-    private String delimiter;
+    private final String delimiter;
 
-    private Integer maxResults;
+    private final Integer maxResults;
 
     /**
      * A {@link ListBlobsOptions} object.

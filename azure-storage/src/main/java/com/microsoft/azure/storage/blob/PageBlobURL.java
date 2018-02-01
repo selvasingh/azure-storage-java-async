@@ -93,9 +93,12 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *       The {@link Single &lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobPutHeaders, Void>> createBlobAsync(
-            Long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders headers,
+    public Single<RestResponse<BlobPutHeaders, Void>> createAsync(
+            long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
+        if (size%512 != 0) {
+            throw new IllegalArgumentException("size must be a multiple of 512.");
+        }
         if (sequenceNumber != null && sequenceNumber < 0) {
             return Single.error(new IllegalArgumentException("SequenceNumber must be greater than or equal to 0."));
         }
@@ -109,6 +112,7 @@ public final class PageBlobURL extends BlobURL {
             accessConditions = BlobAccessConditions.getDefault();
         }
 
+        // TODO: What if you pass 0 for pageblob size? Validate?
         return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.PAGE_BLOB, null,
                 null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(),
@@ -267,7 +271,7 @@ public final class PageBlobURL extends BlobURL {
      * Resize resizes the page blob to the specified size (which must be a multiple of 512).
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/set-blob-properties.
      *
-     * @param length
+     * @param size
      *      Resizes a page blob to the specified size. If the specified value is less than the current size of the
      *      blob, then all pages above the specified value are cleared.
      * @param accessConditions
@@ -277,11 +281,11 @@ public final class PageBlobURL extends BlobURL {
      *      The {@link Single &lt;RestResponse&lt;BlobSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobSetPropertiesHeaders, Void>> resizeAsync(
-            Long length, BlobAccessConditions accessConditions) {
-        if (length%512 != 0) {
-            return Single.error(new IllegalArgumentException("Length must be a multiple of a page size (512)."));
+            long size, BlobAccessConditions accessConditions) {
+        if (size%512 != 0) {
+            throw new IllegalArgumentException("size must be a multiple of 512.");
         }
-        if(accessConditions == null) {
+        if (accessConditions == null) {
             accessConditions = BlobAccessConditions.getDefault();
         }
         return this.storageClient.blobs().setPropertiesWithRestResponseAsync(null,
@@ -291,7 +295,7 @@ public final class PageBlobURL extends BlobURL {
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
-                null, length, null, null, null);
+                null, size, null, null, null);
     }
 
     /**
@@ -367,7 +371,7 @@ public final class PageBlobURL extends BlobURL {
             source = builder.toURL();
         } catch (MalformedURLException e) {
             return Single.error(e);
-         }
+        }
 
         return this.storageClient.pageBlobs().incrementalCopyWithRestResponseAsync(source.toString(),
                 null, null,

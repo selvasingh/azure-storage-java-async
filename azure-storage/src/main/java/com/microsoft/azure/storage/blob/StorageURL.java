@@ -82,10 +82,15 @@ public abstract class StorageURL {
     }
 
     // TODO: Move this? Not discoverable.
-    public static HttpPipeline CreatePipeline(ICredentials credentials, PipelineOptions pipelineOptions) {
+    public static HttpPipeline createPipeline(ICredentials credentials, PipelineOptions pipelineOptions) {
+        /*
+        PipelineOptions is mutable, but its fields refer to immutable objects. This method can pass the fields to other
+        methods, but the PipelineOptions object itself can only be used for the duration of this call; it must not be
+        passed to anything with a longer lifetime.
+         */
         LoggingFactory loggingFactory = new LoggingFactory(pipelineOptions.loggingOptions);
         RequestIDFactory requestIDFactory = new RequestIDFactory();
-        RequestRetryFactory requestRetryFactory = new RequestRetryFactory(new RequestRetryOptions());
+        RequestRetryFactory requestRetryFactory = new RequestRetryFactory(pipelineOptions.requestRetryOptions);
         TelemetryFactory telemetryFactory = new TelemetryFactory(pipelineOptions.telemetryOptions);
         AddDatePolicy addDate = new AddDatePolicy();
         return HttpPipeline.build(

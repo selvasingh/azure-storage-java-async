@@ -150,10 +150,15 @@ public final class ServiceSAS extends BaseSAS {
         }
 
         String resource = "c";
-        if (!Utility.isNullOrEmpty(this.blobName)) {
+        if (Utility.isNullOrEmpty(this.blobName)) {
+
+        }
+        else {
             resource = "b";
         }
 
+        // TODO: parse and then toString on permissions to ensure correct order. Look at the resource type to
+        // use the appropriate enumSet
          String stringToSign = Utility.join(new String[]{
                         super.permissions,
                         Utility.getUTCTimeOrEmpty(super.startTime),
