@@ -23,7 +23,7 @@ final class SR {
     public static final String ACCOUNT_NAME_MISMATCH = "The account name does not match the existing account name on the credentials.";
     public static final String ARGUMENT_NULL_OR_EMPTY = "The argument must not be null or an empty string. Argument name: %s.";
     public static final String ARGUMENT_OUT_OF_RANGE_ERROR = "The argument is out of range. Argument name: %s, Value passed: %s.";
-    public static final String BLOB_OVER_MAX_BLOCK_LIMIT = "The total blocks for this upload exceeds the maximum allowable limit. Please increase the block size.";
+    public static final String BLOB_OVER_MAX_BLOCK_LIMIT = "The total blocks for this upload exceeds the maximum allowable limit.";
     public static final String BLOB_DATA_CORRUPTED = "Blob data corrupted (integrity check failed), Expected value is %s, retrieved %s";
     public static final String BLOB_ENDPOINT_NOT_CONFIGURED = "No blob endpoint configured.";
     public static final String BLOB_HASH_MISMATCH = "Blob hash mismatch (integrity check failed), Expected value is %s, retrieved %s.";
@@ -49,7 +49,7 @@ final class SR {
     public static final String INVALID_ACL_ACCESS_TYPE = "Invalid acl public access type returned '%s'. Expected blob or container.";
     public static final String INVALID_BLOB_TYPE = "Incorrect Blob type, please use the correct Blob type to access a blob on the server. Expected %s, actual %s.";
     public static final String INVALID_BLOCK_ID = "Invalid blockID, blockID must be a valid Base64 String.";
-    public static final String INVALID_BLOCK_SIZE = "Append block data should not exceed the maximum blob size condition value.";
+    public static final String INVALID_BLOCK_SIZE = "Block data should not exceed the maximum blob size condition value.";
     public static final String INVALID_CONDITIONAL_HEADERS = "The conditionals specified for this operation did not match server.";
     public static final String INVALID_CONNECTION_STRING = "Invalid connection string.";
     public static final String INVALID_CONNECTION_STRING_DEV_STORE_NOT_TRUE = "Invalid connection string, the UseDevelopmentStorage key must always be paired with 'true'.  Remove the flag entirely otherwise.";

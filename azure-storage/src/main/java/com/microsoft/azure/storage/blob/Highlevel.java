@@ -11,6 +11,7 @@ import io.reactivex.functions.Function;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Highlevel {
 
@@ -78,12 +79,10 @@ public class Highlevel {
     }
 
     /**
-     * Uploads a buffer in blocks to a block blob.
+     * Uploads an iterable of ByteBuffers to a block blob.
      *
      * @param data
-     *      A {@code Flowable&lt;byte[]&gt;} that contains the data to upload.
-     * @param size
-     *      The length of the data to upload.
+     *      A {@code Iterable&lt;ByteBuffer&gt;} that contains the data to upload.
      * @param blockBlobURL
      *      A {@link BlockBlobURL} that points to the blob to which the data should be uploaded.
      * @param options
@@ -91,16 +90,24 @@ public class Highlevel {
      * @return
      *      A {@code Single} that will return a {@link CommonRestResponse} if successful.
      */
-    public static Single<CommonRestResponse> uploadBufferToBlockBlob(
-            final ByteBuffer data, final long size, final BlockBlobURL blockBlobURL, final UploadToBlockBlobOptions options) {
-        if (size <= Constants.MAX_PUT_BLOB_BYTES) {
-            // If the size can fit in 1 putBlob call, do it this way.
+    public static Single<CommonRestResponse> uploadByteBuffersToBlockBlob(
+            final Iterable<ByteBuffer> data, final BlockBlobURL blockBlobURL,
+            final UploadToBlockBlobOptions options) {
+        // Determine the size of the blob and the number of blocks
+        long size = 0;
+        int numBlocks = 0;
+        for (ByteBuffer b : data) {
+            size += b.remaining();
+            numBlocks++;
+        }
+
+        // If the size can fit in 1 putBlob call, do it this way.
+        if (numBlocks == 1 && size <= Constants.MAX_PUT_BLOB_BYTES) {
             if (options.progressReceiver != null) {
                 // TODO: Wrap in a progress stream once progress is written.
             }
 
-            //TODO: Get rid of AsyncInputStream
-            return blockBlobURL.putBlobAsync(Flowable.just(data), options.httpHeaders,
+            return blockBlobURL.putBlobAsync(Flowable.just(data.iterator().next()), options.httpHeaders,
                     options.metadata, options.accessConditions)
                     .map(new Function<RestResponse<BlobPutHeaders, Void>, CommonRestResponse>() {
                         // Transform the specific RestResponse into a CommonRestResponse.
@@ -112,54 +119,42 @@ public class Highlevel {
                     });
         }
 
-        final int numBlocks = (int) (((size-1) / options.blockSize) + 1);
         if (numBlocks > Constants.MAX_BLOCKS) {
-            throw new IllegalArgumentException(String.format(
-                    "The streamSize is too big or the blockSize is too small; the number of blocks must be <= %d",
-                    Constants.MAX_BLOCKS));
+            throw new IllegalArgumentException(SR.BLOB_OVER_MAX_BLOCK_LIMIT);
         }
 
         // TODO: context with cancel?
-        long blockSize = options.blockSize;
 
-        // Generate a list of numbers [0-numBlocks). This determines how many times we call putBlock.
-        return Observable.range(0, numBlocks)
+        // Generate a flowable that emits items which are the ByteBuffers in the provided Iterable.
+        return Observable.fromIterable(data)
                 /*
-                 For each number in the range, make a call to putBlock as follows. concatMap ensures that the items
+                 For each ByteBuffer, make a call to putBlock as follows. concatMap ensures that the items
                  emitted by this Observable are in the same sequence as they are begun, which will be important for
                  composing the list of Ids later.
                  */
-                .concatMapEager(new Function<Integer, ObservableSource<String>>() {
+                .concatMapEager(new Function<ByteBuffer, ObservableSource<String>>() {
                     @Override
-                    public ObservableSource<String> apply(final Integer blockNum) throws Exception {
-                        long currentBlockSize = options.blockSize;
-                        // Check if we are on the last block and adjust the size accordingly.
-                        if (blockNum == numBlocks-1) {
-                            currentBlockSize = size - (blockNum & options.blockSize);
+                    public ObservableSource<String> apply(final ByteBuffer blockData) throws Exception {
+                        if (blockData.remaining() > Constants.MAX_BLOCK_SIZE) {
+                            throw new IllegalArgumentException(SR.INVALID_BLOCK_SIZE);
                         }
-
-                        // Determine where in the original data to begin reading based on the block number.
-                        long offset = blockNum * options.blockSize;
-
-                        //TODO: Validate the sizes. Use constants
-                        // Check if its an iterable. If so, cast to a List interface. If successful, grab size.
-                        // If not, walk over to count numBlocks. Use .fromIterable instead of .range because
-                        // We don't need the sequence number here any more because we don't have to index in to
-                        // get the data
-                        ByteBuffer blockBuffer = data.duplicate();
-                        blockBuffer.position(offset);
 
                         // TODO: progress
 
-                        final String blockId = "";// TODO: Base64.encode(/* TODO: generate uuid */);
+                        final String blockId = UUID.randomUUID().toString();
 
-                        // TODO: What happens if one of the calls fails?
+                        // TODO: What happens if one of the calls fails? It seems like this single/observable
+                        // will emit an error, which will halt the collecting into a list. Will the list still
+                        // be emitted or will it emit an error? In the latter, it'll just propogate. In the former,
+                        // we should check the size of the blockList equals numBlocks before sending it up.
+
                         /*
                          Make a call to putBlock. Instead of emitting the RestResponse, which we don't care about,
                          emit the blockId for this request. These will be collected below. Turn that into an Observable
                          which emits one item to comply with the signature of concatMapEager.
                          */
-                        return blockBlobURL.putBlockAsync(blockId, null, null)
+                        return blockBlobURL.putBlockAsync(blockId, Flowable.just(blockData),
+                                options.accessConditions.getLeaseAccessConditions())
                                 .map(new Function<RestResponse<BlockBlobPutBlockHeaders,Void>, String>() {
                                     @Override
                                     public String apply(RestResponse<BlockBlobPutBlockHeaders, Void> x) throws Exception {
