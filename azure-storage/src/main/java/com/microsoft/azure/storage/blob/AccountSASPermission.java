@@ -80,7 +80,7 @@ public enum AccountSASPermission {
      * @return
      *      A {@code String} which represents the {@code AccountSASPermissions}.
      */
-    static String permissionsToString(EnumSet<AccountSASPermission> permissions) {
+    static String toString(EnumSet<AccountSASPermission> permissions) {
         if (permissions == null) {
             return Constants.EMPTY_STRING;
         }
@@ -130,7 +130,7 @@ public enum AccountSASPermission {
      * @return
      *      A {@link EnumSet<AccountSASPermission>} generated from the given {@code String}.
      */
-    static EnumSet<AccountSASPermission> permissionsFromString(String permString) {
+    public static EnumSet<AccountSASPermission> parse(String permString) {
         EnumSet<AccountSASPermission> permissions = EnumSet.noneOf(AccountSASPermission.class);
 
         for (final char c : permString.toLowerCase().toCharArray()) {

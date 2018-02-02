@@ -33,7 +33,7 @@ public final class RequestIDFactory implements RequestPolicyFactory {
 
         private final RequestPolicyOptions options;
 
-        public RequestIDPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options) {
+        private RequestIDPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options) {
             this.nextPolicy = nextPolicy;
             this.options = options;
         }

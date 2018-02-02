@@ -48,7 +48,7 @@ public final class ListBlobsOptions {
      *           items.
      */
     public ListBlobsOptions(BlobListingDetails details, String prefix, String delimiter, Integer maxResults) {
-        if (maxResults != null && maxResults < 0) {
+        if (maxResults != null && maxResults <= 0) {
             throw new IllegalArgumentException("MaxResults must be greater than 0.");
         }
         this.details = details;

@@ -113,7 +113,7 @@ public enum ContainerSASPermission {
      * @return
      *      A {@link EnumSet<ContainerSASPermission>} generated from the given {@code String}.
      */
-    static EnumSet<ContainerSASPermission> permissionsFromString(String permString) {
+    public static EnumSet<ContainerSASPermission> parse(String permString) {
         EnumSet<ContainerSASPermission> permissions = EnumSet.noneOf(ContainerSASPermission.class);
 
         for (final char c : permString.toLowerCase().toCharArray()) {

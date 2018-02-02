@@ -27,6 +27,8 @@ import io.reactivex.Single;
  */
 public final class AnonymousCredentials implements ICredentials {
 
+    public AnonymousCredentials(){}
+
     /**
      * Creates a new {@code AnonymousCredentialsPolicy}.
      *

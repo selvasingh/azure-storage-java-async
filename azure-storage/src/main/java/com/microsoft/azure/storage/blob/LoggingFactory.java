@@ -61,7 +61,7 @@ public final class LoggingFactory implements RequestPolicyFactory {
          * @param factory
          *      A {@link LoggingFactory} object.
          */
-        LoggingPolicy(LoggingFactory factory, RequestPolicy nextPolicy, RequestPolicyOptions options) {
+        private LoggingPolicy(LoggingFactory factory, RequestPolicy nextPolicy, RequestPolicyOptions options) {
             this.factory = factory;
             this.nextPolicy = nextPolicy;
             this.options = options;

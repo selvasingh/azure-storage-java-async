@@ -60,7 +60,7 @@ public enum AccountSASService {
      * @return
      *      A {@code String} which represents the {@code SharedAccessAccountServices}.
      */
-    static String servicesToString(EnumSet<AccountSASService> services) {
+    static String toString(EnumSet<AccountSASService> services) {
         if (services == null) {
             return Constants.EMPTY_STRING;
         }
@@ -81,7 +81,7 @@ public enum AccountSASService {
      *            A {@code String} which represents the {@code SharedAccessAccountServices}.
      * @return A {@link EnumSet<AccountSASService>} generated from the given {@code String}.
      */
-    static EnumSet<AccountSASService> servicesFromString(String servicesString) {
+    public static EnumSet<AccountSASService> parse(String servicesString) {
         EnumSet<AccountSASService> services = EnumSet.noneOf(AccountSASService.class);
 
         for (final char c : servicesString.toLowerCase().toCharArray()) {

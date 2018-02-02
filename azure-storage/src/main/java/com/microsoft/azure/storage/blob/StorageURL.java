@@ -99,7 +99,7 @@ public abstract class StorageURL {
     }
 
     // TODO: revisit.
-    static class AddDatePolicy implements RequestPolicyFactory {
+    private static class AddDatePolicy implements RequestPolicyFactory {
 
         @Override
         public RequestPolicy create(RequestPolicy next, RequestPolicyOptions options) {

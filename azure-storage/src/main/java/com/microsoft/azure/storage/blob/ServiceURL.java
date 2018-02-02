@@ -70,7 +70,7 @@ public final class ServiceURL extends StorageURL {
      * @param marker
      *      A {@code String} that identifies the portion of the list of containers to be returned with the next listing
      *      operation.
-     * @param maxresults
+     * @param maxResults
      *      An {@code Integer} representing the maximum number of results to retrieve.  If {@code null} or greater
  *          than 5000, the server will return up to 5,000 items.  Must be at least 1.
      * @param include
@@ -79,13 +79,13 @@ public final class ServiceURL extends StorageURL {
      *      The {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if
      *      successful.
      */
-    public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listConatinersAsync(
-            String prefix, String marker, Integer maxresults, ListContainersIncludeType include) {
-        if (maxresults != null && maxresults < 0) {
+    public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainers(
+            String prefix, String marker, Integer maxResults, ListContainersIncludeType include) {
+        if (maxResults != null && maxResults <= 0) {
             return Single.error(new IllegalArgumentException("MaxResults must be >= 0."));
         }
         return this.storageClient.services().listContainersWithRestResponseAsync(prefix, marker,
-                maxresults, include, null, null);
+                maxResults, include, null, null);
     }
 
     /**
@@ -116,7 +116,7 @@ public final class ServiceURL extends StorageURL {
     }
 
     /**
-     * GetStats  retrieves statistics related to replication for the Blob service. It is only available on the secondary
+     * GetStats retrieves statistics related to replication for the Blob service. It is only available on the secondary
      * location endpoint when read-access geo-redundant replication is enabled for the storage account. For more
      * information, see: https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats.
      *

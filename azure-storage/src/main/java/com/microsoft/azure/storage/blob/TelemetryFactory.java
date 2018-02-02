@@ -23,7 +23,7 @@ import io.reactivex.Single;
 
 public final class TelemetryFactory implements RequestPolicyFactory {
 
-    final private String userAgent;
+    private final String userAgent;
 
     /**
      * Creates a factory that can create telemetry policy objects which add telemetry information to the outgoing
@@ -45,9 +45,9 @@ public final class TelemetryFactory implements RequestPolicyFactory {
     }
 
     private final class TelemetryPolicy implements RequestPolicy {
-        final RequestPolicy nextPolicy;
+        private final RequestPolicy nextPolicy;
 
-        TelemetryPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options) {
+        private TelemetryPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options) {
             this.nextPolicy = nextPolicy;
         }
 

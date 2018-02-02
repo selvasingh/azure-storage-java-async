@@ -55,7 +55,7 @@ public enum AccountSASResourceType {
      * @return
      *      A {@code String} which represents the {@code AccountSASResourceTypes}.
      */
-    static String resourceTypesToString(EnumSet<AccountSASResourceType> types) {
+    static String toString(EnumSet<AccountSASResourceType> types) {
         if (types == null) {
             return Constants.EMPTY_STRING;
         }
@@ -85,7 +85,7 @@ public enum AccountSASResourceType {
      * @return
      *      A {@link EnumSet<AccountSASResourceType>} generated from the given {@code String}.
      */
-    static EnumSet<AccountSASResourceType> resourceTypesFromString(String resourceTypesString) {
+    public static EnumSet<AccountSASResourceType> parse(String resourceTypesString) {
         EnumSet<AccountSASResourceType> resources = EnumSet.noneOf(AccountSASResourceType.class);
 
         for (final char c : resourceTypesString.toLowerCase().toCharArray()) {

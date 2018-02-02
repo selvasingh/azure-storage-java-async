@@ -146,7 +146,7 @@ final class Utility {
      * @throws UnsupportedEncodingException
      *             If a storage service error occurred.
      */
-    public static String safeDecode(final String stringToDecode) throws UnsupportedEncodingException {
+    public static String safeDecode(final String stringToDecode) {
         if (stringToDecode.length() == 0) {
             return Constants.EMPTY_STRING;
         }
@@ -159,8 +159,12 @@ final class Utility {
             for (int m = 0; m < stringToDecode.length(); m++) {
                 if (stringToDecode.charAt(m) == '+') {
                     if (m > startDex) {
-                        outBuilder.append(URLDecoder.decode(stringToDecode.substring(startDex, m),
-                                Constants.UTF8_CHARSET));
+                        try {
+                            outBuilder.append(URLDecoder.decode(stringToDecode.substring(startDex, m),
+                                    Constants.UTF8_CHARSET));
+                        } catch (UnsupportedEncodingException e) {
+                            throw new Error(e);
+                        }
                     }
 
                     outBuilder.append("+");
@@ -169,14 +173,22 @@ final class Utility {
             }
 
             if (startDex != stringToDecode.length()) {
-                outBuilder.append(URLDecoder.decode(stringToDecode.substring(startDex, stringToDecode.length()),
-                        Constants.UTF8_CHARSET));
+                try {
+                    outBuilder.append(URLDecoder.decode(stringToDecode.substring(startDex, stringToDecode.length()),
+                            Constants.UTF8_CHARSET));
+                } catch (UnsupportedEncodingException e) {
+                    throw new Error(e);
+                }
             }
 
             return outBuilder.toString();
         }
         else {
-            return URLDecoder.decode(stringToDecode, Constants.UTF8_CHARSET);
+            try {
+                return URLDecoder.decode(stringToDecode, Constants.UTF8_CHARSET);
+            } catch (UnsupportedEncodingException e) {
+                throw new Error(e);
+            }
         }
     }
 

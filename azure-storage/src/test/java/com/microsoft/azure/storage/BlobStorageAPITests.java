@@ -174,17 +174,17 @@ public class BlobStorageAPITests {
             // Parses a URL into its constituent components. This structure's URL fields may be modified.
             BlobURLParts parts = URLParser.ParseURL(bu.toURL());
 
-            // Construct the AccountSAS values object. This encapsulates all the values needed to create an AccountSAS.
-            AccountSAS sas = new AccountSAS("2016-05-31", SASProtocol.HTTPS_HTTP,
+            // Construct the AccountSasSignatureValues values object. This encapsulates all the values needed to create an AccountSasSignatureValues.
+            AccountSasSignatureValues sas = new AccountSasSignatureValues("2016-05-31", SASProtocol.HTTPS_HTTP,
                     null, DateTime.now().plusDays(1).toDate(),
                     EnumSet.of(AccountSASPermission.READ, AccountSASPermission.WRITE),
                     null,
                     EnumSet.of(AccountSASService.BLOB),
                     EnumSet.of(AccountSASResourceType.OBJECT));
 
-            // Construct a ServiceSAS in a pattern similar to that of the AccountSAS.
-            // Comment out the AccountSAS creation and uncomment this to run with ServiceSAS.
-            /*ServiceSAS sas = new ServiceSAS("2016-05-31", SASProtocol.HTTPS_HTTP,
+            // Construct a ServiceSasSignatureValues in a pattern similar to that of the AccountSasSignatureValues.
+            // Comment out the AccountSasSignatureValues creation and uncomment this to run with ServiceSasSignatureValues.
+            /*ServiceSasSignatureValues sas = new ServiceSasSignatureValues("2016-05-31", SASProtocol.HTTPS_HTTP,
                     DateTime.now().minusDays(1).toDate(), DateTime.now().plusDays(1).toDate(),
                     EnumSet.of(ContainerSASPermission.READ, ContainerSASPermission.WRITE),
                     null, containerName, null, null,

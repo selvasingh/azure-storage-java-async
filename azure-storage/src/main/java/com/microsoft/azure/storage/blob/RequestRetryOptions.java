@@ -26,8 +26,8 @@ public final class RequestRetryOptions {
      */
     private RetryPolicyType retryPolicyType = RetryPolicyType.EXPONENTIAL;
 
-    // MaxTries specifies the maximum number of attempts an operation will be tried before producing an error (0=default).
-    // A value of zero means that you accept our default policy. A value of 1 means 1 try and no retries.
+    // MaxTries specifies the maximum number of attempts an operation will be tried before producing an error
+    // (0=default). A value of zero means that you accept our default policy. A value of 1 means 1 try and no retries.
     int maxTries = 4;
 
     // TryTimeout indicates the maximum time in seconds allowed for any single try of an HTTP request.

@@ -23,60 +23,104 @@ import java.util.Map;
  */
 public final class SASQueryParameters {
 
+    private final String version;
+
+    private final String services;
+
+    private final String resourceTypes;
+
+    private final String protocol;
+
+    private final Date startTime;
+
+    private final Date expiryTime;
+
+    private final IPRange ipRange;
+
+    private final String identifier;
+
+    private final String resource;
+
+    private final String permissions;
+
+    private final String signature;
+
     /**
      * A {@code String} representing the storage version.
      */
-    public String version;
+    public String getVersion() {
+        return version;
+    }
 
     /**
      * A {@code String} representing the storage services being accessed (only for Account SAS).
      */
-    public String services;
+    public String getServices() {
+        return services;
+    }
 
     /**
      * A {@code String} representing the storage resource types being accessed (only for Account SAS).
      */
-    public String resourceTypes;
+    public String getResourceTypes() {
+        return resourceTypes;
+    }
 
     /**
      * A {@code String} representing the allowed HTTP protocol(s) or {@code null}.
      */
-    public String protocol;
+    public String getProtocol() {
+        return protocol;
+    }
 
     /**
      * A {@code java.util.Date} representing the start time for this SAS token or {@code null}.
      */
-    public Date startTime;
+    public Date getStartTime() {
+        return startTime;
+    }
 
     /**
      * A {@code java.util.Date} representing the expiry time for this SAS token.
      */
-    public Date expiryTime;
+    public Date getExpiryTime() {
+        return expiryTime;
+    }
 
     /**
      * A {@link IPRange} representing the range of valid IP addresses for this SAS token or {@code null}.
      */
-    public IPRange ipRange;
+    public IPRange getIpRange() {
+        return ipRange;
+    }
 
     /**
      * A {@code String} representing the signed identifier (only for Service SAS) or {@code null}.
      */
-    public String identifier;
+    public String getIdentifier() {
+        return identifier;
+    }
 
     /**
      * A {@code String} representing the storage container or blob (only for Service SAS).
      */
-    public String resource;
+    public String getResource() {
+        return resource;
+    }
 
     /**
      * A {@code String} representing the storage permissions or {@code null}.
      */
-    public String permissions;
+    public String getPermissions() {
+        return permissions;
+    }
 
     /**
      * A {@code String} representing the signature for the SAS token.
      */
-    public String signature;
+    public String getSignature() {
+        return signature;
+    }
 
     /**
      * Creates a new {@link SASQueryParameters} object.
@@ -209,10 +253,36 @@ public final class SASQueryParameters {
         }
     }
 
+
     /**
      * Creates a new {@link SASQueryParameters} object.
+     *
+     * @param version
+     *      A {@code String} representing the storage version.
+     * @param services
+     *      A {@code String} representing the storage services being accessed (only for Account SAS).
+     * @param resourceTypes
+     *      A {@code String} representing the storage resource types being accessed (only for Account SAS).
+     * @param protocol
+     *      A {@code String} representing the allowed HTTP protocol(s) or {@code null}.
+     * @param startTime
+     *      A {@code java.util.Date} representing the start time for this SAS token or {@code null}.
+     * @param expiryTime
+     *      A {@code java.util.Date} representing the expiry time for this SAS token.
+     * @param ipRange
+     *      A {@link IPRange} representing the range of valid IP addresses for this SAS token or {@code null}.
+     * @param identifier
+     *      A {@code String} representing the signed identifier (only for Service SAS) or {@code null}.
+     * @param resource
+     *      A {@code String} representing the storage container or blob (only for Service SAS).
+     * @param permissions
+     *      A {@code String} representing the storage permissions or {@code null}.
+     * @param signature
+     *      A {@code String} representing the signature for the SAS token.
      */
-    public SASQueryParameters() {
+    public SASQueryParameters(String version, String services, String resourceTypes, String protocol,
+                              Date startTime, Date expiryTime, IPRange ipRange, String identifier,
+                              String resource, String permissions, String signature) {
 
         this.version = version;
         this.services = services;
