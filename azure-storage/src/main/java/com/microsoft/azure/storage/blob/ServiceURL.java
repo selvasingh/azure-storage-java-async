@@ -96,7 +96,7 @@ public final class ServiceURL extends StorageURL {
      *      The {@link Single&lt;RestResponse&lt;ServiceGetPropertiesHeaders, StorageServiceProperties&gt;&gt;} object
      *      if successful.
      */
-    public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getPropertiesAsync() {
+    public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getProperties() {
         return this.storageClient.services().getPropertiesWithRestResponseAsync(null, null);
     }
 
@@ -109,7 +109,7 @@ public final class ServiceURL extends StorageURL {
      * @return
      *      A {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesAsync(
+    public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setProperties(
             StorageServiceProperties properties) {
         return this.storageClient.services().setPropertiesWithRestResponseAsync(properties, null,
                 null);

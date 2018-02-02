@@ -93,7 +93,7 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *       The {@link Single &lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobPutHeaders, Void>> createAsync(
+    public Single<RestResponse<BlobPutHeaders, Void>> create(
             long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
         if (size%512 != 0) {
@@ -139,7 +139,7 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobPutPageHeaders, Void>> putPagesAsync(
+    public Single<RestResponse<PageBlobPutPageHeaders, Void>> putPages(
             PageRange pageRange, Flowable<byte[]> body, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
@@ -178,7 +178,7 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobPutPageHeaders, Void>> clearPagesAsync(
+    public Single<RestResponse<PageBlobPutPageHeaders, Void>> clearPages(
             PageRange pageRange, BlobAccessConditions accessConditions) {
      if (accessConditions == null) {
          accessConditions = BlobAccessConditions.NONE;
@@ -217,7 +217,7 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, PageList&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRangesAsync(
+    public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRanges(
             BlobRange blobRange, BlobAccessConditions accessConditions) {
      if(accessConditions == null) {
          accessConditions = BlobAccessConditions.NONE;
@@ -250,7 +250,7 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;PageBlobGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRangesDiffAsync(
+    public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRangesDiff(
             BlobRange blobRange, String prevSnapshot, BlobAccessConditions accessConditions) {
         if(blobRange == null) {
             blobRange = BlobRange.DEFAULT;
@@ -280,7 +280,7 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *      The {@link Single &lt;RestResponse&lt;BlobSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobSetPropertiesHeaders, Void>> resizeAsync(
+    public Single<RestResponse<BlobSetPropertiesHeaders, Void>> resize(
             long size, BlobAccessConditions accessConditions) {
         if (size%512 != 0) {
             throw new IllegalArgumentException("size must be a multiple of 512.");
@@ -359,7 +359,7 @@ public final class PageBlobURL extends BlobURL {
      * @return
      *      A {@link Single &lt;RestResponse&lt;PageBlobIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<PageBlobIncrementalCopyHeaders, Void>> startIncrementalCopyAsync(
+    public Single<RestResponse<PageBlobIncrementalCopyHeaders, Void>> startIncrementalCopy(
             URL source, String snapshot, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;

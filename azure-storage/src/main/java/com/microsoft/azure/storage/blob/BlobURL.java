@@ -132,7 +132,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobCopyHeaders, Void>> startCopyAsync(
+    public Single<RestResponse<BlobCopyHeaders, Void>> startCopy(
             URL sourceURL, Metadata metadata, BlobAccessConditions sourceAccessConditions,
             BlobAccessConditions destAccessConditions) {
         if (sourceAccessConditions == null) {
@@ -171,7 +171,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobAbortCopyHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobAbortCopyHeaders, Void>> abortCopyAsync(
+    public Single<RestResponse<BlobAbortCopyHeaders, Void>> abortCopy(
             String copyId, LeaseAccessConditions leaseAccessConditions) {
         if (leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.NONE;
@@ -192,7 +192,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;byte[]&gt;&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> getBlobAsync(
+    public Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> getBlob(
             BlobRange range, BlobAccessConditions accessConditions, boolean rangeGetContentMD5) {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
@@ -220,7 +220,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      A {@link Single&lt;RestResponse&lt;BlobDeleteHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobDeleteHeaders, Void>> deleteAsync(
+    public Single<RestResponse<BlobDeleteHeaders, Void>> delete(
             DeleteSnapshotsOptionType deleteBlobSnapshotOptions, BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
@@ -244,7 +244,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobGetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobGetPropertiesHeaders, Void>> getPropertiesAndMetadataAsync(
+    public Single<RestResponse<BlobGetPropertiesHeaders, Void>> getPropertiesAndMetadata(
             BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
@@ -270,7 +270,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobSetPropertiesHeaders, Void>> setPropertiesAsync(
+    public Single<RestResponse<BlobSetPropertiesHeaders, Void>> setProperties(
             BlobHttpHeaders headers, BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
@@ -300,7 +300,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobSetMetadataHeaders, Void>> setMetadataAsync(
+    public Single<RestResponse<BlobSetMetadataHeaders, Void>> setMetadata(
             Metadata metadata, BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
@@ -329,7 +329,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsTakeSnapshotHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobTakeSnapshotHeaders, Void>> createSnapshotAsync(
+    public Single<RestResponse<BlobTakeSnapshotHeaders, Void>> createSnapshot(
             Metadata metadata, BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
@@ -362,7 +362,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobLeaseHeaders, Void>> acquireLeaseAsync(
+    public Single<RestResponse<BlobLeaseHeaders, Void>> acquireLease(
             String proposedID, int duration, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
@@ -390,7 +390,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobLeaseHeaders, Void>> renewLeaseAsync(
+    public Single<RestResponse<BlobLeaseHeaders, Void>> renewLease(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
@@ -415,7 +415,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobLeaseHeaders, Void>> releaseLeaseAsync(
+    public Single<RestResponse<BlobLeaseHeaders, Void>> releaseLease(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
@@ -444,7 +444,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobLeaseHeaders, Void>> breakLeaseAsync(Integer breakPeriodInSeconds,
+    public Single<RestResponse<BlobLeaseHeaders, Void>> breakLease(Integer breakPeriodInSeconds,
                                         HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
@@ -471,7 +471,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobLeaseHeaders, Void>> changeLeaseAsync(
+    public Single<RestResponse<BlobLeaseHeaders, Void>> changeLease(
             String leaseId, String proposedID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;

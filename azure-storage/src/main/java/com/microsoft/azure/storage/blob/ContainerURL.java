@@ -149,7 +149,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;ContainerCreateHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerCreateHeaders, Void>> createAsync(
+    public Single<RestResponse<ContainerCreateHeaders, Void>> create(
             Metadata metadata, PublicAccessType accessType) {
         if (metadata == null) {
             metadata = Metadata.NONE;
@@ -169,7 +169,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;ContainerDeleteHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerDeleteHeaders, Void>> deleteAsync(
+    public Single<RestResponse<ContainerDeleteHeaders, Void>> delete(
             ContainerAccessConditions accessConditions) {
         if (accessConditions == null) {
             accessConditions = ContainerAccessConditions.NONE;
@@ -195,7 +195,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;ContainerGetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerGetPropertiesHeaders, Void>> getPropertiesAndMetadataAsync(
+    public Single<RestResponse<ContainerGetPropertiesHeaders, Void>> getPropertiesAndMetadata(
             LeaseAccessConditions leaseAccessConditions) {
         if (leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.NONE;
@@ -217,7 +217,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;ContainerSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadataAsync(
+    public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadata(
             Metadata metadata, ContainerAccessConditions accessConditions) {
         if (accessConditions == null) {
             accessConditions = ContainerAccessConditions.NONE;
@@ -248,7 +248,7 @@ public final class ContainerURL extends StorageURL {
      *      The {@link Single&lt;RestResponse&lt;ContainerGetAclHeaders, List&lt;SignedIdentifier&gt;&gt;&gt;}
      *      object if successful.
      */
-    public Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getPermissionsAsync(
+    public Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getPermissions(
             LeaseAccessConditions leaseAccessConditions) {
         if (leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.NONE;
@@ -273,7 +273,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;ContainerSetAclHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerSetAclHeaders, Void>> setPermissionsAsync(
+    public Single<RestResponse<ContainerSetAclHeaders, Void>> setPermissions(
             PublicAccessType accessType, List<SignedIdentifier> identifiers,
             ContainerAccessConditions accessConditions) {
         if(accessConditions == null) {
@@ -308,7 +308,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;ContainerLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerLeaseHeaders, Void>> acquireLeaseAsync(
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> acquireLease(
             String proposedID, Integer duration, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
@@ -336,7 +336,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerLeaseHeaders, Void>> renewLeaseAsync(
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> renewLease(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
@@ -364,7 +364,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLeaseAsync(
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLease(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
@@ -392,7 +392,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerLeaseHeaders, Void>> breakLeaseAsync(
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> breakLease(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
@@ -422,7 +422,7 @@ public final class ContainerURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLeaseAsync(
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLease(
             String leaseID, String proposedID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
@@ -454,7 +454,7 @@ public final class ContainerURL extends StorageURL {
      *      The {@link Single&lt;RestResponse&lt;ContainerListBlobsHeaders, ListBlobsResponse&gt;&gt;} object if
      *      successful.
      */
-    public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobsAsync(
+    public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobs(
             String marker, ListBlobsOptions listBlobsOptions) {
         return this.storageClient.containers().listBlobsWithRestResponseAsync(listBlobsOptions.getPrefix(),
                 listBlobsOptions.getDelimiter(), marker, listBlobsOptions.getMaxResults(),

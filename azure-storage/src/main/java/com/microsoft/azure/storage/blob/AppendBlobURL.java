@@ -90,7 +90,7 @@ public final class AppendBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobPutHeaders, Void>> createAsync(
+    public Single<RestResponse<BlobPutHeaders, Void>> create(
             Metadata metadata, BlobHttpHeaders headers, BlobAccessConditions accessConditions) {
         if(metadata == null) {
             metadata = Metadata.NONE;
@@ -125,7 +125,7 @@ public final class AppendBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockAsync(
+    public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlock(
             Flowable<byte[]> data, long length, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;

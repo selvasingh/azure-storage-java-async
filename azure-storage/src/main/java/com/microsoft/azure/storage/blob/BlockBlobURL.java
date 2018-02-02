@@ -92,7 +92,7 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobPutHeaders, Void>> putBlobAsync(
+    public Single<RestResponse<BlobPutHeaders, Void>> putBlob(
             Flowable<byte[]> data, long contentLength, BlobHttpHeaders headers, Metadata metadata,
             BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
@@ -130,7 +130,7 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockAsync(
+    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlock(
             String base64BlockID, Flowable<byte[]> data, long contentLength,
             LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
@@ -150,7 +150,7 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlockBlobGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockListAsync(
+    public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockList(
             BlockListType listType, LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.NONE;
@@ -180,7 +180,7 @@ public final class BlockBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockListHeaders, Void&gt;&gt;} object if successful.
      */
     // TODO: Add Content-Length to swagger once the modeler knows to hide (or whatever solution).
-    public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockListAsync(
+    public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockList(
             List<String> base64BlockIDs, Metadata metadata, BlobHttpHeaders httpHeaders,
             BlobAccessConditions accessConditions) {
         if(metadata == null) {
