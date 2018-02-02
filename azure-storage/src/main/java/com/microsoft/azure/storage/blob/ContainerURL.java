@@ -461,7 +461,7 @@ public final class ContainerURL extends StorageURL {
      * @param marker
      *      A {@code String} value that identifies the portion of the list to be returned with the next list operation.
      * @param listBlobsOptions
-     *      A {@link ListBlobsOptions} object which one or more datasets to include in the response.
+     *      A {@link ListBlobsOptions} object which specifies one or more datasets to include in the response.
      * @return
      *      The {@link Single&lt;RestResponse&lt;ContainerListBlobsHeaders, ListBlobsResponse&gt;&gt;} object if
      *      successful.

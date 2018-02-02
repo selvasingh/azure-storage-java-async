@@ -65,27 +65,19 @@ public final class ServiceURL extends StorageURL {
      * Marker) to get the next segment. For more information, see
      * https://docs.microsoft.com/rest/api/storageservices/list-containers2.
      *
-     * @param prefix
-     *      A {@code String} that represents the prefix of the container name.
      * @param marker
      *      A {@code String} that identifies the portion of the list of containers to be returned with the next listing
      *      operation.
-     * @param maxResults
-     *      An {@code Integer} representing the maximum number of results to retrieve.  If {@code null} or greater
- *          than 5000, the server will return up to 5,000 items.  Must be at least 1.
-     * @param include
-     *      A {@code String} representing which details to include when listing the containers in this storage account.
+     * @param options
+     *      A {@link ListContainersOptions} which specifies what data should be returned by the service. 
      * @return
      *      The {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if
      *      successful.
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainers(
-            String prefix, String marker, Integer maxResults, ListContainersIncludeType include) {
-        if (maxResults != null && maxResults <= 0) {
-            throw new IllegalArgumentException("MaxResults must be >= 0.");
-        }
-        return this.storageClient.services().listContainersWithRestResponseAsync(prefix, marker,
-                maxResults, include, null, null);
+            String marker, ListContainersOptions options) {
+        return this.storageClient.services().listContainersWithRestResponseAsync(options.getPrefix(), marker,
+                options.getMaxResults(), options.getDetails().toIncludeType(), null, null);
     }
 
     /**

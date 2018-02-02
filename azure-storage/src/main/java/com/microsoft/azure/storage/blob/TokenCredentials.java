@@ -54,11 +54,11 @@ public final class TokenCredentials  implements ICredentials{
 
         private final TokenCredentials factory;
 
-        private final RequestPolicy requestPolicy;
+        private final RequestPolicy nextPolicy;
 
-        private TokenCredentialsPolicy(TokenCredentials factory, RequestPolicy requestPolicy) {
+        private TokenCredentialsPolicy(TokenCredentials factory, RequestPolicy nextPolicy) {
             this.factory = factory;
-            this.requestPolicy = requestPolicy;
+            this.nextPolicy = nextPolicy;
         }
 
         public Single<HttpResponse> sendAsync(HttpRequest request) {
@@ -67,7 +67,7 @@ public final class TokenCredentials  implements ICredentials{
             }
             request.withHeader(Constants.HeaderConstants.AUTHORIZATION,
                     "Bearer " + this.factory.getToken());
-            return this.requestPolicy.sendAsync(request);
+            return this.nextPolicy.sendAsync(request);
         }
     }
 }

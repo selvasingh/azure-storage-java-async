@@ -25,12 +25,10 @@ import io.reactivex.Single;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.microsoft.azure.storage.blob.Utility.getGMTTime;
 
@@ -78,14 +76,14 @@ public final class SharedKeyCredentials implements ICredentials {
 
         private final SharedKeyCredentials factory;
 
-        private final RequestPolicy requestPolicy;
+        private final RequestPolicy nextPolicy;
 
         private final RequestPolicyOptions options;
 
-        SharedKeyCredentialsPolicy(SharedKeyCredentials factory, RequestPolicy requestPolicy,
+        SharedKeyCredentialsPolicy(SharedKeyCredentials factory, RequestPolicy nextPolicy,
                                    RequestPolicyOptions options) {
             this.factory = factory;
-            this.requestPolicy = requestPolicy;
+            this.nextPolicy = nextPolicy;
             this.options = options;
         }
 
@@ -93,7 +91,7 @@ public final class SharedKeyCredentials implements ICredentials {
          * Sign the request.
          *
          * @param request
-         *      the request to sign
+         *      The request to sign.
          * @return
          *      A {@link Single} representing the HTTP response that will arrive asynchronously.
          */
@@ -111,7 +109,7 @@ public final class SharedKeyCredentials implements ICredentials {
                 return Single.error(e);
             }
 
-            Single<HttpResponse> response = requestPolicy.sendAsync(request);
+            Single<HttpResponse> response = nextPolicy.sendAsync(request);
             return response.doOnSuccess(new Consumer<HttpResponse>() {
                 @Override
                 public void accept(HttpResponse response) {

@@ -85,7 +85,7 @@ public final class BlobListingDetails {
         return uncommittedBlobs;
     }
 
-    public ArrayList<ListBlobsIncludeItem> toList() {
+    ArrayList<ListBlobsIncludeItem> toList() {
         ArrayList<ListBlobsIncludeItem> details = new ArrayList<ListBlobsIncludeItem>();
         if(this.copy) {
             details.add(ListBlobsIncludeItem.COPY);

@@ -35,19 +35,17 @@ public final class ListBlobsOptions {
      * A {@link ListBlobsOptions} object.
      *
      * @param details
-     *           A {@link BlobListingDetails} object indicating what additional information the service should return
-     *           with each blob.
+     *      A {@link BlobListingDetails} object indicating what additional information the service should return with
+     *      each blob.
      * @param prefix
-     *           A {@code String} that filters the results to return only blobs whose names begin with the specified
-     *           prefix.
+     *      A {@code String} that filters the results to return only blobs whose names begin with the specified prefix.
      * @param delimiter
-     *           A {@code String}. When the request includes this parameter, the operation returns a BlobPrefix element
-     *           in the response body that acts as a placeholder for all blobs whose names begin with the same substring
-     *           up to the appearance of the delimiter character. The delimiter may be a single character or a string.
+     *      A {@code String}. When the request includes this parameter, the operation returns a BlobPrefix element in
+     *      the response body that acts as a placeholder for all blobs whose names begin with the same substring up to
+     *      the appearance of the delimiter character. The delimiter may be a single character or a string.
      * @param maxResults
-     *           Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does
-     *           not specify maxResults or specifies a value greater than 5,000, the server will return up to 5,000
-     *           items.
+     *      Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not
+     *      specify maxResults or specifies a value greater than 5,000, the server will return up to 5,000 items.
      */
     public ListBlobsOptions(BlobListingDetails details, String prefix, String delimiter, Integer maxResults) {
         if (maxResults != null && maxResults <= 0) {
