@@ -93,13 +93,13 @@ public final class AppendBlobURL extends BlobURL {
     public Single<RestResponse<BlobPutHeaders, Void>> createAsync(
             Metadata metadata, BlobHttpHeaders headers, BlobAccessConditions accessConditions) {
         if(metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
         if(headers == null) {
-            headers = BlobHttpHeaders.getDefault();
+            headers = BlobHttpHeaders.NONE;
         }
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.APPEND_BLOB,
                 null,null, headers.getContentType(), headers.getContentEncoding(),
@@ -128,7 +128,7 @@ public final class AppendBlobURL extends BlobURL {
     public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockAsync(
             Flowable<byte[]> data, long length, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
 
         return this.storageClient.appendBlobs().appendBlockWithRestResponseAsync(data, length, null,

@@ -136,13 +136,13 @@ public class BlobURL extends StorageURL {
             URL sourceURL, Metadata metadata, BlobAccessConditions sourceAccessConditions,
             BlobAccessConditions destAccessConditions) {
         if (sourceAccessConditions == null) {
-            sourceAccessConditions = BlobAccessConditions.getDefault();
+            sourceAccessConditions = BlobAccessConditions.NONE;
         }
         if (destAccessConditions == null) {
-            destAccessConditions = BlobAccessConditions.getDefault();
+            destAccessConditions = BlobAccessConditions.NONE;
         }
         if(metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
 
         // TODO: Remove sourceURL.toString when runtime updates
@@ -174,7 +174,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobAbortCopyHeaders, Void>> abortCopyAsync(
             String copyId, LeaseAccessConditions leaseAccessConditions) {
         if (leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.getDefault();
+            leaseAccessConditions = LeaseAccessConditions.NONE;
         }
 
         return this.storageClient.blobs().abortCopyWithRestResponseAsync(
@@ -195,7 +195,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> getBlobAsync(
             BlobRange range, BlobAccessConditions accessConditions, boolean rangeGetContentMD5) {
         if (accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
 
 
@@ -223,7 +223,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobDeleteHeaders, Void>> deleteAsync(
             DeleteSnapshotsOptionType deleteBlobSnapshotOptions, BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
 
         return this.storageClient.blobs().deleteWithRestResponseAsync(null, null,
@@ -247,7 +247,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobGetPropertiesHeaders, Void>> getPropertiesAndMetadataAsync(
             BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
 
         return this.storageClient.blobs().getPropertiesWithRestResponseAsync(null, null,
@@ -273,7 +273,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobSetPropertiesHeaders, Void>> setPropertiesAsync(
             BlobHttpHeaders headers, BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
 
         return this.storageClient.blobs().setPropertiesWithRestResponseAsync(null,
@@ -303,10 +303,10 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobSetMetadataHeaders, Void>> setMetadataAsync(
             Metadata metadata, BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         if(metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
 
         return this.storageClient.blobs().setMetadataWithRestResponseAsync(null, metadata.toString(),
@@ -332,10 +332,10 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobTakeSnapshotHeaders, Void>> createSnapshotAsync(
             Metadata metadata, BlobAccessConditions accessConditions) {
         if (accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         if(metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
 
         return this.storageClient.blobs().takeSnapshotWithRestResponseAsync(null,
@@ -365,7 +365,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobLeaseHeaders, Void>> acquireLeaseAsync(
             String proposedID, int duration, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
         if (!(duration == -1 || (duration >= 15 && duration <=60))) {
             return Single.error(new IllegalArgumentException("Duration must be -1 or between 15 and 60."));
@@ -393,7 +393,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobLeaseHeaders, Void>> renewLeaseAsync(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.RENEW, null,
@@ -418,7 +418,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobLeaseHeaders, Void>> releaseLeaseAsync(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.RELEASE, null,
@@ -447,7 +447,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobLeaseHeaders, Void>> breakLeaseAsync(Integer breakPeriodInSeconds,
                                         HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.RENEW, null,
@@ -474,7 +474,7 @@ public class BlobURL extends StorageURL {
     public Single<RestResponse<BlobLeaseHeaders, Void>> changeLeaseAsync(
             String leaseId, String proposedID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.RENEW, null,

@@ -18,7 +18,10 @@ package com.microsoft.azure.storage.blob;
  * Access conditions specific to containers
  */
 public final class ContainerAccessConditions {
-    private static ContainerAccessConditions defaultContainerAccessConditions;
+
+    public static final ContainerAccessConditions NONE = new ContainerAccessConditions(null,
+            null);
+
     private final HttpAccessConditions httpAccessConditions;
 
     private final LeaseAccessConditions leaseID;
@@ -32,8 +35,8 @@ public final class ContainerAccessConditions {
      *      A {@link LeaseAccessConditions} object.
      */
     public ContainerAccessConditions(HttpAccessConditions httpAccessConditions, LeaseAccessConditions leaseID) {
-        this.httpAccessConditions = httpAccessConditions;
-        this.leaseID = leaseID;
+        this.httpAccessConditions = httpAccessConditions == null ? HttpAccessConditions.NONE : httpAccessConditions;
+        this.leaseID = leaseID == null ? LeaseAccessConditions.NONE : leaseID;
     }
 
     /**
@@ -50,14 +53,5 @@ public final class ContainerAccessConditions {
      */
     public LeaseAccessConditions getLeaseID() {
         return leaseID;
-    }
-
-    public static ContainerAccessConditions getDefault() {
-        if (defaultContainerAccessConditions == null) {
-            defaultContainerAccessConditions = new ContainerAccessConditions(HttpAccessConditions.getDefault(),
-                    LeaseAccessConditions.getDefault());
-        }
-
-        return defaultContainerAccessConditions;
     }
 }

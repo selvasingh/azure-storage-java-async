@@ -23,10 +23,15 @@ import java.util.Date;
  */
 public final class HttpAccessConditions {
 
-    private static HttpAccessConditions defaultHttpAccessConditions;
+    public static final HttpAccessConditions NONE = new HttpAccessConditions(null, null,
+            null, null);
+
     private final Date ifModifiedSince;
+
     private final Date ifUnmodifiedSince;
+
     private final ETag ifMatch;
+
     private final ETag ifNoneMatch;
 
     /**
@@ -42,11 +47,11 @@ public final class HttpAccessConditions {
      *      An {@link ETag} if none match condition.
      */
     public HttpAccessConditions(Date ifModifiedSince, Date ifUnmodifiedSince, ETag ifMatch, ETag ifNoneMatch) {
-        this.ifModifiedSince = (ifModifiedSince != null) ? new Date(ifModifiedSince.getTime()) : null;
-        this.ifUnmodifiedSince = (ifUnmodifiedSince != null) ? new Date(ifUnmodifiedSince.getTime()) : null;
+        this.ifModifiedSince = ifModifiedSince == null ? null : new Date(ifModifiedSince.getTime());
+        this.ifUnmodifiedSince = ifUnmodifiedSince == null ? null : new Date(ifUnmodifiedSince.getTime());
 
-        this.ifMatch = ifMatch == null ? ETag.getDefault() : ifMatch;
-        this.ifNoneMatch = ifNoneMatch == null ? ETag.getDefault() : ifNoneMatch;
+        this.ifMatch = ifMatch == null ? ETag.NONE : ifMatch;
+        this.ifNoneMatch = ifNoneMatch == null ? ETag.NONE : ifNoneMatch;
     }
 
     // TODO: Change to java.util.Date
@@ -64,15 +69,5 @@ public final class HttpAccessConditions {
 
     public ETag getIfNoneMatch() {
         return ifNoneMatch;
-    }
-
-
-    public static HttpAccessConditions getDefault() {
-        if (defaultHttpAccessConditions == null) {
-            defaultHttpAccessConditions = new HttpAccessConditions(null, null,
-                    ETag.getDefault(), ETag.getDefault());
-        }
-
-        return defaultHttpAccessConditions;
     }
 }

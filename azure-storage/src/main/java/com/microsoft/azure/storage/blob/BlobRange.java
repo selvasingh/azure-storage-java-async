@@ -2,7 +2,7 @@ package com.microsoft.azure.storage.blob;
 
 public final class BlobRange {
 
-    private static BlobRange defaultBlobRange;
+    public static final BlobRange DEFAULT = new BlobRange(0, 0);
 
     public final long offset;
 
@@ -30,12 +30,5 @@ public final class BlobRange {
 
         return String.format(
                 Utility.LOCALE_US, Constants.HeaderConstants.BEGIN_RANGE_HEADER_FORMAT, this.offset);
-    }
-
-    public static BlobRange getDefault() {
-        if(defaultBlobRange == null) {
-            defaultBlobRange = new BlobRange(0, 0);
-        }
-        return defaultBlobRange;
     }
 }

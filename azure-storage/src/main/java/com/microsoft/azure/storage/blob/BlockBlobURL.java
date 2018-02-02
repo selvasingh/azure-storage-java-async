@@ -96,14 +96,14 @@ public final class BlockBlobURL extends BlobURL {
             Flowable<byte[]> data, long contentLength, BlobHttpHeaders headers, Metadata metadata,
             BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         if(headers == null) {
-            headers = BlobHttpHeaders.getDefault();
+            headers = BlobHttpHeaders.NONE;
         }
         // TODO: Metadata protocol layer broken.
         if(metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
         return this.storageClient.blobs().putWithRestResponseAsync(contentLength, BlobType.BLOCK_BLOB, data,
                 null, headers.getContentType(), headers.getContentEncoding(),
@@ -134,7 +134,7 @@ public final class BlockBlobURL extends BlobURL {
             String base64BlockID, Flowable<byte[]> data, long contentLength,
             LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.getDefault();
+            leaseAccessConditions = LeaseAccessConditions.NONE;
         }
         return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(base64BlockID, contentLength, data,
                 null, leaseAccessConditions.toString(), null);
@@ -153,7 +153,7 @@ public final class BlockBlobURL extends BlobURL {
     public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockListAsync(
             BlockListType listType, LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.getDefault();
+            leaseAccessConditions = LeaseAccessConditions.NONE;
         }
         return this.storageClient.blockBlobs().getBlockListWithRestResponseAsync(listType,
                 null, null, leaseAccessConditions.toString(), null);
@@ -184,13 +184,13 @@ public final class BlockBlobURL extends BlobURL {
             List<String> base64BlockIDs, Metadata metadata, BlobHttpHeaders httpHeaders,
             BlobAccessConditions accessConditions) {
         if(metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
         if(httpHeaders == null) {
-            httpHeaders = BlobHttpHeaders.getDefault();
+            httpHeaders = BlobHttpHeaders.NONE;
         }
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         return this.storageClient.blockBlobs().putBlockListWithRestResponseAsync(
                 new BlockLookupList().withLatest(base64BlockIDs), null,

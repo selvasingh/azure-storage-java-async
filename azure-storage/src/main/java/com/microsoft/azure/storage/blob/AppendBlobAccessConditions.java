@@ -19,7 +19,7 @@ package com.microsoft.azure.storage.blob;
  */
 public final class AppendBlobAccessConditions {
 
-    public static final AppendBlobAccessConditions defaultAppendBlobAccessConditions =
+    public static final AppendBlobAccessConditions NONE =
             new AppendBlobAccessConditions(null, null);
 
     private final Integer ifAppendPositionEquals;

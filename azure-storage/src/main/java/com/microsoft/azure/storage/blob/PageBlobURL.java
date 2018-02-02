@@ -103,13 +103,13 @@ public final class PageBlobURL extends BlobURL {
             return Single.error(new IllegalArgumentException("SequenceNumber must be greater than or equal to 0."));
         }
         if(metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
         if(headers == null) {
-            headers = BlobHttpHeaders.getDefault();
+            headers = BlobHttpHeaders.NONE;
         }
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
 
         // TODO: What if you pass 0 for pageblob size? Validate?
@@ -142,7 +142,7 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<PageBlobPutPageHeaders, Void>> putPagesAsync(
             PageRange pageRange, Flowable<byte[]> body, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         if (pageRange == null) {
             return Single.error(new IllegalArgumentException("pageRange cannot be null."));
@@ -181,7 +181,7 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<PageBlobPutPageHeaders, Void>> clearPagesAsync(
             PageRange pageRange, BlobAccessConditions accessConditions) {
      if (accessConditions == null) {
-         accessConditions = BlobAccessConditions.getDefault();
+         accessConditions = BlobAccessConditions.NONE;
      }
      if (pageRange == null) {
          return Single.error(new IllegalArgumentException("pageRange cannot be null."));
@@ -220,10 +220,10 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRangesAsync(
             BlobRange blobRange, BlobAccessConditions accessConditions) {
      if(accessConditions == null) {
-         accessConditions = BlobAccessConditions.getDefault();
+         accessConditions = BlobAccessConditions.NONE;
      }
      if(blobRange == null) {
-         blobRange = BlobRange.getDefault();
+         blobRange = BlobRange.DEFAULT;
      }
      return this.storageClient.pageBlobs().getPageRangesWithRestResponseAsync(null, null,
              null, blobRange.toString(), accessConditions.getLeaseAccessConditions().toString(),
@@ -253,10 +253,10 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRangesDiffAsync(
             BlobRange blobRange, String prevSnapshot, BlobAccessConditions accessConditions) {
         if(blobRange == null) {
-            blobRange = BlobRange.getDefault();
+            blobRange = BlobRange.DEFAULT;
         }
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         return this.storageClient.pageBlobs().getPageRangesWithRestResponseAsync(null,null,
                 prevSnapshot, blobRange.toString(), accessConditions.getLeaseAccessConditions().toString(),
@@ -286,7 +286,7 @@ public final class PageBlobURL extends BlobURL {
             throw new IllegalArgumentException("size must be a multiple of 512.");
         }
         if (accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         return this.storageClient.blobs().setPropertiesWithRestResponseAsync(null,
                 null, null, null, null,
@@ -321,10 +321,10 @@ public final class PageBlobURL extends BlobURL {
             return Single.error(new IllegalArgumentException("SequenceNumber must be greater than or equal to 0."));
         }
         if(headers == null) {
-            headers = BlobHttpHeaders.getDefault();
+            headers = BlobHttpHeaders.NONE;
         }
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         if(action == SequenceNumberActionType.INCREMENT) {
            sequenceNumber = null;
@@ -362,7 +362,7 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<PageBlobIncrementalCopyHeaders, Void>> startIncrementalCopyAsync(
             URL source, String snapshot, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
 
         try {

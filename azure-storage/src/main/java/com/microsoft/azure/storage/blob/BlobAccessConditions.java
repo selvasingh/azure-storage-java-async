@@ -19,7 +19,7 @@ package com.microsoft.azure.storage.blob;
  */
 public final class BlobAccessConditions {
 
-    private static BlobAccessConditions defaultBlobAccessConditions =
+    public static final BlobAccessConditions NONE =
             new BlobAccessConditions(null, null, null,
                     null);
 
@@ -54,13 +54,13 @@ public final class BlobAccessConditions {
             AppendBlobAccessConditions appendBlobAccessConditions,
             PageBlobAccessConditions pageBlobAccessConditions) {
         this.httpAccessConditions = httpAccessConditions == null ?
-                HttpAccessConditions.getDefault() : httpAccessConditions;
+                HttpAccessConditions.NONE : httpAccessConditions;
         this.leaseAccessConditions = leaseAccessConditions == null ?
-                LeaseAccessConditions.getDefault() : leaseAccessConditions;
+                LeaseAccessConditions.NONE : leaseAccessConditions;
         this.appendBlobAccessConditions = appendBlobAccessConditions == null ?
-                AppendBlobAccessConditions.getDefault() : appendBlobAccessConditions;
+                AppendBlobAccessConditions.NONE : appendBlobAccessConditions;
         this.pageBlobAccessConditions = pageBlobAccessConditions == null ?
-                PageBlobAccessConditions.getDefault() : pageBlobAccessConditions;
+                PageBlobAccessConditions.NONE : pageBlobAccessConditions;
     }
 
     HttpAccessConditions getHttpAccessConditions() {
@@ -78,15 +78,5 @@ public final class BlobAccessConditions {
     PageBlobAccessConditions getPageBlobAccessConditions() {
         return pageBlobAccessConditions;
     }
-    
-    public static BlobAccessConditions getDefault() {
-        if (defaultBlobAccessConditions == null) {
-            defaultBlobAccessConditions = new BlobAccessConditions(HttpAccessConditions.getDefault(),
-                    LeaseAccessConditions.getDefault(),
-                    AppendBlobAccessConditions.getDefault(),
-                    PageBlobAccessConditions.getDefault());
-        }
 
-        return defaultBlobAccessConditions;
-    }
 }

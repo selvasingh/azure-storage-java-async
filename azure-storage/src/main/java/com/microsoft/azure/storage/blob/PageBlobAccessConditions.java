@@ -16,7 +16,8 @@ package com.microsoft.azure.storage.blob;
 
 public final class PageBlobAccessConditions {
 
-    private final static PageBlobAccessConditions defaultPageBlobAccessConditions;
+    public static final PageBlobAccessConditions NONE = new PageBlobAccessConditions(null,
+            null, null);
 
     private final Long ifSequenceNumberLessThan;
 
@@ -57,14 +58,5 @@ public final class PageBlobAccessConditions {
 
     public Long getIfSequenceNumberEqual() {
         return ifSequenceNumberEqual;
-    }
-
-    public static PageBlobAccessConditions getDefault() {
-        if (defaultPageBlobAccessConditions == null) {
-            defaultPageBlobAccessConditions = new PageBlobAccessConditions(null,
-                    null, null);
-        }
-
-        return defaultPageBlobAccessConditions;
     }
 }

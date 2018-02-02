@@ -94,7 +94,7 @@ public final class AccountSasSignatureValues {
         }
         IPRange ipRange;
         if (this.ipRange == null) {
-            ipRange = IPRange.getDefault();
+            ipRange = IPRange.DEFAULT;
         }
         else {
             ipRange = this.ipRange;

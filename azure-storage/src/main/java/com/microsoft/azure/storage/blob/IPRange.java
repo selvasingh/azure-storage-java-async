@@ -20,8 +20,11 @@ import java.net.Inet4Address;
  * A continuous range of IP addresses.
  */
 public final class IPRange {
-    private static IPRange defaultIPRange;
+
+    public static final IPRange DEFAULT = new IPRange("", "");
+
     private final String ipMin;
+
     private final String ipMax;
 
     /**
@@ -90,12 +93,5 @@ public final class IPRange {
         }
 
         return str.toString();
-    }
-
-    public static IPRange getDefault() {
-        if(defaultIPRange == null) {
-            defaultIPRange = new IPRange("", "");
-        }
-        return defaultIPRange;
     }
 }

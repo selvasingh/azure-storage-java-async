@@ -19,7 +19,9 @@ package com.microsoft.azure.storage.blob;
  */
 public final class ListBlobsOptions {
 
-    private static ListBlobsOptions defaultListBlobsOptions;
+    public static final ListBlobsOptions DEFAULT = new ListBlobsOptions(
+            new BlobListingDetails(false, false, false, false),
+            null, null, null);
 
     private final BlobListingDetails details;
 
@@ -89,14 +91,5 @@ public final class ListBlobsOptions {
      */
     public Integer getMaxResults() {
         return maxResults;
-    }
-
-    public static ListBlobsOptions getDefualt() {
-        if(defaultListBlobsOptions == null) {
-            defaultListBlobsOptions = new ListBlobsOptions(
-                    new BlobListingDetails(false, false, false, false),
-                    null, null, null);
-        }
-        return defaultListBlobsOptions;
     }
 }

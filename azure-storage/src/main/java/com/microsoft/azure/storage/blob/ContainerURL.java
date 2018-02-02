@@ -152,7 +152,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerCreateHeaders, Void>> createAsync(
             Metadata metadata, PublicAccessType accessType) {
         if (metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
         return this.storageClient.containers().createWithRestResponseAsync(
                 null, metadata.toString(), accessType, null);
@@ -172,10 +172,10 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerDeleteHeaders, Void>> deleteAsync(
             ContainerAccessConditions accessConditions) {
         if (accessConditions == null) {
-            accessConditions = ContainerAccessConditions.getDefault();
+            accessConditions = ContainerAccessConditions.NONE;
         }
-        if (!accessConditions.getHttpAccessConditions().getIfMatch().equals(ETag.getDefault()) ||
-                !accessConditions.getHttpAccessConditions().getIfNoneMatch().equals(ETag.getDefault())) {
+        if (!accessConditions.getHttpAccessConditions().getIfMatch().equals(ETag.NONE) ||
+                !accessConditions.getHttpAccessConditions().getIfNoneMatch().equals(ETag.NONE)) {
             return Single.error(new IllegalArgumentException("ETag access conditions are not supported for this API."));
         }
 
@@ -198,7 +198,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerGetPropertiesHeaders, Void>> getPropertiesAndMetadataAsync(
             LeaseAccessConditions leaseAccessConditions) {
         if (leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.getDefault();
+            leaseAccessConditions = LeaseAccessConditions.NONE;
         }
 
         return this.storageClient.containers().getPropertiesWithRestResponseAsync(null,
@@ -220,16 +220,16 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadataAsync(
             Metadata metadata, ContainerAccessConditions accessConditions) {
         if (accessConditions == null) {
-            accessConditions = ContainerAccessConditions.getDefault();
+            accessConditions = ContainerAccessConditions.NONE;
         }
-        else if (accessConditions.getHttpAccessConditions().getIfMatch() != ETag.getDefault() ||
-                accessConditions.getHttpAccessConditions().getIfNoneMatch() != ETag.getDefault() ||
+        else if (accessConditions.getHttpAccessConditions().getIfMatch() != ETag.NONE ||
+                accessConditions.getHttpAccessConditions().getIfNoneMatch() != ETag.NONE ||
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince() != null) {
             return Single.error(new IllegalArgumentException(
                     "If-Modified-Since is the only HTTP access condition supported for this API"));
         }
         if (metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
 
         return this.storageClient.containers().setMetadataWithRestResponseAsync(null,
@@ -251,7 +251,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getPermissionsAsync(
             LeaseAccessConditions leaseAccessConditions) {
         if (leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.getDefault();
+            leaseAccessConditions = LeaseAccessConditions.NONE;
         }
 
         return this.storageClient.containers().getAclWithRestResponseAsync(
@@ -277,7 +277,7 @@ public final class ContainerURL extends StorageURL {
             PublicAccessType accessType, List<SignedIdentifier> identifiers,
             ContainerAccessConditions accessConditions) {
         if(accessConditions == null) {
-            accessConditions = ContainerAccessConditions.getDefault();
+            accessConditions = ContainerAccessConditions.NONE;
         }
 
         // TODO: validate that empty list clears permissions and null list does not change list. Document behavior.
@@ -289,8 +289,8 @@ public final class ContainerURL extends StorageURL {
     }
 
     private boolean validateLeaseOperationAccessConditions(HttpAccessConditions httpAccessConditions) {
-        return (httpAccessConditions.getIfMatch() == ETag.getDefault() &&
-                httpAccessConditions.getIfNoneMatch() == ETag.getDefault());
+        return (httpAccessConditions.getIfMatch() == ETag.NONE &&
+                httpAccessConditions.getIfNoneMatch() == ETag.NONE);
     }
 
     /**
@@ -311,7 +311,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerLeaseHeaders, Void>> acquireLeaseAsync(
             String proposedID, Integer duration, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)){
             return Single.error(new IllegalArgumentException(
@@ -339,7 +339,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerLeaseHeaders, Void>> renewLeaseAsync(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
             return Single.error(new IllegalArgumentException(
@@ -367,7 +367,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLeaseAsync(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
             return Single.error(new IllegalArgumentException(
@@ -395,7 +395,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerLeaseHeaders, Void>> breakLeaseAsync(
             String leaseID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
             return Single.error(new IllegalArgumentException(
@@ -425,7 +425,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLeaseAsync(
             String leaseID, String proposedID, HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.getDefault();
+            httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
             return Single.error(new IllegalArgumentException(
