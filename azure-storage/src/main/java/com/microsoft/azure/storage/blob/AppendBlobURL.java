@@ -104,7 +104,7 @@ public final class AppendBlobURL extends BlobURL {
         return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.APPEND_BLOB,
                 null,null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
-                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(),
                 headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -132,7 +132,7 @@ public final class AppendBlobURL extends BlobURL {
         }
 
         return this.storageClient.appendBlobs().appendBlockWithRestResponseAsync(data, length, null,
-                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(),
                 accessConditions.getAppendBlobAccessConditions().getIfMaxSizeLessThanOrEqual(),
                 accessConditions.getAppendBlobAccessConditions().getIfAppendPositionEquals(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),

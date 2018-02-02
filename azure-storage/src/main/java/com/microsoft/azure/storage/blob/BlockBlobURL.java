@@ -108,7 +108,7 @@ public final class BlockBlobURL extends BlobURL {
         return this.storageClient.blobs().putWithRestResponseAsync(contentLength, BlobType.BLOCK_BLOB, data,
                 null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
-                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(),
                 headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -137,7 +137,7 @@ public final class BlockBlobURL extends BlobURL {
             leaseAccessConditions = LeaseAccessConditions.NONE;
         }
         return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(base64BlockID, contentLength, data,
-                null, leaseAccessConditions.toString(), null);
+                null, leaseAccessConditions.getLeaseId(), null);
     }
 
     /**
@@ -156,7 +156,7 @@ public final class BlockBlobURL extends BlobURL {
             leaseAccessConditions = LeaseAccessConditions.NONE;
         }
         return this.storageClient.blockBlobs().getBlockListWithRestResponseAsync(listType,
-                null, null, leaseAccessConditions.toString(), null);
+                null, null, leaseAccessConditions.getLeaseId(), null);
     }
 
     /**
@@ -196,7 +196,7 @@ public final class BlockBlobURL extends BlobURL {
                 new BlockLookupList().withLatest(base64BlockIDs), null,
                 httpHeaders.getCacheControl(), httpHeaders.getContentType(),httpHeaders.getContentEncoding(),
                 httpHeaders.getContentLanguage(), httpHeaders.getContentMD5(), metadata.toString(),
-                accessConditions.getLeaseAccessConditions().toString(), httpHeaders.getContentDisposition(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(), httpHeaders.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),

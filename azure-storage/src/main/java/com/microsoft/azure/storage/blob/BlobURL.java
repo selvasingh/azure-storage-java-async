@@ -145,7 +145,7 @@ public class BlobURL extends StorageURL {
             metadata = Metadata.NONE;
         }
 
-        // TODO: Remove sourceURL.toString when runtime updates
+        // TODO: Remove sourceURL.getLeaseId when runtime updates
         return this.storageClient.blobs().copyWithRestResponseAsync(sourceURL.toString(), null, null,
                 sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -155,8 +155,8 @@ public class BlobURL extends StorageURL {
                 destAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 destAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 destAccessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
-                sourceAccessConditions.getLeaseAccessConditions().toString(),
-                destAccessConditions.getLeaseAccessConditions().toString(), null);
+                sourceAccessConditions.getLeaseAccessConditions().getLeaseId(),
+                destAccessConditions.getLeaseAccessConditions().getLeaseId(), null);
     }
 
     /**
@@ -178,7 +178,7 @@ public class BlobURL extends StorageURL {
         }
 
         return this.storageClient.blobs().abortCopyWithRestResponseAsync(
-                copyId, null, leaseAccessConditions.toString(), null);
+                copyId, null, leaseAccessConditions.getLeaseId(), null);
     }
 
     /**
@@ -200,7 +200,7 @@ public class BlobURL extends StorageURL {
 
 
         return this.storageClient.blobs().getWithRestResponseAsync(null, null,
-                range.toString(), accessConditions.getLeaseAccessConditions().toString(),
+                range.toString(), accessConditions.getLeaseAccessConditions().getLeaseId(),
                 rangeGetContentMD5, accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -227,7 +227,7 @@ public class BlobURL extends StorageURL {
         }
 
         return this.storageClient.blobs().deleteWithRestResponseAsync(null, null,
-                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(),
                 deleteBlobSnapshotOptions,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -251,7 +251,7 @@ public class BlobURL extends StorageURL {
         }
 
         return this.storageClient.blobs().getPropertiesWithRestResponseAsync(null, null,
-                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -279,7 +279,7 @@ public class BlobURL extends StorageURL {
         return this.storageClient.blobs().setPropertiesWithRestResponseAsync(null,
                 headers.getCacheControl(), headers.getContentType(), headers.getContentMD5(),
                 headers.getContentEncoding(),
-                headers.getContentLanguage(), accessConditions.getLeaseAccessConditions().toString(),
+                headers.getContentLanguage(), accessConditions.getLeaseAccessConditions().getLeaseId(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -310,7 +310,7 @@ public class BlobURL extends StorageURL {
         }
 
         return this.storageClient.blobs().setMetadataWithRestResponseAsync(null, metadata.toString(),
-                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -344,7 +344,7 @@ public class BlobURL extends StorageURL {
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
-                accessConditions.getLeaseAccessConditions().toString(), null);
+                accessConditions.getLeaseAccessConditions().getLeaseId(), null);
     }
 
     /**
@@ -368,7 +368,9 @@ public class BlobURL extends StorageURL {
             httpAccessConditions = HttpAccessConditions.NONE;
         }
         if (!(duration == -1 || (duration >= 15 && duration <=60))) {
-            return Single.error(new IllegalArgumentException("Duration must be -1 or between 15 and 60."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException("Duration must be -1 or between 15 and 60.");
         }
 
         return this.storageClient.blobs().leaseWithRestResponseAsync(LeaseActionType.ACQUIRE, null,
@@ -383,6 +385,7 @@ public class BlobURL extends StorageURL {
     /**
      * RenewLease renews the blob's previously-acquired lease.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
+     *
      * @param leaseID
      *      A {@code String} representing the lease on the blob.
      * @param httpAccessConditions

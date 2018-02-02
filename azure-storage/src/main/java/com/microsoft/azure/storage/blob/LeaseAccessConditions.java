@@ -46,8 +46,7 @@ public final class LeaseAccessConditions {
         return this.leaseId.equals(obj);
     }
 
-    @Override
-    public String toString() {
+    public String getLeaseId() {
         return this.leaseId;
     }
 }

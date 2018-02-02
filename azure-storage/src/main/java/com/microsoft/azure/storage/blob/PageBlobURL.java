@@ -97,10 +97,14 @@ public final class PageBlobURL extends BlobURL {
             long size, Long sequenceNumber, Metadata metadata, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
         if (size%512 != 0) {
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
             throw new IllegalArgumentException("size must be a multiple of 512.");
         }
         if (sequenceNumber != null && sequenceNumber < 0) {
-            return Single.error(new IllegalArgumentException("SequenceNumber must be greater than or equal to 0."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException("SequenceNumber must be greater than or equal to 0.");
         }
         if(metadata == null) {
             metadata = Metadata.NONE;
@@ -116,7 +120,7 @@ public final class PageBlobURL extends BlobURL {
         return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.PAGE_BLOB, null,
                 null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(),
-                metadata.toString(), accessConditions.getLeaseAccessConditions().toString(),
+                metadata.toString(), accessConditions.getLeaseAccessConditions().getLeaseId(),
                 headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -145,18 +149,15 @@ public final class PageBlobURL extends BlobURL {
             accessConditions = BlobAccessConditions.NONE;
         }
         if (pageRange == null) {
-            return Single.error(new IllegalArgumentException("pageRange cannot be null."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            new IllegalArgumentException("pageRange cannot be null.");
         }
-        String pageRangeStr;
-        try {
-            pageRangeStr = this.pageRangeToString(pageRange);
-        }
-        catch (IllegalArgumentException e) {
-            return Single.error(e);
-        }
+        String pageRangeStr = this.pageRangeToString(pageRange);
+
         return this.storageClient.pageBlobs().putPageWithRestResponseAsync(
                 pageRange.end()-pageRange.start()+1, PageWriteType.UPDATE, body,
-                null, pageRangeStr, accessConditions.getLeaseAccessConditions().toString(),
+                null, pageRangeStr, accessConditions.getLeaseAccessConditions().getLeaseId(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThanOrEqual(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThan(),
                 accessConditions.getPageBlobAccessConditions().getIfSequenceNumberEqual(),
@@ -184,17 +185,14 @@ public final class PageBlobURL extends BlobURL {
          accessConditions = BlobAccessConditions.NONE;
      }
      if (pageRange == null) {
-         return Single.error(new IllegalArgumentException("pageRange cannot be null."));
+         // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+         // subscription.
+         throw new IllegalArgumentException("pageRange cannot be null.");
      }
-     String pageRangeStr;
-     try {
-         pageRangeStr = this.pageRangeToString(pageRange);
-     }
-     catch (IllegalArgumentException e) {
-         return Single.error(e);
-     }
+     String pageRangeStr = this.pageRangeToString(pageRange);
+
      return this.storageClient.pageBlobs().putPageWithRestResponseAsync(0, PageWriteType.CLEAR,
-             null,null, pageRangeStr, accessConditions.getLeaseAccessConditions().toString(),
+             null,null, pageRangeStr, accessConditions.getLeaseAccessConditions().getLeaseId(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThanOrEqual(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberLessThan(),
              accessConditions.getPageBlobAccessConditions().getIfSequenceNumberEqual(),
@@ -226,7 +224,7 @@ public final class PageBlobURL extends BlobURL {
          blobRange = BlobRange.DEFAULT;
      }
      return this.storageClient.pageBlobs().getPageRangesWithRestResponseAsync(null, null,
-             null, blobRange.toString(), accessConditions.getLeaseAccessConditions().toString(),
+             null, blobRange.toString(), accessConditions.getLeaseAccessConditions().getLeaseId(),
              accessConditions.getHttpAccessConditions().getIfModifiedSince(),
              accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
              accessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -259,7 +257,7 @@ public final class PageBlobURL extends BlobURL {
             accessConditions = BlobAccessConditions.NONE;
         }
         return this.storageClient.pageBlobs().getPageRangesWithRestResponseAsync(null,null,
-                prevSnapshot, blobRange.toString(), accessConditions.getLeaseAccessConditions().toString(),
+                prevSnapshot, blobRange.toString(), accessConditions.getLeaseAccessConditions().getLeaseId(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -283,6 +281,8 @@ public final class PageBlobURL extends BlobURL {
     public Single<RestResponse<BlobSetPropertiesHeaders, Void>> resize(
             long size, BlobAccessConditions accessConditions) {
         if (size%512 != 0) {
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
             throw new IllegalArgumentException("size must be a multiple of 512.");
         }
         if (accessConditions == null) {
@@ -290,7 +290,7 @@ public final class PageBlobURL extends BlobURL {
         }
         return this.storageClient.blobs().setPropertiesWithRestResponseAsync(null,
                 null, null, null, null,
-                null, accessConditions.getLeaseAccessConditions().toString(),
+                null, accessConditions.getLeaseAccessConditions().getLeaseId(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -318,7 +318,9 @@ public final class PageBlobURL extends BlobURL {
             SequenceNumberActionType action, Long sequenceNumber, BlobHttpHeaders headers,
             BlobAccessConditions accessConditions) {
         if (sequenceNumber != null && sequenceNumber < 0) {
-            return Single.error(new IllegalArgumentException("SequenceNumber must be greater than or equal to 0."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException("SequenceNumber must be greater than or equal to 0.");
         }
         if(headers == null) {
             headers = BlobHttpHeaders.NONE;
@@ -332,7 +334,7 @@ public final class PageBlobURL extends BlobURL {
         return this.storageClient.blobs().setPropertiesWithRestResponseAsync(null,
                 headers.getCacheControl(), headers.getContentType(), headers.getContentMD5(),
                 headers.getContentEncoding(), headers.getContentLanguage(),
-                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -360,18 +362,15 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link Single &lt;RestResponse&lt;PageBlobIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<PageBlobIncrementalCopyHeaders, Void>> startIncrementalCopy(
-            URL source, String snapshot, BlobAccessConditions accessConditions) {
+            URL source, String snapshot, BlobAccessConditions accessConditions) throws MalformedURLException {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
         }
 
-        try {
-            UrlBuilder builder = UrlBuilder.parse(source.toString());
-            builder.addQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, snapshot);
-            source = builder.toURL();
-        } catch (MalformedURLException e) {
-            return Single.error(e);
-        }
+
+        UrlBuilder builder = UrlBuilder.parse(source.toString());
+        builder.addQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, snapshot);
+        source = builder.toURL();
 
         return this.storageClient.pageBlobs().incrementalCopyWithRestResponseAsync(source.toString(),
                 null, null,
@@ -381,7 +380,7 @@ public final class PageBlobURL extends BlobURL {
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(), null);
     }
 
-    private String pageRangeToString(PageRange pageRange) throws IllegalArgumentException {
+    private String pageRangeToString(PageRange pageRange) {
         if (pageRange.start() < 0 || pageRange.end() <= 0) {
             throw new IllegalArgumentException("PageRange's start and end values must be greater than or equal to " +
                     "0 if specified.");

@@ -55,7 +55,7 @@ public abstract class StorageURL {
         try {
             return new URL(this.storageClient.url());
         } catch (MalformedURLException e) {
-            // TODO: remove and update toString.
+            // TODO: remove and update getLeaseId.
         }
         return null;
     }

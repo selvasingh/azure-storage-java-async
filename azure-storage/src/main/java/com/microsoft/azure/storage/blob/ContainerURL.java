@@ -176,11 +176,13 @@ public final class ContainerURL extends StorageURL {
         }
         if (!accessConditions.getHttpAccessConditions().getIfMatch().equals(ETag.NONE) ||
                 !accessConditions.getHttpAccessConditions().getIfNoneMatch().equals(ETag.NONE)) {
-            return Single.error(new IllegalArgumentException("ETag access conditions are not supported for this API."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException("ETag access conditions are not supported for this API.");
         }
 
         return this.storageClient.containers().deleteWithRestResponseAsync(null,
-                accessConditions.getLeaseID().toString(),
+                accessConditions.getLeaseID().getLeaseId(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 null);
@@ -202,7 +204,7 @@ public final class ContainerURL extends StorageURL {
         }
 
         return this.storageClient.containers().getPropertiesWithRestResponseAsync(null,
-                leaseAccessConditions.toString(), null);
+                leaseAccessConditions.getLeaseId(), null);
     }
 
     /**
@@ -225,15 +227,17 @@ public final class ContainerURL extends StorageURL {
         else if (accessConditions.getHttpAccessConditions().getIfMatch() != ETag.NONE ||
                 accessConditions.getHttpAccessConditions().getIfNoneMatch() != ETag.NONE ||
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince() != null) {
-            return Single.error(new IllegalArgumentException(
-                    "If-Modified-Since is the only HTTP access condition supported for this API"));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException(
+                    "If-Modified-Since is the only HTTP access condition supported for this API");
         }
         if (metadata == null) {
             metadata = Metadata.NONE;
         }
 
         return this.storageClient.containers().setMetadataWithRestResponseAsync(null,
-                accessConditions.getLeaseID().toString(), metadata.toString(),
+                accessConditions.getLeaseID().getLeaseId(), metadata.toString(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),null);
     }
 
@@ -255,7 +259,7 @@ public final class ContainerURL extends StorageURL {
         }
 
         return this.storageClient.containers().getAclWithRestResponseAsync(
-                null, leaseAccessConditions.toString(), null);
+                null, leaseAccessConditions.getLeaseId(), null);
     }
 
     /**
@@ -282,7 +286,7 @@ public final class ContainerURL extends StorageURL {
 
         // TODO: validate that empty list clears permissions and null list does not change list. Document behavior.
         return this.storageClient.containers().setAclWithRestResponseAsync(identifiers, null,
-                accessConditions.getLeaseID().toString(), accessType,
+                accessConditions.getLeaseID().getLeaseId(), accessType,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 null);
@@ -314,8 +318,10 @@ public final class ContainerURL extends StorageURL {
             httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)){
-            return Single.error(new IllegalArgumentException(
-                    "ETag access conditions are not supported for this API."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API.");
         }
 
         return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.ACQUIRE,
@@ -342,8 +348,10 @@ public final class ContainerURL extends StorageURL {
             httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
-            return Single.error(new IllegalArgumentException(
-                    "ETag access conditions are not supported for this API."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API.");
         }
 
         return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.RENEW, null,
@@ -370,8 +378,10 @@ public final class ContainerURL extends StorageURL {
             httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
-            return Single.error(new IllegalArgumentException(
-                    "ETag access conditions are not supported for this API."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API.");
         }
 
         return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.RELEASE,
@@ -385,25 +395,25 @@ public final class ContainerURL extends StorageURL {
      * BreakLease breaks the container's previously-acquired lease.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-container.
      *
-     * @param leaseID
-     *      A {@code String} representing the lease on the blob.
      * @param httpAccessConditions
      *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> breakLease(
-            String leaseID, HttpAccessConditions httpAccessConditions) {
+            HttpAccessConditions httpAccessConditions) {
         if (httpAccessConditions == null) {
             httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
-            return Single.error(new IllegalArgumentException(
-                    "ETag access conditions are not supported for this API."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API.");
         }
 
         return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.BREAK,
-                null, leaseID, null, null, null,
+                null, null, null, null, null,
                 httpAccessConditions.getIfModifiedSince(),
                 httpAccessConditions.getIfUnmodifiedSince(),
                 null);
@@ -428,8 +438,10 @@ public final class ContainerURL extends StorageURL {
             httpAccessConditions = HttpAccessConditions.NONE;
         }
         else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
-            return Single.error(new IllegalArgumentException(
-                    "ETag access conditions are not supported for this API."));
+            // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
+            // subscription.
+            throw new IllegalArgumentException(
+                    "ETag access conditions are not supported for this API.");
         }
 
         return this.storageClient.containers().leaseWithRestResponseAsync(LeaseActionType.RELEASE,
