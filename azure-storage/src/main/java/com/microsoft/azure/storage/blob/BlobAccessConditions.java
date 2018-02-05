@@ -19,7 +19,9 @@ package com.microsoft.azure.storage.blob;
  */
 public final class BlobAccessConditions {
 
-    private static BlobAccessConditions defaultBlobAccessConditions;
+    public static final BlobAccessConditions NONE =
+            new BlobAccessConditions(null, null, null,
+                    null);
 
     // Optional standard HTTP access conditions which are optionally set
     private final HttpAccessConditions httpAccessConditions;
@@ -51,10 +53,14 @@ public final class BlobAccessConditions {
             LeaseAccessConditions leaseAccessConditions,
             AppendBlobAccessConditions appendBlobAccessConditions,
             PageBlobAccessConditions pageBlobAccessConditions) {
-        this.httpAccessConditions = httpAccessConditions == null ? HttpAccessConditions.getDefault() : httpAccessConditions;
-        this.leaseAccessConditions = leaseAccessConditions == null ? LeaseAccessConditions.getDefault() : leaseAccessConditions;
-        this.appendBlobAccessConditions = appendBlobAccessConditions == null ? AppendBlobAccessConditions.getDefault() : appendBlobAccessConditions;
-        this.pageBlobAccessConditions = pageBlobAccessConditions == null ? PageBlobAccessConditions.getDefault() : pageBlobAccessConditions;
+        this.httpAccessConditions = httpAccessConditions == null ?
+                HttpAccessConditions.NONE : httpAccessConditions;
+        this.leaseAccessConditions = leaseAccessConditions == null ?
+                LeaseAccessConditions.NONE : leaseAccessConditions;
+        this.appendBlobAccessConditions = appendBlobAccessConditions == null ?
+                AppendBlobAccessConditions.NONE : appendBlobAccessConditions;
+        this.pageBlobAccessConditions = pageBlobAccessConditions == null ?
+                PageBlobAccessConditions.NONE : pageBlobAccessConditions;
     }
 
     HttpAccessConditions getHttpAccessConditions() {
@@ -72,15 +78,5 @@ public final class BlobAccessConditions {
     PageBlobAccessConditions getPageBlobAccessConditions() {
         return pageBlobAccessConditions;
     }
-    
-    public static BlobAccessConditions getDefault() {
-        if (defaultBlobAccessConditions == null) {
-            defaultBlobAccessConditions = new BlobAccessConditions(HttpAccessConditions.getDefault(),
-                    LeaseAccessConditions.getDefault(),
-                    AppendBlobAccessConditions.getDefault(),
-                    PageBlobAccessConditions.getDefault());
-        }
 
-        return defaultBlobAccessConditions;
-    }
 }

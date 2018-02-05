@@ -59,8 +59,4 @@ public final class ETag {
     public String toString() {
         return this.eTagString;
     }
-
-    public static ETag getDefault() {
-        return new ETag(null);
-    }
 }

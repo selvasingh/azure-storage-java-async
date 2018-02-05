@@ -27,6 +27,8 @@ import java.util.Map;
  * NOTE: Changing any SAS-related field requires computing a new SAS signature.
  */
 public final class BlobURLParts {
+    // Fields are intentionally not final because they are mutable.
+
     private String scheme;
 
     private String host;
@@ -79,12 +81,21 @@ public final class BlobURLParts {
         return scheme;
     }
 
+    // TODO: docs.
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
+
     /**
      * @return
      *      A {@code String} representing the host. Ex: "account.blob.core.windows.net".
      */
     public String getHost() {
         return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     /**
@@ -95,12 +106,20 @@ public final class BlobURLParts {
         return containerName;
     }
 
+    public void setContainerName(String containerName) {
+        this.containerName = containerName;
+    }
+
     /**
      * @return
      *      A {@code String} representing the blob name or {@code null}.
      */
     public String getBlobName() {
         return blobName;
+    }
+
+    public void setBlobName(String blobName) {
+        this.blobName = blobName;
     }
 
     /**
@@ -111,6 +130,10 @@ public final class BlobURLParts {
         return snapshot;
     }
 
+    public void setSnapshot(String snapshot) {
+        this.snapshot = snapshot;
+    }
+
     /**
      * @return
      *      A {@link SASQueryParameters} representing the SAS query parameters or {@code null}.
@@ -118,6 +141,11 @@ public final class BlobURLParts {
     public SASQueryParameters getSasQueryParameters() {
         return sasQueryParameters;
     }
+
+    public void setSasQueryParameters(SASQueryParameters sasQueryParameters) {
+        this.sasQueryParameters = sasQueryParameters;
+    }
+
 
     /**
      * @return
@@ -127,6 +155,12 @@ public final class BlobURLParts {
     public Map<String, String[]> getUnparsedParameters() {
         return unparsedParameters;
     }
+
+    // TODO: revisit
+    public void setUnparsedParameters(Map<String, String[]> unparsedParameters) {
+        this.unparsedParameters = unparsedParameters;
+    }
+
 
     /**
      * Converts the blob URL parts to {@code String} representing a URL.
@@ -160,33 +194,5 @@ public final class BlobURLParts {
                 url.query() + this.sasQueryParameters.encode() : this.sasQueryParameters.encode();
         url.withQuery(query);
         return new URL(url.toString()); // TODO: replace with toURL when new autorest publishes
-    }
-
-    public void setScheme(String scheme) {
-        this.scheme = scheme;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public void setContainerName(String containerName) {
-        this.containerName = containerName;
-    }
-
-    public void setBlobName(String blobName) {
-        this.blobName = blobName;
-    }
-
-    public void setSnapshot(String snapshot) {
-        this.snapshot = snapshot;
-    }
-
-    public void setSasQueryParameters(SASQueryParameters sasQueryParameters) {
-        this.sasQueryParameters = sasQueryParameters;
-    }
-
-    public void setUnparsedParameters(Map<String, String[]> unparsedParameters) {
-        this.unparsedParameters = unparsedParameters;
     }
 }

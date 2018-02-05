@@ -27,7 +27,7 @@ public class BlobPrefix {
     /**
      * Get the name value.
      *
-     * @return the name value
+     * @return the name value.
      */
     public String name() {
         return this.name;
@@ -36,7 +36,7 @@ public class BlobPrefix {
     /**
      * Set the name value.
      *
-     * @param name the name value to set
+     * @param name the name value to set.
      * @return the BlobPrefix object itself.
      */
     public BlobPrefix withName(String name) {

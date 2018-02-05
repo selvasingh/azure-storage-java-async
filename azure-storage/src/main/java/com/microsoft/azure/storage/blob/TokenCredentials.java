@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * TokenCredentials is a {@link com.microsoft.rest.v2.http.HttpPipeline} and is the TokenCredential's policy factory.
  */
-public class TokenCredentials  implements ICredentials{
+public final class TokenCredentials  implements ICredentials{
 
     private AtomicReference<String> token;
 
@@ -47,27 +47,27 @@ public class TokenCredentials  implements ICredentials{
 
     @Override
     public RequestPolicy create(RequestPolicy next, RequestPolicyOptions options) {
-        return new TokenCredentialsPolicy(next);
+        return new TokenCredentialsPolicy(this, next);
     }
 
     private final class TokenCredentialsPolicy implements RequestPolicy {
 
-        final RequestPolicy requestPolicy;
+        private final TokenCredentials factory;
 
-        TokenCredentials factory;
+        private final RequestPolicy nextPolicy;
 
-        TokenCredentialsPolicy(RequestPolicy requestPolicy) {
-            this.requestPolicy = requestPolicy;
+        private TokenCredentialsPolicy(TokenCredentials factory, RequestPolicy nextPolicy) {
+            this.factory = factory;
+            this.nextPolicy = nextPolicy;
         }
 
         public Single<HttpResponse> sendAsync(HttpRequest request) {
             if (!request.url().getProtocol().equals(Constants.HTTPS)) {
-                throw new IllegalArgumentException(
-                        "Token credentials require a URL using the https protocol scheme");
+                throw new Error("Token credentials require a URL using the https protocol scheme");
             }
-            request.withHeader(Constants.HeaderConstants.AUTHORIZATION, "Bearer " +
-                    this.factory.getToken());
-            return this.requestPolicy.sendAsync(request);
+            request.withHeader(Constants.HeaderConstants.AUTHORIZATION,
+                    "Bearer " + this.factory.getToken());
+            return this.nextPolicy.sendAsync(request);
         }
     }
 }

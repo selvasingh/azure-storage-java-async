@@ -83,7 +83,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -92,7 +92,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the AppendBlobAppendBlockHeaders object itself.
      */
     public AppendBlobAppendBlockHeaders withETag(String eTag) {
@@ -103,7 +103,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -115,7 +115,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the AppendBlobAppendBlockHeaders object itself.
      */
     public AppendBlobAppendBlockHeaders withLastModified(DateTime lastModified) {
@@ -130,7 +130,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Get the contentMD5 value.
      *
-     * @return the contentMD5 value
+     * @return the contentMD5 value.
      */
     public String contentMD5() {
         return this.contentMD5;
@@ -139,7 +139,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Set the contentMD5 value.
      *
-     * @param contentMD5 the contentMD5 value to set
+     * @param contentMD5 the contentMD5 value to set.
      * @return the AppendBlobAppendBlockHeaders object itself.
      */
     public AppendBlobAppendBlockHeaders withContentMD5(String contentMD5) {
@@ -150,7 +150,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -159,7 +159,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the AppendBlobAppendBlockHeaders object itself.
      */
     public AppendBlobAppendBlockHeaders withRequestId(String requestId) {
@@ -170,7 +170,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -179,7 +179,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the AppendBlobAppendBlockHeaders object itself.
      */
     public AppendBlobAppendBlockHeaders withVersion(String version) {
@@ -190,7 +190,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -202,7 +202,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the AppendBlobAppendBlockHeaders object itself.
      */
     public AppendBlobAppendBlockHeaders withDateProperty(DateTime dateProperty) {
@@ -217,7 +217,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Get the blobAppendOffset value.
      *
-     * @return the blobAppendOffset value
+     * @return the blobAppendOffset value.
      */
     public String blobAppendOffset() {
         return this.blobAppendOffset;
@@ -226,7 +226,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Set the blobAppendOffset value.
      *
-     * @param blobAppendOffset the blobAppendOffset value to set
+     * @param blobAppendOffset the blobAppendOffset value to set.
      * @return the AppendBlobAppendBlockHeaders object itself.
      */
     public AppendBlobAppendBlockHeaders withBlobAppendOffset(String blobAppendOffset) {
@@ -237,7 +237,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Get the blobCommittedBlockCount value.
      *
-     * @return the blobCommittedBlockCount value
+     * @return the blobCommittedBlockCount value.
      */
     public String blobCommittedBlockCount() {
         return this.blobCommittedBlockCount;
@@ -246,7 +246,7 @@ public class AppendBlobAppendBlockHeaders {
     /**
      * Set the blobCommittedBlockCount value.
      *
-     * @param blobCommittedBlockCount the blobCommittedBlockCount value to set
+     * @param blobCommittedBlockCount the blobCommittedBlockCount value to set.
      * @return the AppendBlobAppendBlockHeaders object itself.
      */
     public AppendBlobAppendBlockHeaders withBlobCommittedBlockCount(String blobCommittedBlockCount) {

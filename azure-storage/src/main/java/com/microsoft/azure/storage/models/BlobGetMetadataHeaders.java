@@ -68,7 +68,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Get the metadata value.
      *
-     * @return the metadata value
+     * @return the metadata value.
      */
     public Map<String, String> metadata() {
         return this.metadata;
@@ -77,7 +77,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Set the metadata value.
      *
-     * @param metadata the metadata value to set
+     * @param metadata the metadata value to set.
      * @return the BlobGetMetadataHeaders object itself.
      */
     public BlobGetMetadataHeaders withMetadata(Map<String, String> metadata) {
@@ -88,7 +88,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -100,7 +100,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the BlobGetMetadataHeaders object itself.
      */
     public BlobGetMetadataHeaders withLastModified(DateTime lastModified) {
@@ -115,7 +115,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -124,7 +124,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the BlobGetMetadataHeaders object itself.
      */
     public BlobGetMetadataHeaders withETag(String eTag) {
@@ -135,7 +135,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -144,7 +144,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the BlobGetMetadataHeaders object itself.
      */
     public BlobGetMetadataHeaders withRequestId(String requestId) {
@@ -155,7 +155,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -164,7 +164,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the BlobGetMetadataHeaders object itself.
      */
     public BlobGetMetadataHeaders withVersion(String version) {
@@ -175,7 +175,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -187,7 +187,7 @@ public class BlobGetMetadataHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the BlobGetMetadataHeaders object itself.
      */
     public BlobGetMetadataHeaders withDateProperty(DateTime dateProperty) {

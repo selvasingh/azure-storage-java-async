@@ -27,28 +27,7 @@ import io.reactivex.Single;
  */
 public final class AnonymousCredentials implements ICredentials {
 
-    /**
-     * Anonymous credentials are to be used with with HTTP(S) requests
-     * that read blobs from public containers or requests that use a
-     * Shared Access Signature (SAS).
-     */
-    private final class AnonymousCredentialsPolicy implements RequestPolicy {
-        final RequestPolicy requestPolicy;
-
-        AnonymousCredentialsPolicy(RequestPolicy requestPolicy) {
-            this.requestPolicy = requestPolicy;
-        }
-
-        /**
-         * For anonymous credentials, this is effectively a no-op.
-         *
-         * @param request
-         *      An {@link HttpRequest} object representing the storage request.
-         * @return
-         *      The {@link Single&lt;HttpResponse&gt;} containing the response if successful.
-         */
-        public Single<HttpResponse> sendAsync(HttpRequest request) { return requestPolicy.sendAsync(request); }
-    }
+    public AnonymousCredentials(){}
 
     /**
      * Creates a new {@code AnonymousCredentialsPolicy}.
@@ -61,5 +40,28 @@ public final class AnonymousCredentials implements ICredentials {
     @Override
     public RequestPolicy create(RequestPolicy nextRequestPolicy, RequestPolicyOptions options) {
         return new AnonymousCredentialsPolicy(nextRequestPolicy);
+    }
+
+    /**
+     * Anonymous credentials are to be used with with HTTP(S) requests
+     * that read blobs from public containers or requests that use a
+     * Shared Access Signature (SAS).
+     */
+    private final class AnonymousCredentialsPolicy implements RequestPolicy {
+        final RequestPolicy nextPolicy;
+
+        AnonymousCredentialsPolicy(RequestPolicy nextPolicy) {
+            this.nextPolicy = nextPolicy;
+        }
+
+        /**
+         * For anonymous credentials, this is effectively a no-op.
+         *
+         * @param request
+         *      An {@link HttpRequest} object representing the storage request.
+         * @return
+         *      The {@link Single&lt;HttpResponse&gt;} containing the response if successful.
+         */
+        public Single<HttpResponse> sendAsync(HttpRequest request) { return nextPolicy.sendAsync(request); }
     }
 }

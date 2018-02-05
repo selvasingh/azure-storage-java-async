@@ -19,7 +19,7 @@ package com.microsoft.azure.storage.blob;
  */
 public final class LeaseAccessConditions {
 
-    private static LeaseAccessConditions defaultLeaseAccessConditions;
+    public static final LeaseAccessConditions NONE = new LeaseAccessConditions(null);
     private final String leaseId;
 
     /**
@@ -46,16 +46,7 @@ public final class LeaseAccessConditions {
         return this.leaseId.equals(obj);
     }
 
-    @Override
-    public String toString() {
+    public String getLeaseId() {
         return this.leaseId;
-    }
-
-    public static LeaseAccessConditions getDefault() {
-        if (defaultLeaseAccessConditions == null) {
-            defaultLeaseAccessConditions = new LeaseAccessConditions(null);
-        }
-
-        return defaultLeaseAccessConditions;
     }
 }

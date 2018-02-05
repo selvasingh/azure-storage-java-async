@@ -68,7 +68,7 @@ public class ContainerGetAclHeaders {
     /**
      * Get the blobPublicAccess value.
      *
-     * @return the blobPublicAccess value
+     * @return the blobPublicAccess value.
      */
     public PublicAccessType blobPublicAccess() {
         return this.blobPublicAccess;
@@ -77,7 +77,7 @@ public class ContainerGetAclHeaders {
     /**
      * Set the blobPublicAccess value.
      *
-     * @param blobPublicAccess the blobPublicAccess value to set
+     * @param blobPublicAccess the blobPublicAccess value to set.
      * @return the ContainerGetAclHeaders object itself.
      */
     public ContainerGetAclHeaders withBlobPublicAccess(PublicAccessType blobPublicAccess) {
@@ -88,7 +88,7 @@ public class ContainerGetAclHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -97,7 +97,7 @@ public class ContainerGetAclHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the ContainerGetAclHeaders object itself.
      */
     public ContainerGetAclHeaders withETag(String eTag) {
@@ -108,7 +108,7 @@ public class ContainerGetAclHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -120,7 +120,7 @@ public class ContainerGetAclHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the ContainerGetAclHeaders object itself.
      */
     public ContainerGetAclHeaders withLastModified(DateTime lastModified) {
@@ -135,7 +135,7 @@ public class ContainerGetAclHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -144,7 +144,7 @@ public class ContainerGetAclHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the ContainerGetAclHeaders object itself.
      */
     public ContainerGetAclHeaders withRequestId(String requestId) {
@@ -155,7 +155,7 @@ public class ContainerGetAclHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -164,7 +164,7 @@ public class ContainerGetAclHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the ContainerGetAclHeaders object itself.
      */
     public ContainerGetAclHeaders withVersion(String version) {
@@ -175,7 +175,7 @@ public class ContainerGetAclHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -187,7 +187,7 @@ public class ContainerGetAclHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the ContainerGetAclHeaders object itself.
      */
     public ContainerGetAclHeaders withDateProperty(DateTime dateProperty) {

@@ -19,6 +19,7 @@ import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.http.HttpRequest;
 import com.microsoft.rest.v2.http.HttpResponse;
 import com.microsoft.rest.v2.http.UrlBuilder;
+import com.microsoft.rest.v2.policy.DecodingPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
@@ -46,17 +47,6 @@ public abstract class StorageURL {
         this.storageClient.withUrl(url.toString());
     }
 
-    public static HttpPipeline CreatePipeline(ICredentials credentials, PipelineOptions pipelineOptions) {
-        LoggingFactory loggingFactory = new LoggingFactory(pipelineOptions.loggingOptions);
-        RequestIDFactory requestIDFactory = new RequestIDFactory();
-        RequestRetryFactory requestRetryFactory = new RequestRetryFactory(new RequestRetryOptions());
-        TelemetryFactory telemetryFactory = new TelemetryFactory(pipelineOptions.telemetryOptions);
-        AddDatePolicy addDate = new AddDatePolicy();
-        return HttpPipeline.build(
-                pipelineOptions.client, telemetryFactory, requestIDFactory, requestRetryFactory, addDate, credentials,
-                loggingFactory);
-    }
-
     @Override
     public String toString() {
         return this.storageClient.url();
@@ -66,7 +56,7 @@ public abstract class StorageURL {
         try {
             return new URL(this.storageClient.url());
         } catch (MalformedURLException e) {
-            // TODO: remove and update toString.
+            // TODO: remove and update getLeaseId.
         }
         return null;
     }
@@ -92,7 +82,27 @@ public abstract class StorageURL {
         return new URL(url.toString()); // TODO: modify when toURL is released.
     }
 
-    static class AddDatePolicy implements RequestPolicyFactory {
+    // TODO: Move this? Not discoverable.
+    public static HttpPipeline createPipeline(ICredentials credentials, PipelineOptions pipelineOptions) {
+        /*
+        PipelineOptions is mutable, but its fields refer to immutable objects. This method can pass the fields to other
+        methods, but the PipelineOptions object itself can only be used for the duration of this call; it must not be
+        passed to anything with a longer lifetime.
+         */
+        LoggingFactory loggingFactory = new LoggingFactory(pipelineOptions.loggingOptions);
+        RequestIDFactory requestIDFactory = new RequestIDFactory();
+        RequestRetryFactory requestRetryFactory = new RequestRetryFactory(pipelineOptions.requestRetryOptions);
+        TelemetryFactory telemetryFactory = new TelemetryFactory(pipelineOptions.telemetryOptions);
+        AddDatePolicy addDate = new AddDatePolicy();
+        DecodingPolicyFactory decodingPolicyFactory = new DecodingPolicyFactory();
+        // TODO: Add decodingPolicy to pipeline
+        return HttpPipeline.build(
+                pipelineOptions.client, telemetryFactory, requestIDFactory, requestRetryFactory, addDate, credentials,
+                decodingPolicyFactory, loggingFactory);
+    }
+
+    // TODO: revisit.
+    private static class AddDatePolicy implements RequestPolicyFactory {
 
         @Override
         public RequestPolicy create(RequestPolicy next, RequestPolicyOptions options) {

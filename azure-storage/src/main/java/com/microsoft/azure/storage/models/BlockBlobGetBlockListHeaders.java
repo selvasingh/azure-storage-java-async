@@ -74,7 +74,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -86,7 +86,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the BlockBlobGetBlockListHeaders object itself.
      */
     public BlockBlobGetBlockListHeaders withLastModified(DateTime lastModified) {
@@ -101,7 +101,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -110,7 +110,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the BlockBlobGetBlockListHeaders object itself.
      */
     public BlockBlobGetBlockListHeaders withETag(String eTag) {
@@ -121,7 +121,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Get the contentType value.
      *
-     * @return the contentType value
+     * @return the contentType value.
      */
     public String contentType() {
         return this.contentType;
@@ -130,7 +130,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Set the contentType value.
      *
-     * @param contentType the contentType value to set
+     * @param contentType the contentType value to set.
      * @return the BlockBlobGetBlockListHeaders object itself.
      */
     public BlockBlobGetBlockListHeaders withContentType(String contentType) {
@@ -141,7 +141,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Get the blobContentLength value.
      *
-     * @return the blobContentLength value
+     * @return the blobContentLength value.
      */
     public Long blobContentLength() {
         return this.blobContentLength;
@@ -150,7 +150,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Set the blobContentLength value.
      *
-     * @param blobContentLength the blobContentLength value to set
+     * @param blobContentLength the blobContentLength value to set.
      * @return the BlockBlobGetBlockListHeaders object itself.
      */
     public BlockBlobGetBlockListHeaders withBlobContentLength(Long blobContentLength) {
@@ -161,7 +161,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -170,7 +170,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the BlockBlobGetBlockListHeaders object itself.
      */
     public BlockBlobGetBlockListHeaders withRequestId(String requestId) {
@@ -181,7 +181,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -190,7 +190,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the BlockBlobGetBlockListHeaders object itself.
      */
     public BlockBlobGetBlockListHeaders withVersion(String version) {
@@ -201,7 +201,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -213,7 +213,7 @@ public class BlockBlobGetBlockListHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the BlockBlobGetBlockListHeaders object itself.
      */
     public BlockBlobGetBlockListHeaders withDateProperty(DateTime dateProperty) {

@@ -21,7 +21,7 @@ public class Metrics {
     /**
      * The version of Storage Analytics to configure.
      */
-    @JsonProperty(value = "Version", required = true)
+    @JsonProperty(value = "Version")
     private String version;
 
     /**
@@ -34,19 +34,19 @@ public class Metrics {
      * Indicates whether metrics should generate summary statistics for called
      * API operations.
      */
-    @JsonProperty(value = "IncludeAPIs", required = true)
-    private boolean includeAPIs;
+    @JsonProperty(value = "IncludeAPIs")
+    private Boolean includeAPIs;
 
     /**
      * The retentionPolicy property.
      */
-    @JsonProperty(value = "RetentionPolicy", required = true)
+    @JsonProperty(value = "RetentionPolicy")
     private RetentionPolicy retentionPolicy;
 
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -55,7 +55,7 @@ public class Metrics {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the Metrics object itself.
      */
     public Metrics withVersion(String version) {
@@ -66,7 +66,7 @@ public class Metrics {
     /**
      * Get the enabled value.
      *
-     * @return the enabled value
+     * @return the enabled value.
      */
     public boolean enabled() {
         return this.enabled;
@@ -75,7 +75,7 @@ public class Metrics {
     /**
      * Set the enabled value.
      *
-     * @param enabled the enabled value to set
+     * @param enabled the enabled value to set.
      * @return the Metrics object itself.
      */
     public Metrics withEnabled(boolean enabled) {
@@ -86,19 +86,19 @@ public class Metrics {
     /**
      * Get the includeAPIs value.
      *
-     * @return the includeAPIs value
+     * @return the includeAPIs value.
      */
-    public boolean includeAPIs() {
+    public Boolean includeAPIs() {
         return this.includeAPIs;
     }
 
     /**
      * Set the includeAPIs value.
      *
-     * @param includeAPIs the includeAPIs value to set
+     * @param includeAPIs the includeAPIs value to set.
      * @return the Metrics object itself.
      */
-    public Metrics withIncludeAPIs(boolean includeAPIs) {
+    public Metrics withIncludeAPIs(Boolean includeAPIs) {
         this.includeAPIs = includeAPIs;
         return this;
     }
@@ -106,7 +106,7 @@ public class Metrics {
     /**
      * Get the retentionPolicy value.
      *
-     * @return the retentionPolicy value
+     * @return the retentionPolicy value.
      */
     public RetentionPolicy retentionPolicy() {
         return this.retentionPolicy;
@@ -115,7 +115,7 @@ public class Metrics {
     /**
      * Set the retentionPolicy value.
      *
-     * @param retentionPolicy the retentionPolicy value to set
+     * @param retentionPolicy the retentionPolicy value to set.
      * @return the Metrics object itself.
      */
     public Metrics withRetentionPolicy(RetentionPolicy retentionPolicy) {

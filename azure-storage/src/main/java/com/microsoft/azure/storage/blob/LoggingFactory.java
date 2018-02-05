@@ -38,17 +38,17 @@ public final class LoggingFactory implements RequestPolicyFactory {
 
     private final class LoggingPolicy implements RequestPolicy {
 
+        private final LoggingFactory factory;
+
+        private final RequestPolicy nextPolicy;
+
+        private final RequestPolicyOptions options;
+
         private int tryCount;
 
         private long operationStartTime;
 
-        private RequestPolicyOptions options;
-
-        private final RequestPolicy nextPolicy;
-
-        final private LoggingFactory factory;
-
-        private Long requestStartTime;
+        private long requestStartTime;
 
         /**
          * Creates a policy which configures the logging behavior within the
@@ -61,10 +61,10 @@ public final class LoggingFactory implements RequestPolicyFactory {
          * @param factory
          *      A {@link LoggingFactory} object.
          */
-        LoggingPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options, LoggingFactory factory) {
+        private LoggingPolicy(LoggingFactory factory, RequestPolicy nextPolicy, RequestPolicyOptions options) {
+            this.factory = factory;
             this.nextPolicy = nextPolicy;
             this.options = options;
-            this.factory = factory;
         }
 
         /**
@@ -163,6 +163,6 @@ public final class LoggingFactory implements RequestPolicyFactory {
 
     @Override
     public RequestPolicy create(RequestPolicy next, RequestPolicyOptions options) {
-        return new LoggingPolicy(next, options, this);
+        return new LoggingPolicy(this, next, options);
     }
 }

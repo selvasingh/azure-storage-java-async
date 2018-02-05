@@ -15,11 +15,12 @@
 package com.microsoft.azure.storage.blob;
 
 /**
- * Access conditions specific to append blobs
+ * Access conditions specific to append blobs.
  */
 public final class AppendBlobAccessConditions {
 
-    private static AppendBlobAccessConditions defaultAppendBlobAccessConditions;
+    public static final AppendBlobAccessConditions NONE =
+            new AppendBlobAccessConditions(null, null);
 
     private final Integer ifAppendPositionEquals;
 
@@ -59,14 +60,5 @@ public final class AppendBlobAccessConditions {
      */
     public Integer getIfMaxSizeLessThanOrEqual() {
         return ifMaxSizeLessThanOrEqual;
-    }
-
-    public static AppendBlobAccessConditions getDefault() {
-        if (defaultAppendBlobAccessConditions == null) {
-            defaultAppendBlobAccessConditions = new AppendBlobAccessConditions(null,
-                    null);
-        }
-
-        return defaultAppendBlobAccessConditions;
     }
 }

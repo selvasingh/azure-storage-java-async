@@ -1,18 +1,18 @@
 package com.microsoft.azure.storage.blob;
 
-public class BlobRange {
+public final class BlobRange {
 
-    private static BlobRange defaultBlobRange;
+    public static final BlobRange DEFAULT = new BlobRange(0, 0);
 
-    public Long offset;
+    public final long offset;
 
-    public Long count;
+    public final long count;
 
-    public BlobRange(Long offset, Long count) {
-        if (offset != null && offset < 0) {
+    public BlobRange(long offset, long count) {
+        if (offset < 0) {
             throw new IllegalArgumentException("BlobRange offset must be greater than or equal to 0 if specified.");
         }
-        if (offset != null && count < 0) {
+        if (count < 0) {
             throw new IllegalArgumentException("BlobRange count must be greater than or equal to 0 if specified.");
         }
         this.offset = offset;
@@ -21,26 +21,14 @@ public class BlobRange {
 
     @Override
     public String toString() {
-        if (offset != null) {
-            long rangeStart = offset;
-            long rangeEnd;
-            if (count != null) {
-                rangeEnd = offset + count - 1;
-                return String.format(
-                        Utility.LOCALE_US, Constants.HeaderConstants.RANGE_HEADER_FORMAT, rangeStart, rangeEnd);
-            }
 
+        if (count != 0) {
+            long rangeEnd = this.offset + this.count - 1;
             return String.format(
-                    Utility.LOCALE_US, Constants.HeaderConstants.BEGIN_RANGE_HEADER_FORMAT, rangeStart);
+                    Utility.LOCALE_US, Constants.HeaderConstants.RANGE_HEADER_FORMAT, this.offset, rangeEnd);
         }
 
-        return null;
-    }
-
-    public static BlobRange getDefault() {
-        if(defaultBlobRange == null) {
-            defaultBlobRange = new BlobRange(null, null);
-        }
-        return defaultBlobRange;
+        return String.format(
+                Utility.LOCALE_US, Constants.HeaderConstants.BEGIN_RANGE_HEADER_FORMAT, this.offset);
     }
 }

@@ -17,13 +17,19 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Defines values for PageWriteType.
  */
 public enum PageWriteType {
-    /** Enum value update. */
+    /**
+     * Enum value update.
+     */
     UPDATE("update"),
 
-    /** Enum value clear. */
+    /**
+     * Enum value clear.
+     */
     CLEAR("clear");
 
-    /** The actual serialized value for a PageWriteType instance. */
+    /**
+     * The actual serialized value for a PageWriteType instance.
+     */
     private String value;
 
     PageWriteType(String value) {

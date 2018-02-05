@@ -52,7 +52,7 @@ public class Blob {
     /**
      * Get the name value.
      *
-     * @return the name value
+     * @return the name value.
      */
     public String name() {
         return this.name;
@@ -61,7 +61,7 @@ public class Blob {
     /**
      * Set the name value.
      *
-     * @param name the name value to set
+     * @param name the name value to set.
      * @return the Blob object itself.
      */
     public Blob withName(String name) {
@@ -72,7 +72,7 @@ public class Blob {
     /**
      * Get the deleted value.
      *
-     * @return the deleted value
+     * @return the deleted value.
      */
     public boolean deleted() {
         return this.deleted;
@@ -81,7 +81,7 @@ public class Blob {
     /**
      * Set the deleted value.
      *
-     * @param deleted the deleted value to set
+     * @param deleted the deleted value to set.
      * @return the Blob object itself.
      */
     public Blob withDeleted(boolean deleted) {
@@ -92,7 +92,7 @@ public class Blob {
     /**
      * Get the snapshot value.
      *
-     * @return the snapshot value
+     * @return the snapshot value.
      */
     public String snapshot() {
         return this.snapshot;
@@ -101,7 +101,7 @@ public class Blob {
     /**
      * Set the snapshot value.
      *
-     * @param snapshot the snapshot value to set
+     * @param snapshot the snapshot value to set.
      * @return the Blob object itself.
      */
     public Blob withSnapshot(String snapshot) {
@@ -112,7 +112,7 @@ public class Blob {
     /**
      * Get the properties value.
      *
-     * @return the properties value
+     * @return the properties value.
      */
     public BlobProperties properties() {
         return this.properties;
@@ -121,7 +121,7 @@ public class Blob {
     /**
      * Set the properties value.
      *
-     * @param properties the properties value to set
+     * @param properties the properties value to set.
      * @return the Blob object itself.
      */
     public Blob withProperties(BlobProperties properties) {
@@ -132,7 +132,7 @@ public class Blob {
     /**
      * Get the metadata value.
      *
-     * @return the metadata value
+     * @return the metadata value.
      */
     public Map<String, String> metadata() {
         return this.metadata;
@@ -141,7 +141,7 @@ public class Blob {
     /**
      * Set the metadata value.
      *
-     * @param metadata the metadata value to set
+     * @param metadata the metadata value to set.
      * @return the Blob object itself.
      */
     public Blob withMetadata(Map<String, String> metadata) {

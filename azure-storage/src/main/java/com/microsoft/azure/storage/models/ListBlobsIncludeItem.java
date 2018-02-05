@@ -17,22 +17,34 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Defines values for ListBlobsIncludeItem.
  */
 public enum ListBlobsIncludeItem {
-    /** Enum value snapshots. */
+    /**
+     * Enum value snapshots.
+     */
     SNAPSHOTS("snapshots"),
 
-    /** Enum value metadata. */
+    /**
+     * Enum value metadata.
+     */
     METADATA("metadata"),
 
-    /** Enum value uncommittedblobs. */
+    /**
+     * Enum value uncommittedblobs.
+     */
     UNCOMMITTEDBLOBS("uncommittedblobs"),
 
-    /** Enum value copy. */
+    /**
+     * Enum value copy.
+     */
     COPY("copy"),
 
-    /** Enum value deleted. */
+    /**
+     * Enum value deleted.
+     */
     DELETED("deleted");
 
-    /** The actual serialized value for a ListBlobsIncludeItem instance. */
+    /**
+     * The actual serialized value for a ListBlobsIncludeItem instance.
+     */
     private String value;
 
     ListBlobsIncludeItem(String value) {

@@ -21,15 +21,15 @@ import java.util.ArrayList;
 /**
  * Details indicating what additional information the service should return with each blob.
  */
-public class BlobListingDetails {
+public final class BlobListingDetails {
 
-    private boolean copy;
+    private final boolean copy;
 
-    private boolean metadata;
+    private final boolean metadata;
 
-    private boolean snapshots;
+    private final boolean snapshots;
 
-    private boolean uncommittedBlobs;
+    private final boolean uncommittedBlobs;
 
     /**
      * A {@link BlobListingDetails} object.
@@ -85,7 +85,7 @@ public class BlobListingDetails {
         return uncommittedBlobs;
     }
 
-    public ArrayList<ListBlobsIncludeItem> toList() {
+    ArrayList<ListBlobsIncludeItem> toList() {
         ArrayList<ListBlobsIncludeItem> details = new ArrayList<ListBlobsIncludeItem>();
         if(this.copy) {
             details.add(ListBlobsIncludeItem.COPY);

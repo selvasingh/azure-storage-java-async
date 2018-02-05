@@ -52,7 +52,7 @@ public class ContainerListBlobsHeaders {
     /**
      * Get the contentType value.
      *
-     * @return the contentType value
+     * @return the contentType value.
      */
     public String contentType() {
         return this.contentType;
@@ -61,7 +61,7 @@ public class ContainerListBlobsHeaders {
     /**
      * Set the contentType value.
      *
-     * @param contentType the contentType value to set
+     * @param contentType the contentType value to set.
      * @return the ContainerListBlobsHeaders object itself.
      */
     public ContainerListBlobsHeaders withContentType(String contentType) {
@@ -72,7 +72,7 @@ public class ContainerListBlobsHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -81,7 +81,7 @@ public class ContainerListBlobsHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the ContainerListBlobsHeaders object itself.
      */
     public ContainerListBlobsHeaders withRequestId(String requestId) {
@@ -92,7 +92,7 @@ public class ContainerListBlobsHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -101,7 +101,7 @@ public class ContainerListBlobsHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the ContainerListBlobsHeaders object itself.
      */
     public ContainerListBlobsHeaders withVersion(String version) {
@@ -112,7 +112,7 @@ public class ContainerListBlobsHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -124,7 +124,7 @@ public class ContainerListBlobsHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the ContainerListBlobsHeaders object itself.
      */
     public ContainerListBlobsHeaders withDateProperty(DateTime dateProperty) {

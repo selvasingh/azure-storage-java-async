@@ -65,27 +65,22 @@ public final class ServiceURL extends StorageURL {
      * Marker) to get the next segment. For more information, see
      * https://docs.microsoft.com/rest/api/storageservices/list-containers2.
      *
-     * @param prefix
-     *      A {@code String} that represents the prefix of the container name.
      * @param marker
      *      A {@code String} that identifies the portion of the list of containers to be returned with the next listing
      *      operation.
-     * @param maxresults
-     *      An {@code Integer} representing the maximum number of results to retrieve.  If {@code null} or greater
- *          than 5000, the server will return up to 5,000 items.  Must be at least 1.
-     * @param include
-     *      A {@code String} representing which details to include when listing the containers in this storage account.
+     * @param options
+     *      A {@link ListContainersOptions} which specifies what data should be returned by the service.
      * @return
      *      The {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if
      *      successful.
      */
-    public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listConatinersAsync(
-            String prefix, String marker, Integer maxresults, ListContainersIncludeType include) {
-        if (maxresults != null && maxresults < 0) {
-            return Single.error(new IllegalArgumentException("MaxResults must be >= 0."));
+    public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainers(
+            String marker, ListContainersOptions options) {
+        if (options == null) {
+            options = ListContainersOptions.DEFAULT;
         }
-        return this.storageClient.services().listContainersWithRestResponseAsync(prefix, marker,
-                maxresults, include, null, null);
+        return this.storageClient.services().listContainersWithRestResponseAsync(options.getPrefix(), marker,
+                options.getMaxResults(), options.getDetails().toIncludeType(), null, null);
     }
 
     /**
@@ -96,7 +91,7 @@ public final class ServiceURL extends StorageURL {
      *      The {@link Single&lt;RestResponse&lt;ServiceGetPropertiesHeaders, StorageServiceProperties&gt;&gt;} object
      *      if successful.
      */
-    public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getPropertiesAsync() {
+    public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getProperties() {
         return this.storageClient.services().getPropertiesWithRestResponseAsync(null, null);
     }
 
@@ -109,14 +104,14 @@ public final class ServiceURL extends StorageURL {
      * @return
      *      A {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesAsync(
+    public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setProperties(
             StorageServiceProperties properties) {
         return this.storageClient.services().setPropertiesWithRestResponseAsync(properties, null,
                 null);
     }
 
     /**
-     * GetStats  retrieves statistics related to replication for the Blob service. It is only available on the secondary
+     * GetStats retrieves statistics related to replication for the Blob service. It is only available on the secondary
      * location endpoint when read-access geo-redundant replication is enabled for the storage account. For more
      * information, see: https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats.
      *

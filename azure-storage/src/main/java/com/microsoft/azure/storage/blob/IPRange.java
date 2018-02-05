@@ -20,9 +20,12 @@ import java.net.Inet4Address;
  * A continuous range of IP addresses.
  */
 public final class IPRange {
-    private static IPRange defaultIPRange;
-    private String ipMin;
-    private String ipMax;
+
+    public static final IPRange DEFAULT = new IPRange("", "");
+
+    private final String ipMin;
+
+    private final String ipMax;
 
     /**
      * Creates an IP Range using the specified single IP address. The IP address must be IPv4.
@@ -31,11 +34,7 @@ public final class IPRange {
      *      A {@link String} representing a single IP address.
      */
     public IPRange(String ip) {
-        Utility.assertNotNull("ip", ip);
-        IPRange.validateIPAddress(ip);
-
-        this.ipMin = ip;
-        this.ipMax = ip;
+        this(ip, ip);
     }
 
     /**
@@ -49,9 +48,6 @@ public final class IPRange {
     public IPRange(String minimumIP, String maximumIP) {
         Utility.assertNotNull("minimumIP", minimumIP);
         Utility.assertNotNull("maximumIP", maximumIP);
-
-        IPRange.validateIPAddress(minimumIP);
-        IPRange.validateIPAddress(maximumIP);
 
         this.ipMin = minimumIP;
         this.ipMax = maximumIP;
@@ -92,33 +88,10 @@ public final class IPRange {
         }
         StringBuilder str = new StringBuilder(this.ipMin);
         if (!this.ipMin.equals(this.ipMax)) {
-            str.append("-");
+            str.append('-');
             str.append(this.ipMax);
         }
 
         return str.toString();
-    }
-
-    /**
-     * Validate that the IP address is IPv4.
-     *
-     * @param ipAddress
-     *      A {@code String} representing the IP address to validate.
-     */
-    private static void validateIPAddress(String ipAddress) {
-        try {
-            @SuppressWarnings("unused")
-            Inet4Address address = (Inet4Address) Inet4Address.getByName(ipAddress);
-        }
-        catch (Exception ex) {
-            throw new IllegalArgumentException(String.format(SR.INVALID_IP_ADDRESS, ipAddress), ex);
-        }
-    }
-
-    public static IPRange getDefault() {
-        if(defaultIPRange == null) {
-            defaultIPRange = new IPRange("", "");
-        }
-        return defaultIPRange;
     }
 }

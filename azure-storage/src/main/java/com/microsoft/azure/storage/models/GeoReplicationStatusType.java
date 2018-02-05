@@ -36,8 +36,8 @@ public final class GeoReplicationStatusType extends ExpandableStringEnum<GeoRepl
     /**
      * Creates or finds a GeoReplicationStatusType from its string representation.
      *
-     * @param name a name to look for
-     * @return the corresponding GeoReplicationStatusType
+     * @param name a name to look for.
+     * @return the corresponding GeoReplicationStatusType.
      */
     @JsonCreator
     public static GeoReplicationStatusType fromString(String name) {
@@ -45,7 +45,7 @@ public final class GeoReplicationStatusType extends ExpandableStringEnum<GeoRepl
     }
 
     /**
-     * @return known GeoReplicationStatusType values
+     * @return known GeoReplicationStatusType values.
      */
     public static Collection<GeoReplicationStatusType> values() {
         return values(GeoReplicationStatusType.class);

@@ -21,30 +21,23 @@ import java.util.concurrent.TimeUnit;
  */
 public final class RequestRetryOptions {
 
+    public static final RequestRetryOptions DEFAULT = new RequestRetryOptions(RetryPolicyType.EXPONENTIAL, 0,
+            0,null, null, null);
+
     /**
      * A {@link RetryPolicyType} telling the pipeline what kind of retry policy to use.
      */
     private RetryPolicyType retryPolicyType = RetryPolicyType.EXPONENTIAL;
 
-    // MaxTries specifies the maximum number of attempts an operation will be tried before producing an error (0=default).
-    // A value of zero means that you accept our default policy. A value of 1 means 1 try and no retries.
-    int maxTries = 4;
+    private int maxTries = 4;
 
-    // TryTimeout indicates the maximum time in seconds allowed for any single try of an HTTP request.
-    // A value of zero means that you accept our default timeout. NOTE: When transferring large amounts
-    // of data, the default TryTimeout will probably not be sufficient. You should override this value
-    // based on the bandwidth available to the host machine and proximity to the Storage service. A good
-    // starting point may be something like (60 seconds per MB of anticipated-payload-size).
-    int tryTimeout = 30;
+    private int tryTimeout = 30;
 
     private long retryDelayInMs = TimeUnit.SECONDS.toMillis(4);
 
     private long maxRetryDelayInMs = TimeUnit.SECONDS.toMillis(120);
 
-    String secondaryHost;
-
-    public RequestRetryOptions() {
-    }
+    private String secondaryHost;
 
     /**
      * Configures how the {@link com.microsoft.rest.v2.http.HttpPipeline} should retry requests.
@@ -102,9 +95,42 @@ public final class RequestRetryOptions {
             }
         }
         else {
-            this.maxRetryDelayInMs = maxRetryDelayInMs;
             this.retryDelayInMs = Math.min(this.retryDelayInMs, this.maxRetryDelayInMs);
         }
+    }
+
+    /**
+     * @return
+     *      MaxTries specifies the maximum number of attempts an operation will be tried before producing an error
+     *      (0=default). A value of zero means that you accept our default policy. A value of 1 means 1 try and no
+     *      retries.
+     */
+    public int getMaxTries() {
+        return this.maxTries;
+    }
+
+    /**
+     * @return
+     *      TryTimeout indicates the maximum time in seconds allowed for any single try of an HTTP request.
+     *      A value of zero means that you accept our default timeout. NOTE: When transferring large amounts
+     *      of data, the default TryTimeout will probably not be sufficient. You should override this value
+     *      based on the bandwidth available to the host machine and proximity to the Storage service. A good
+     *      starting point may be something like (60 seconds per MB of anticipated-payload-size).
+     */
+    public int getTryTimeout() {
+        return this.tryTimeout;
+    }
+
+    /**
+     * @return
+     *      RetryReadsFromSecondaryHost specifies whether the retry policy should retry a read operation against another
+     *      host. If RetryReadsFromSecondaryHost is {@code null} (the default) then operations are not retried against another
+     *      host. NOTE: Before setting this field, make sure you understand the issues around reading stale &
+     *      potentially-inconsistent data at this webpage:
+     *      https://docs.microsoft.com/en-us/azure/storage/common/storage-designing-ha-apps-with-ragrs
+     */
+    public String getSecondaryHost() {
+        return this.secondaryHost;
     }
 
     /**

@@ -33,7 +33,7 @@ public class ClearRange {
     /**
      * Get the start value.
      *
-     * @return the start value
+     * @return the start value.
      */
     public int start() {
         return this.start;
@@ -42,7 +42,7 @@ public class ClearRange {
     /**
      * Set the start value.
      *
-     * @param start the start value to set
+     * @param start the start value to set.
      * @return the ClearRange object itself.
      */
     public ClearRange withStart(int start) {
@@ -53,7 +53,7 @@ public class ClearRange {
     /**
      * Get the end value.
      *
-     * @return the end value
+     * @return the end value.
      */
     public int end() {
         return this.end;
@@ -62,7 +62,7 @@ public class ClearRange {
     /**
      * Set the end value.
      *
-     * @param end the end value to set
+     * @param end the end value to set.
      * @return the ClearRange object itself.
      */
     public ClearRange withEnd(int end) {

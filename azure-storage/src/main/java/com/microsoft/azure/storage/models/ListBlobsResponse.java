@@ -70,7 +70,7 @@ public class ListBlobsResponse {
     /**
      * Get the serviceEndpoint value.
      *
-     * @return the serviceEndpoint value
+     * @return the serviceEndpoint value.
      */
     public String serviceEndpoint() {
         return this.serviceEndpoint;
@@ -79,7 +79,7 @@ public class ListBlobsResponse {
     /**
      * Set the serviceEndpoint value.
      *
-     * @param serviceEndpoint the serviceEndpoint value to set
+     * @param serviceEndpoint the serviceEndpoint value to set.
      * @return the ListBlobsResponse object itself.
      */
     public ListBlobsResponse withServiceEndpoint(String serviceEndpoint) {
@@ -90,7 +90,7 @@ public class ListBlobsResponse {
     /**
      * Get the containerName value.
      *
-     * @return the containerName value
+     * @return the containerName value.
      */
     public String containerName() {
         return this.containerName;
@@ -99,7 +99,7 @@ public class ListBlobsResponse {
     /**
      * Set the containerName value.
      *
-     * @param containerName the containerName value to set
+     * @param containerName the containerName value to set.
      * @return the ListBlobsResponse object itself.
      */
     public ListBlobsResponse withContainerName(String containerName) {
@@ -110,7 +110,7 @@ public class ListBlobsResponse {
     /**
      * Get the prefix value.
      *
-     * @return the prefix value
+     * @return the prefix value.
      */
     public String prefix() {
         return this.prefix;
@@ -119,7 +119,7 @@ public class ListBlobsResponse {
     /**
      * Set the prefix value.
      *
-     * @param prefix the prefix value to set
+     * @param prefix the prefix value to set.
      * @return the ListBlobsResponse object itself.
      */
     public ListBlobsResponse withPrefix(String prefix) {
@@ -130,7 +130,7 @@ public class ListBlobsResponse {
     /**
      * Get the marker value.
      *
-     * @return the marker value
+     * @return the marker value.
      */
     public String marker() {
         return this.marker;
@@ -139,7 +139,7 @@ public class ListBlobsResponse {
     /**
      * Set the marker value.
      *
-     * @param marker the marker value to set
+     * @param marker the marker value to set.
      * @return the ListBlobsResponse object itself.
      */
     public ListBlobsResponse withMarker(String marker) {
@@ -150,7 +150,7 @@ public class ListBlobsResponse {
     /**
      * Get the maxResults value.
      *
-     * @return the maxResults value
+     * @return the maxResults value.
      */
     public int maxResults() {
         return this.maxResults;
@@ -159,7 +159,7 @@ public class ListBlobsResponse {
     /**
      * Set the maxResults value.
      *
-     * @param maxResults the maxResults value to set
+     * @param maxResults the maxResults value to set.
      * @return the ListBlobsResponse object itself.
      */
     public ListBlobsResponse withMaxResults(int maxResults) {
@@ -170,7 +170,7 @@ public class ListBlobsResponse {
     /**
      * Get the delimiter value.
      *
-     * @return the delimiter value
+     * @return the delimiter value.
      */
     public String delimiter() {
         return this.delimiter;
@@ -179,7 +179,7 @@ public class ListBlobsResponse {
     /**
      * Set the delimiter value.
      *
-     * @param delimiter the delimiter value to set
+     * @param delimiter the delimiter value to set.
      * @return the ListBlobsResponse object itself.
      */
     public ListBlobsResponse withDelimiter(String delimiter) {
@@ -190,7 +190,7 @@ public class ListBlobsResponse {
     /**
      * Get the blobs value.
      *
-     * @return the blobs value
+     * @return the blobs value.
      */
     public Blobs blobs() {
         return this.blobs;
@@ -199,7 +199,7 @@ public class ListBlobsResponse {
     /**
      * Set the blobs value.
      *
-     * @param blobs the blobs value to set
+     * @param blobs the blobs value to set.
      * @return the ListBlobsResponse object itself.
      */
     public ListBlobsResponse withBlobs(Blobs blobs) {
@@ -210,7 +210,7 @@ public class ListBlobsResponse {
     /**
      * Get the nextMarker value.
      *
-     * @return the nextMarker value
+     * @return the nextMarker value.
      */
     public String nextMarker() {
         return this.nextMarker;
@@ -219,7 +219,7 @@ public class ListBlobsResponse {
     /**
      * Set the nextMarker value.
      *
-     * @param nextMarker the nextMarker value to set
+     * @param nextMarker the nextMarker value to set.
      * @return the ListBlobsResponse object itself.
      */
     public ListBlobsResponse withNextMarker(String nextMarker) {

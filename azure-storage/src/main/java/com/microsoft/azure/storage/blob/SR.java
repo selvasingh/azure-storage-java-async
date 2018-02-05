@@ -42,7 +42,7 @@ final class SR {
     public static final String ETAG_INVALID_FOR_DELETE = "Delete requires a valid ETag (which may be the '*' wildcard).";
     public static final String ETAG_INVALID_FOR_MERGE = "Merge requires a valid ETag (which may be the '*' wildcard).";
     public static final String ETAG_INVALID_FOR_UPDATE = "Replace requires a valid ETag (which may be the '*' wildcard).";
-    public static final String ENUM_COULD_NOT_BE_PARSED = "%s could not be parsed from '%s'.";
+    public static final String ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE = "%s could not be parsed from '%s' due to invalid value %s.";
     public static final String INCORRECT_STREAM_LENGTH = "An incorrect stream length was specified, resulting in an authentication failure. Please specify correct length, or -1.";
     public static final String INPUT_STREAM_SHOULD_BE_MARKABLE = "Input stream must be markable.";
     public static final String INVALID_ACCOUNT_NAME = "Invalid account name.";

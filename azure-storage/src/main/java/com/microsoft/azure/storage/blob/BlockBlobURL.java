@@ -15,14 +15,15 @@
 package com.microsoft.azure.storage.blob;
 
 import com.microsoft.azure.storage.models.*;
-import com.microsoft.rest.v2.http.AsyncInputStream;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.RestResponse;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 /**
@@ -68,7 +69,7 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlockBlobURL} object with the given pipeline.
      */
     public BlockBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(new URL(this.storageClient.url()));
+        BlobURLParts blobURLParts = URLParser.parse(new URL(this.storageClient.url()));
         blobURLParts.setSnapshot(snapshot);
         return new BlockBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
@@ -81,7 +82,7 @@ public final class BlockBlobURL extends BlobURL {
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
      *
      * @param data
-     *      An {@link AsyncInputStream} which contains the data to write to the blob.
+     *      A {@code Flowable&lt;byte[]&gt;} which contains the data to write to the blob.
      * @param headers
      *      A {@link BlobHttpHeaders} object that specifies which properties to set on the blob.
      * @param metadata
@@ -92,22 +93,23 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobPutHeaders, Void>> putBlobAsync(
-            AsyncInputStream data, BlobHttpHeaders headers, Metadata metadata, BlobAccessConditions accessConditions) {
+    public Single<RestResponse<BlobPutHeaders, Void>> putBlob(
+            Flowable<ByteBuffer> data, long contentLength, BlobHttpHeaders headers, Metadata metadata,
+            BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         if(headers == null) {
-            headers = BlobHttpHeaders.getDefault();
+            headers = BlobHttpHeaders.NONE;
         }
         // TODO: Metadata protocol layer broken.
         if(metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
-        return this.storageClient.blobs().putWithRestResponseAsync(BlobType.BLOCK_BLOB, data,
-                null, null, headers.getContentType(), headers.getContentEncoding(),
+        return this.storageClient.blobs().putWithRestResponseAsync(contentLength, BlobType.BLOCK_BLOB, data,
+                null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
-                accessConditions.getLeaseAccessConditions().toString(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(),
                 headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -123,19 +125,20 @@ public final class BlockBlobURL extends BlobURL {
      * @param base64BlockID
      *      A Base64 encoded {@code String} that specifies the ID for this block.
      * @param data
-     *      An {@link AsyncInputStream} which contains the data to write to the block.
+     *      A {@code Flowable&lt;byte[]&gt;} which contains the data to write to the block.
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the blob if there is one.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockAsync(
-            String base64BlockID, AsyncInputStream data, LeaseAccessConditions leaseAccessConditions) {
+    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlock(
+            String base64BlockID, Flowable<ByteBuffer> data, long contentLength,
+            LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.getDefault();
+            leaseAccessConditions = LeaseAccessConditions.NONE;
         }
-        return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(base64BlockID, data,
-                null, leaseAccessConditions.toString(), null);
+        return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(base64BlockID, contentLength, data,
+                null, leaseAccessConditions.getLeaseId(), null);
     }
 
     /**
@@ -148,13 +151,13 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlockBlobGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockListAsync(
+    public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockList(
             BlockListType listType, LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.getDefault();
+            leaseAccessConditions = LeaseAccessConditions.NONE;
         }
         return this.storageClient.blockBlobs().getBlockListWithRestResponseAsync(listType,
-                null, null, leaseAccessConditions.toString(), null);
+                null, null, leaseAccessConditions.getLeaseId(), null);
     }
 
     /**
@@ -177,23 +180,24 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockListHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockListAsync(
+    // TODO: Add Content-Length to swagger once the modeler knows to hide (or whatever solution).
+    public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockList(
             List<String> base64BlockIDs, Metadata metadata, BlobHttpHeaders httpHeaders,
             BlobAccessConditions accessConditions) {
         if(metadata == null) {
-            metadata = Metadata.getDefault();
+            metadata = Metadata.NONE;
         }
         if(httpHeaders == null) {
-            httpHeaders = BlobHttpHeaders.getDefault();
+            httpHeaders = BlobHttpHeaders.NONE;
         }
         if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
+            accessConditions = BlobAccessConditions.NONE;
         }
         return this.storageClient.blockBlobs().putBlockListWithRestResponseAsync(
                 new BlockLookupList().withLatest(base64BlockIDs), null,
                 httpHeaders.getCacheControl(), httpHeaders.getContentType(),httpHeaders.getContentEncoding(),
                 httpHeaders.getContentLanguage(), httpHeaders.getContentMD5(), metadata.toString(),
-                accessConditions.getLeaseAccessConditions().toString(), httpHeaders.getContentDisposition(),
+                accessConditions.getLeaseAccessConditions().getLeaseId(), httpHeaders.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),

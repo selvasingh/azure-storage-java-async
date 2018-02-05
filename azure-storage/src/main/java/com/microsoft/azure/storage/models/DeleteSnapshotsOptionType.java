@@ -17,13 +17,19 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Defines values for DeleteSnapshotsOptionType.
  */
 public enum DeleteSnapshotsOptionType {
-    /** Enum value include. */
+    /**
+     * Enum value include.
+     */
     INCLUDE("include"),
 
-    /** Enum value only. */
+    /**
+     * Enum value only.
+     */
     ONLY("only");
 
-    /** The actual serialized value for a DeleteSnapshotsOptionType instance. */
+    /**
+     * The actual serialized value for a DeleteSnapshotsOptionType instance.
+     */
     private String value;
 
     DeleteSnapshotsOptionType(String value) {

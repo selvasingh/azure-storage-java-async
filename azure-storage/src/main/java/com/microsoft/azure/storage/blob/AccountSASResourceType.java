@@ -55,7 +55,7 @@ public enum AccountSASResourceType {
      * @return
      *      A {@code String} which represents the {@code AccountSASResourceTypes}.
      */
-    static String resourceTypesToString(EnumSet<AccountSASResourceType> types) {
+    public static String toString(EnumSet<AccountSASResourceType> types) {
         if (types == null) {
             return Constants.EMPTY_STRING;
         }
@@ -85,11 +85,12 @@ public enum AccountSASResourceType {
      * @return
      *      A {@link EnumSet<AccountSASResourceType>} generated from the given {@code String}.
      */
-    static EnumSet<AccountSASResourceType> resourceTypesFromString(String resourceTypesString) {
+    public static EnumSet<AccountSASResourceType> parse(String resourceTypesString) {
         EnumSet<AccountSASResourceType> resources = EnumSet.noneOf(AccountSASResourceType.class);
 
-        for (final char c : resourceTypesString.toLowerCase().toCharArray()) {
+        for (int i=0; i<resourceTypesString.length(); i++) {
             boolean invalidCharacter = true;
+            char c = resourceTypesString.charAt(i);
 
             for (AccountSASResourceType rsrc : AccountSASResourceType.values()) {
                 if (c == rsrc.value) {
@@ -101,7 +102,8 @@ public enum AccountSASResourceType {
 
             if (invalidCharacter) {
                 throw new IllegalArgumentException(
-                        String.format(SR.ENUM_COULD_NOT_BE_PARSED, "Resource Types", resourceTypesString));
+                        String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE,
+                                "Resource Types", resourceTypesString, c));
             }
         }
 

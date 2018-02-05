@@ -76,7 +76,7 @@ public class BlobCopyHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -85,7 +85,7 @@ public class BlobCopyHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the BlobCopyHeaders object itself.
      */
     public BlobCopyHeaders withETag(String eTag) {
@@ -96,7 +96,7 @@ public class BlobCopyHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -108,7 +108,7 @@ public class BlobCopyHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the BlobCopyHeaders object itself.
      */
     public BlobCopyHeaders withLastModified(DateTime lastModified) {
@@ -123,7 +123,7 @@ public class BlobCopyHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -132,7 +132,7 @@ public class BlobCopyHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the BlobCopyHeaders object itself.
      */
     public BlobCopyHeaders withRequestId(String requestId) {
@@ -143,7 +143,7 @@ public class BlobCopyHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -152,7 +152,7 @@ public class BlobCopyHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the BlobCopyHeaders object itself.
      */
     public BlobCopyHeaders withVersion(String version) {
@@ -163,7 +163,7 @@ public class BlobCopyHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -175,7 +175,7 @@ public class BlobCopyHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the BlobCopyHeaders object itself.
      */
     public BlobCopyHeaders withDateProperty(DateTime dateProperty) {
@@ -190,7 +190,7 @@ public class BlobCopyHeaders {
     /**
      * Get the copyId value.
      *
-     * @return the copyId value
+     * @return the copyId value.
      */
     public String copyId() {
         return this.copyId;
@@ -199,7 +199,7 @@ public class BlobCopyHeaders {
     /**
      * Set the copyId value.
      *
-     * @param copyId the copyId value to set
+     * @param copyId the copyId value to set.
      * @return the BlobCopyHeaders object itself.
      */
     public BlobCopyHeaders withCopyId(String copyId) {
@@ -210,7 +210,7 @@ public class BlobCopyHeaders {
     /**
      * Get the copyStatus value.
      *
-     * @return the copyStatus value
+     * @return the copyStatus value.
      */
     public CopyStatusType copyStatus() {
         return this.copyStatus;
@@ -219,7 +219,7 @@ public class BlobCopyHeaders {
     /**
      * Set the copyStatus value.
      *
-     * @param copyStatus the copyStatus value to set
+     * @param copyStatus the copyStatus value to set.
      * @return the BlobCopyHeaders object itself.
      */
     public BlobCopyHeaders withCopyStatus(CopyStatusType copyStatus) {

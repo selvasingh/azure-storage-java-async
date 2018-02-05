@@ -60,7 +60,7 @@ public final class Base64 {
      */
     public static byte[] decode(final String data) {
         if (data == null) {
-            //throw new IllegalArgumentException(SR.STRING_NOT_VALID);
+            throw new IllegalArgumentException(SR.STRING_NOT_VALID);
         }
 
         int byteArrayLength = 3 * data.length() / 4;
@@ -73,69 +73,6 @@ public final class Base64 {
         }
 
         final byte[] retArray = new byte[byteArrayLength];
-        int byteDex = 0;
-        int charDex = 0;
-
-        for (; charDex < data.length(); charDex += 4) {
-            // get 4 chars, convert to 3 bytes
-            final int char1 = DECODE_64[(byte) data.charAt(charDex)];
-            final int char2 = DECODE_64[(byte) data.charAt(charDex + 1)];
-            final int char3 = DECODE_64[(byte) data.charAt(charDex + 2)];
-            final int char4 = DECODE_64[(byte) data.charAt(charDex + 3)];
-
-            if (char1 < 0 || char2 < 0 || char3 == -1 || char4 == -1) {
-                // invalid character(-1), or bad padding (-2)
-                throw new IllegalArgumentException(SR.STRING_NOT_VALID);
-            }
-
-            int tVal = char1 << 18;
-            tVal += char2 << 12;
-            tVal += (char3 & 0xff) << 6;
-            tVal += char4 & 0xff;
-
-            if (char3 == -2) {
-                // two "==" pad chars, check bits 12-24
-                tVal &= 0x00FFF000;
-                retArray[byteDex++] = (byte) (tVal >> 16 & 0xFF);
-            }
-            else if (char4 == -2) {
-                // one pad char "=" , check bits 6-24.
-                tVal &= 0x00FFFFC0;
-                retArray[byteDex++] = (byte) (tVal >> 16 & 0xFF);
-                retArray[byteDex++] = (byte) (tVal >> 8 & 0xFF);
-
-            }
-            else {
-                // No pads take all 3 bytes, bits 0-24
-                retArray[byteDex++] = (byte) (tVal >> 16 & 0xFF);
-                retArray[byteDex++] = (byte) (tVal >> 8 & 0xFF);
-                retArray[byteDex++] = (byte) (tVal & 0xFF);
-            }
-        }
-        return retArray;
-    }
-
-    /**
-     * Decodes a given Base64 string into its corresponding byte array.
-     *
-     * @param data
-     *      The Base64 string, as a {@code String} object, to decode
-     * @return
-     *      The corresponding decoded byte array
-     * @throws IllegalArgumentException
-     *      If the string is not a valid base64 encoded string
-     */
-    public static Byte[] decodeAsByteObjectArray(final String data) {
-        int byteArrayLength = 3 * data.length() / 4;
-
-        if (data.endsWith("==")) {
-            byteArrayLength -= 2;
-        }
-        else if (data.endsWith("=")) {
-            byteArrayLength -= 1;
-        }
-
-        final Byte[] retArray = new Byte[byteArrayLength];
         int byteDex = 0;
         int charDex = 0;
 
@@ -228,92 +165,6 @@ public final class Base64 {
         }
 
         return builder.toString();
-    }
-
-    /**
-     * Encodes a byte array as a Base64 string.
-     *
-     * @param data
-     *      The byte array to encode
-     * @return
-     *      The Base64-encoded string, as a {@code String} object
-     */
-    public static String encode(final Byte[] data) {
-        final StringBuilder builder = new StringBuilder();
-        final int dataRemainder = data.length % 3;
-
-        int j = 0;
-        int n = 0;
-        for (; j < data.length; j += 3) {
-
-            if (j < data.length - dataRemainder) {
-                n = ((data[j] & 0xFF) << 16) + ((data[j + 1] & 0xFF) << 8) + (data[j + 2] & 0xFF);
-            }
-            else {
-                if (dataRemainder == 1) {
-                    n = (data[j] & 0xFF) << 16;
-                }
-                else if (dataRemainder == 2) {
-                    n = ((data[j] & 0xFF) << 16) + ((data[j + 1] & 0xFF) << 8);
-                }
-            }
-
-            // Left here for readability
-            // byte char1 = (byte) ((n >>> 18) & 0x3F);
-            // byte char2 = (byte) ((n >>> 12) & 0x3F);
-            // byte char3 = (byte) ((n >>> 6) & 0x3F);
-            // byte char4 = (byte) (n & 0x3F);
-            builder.append(BASE_64_CHARS.charAt((byte) ((n >>> 18) & 0x3F)));
-            builder.append(BASE_64_CHARS.charAt((byte) ((n >>> 12) & 0x3F)));
-            builder.append(BASE_64_CHARS.charAt((byte) ((n >>> 6) & 0x3F)));
-            builder.append(BASE_64_CHARS.charAt((byte) (n & 0x3F)));
-        }
-
-        final int bLength = builder.length();
-
-        // append '=' to pad
-        if (data.length % 3 == 1) {
-            builder.replace(bLength - 2, bLength, "==");
-        }
-        else if (data.length % 3 == 2) {
-            builder.replace(bLength - 1, bLength, "=");
-        }
-
-        return builder.toString();
-    }
-
-    /**
-     * Determines whether the given string contains only Base64 characters.
-     *
-     * @param data
-     *       the string, as a {@code String} object, to validate
-     * @return
-     *      {@code true} if {@code data} is a valid Base64 string, otherwise {@code false}
-     */
-    public static boolean validateIsBase64String(final String data) {
-        if (data == null || data.length() % 4 != 0) {
-            return false;
-        }
-
-        for (int m = 0; m < data.length(); m++) {
-            final byte charByte = (byte) data.charAt(m);
-
-            // pad char detected
-            if (DECODE_64[charByte] == -2) {
-                if (m < data.length() - 2) {
-                    return false;
-                }
-                else if (m == data.length() - 2 && DECODE_64[(byte) data.charAt(m + 1)] != -2) {
-                    return false;
-                }
-            }
-
-            if (charByte < 0 || DECODE_64[charByte] == -1) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**

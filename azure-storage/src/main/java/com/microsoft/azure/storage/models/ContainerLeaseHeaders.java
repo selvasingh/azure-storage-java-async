@@ -73,7 +73,7 @@ public class ContainerLeaseHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -82,7 +82,7 @@ public class ContainerLeaseHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the ContainerLeaseHeaders object itself.
      */
     public ContainerLeaseHeaders withETag(String eTag) {
@@ -93,7 +93,7 @@ public class ContainerLeaseHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -105,7 +105,7 @@ public class ContainerLeaseHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the ContainerLeaseHeaders object itself.
      */
     public ContainerLeaseHeaders withLastModified(DateTime lastModified) {
@@ -120,7 +120,7 @@ public class ContainerLeaseHeaders {
     /**
      * Get the leaseId value.
      *
-     * @return the leaseId value
+     * @return the leaseId value.
      */
     public String leaseId() {
         return this.leaseId;
@@ -129,7 +129,7 @@ public class ContainerLeaseHeaders {
     /**
      * Set the leaseId value.
      *
-     * @param leaseId the leaseId value to set
+     * @param leaseId the leaseId value to set.
      * @return the ContainerLeaseHeaders object itself.
      */
     public ContainerLeaseHeaders withLeaseId(String leaseId) {
@@ -140,7 +140,7 @@ public class ContainerLeaseHeaders {
     /**
      * Get the leaseTime value.
      *
-     * @return the leaseTime value
+     * @return the leaseTime value.
      */
     public Integer leaseTime() {
         return this.leaseTime;
@@ -149,7 +149,7 @@ public class ContainerLeaseHeaders {
     /**
      * Set the leaseTime value.
      *
-     * @param leaseTime the leaseTime value to set
+     * @param leaseTime the leaseTime value to set.
      * @return the ContainerLeaseHeaders object itself.
      */
     public ContainerLeaseHeaders withLeaseTime(Integer leaseTime) {
@@ -160,7 +160,7 @@ public class ContainerLeaseHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -169,7 +169,7 @@ public class ContainerLeaseHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the ContainerLeaseHeaders object itself.
      */
     public ContainerLeaseHeaders withRequestId(String requestId) {
@@ -180,7 +180,7 @@ public class ContainerLeaseHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -189,7 +189,7 @@ public class ContainerLeaseHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the ContainerLeaseHeaders object itself.
      */
     public ContainerLeaseHeaders withVersion(String version) {
@@ -200,7 +200,7 @@ public class ContainerLeaseHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -212,7 +212,7 @@ public class ContainerLeaseHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the ContainerLeaseHeaders object itself.
      */
     public ContainerLeaseHeaders withDateProperty(DateTime dateProperty) {

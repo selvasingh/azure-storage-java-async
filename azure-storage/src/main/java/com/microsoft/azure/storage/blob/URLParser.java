@@ -31,13 +31,11 @@ public final class URLParser {
      *      The {@code java.net.URL} to be parsed.
      * @return
      *      A {@link BlobURLParts} object containing all the components of a BlobURL.
-     * @throws MalformedURLException
-     * @throws UnsupportedEncodingException
      */
-    public static BlobURLParts ParseURL(URL url) throws MalformedURLException, UnsupportedEncodingException {
+    public static BlobURLParts parse(URL url) {
 
-        String scheme = url.getProtocol();
-        String host = url.getHost();
+        final String scheme = url.getProtocol();
+        final String host = url.getHost();
 
         String containerName = null;
         String blobName = null;
@@ -49,7 +47,6 @@ public final class URLParser {
             if (path.charAt(0) == '/') {
                 path = path.substring(1);
             }
-
 
             int containerEndIndex = path.indexOf('/');
             if (containerEndIndex == -1) {
@@ -84,11 +81,10 @@ public final class URLParser {
      *      The string of query params to parse.
      * @return
      *      A {@code HashMap&lt;String, String[]&gt;} of the key values.
-     * @throws UnsupportedEncodingException
      */
     private static TreeMap<String, String[]> parseQueryString(String queryParams, boolean lowerCaseKey)
-            throws UnsupportedEncodingException {
-        //Comparator<String> c = new Comparator.<String>naturalOrder();
+             {
+
         final TreeMap<String, String[]> retVals = new TreeMap<String, String[]>(new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {

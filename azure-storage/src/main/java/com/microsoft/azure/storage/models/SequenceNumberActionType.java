@@ -17,16 +17,24 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Defines values for SequenceNumberActionType.
  */
 public enum SequenceNumberActionType {
-    /** Enum value max. */
+    /**
+     * Enum value max.
+     */
     MAX("max"),
 
-    /** Enum value update. */
+    /**
+     * Enum value update.
+     */
     UPDATE("update"),
 
-    /** Enum value increment. */
+    /**
+     * Enum value increment.
+     */
     INCREMENT("increment");
 
-    /** The actual serialized value for a SequenceNumberActionType instance. */
+    /**
+     * The actual serialized value for a SequenceNumberActionType instance.
+     */
     private String value;
 
     SequenceNumberActionType(String value) {

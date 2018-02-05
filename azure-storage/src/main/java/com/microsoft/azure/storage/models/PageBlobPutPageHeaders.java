@@ -83,7 +83,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -92,7 +92,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the PageBlobPutPageHeaders object itself.
      */
     public PageBlobPutPageHeaders withETag(String eTag) {
@@ -103,7 +103,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -115,7 +115,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the PageBlobPutPageHeaders object itself.
      */
     public PageBlobPutPageHeaders withLastModified(DateTime lastModified) {
@@ -130,7 +130,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Get the contentMD5 value.
      *
-     * @return the contentMD5 value
+     * @return the contentMD5 value.
      */
     public String contentMD5() {
         return this.contentMD5;
@@ -139,7 +139,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Set the contentMD5 value.
      *
-     * @param contentMD5 the contentMD5 value to set
+     * @param contentMD5 the contentMD5 value to set.
      * @return the PageBlobPutPageHeaders object itself.
      */
     public PageBlobPutPageHeaders withContentMD5(String contentMD5) {
@@ -150,7 +150,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Get the blobSequenceNumber value.
      *
-     * @return the blobSequenceNumber value
+     * @return the blobSequenceNumber value.
      */
     public Integer blobSequenceNumber() {
         return this.blobSequenceNumber;
@@ -159,7 +159,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Set the blobSequenceNumber value.
      *
-     * @param blobSequenceNumber the blobSequenceNumber value to set
+     * @param blobSequenceNumber the blobSequenceNumber value to set.
      * @return the PageBlobPutPageHeaders object itself.
      */
     public PageBlobPutPageHeaders withBlobSequenceNumber(Integer blobSequenceNumber) {
@@ -170,7 +170,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -179,7 +179,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the PageBlobPutPageHeaders object itself.
      */
     public PageBlobPutPageHeaders withRequestId(String requestId) {
@@ -190,7 +190,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -199,7 +199,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the PageBlobPutPageHeaders object itself.
      */
     public PageBlobPutPageHeaders withVersion(String version) {
@@ -210,7 +210,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -222,7 +222,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the PageBlobPutPageHeaders object itself.
      */
     public PageBlobPutPageHeaders withDateProperty(DateTime dateProperty) {
@@ -237,7 +237,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Get the isServerEncrypted value.
      *
-     * @return the isServerEncrypted value
+     * @return the isServerEncrypted value.
      */
     public Boolean isServerEncrypted() {
         return this.isServerEncrypted;
@@ -246,7 +246,7 @@ public class PageBlobPutPageHeaders {
     /**
      * Set the isServerEncrypted value.
      *
-     * @param isServerEncrypted the isServerEncrypted value to set
+     * @param isServerEncrypted the isServerEncrypted value to set.
      * @return the PageBlobPutPageHeaders object itself.
      */
     public PageBlobPutPageHeaders withIsServerEncrypted(Boolean isServerEncrypted) {

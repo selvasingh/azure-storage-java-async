@@ -20,7 +20,7 @@ import com.microsoft.azure.storage.models.BlobGetHeaders;
 import com.microsoft.azure.storage.models.BlobPutHeaders;
 import com.microsoft.rest.v2.RestException;
 import com.microsoft.rest.v2.RestResponse;
-import com.microsoft.rest.v2.http.AsyncInputStream;
+
 import com.microsoft.rest.v2.http.HttpClient;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.http.HttpPipelineLogLevel;
@@ -47,6 +47,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BasicSample {
+    private void test(){
+
+    }
     static HttpPipeline getPipeline(String accountName, String accountKey) throws UnsupportedEncodingException, InvalidKeyException {
         HttpPipelineLogger logger = new HttpPipelineLogger() {
             @Override

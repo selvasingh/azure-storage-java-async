@@ -49,6 +49,7 @@ public class ListContainersResponse {
      * The containers property.
      */
     @JacksonXmlElementWrapper(localName = "Containers")
+    @JsonProperty("Container")
     private List<Container> containers;
 
     /**
@@ -60,7 +61,7 @@ public class ListContainersResponse {
     /**
      * Get the serviceEndpoint value.
      *
-     * @return the serviceEndpoint value
+     * @return the serviceEndpoint value.
      */
     public String serviceEndpoint() {
         return this.serviceEndpoint;
@@ -69,7 +70,7 @@ public class ListContainersResponse {
     /**
      * Set the serviceEndpoint value.
      *
-     * @param serviceEndpoint the serviceEndpoint value to set
+     * @param serviceEndpoint the serviceEndpoint value to set.
      * @return the ListContainersResponse object itself.
      */
     public ListContainersResponse withServiceEndpoint(String serviceEndpoint) {
@@ -80,7 +81,7 @@ public class ListContainersResponse {
     /**
      * Get the prefix value.
      *
-     * @return the prefix value
+     * @return the prefix value.
      */
     public String prefix() {
         return this.prefix;
@@ -89,7 +90,7 @@ public class ListContainersResponse {
     /**
      * Set the prefix value.
      *
-     * @param prefix the prefix value to set
+     * @param prefix the prefix value to set.
      * @return the ListContainersResponse object itself.
      */
     public ListContainersResponse withPrefix(String prefix) {
@@ -100,7 +101,7 @@ public class ListContainersResponse {
     /**
      * Get the marker value.
      *
-     * @return the marker value
+     * @return the marker value.
      */
     public String marker() {
         return this.marker;
@@ -109,7 +110,7 @@ public class ListContainersResponse {
     /**
      * Set the marker value.
      *
-     * @param marker the marker value to set
+     * @param marker the marker value to set.
      * @return the ListContainersResponse object itself.
      */
     public ListContainersResponse withMarker(String marker) {
@@ -120,7 +121,7 @@ public class ListContainersResponse {
     /**
      * Get the maxResults value.
      *
-     * @return the maxResults value
+     * @return the maxResults value.
      */
     public int maxResults() {
         return this.maxResults;
@@ -129,7 +130,7 @@ public class ListContainersResponse {
     /**
      * Set the maxResults value.
      *
-     * @param maxResults the maxResults value to set
+     * @param maxResults the maxResults value to set.
      * @return the ListContainersResponse object itself.
      */
     public ListContainersResponse withMaxResults(int maxResults) {
@@ -140,7 +141,7 @@ public class ListContainersResponse {
     /**
      * Get the containers value.
      *
-     * @return the containers value
+     * @return the containers value.
      */
     public List<Container> containers() {
         return this.containers;
@@ -149,7 +150,7 @@ public class ListContainersResponse {
     /**
      * Set the containers value.
      *
-     * @param containers the containers value to set
+     * @param containers the containers value to set.
      * @return the ListContainersResponse object itself.
      */
     public ListContainersResponse withContainers(List<Container> containers) {
@@ -160,7 +161,7 @@ public class ListContainersResponse {
     /**
      * Get the nextMarker value.
      *
-     * @return the nextMarker value
+     * @return the nextMarker value.
      */
     public String nextMarker() {
         return this.nextMarker;
@@ -169,7 +170,7 @@ public class ListContainersResponse {
     /**
      * Set the nextMarker value.
      *
-     * @param nextMarker the nextMarker value to set
+     * @param nextMarker the nextMarker value to set.
      * @return the ListContainersResponse object itself.
      */
     public ListContainersResponse withNextMarker(String nextMarker) {

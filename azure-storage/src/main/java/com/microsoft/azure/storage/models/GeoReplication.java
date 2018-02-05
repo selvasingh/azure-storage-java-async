@@ -39,7 +39,7 @@ public class GeoReplication {
     /**
      * Get the status value.
      *
-     * @return the status value
+     * @return the status value.
      */
     public GeoReplicationStatusType status() {
         return this.status;
@@ -48,7 +48,7 @@ public class GeoReplication {
     /**
      * Set the status value.
      *
-     * @param status the status value to set
+     * @param status the status value to set.
      * @return the GeoReplication object itself.
      */
     public GeoReplication withStatus(GeoReplicationStatusType status) {
@@ -59,7 +59,7 @@ public class GeoReplication {
     /**
      * Get the lastSyncTime value.
      *
-     * @return the lastSyncTime value
+     * @return the lastSyncTime value.
      */
     public DateTime lastSyncTime() {
         if (this.lastSyncTime == null) {
@@ -71,7 +71,7 @@ public class GeoReplication {
     /**
      * Set the lastSyncTime value.
      *
-     * @param lastSyncTime the lastSyncTime value to set
+     * @param lastSyncTime the lastSyncTime value to set.
      * @return the GeoReplication object itself.
      */
     public GeoReplication withLastSyncTime(DateTime lastSyncTime) {

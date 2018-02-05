@@ -17,38 +17,38 @@ package com.microsoft.azure.storage.blob;
 /**
  * Defines options availble when calling ListBlobs.
  */
-public class ListBlobsOptions {
+public final class ListBlobsOptions {
 
-    private static ListBlobsOptions defaultListBlobsOptions;
+    public static final ListBlobsOptions DEFAULT = new ListBlobsOptions(
+            new BlobListingDetails(false, false, false, false),
+            null, null, null);
 
-    private BlobListingDetails details;
+    private final BlobListingDetails details;
 
-    private String prefix;
+    private final String prefix;
 
-    private String delimiter;
+    private final String delimiter;
 
-    private Integer maxResults;
+    private final Integer maxResults;
 
     /**
      * A {@link ListBlobsOptions} object.
      *
      * @param details
-     *           A {@link BlobListingDetails} object indicating what additional information the service should return
-     *           with each blob.
+     *      A {@link BlobListingDetails} object indicating what additional information the service should return with
+     *      each blob.
      * @param prefix
-     *           A {@code String} that filters the results to return only blobs whose names begin with the specified
-     *           prefix.
+     *      A {@code String} that filters the results to return only blobs whose names begin with the specified prefix.
      * @param delimiter
-     *           A {@code String}. When the request includes this parameter, the operation returns a BlobPrefix element
-     *           in the response body that acts as a placeholder for all blobs whose names begin with the same substring
-     *           up to the appearance of the delimiter character. The delimiter may be a single character or a string.
+     *      A {@code String}. When the request includes this parameter, the operation returns a BlobPrefix element in
+     *      the response body that acts as a placeholder for all blobs whose names begin with the same substring up to
+     *      the appearance of the delimiter character. The delimiter may be a single character or a string.
      * @param maxResults
-     *           Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does
-     *           not specify maxResults or specifies a value greater than 5,000, the server will return up to 5,000
-     *           items.
+     *      Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not
+     *      specify maxResults or specifies a value greater than 5,000, the server will return up to 5,000 items.
      */
     public ListBlobsOptions(BlobListingDetails details, String prefix, String delimiter, Integer maxResults) {
-        if (maxResults != null && maxResults < 0) {
+        if (maxResults != null && maxResults <= 0) {
             throw new IllegalArgumentException("MaxResults must be greater than 0.");
         }
         this.details = details;
@@ -89,14 +89,5 @@ public class ListBlobsOptions {
      */
     public Integer getMaxResults() {
         return maxResults;
-    }
-
-    public static ListBlobsOptions getDefualt() {
-        if(defaultListBlobsOptions == null) {
-            defaultListBlobsOptions = new ListBlobsOptions(
-                    new BlobListingDetails(false, false, false, false),
-                    null, null, null);
-        }
-        return defaultListBlobsOptions;
     }
 }

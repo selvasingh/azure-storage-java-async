@@ -33,7 +33,7 @@ public class PageRange {
     /**
      * Get the start value.
      *
-     * @return the start value
+     * @return the start value.
      */
     public long start() {
         return this.start;
@@ -42,7 +42,7 @@ public class PageRange {
     /**
      * Set the start value.
      *
-     * @param start the start value to set
+     * @param start the start value to set.
      * @return the PageRange object itself.
      */
     public PageRange withStart(long start) {
@@ -53,7 +53,7 @@ public class PageRange {
     /**
      * Get the end value.
      *
-     * @return the end value
+     * @return the end value.
      */
     public long end() {
         return this.end;
@@ -62,7 +62,7 @@ public class PageRange {
     /**
      * Set the end value.
      *
-     * @param end the end value to set
+     * @param end the end value to set.
      * @return the PageRange object itself.
      */
     public PageRange withEnd(long end) {

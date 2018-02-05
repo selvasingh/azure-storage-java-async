@@ -65,7 +65,7 @@ public enum BlobSASPermission {
      *
      * @return A {@code String} which represents the {@code BlobSASPermission}.
      */
-    static String permissionsToString(EnumSet<BlobSASPermission> permissions) {
+    static String toString(EnumSet<BlobSASPermission> permissions) {
         if (permissions == null) {
             return Constants.EMPTY_STRING;
         }
@@ -104,11 +104,12 @@ public enum BlobSASPermission {
      * @return
      *      A {@link EnumSet<BlobSASPermission>} generated from the given {@code String}.
      */
-    static EnumSet<BlobSASPermission> permissionsFromString(String permString) {
+    public static EnumSet<BlobSASPermission> parse(String permString) {
         EnumSet<BlobSASPermission> permissions = EnumSet.noneOf(BlobSASPermission.class);
 
-        for (final char c : permString.toLowerCase().toCharArray()) {
+        for (int i=0; i<permString.length(); i++) {
             boolean invalidCharacter = true;
+            char c = permString.charAt(i);
 
             for (BlobSASPermission perm : BlobSASPermission.values()) {
                 if (c == perm.value) {
@@ -120,7 +121,7 @@ public enum BlobSASPermission {
 
             if (invalidCharacter) {
                 throw new IllegalArgumentException(
-                        String.format(SR.ENUM_COULD_NOT_BE_PARSED, "Permissions", permString));
+                        String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Permissions", permString, c));
             }
         }
 

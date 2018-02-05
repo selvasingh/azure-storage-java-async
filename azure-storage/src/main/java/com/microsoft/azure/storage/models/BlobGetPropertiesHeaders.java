@@ -279,7 +279,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the lastModified value.
      *
-     * @return the lastModified value
+     * @return the lastModified value.
      */
     public DateTime lastModified() {
         if (this.lastModified == null) {
@@ -291,7 +291,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the lastModified value.
      *
-     * @param lastModified the lastModified value to set
+     * @param lastModified the lastModified value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withLastModified(DateTime lastModified) {
@@ -306,7 +306,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the metadata value.
      *
-     * @return the metadata value
+     * @return the metadata value.
      */
     public Map<String, String> metadata() {
         return this.metadata;
@@ -315,7 +315,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the metadata value.
      *
-     * @param metadata the metadata value to set
+     * @param metadata the metadata value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withMetadata(Map<String, String> metadata) {
@@ -326,7 +326,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the blobType value.
      *
-     * @return the blobType value
+     * @return the blobType value.
      */
     public BlobType blobType() {
         return this.blobType;
@@ -335,7 +335,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the blobType value.
      *
-     * @param blobType the blobType value to set
+     * @param blobType the blobType value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withBlobType(BlobType blobType) {
@@ -346,7 +346,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the copyCompletionTime value.
      *
-     * @return the copyCompletionTime value
+     * @return the copyCompletionTime value.
      */
     public DateTime copyCompletionTime() {
         if (this.copyCompletionTime == null) {
@@ -358,7 +358,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the copyCompletionTime value.
      *
-     * @param copyCompletionTime the copyCompletionTime value to set
+     * @param copyCompletionTime the copyCompletionTime value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withCopyCompletionTime(DateTime copyCompletionTime) {
@@ -373,7 +373,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the copyStatusDescription value.
      *
-     * @return the copyStatusDescription value
+     * @return the copyStatusDescription value.
      */
     public String copyStatusDescription() {
         return this.copyStatusDescription;
@@ -382,7 +382,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the copyStatusDescription value.
      *
-     * @param copyStatusDescription the copyStatusDescription value to set
+     * @param copyStatusDescription the copyStatusDescription value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withCopyStatusDescription(String copyStatusDescription) {
@@ -393,7 +393,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the copyId value.
      *
-     * @return the copyId value
+     * @return the copyId value.
      */
     public String copyId() {
         return this.copyId;
@@ -402,7 +402,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the copyId value.
      *
-     * @param copyId the copyId value to set
+     * @param copyId the copyId value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withCopyId(String copyId) {
@@ -413,7 +413,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the copyProgress value.
      *
-     * @return the copyProgress value
+     * @return the copyProgress value.
      */
     public String copyProgress() {
         return this.copyProgress;
@@ -422,7 +422,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the copyProgress value.
      *
-     * @param copyProgress the copyProgress value to set
+     * @param copyProgress the copyProgress value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withCopyProgress(String copyProgress) {
@@ -433,7 +433,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the copySource value.
      *
-     * @return the copySource value
+     * @return the copySource value.
      */
     public String copySource() {
         return this.copySource;
@@ -442,7 +442,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the copySource value.
      *
-     * @param copySource the copySource value to set
+     * @param copySource the copySource value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withCopySource(String copySource) {
@@ -453,7 +453,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the copyStatus value.
      *
-     * @return the copyStatus value
+     * @return the copyStatus value.
      */
     public CopyStatusType copyStatus() {
         return this.copyStatus;
@@ -462,7 +462,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the copyStatus value.
      *
-     * @param copyStatus the copyStatus value to set
+     * @param copyStatus the copyStatus value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withCopyStatus(CopyStatusType copyStatus) {
@@ -473,7 +473,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the isIncrementalCopy value.
      *
-     * @return the isIncrementalCopy value
+     * @return the isIncrementalCopy value.
      */
     public Boolean isIncrementalCopy() {
         return this.isIncrementalCopy;
@@ -482,7 +482,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the isIncrementalCopy value.
      *
-     * @param isIncrementalCopy the isIncrementalCopy value to set
+     * @param isIncrementalCopy the isIncrementalCopy value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withIsIncrementalCopy(Boolean isIncrementalCopy) {
@@ -493,7 +493,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the destinationSnapshot value.
      *
-     * @return the destinationSnapshot value
+     * @return the destinationSnapshot value.
      */
     public String destinationSnapshot() {
         return this.destinationSnapshot;
@@ -502,7 +502,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the destinationSnapshot value.
      *
-     * @param destinationSnapshot the destinationSnapshot value to set
+     * @param destinationSnapshot the destinationSnapshot value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withDestinationSnapshot(String destinationSnapshot) {
@@ -513,7 +513,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the leaseDuration value.
      *
-     * @return the leaseDuration value
+     * @return the leaseDuration value.
      */
     public LeaseDurationType leaseDuration() {
         return this.leaseDuration;
@@ -522,7 +522,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the leaseDuration value.
      *
-     * @param leaseDuration the leaseDuration value to set
+     * @param leaseDuration the leaseDuration value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withLeaseDuration(LeaseDurationType leaseDuration) {
@@ -533,7 +533,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the leaseState value.
      *
-     * @return the leaseState value
+     * @return the leaseState value.
      */
     public LeaseStateType leaseState() {
         return this.leaseState;
@@ -542,7 +542,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the leaseState value.
      *
-     * @param leaseState the leaseState value to set
+     * @param leaseState the leaseState value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withLeaseState(LeaseStateType leaseState) {
@@ -553,7 +553,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the leaseStatus value.
      *
-     * @return the leaseStatus value
+     * @return the leaseStatus value.
      */
     public LeaseStatusType leaseStatus() {
         return this.leaseStatus;
@@ -562,7 +562,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the leaseStatus value.
      *
-     * @param leaseStatus the leaseStatus value to set
+     * @param leaseStatus the leaseStatus value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withLeaseStatus(LeaseStatusType leaseStatus) {
@@ -573,7 +573,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the contentLength value.
      *
-     * @return the contentLength value
+     * @return the contentLength value.
      */
     public Long contentLength() {
         return this.contentLength;
@@ -582,7 +582,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the contentLength value.
      *
-     * @param contentLength the contentLength value to set
+     * @param contentLength the contentLength value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withContentLength(Long contentLength) {
@@ -593,7 +593,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the contentType value.
      *
-     * @return the contentType value
+     * @return the contentType value.
      */
     public String contentType() {
         return this.contentType;
@@ -602,7 +602,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the contentType value.
      *
-     * @param contentType the contentType value to set
+     * @param contentType the contentType value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withContentType(String contentType) {
@@ -613,7 +613,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the eTag value.
      *
-     * @return the eTag value
+     * @return the eTag value.
      */
     public String eTag() {
         return this.eTag;
@@ -622,7 +622,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the eTag value.
      *
-     * @param eTag the eTag value to set
+     * @param eTag the eTag value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withETag(String eTag) {
@@ -633,7 +633,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the contentMD5 value.
      *
-     * @return the contentMD5 value
+     * @return the contentMD5 value.
      */
     public String contentMD5() {
         return this.contentMD5;
@@ -642,7 +642,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the contentMD5 value.
      *
-     * @param contentMD5 the contentMD5 value to set
+     * @param contentMD5 the contentMD5 value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withContentMD5(String contentMD5) {
@@ -653,7 +653,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the contentEncoding value.
      *
-     * @return the contentEncoding value
+     * @return the contentEncoding value.
      */
     public String contentEncoding() {
         return this.contentEncoding;
@@ -662,7 +662,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the contentEncoding value.
      *
-     * @param contentEncoding the contentEncoding value to set
+     * @param contentEncoding the contentEncoding value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withContentEncoding(String contentEncoding) {
@@ -673,7 +673,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the contentDisposition value.
      *
-     * @return the contentDisposition value
+     * @return the contentDisposition value.
      */
     public String contentDisposition() {
         return this.contentDisposition;
@@ -682,7 +682,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the contentDisposition value.
      *
-     * @param contentDisposition the contentDisposition value to set
+     * @param contentDisposition the contentDisposition value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withContentDisposition(String contentDisposition) {
@@ -693,7 +693,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the contentLanguage value.
      *
-     * @return the contentLanguage value
+     * @return the contentLanguage value.
      */
     public String contentLanguage() {
         return this.contentLanguage;
@@ -702,7 +702,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the contentLanguage value.
      *
-     * @param contentLanguage the contentLanguage value to set
+     * @param contentLanguage the contentLanguage value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withContentLanguage(String contentLanguage) {
@@ -713,7 +713,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the cacheControl value.
      *
-     * @return the cacheControl value
+     * @return the cacheControl value.
      */
     public String cacheControl() {
         return this.cacheControl;
@@ -722,7 +722,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the cacheControl value.
      *
-     * @param cacheControl the cacheControl value to set
+     * @param cacheControl the cacheControl value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withCacheControl(String cacheControl) {
@@ -733,7 +733,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the blobSequenceNumber value.
      *
-     * @return the blobSequenceNumber value
+     * @return the blobSequenceNumber value.
      */
     public Long blobSequenceNumber() {
         return this.blobSequenceNumber;
@@ -742,7 +742,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the blobSequenceNumber value.
      *
-     * @param blobSequenceNumber the blobSequenceNumber value to set
+     * @param blobSequenceNumber the blobSequenceNumber value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withBlobSequenceNumber(Long blobSequenceNumber) {
@@ -753,7 +753,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the requestId value.
      *
-     * @return the requestId value
+     * @return the requestId value.
      */
     public String requestId() {
         return this.requestId;
@@ -762,7 +762,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the requestId value.
      *
-     * @param requestId the requestId value to set
+     * @param requestId the requestId value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withRequestId(String requestId) {
@@ -773,7 +773,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the version value.
      *
-     * @return the version value
+     * @return the version value.
      */
     public String version() {
         return this.version;
@@ -782,7 +782,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the version value.
      *
-     * @param version the version value to set
+     * @param version the version value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withVersion(String version) {
@@ -793,7 +793,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the dateProperty value.
      *
-     * @return the dateProperty value
+     * @return the dateProperty value.
      */
     public DateTime dateProperty() {
         if (this.dateProperty == null) {
@@ -805,7 +805,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the dateProperty value.
      *
-     * @param dateProperty the dateProperty value to set
+     * @param dateProperty the dateProperty value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withDateProperty(DateTime dateProperty) {
@@ -820,7 +820,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the acceptRanges value.
      *
-     * @return the acceptRanges value
+     * @return the acceptRanges value.
      */
     public String acceptRanges() {
         return this.acceptRanges;
@@ -829,7 +829,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the acceptRanges value.
      *
-     * @param acceptRanges the acceptRanges value to set
+     * @param acceptRanges the acceptRanges value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withAcceptRanges(String acceptRanges) {
@@ -840,7 +840,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the blobCommittedBlockCount value.
      *
-     * @return the blobCommittedBlockCount value
+     * @return the blobCommittedBlockCount value.
      */
     public String blobCommittedBlockCount() {
         return this.blobCommittedBlockCount;
@@ -849,7 +849,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the blobCommittedBlockCount value.
      *
-     * @param blobCommittedBlockCount the blobCommittedBlockCount value to set
+     * @param blobCommittedBlockCount the blobCommittedBlockCount value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withBlobCommittedBlockCount(String blobCommittedBlockCount) {
@@ -860,7 +860,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the isServerEncrypted value.
      *
-     * @return the isServerEncrypted value
+     * @return the isServerEncrypted value.
      */
     public Boolean isServerEncrypted() {
         return this.isServerEncrypted;
@@ -869,7 +869,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the isServerEncrypted value.
      *
-     * @param isServerEncrypted the isServerEncrypted value to set
+     * @param isServerEncrypted the isServerEncrypted value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withIsServerEncrypted(Boolean isServerEncrypted) {
@@ -880,7 +880,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the accessTier value.
      *
-     * @return the accessTier value
+     * @return the accessTier value.
      */
     public String accessTier() {
         return this.accessTier;
@@ -889,7 +889,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the accessTier value.
      *
-     * @param accessTier the accessTier value to set
+     * @param accessTier the accessTier value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withAccessTier(String accessTier) {
@@ -900,7 +900,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the accessTierInferred value.
      *
-     * @return the accessTierInferred value
+     * @return the accessTierInferred value.
      */
     public Boolean accessTierInferred() {
         return this.accessTierInferred;
@@ -909,7 +909,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the accessTierInferred value.
      *
-     * @param accessTierInferred the accessTierInferred value to set
+     * @param accessTierInferred the accessTierInferred value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withAccessTierInferred(Boolean accessTierInferred) {
@@ -920,7 +920,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Get the archiveStatus value.
      *
-     * @return the archiveStatus value
+     * @return the archiveStatus value.
      */
     public String archiveStatus() {
         return this.archiveStatus;
@@ -929,7 +929,7 @@ public class BlobGetPropertiesHeaders {
     /**
      * Set the archiveStatus value.
      *
-     * @param archiveStatus the archiveStatus value to set
+     * @param archiveStatus the archiveStatus value to set.
      * @return the BlobGetPropertiesHeaders object itself.
      */
     public BlobGetPropertiesHeaders withArchiveStatus(String archiveStatus) {
