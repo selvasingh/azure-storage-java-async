@@ -177,14 +177,21 @@ public class BlobStorageAPITests {
 
             // Construct the AccountSasSignatureValues values object. This encapsulates all the values needed to create an AccountSasSignatureValues.
             AccountSasSignatureValues sas = new AccountSasSignatureValues();
+            AccountSASPermission perms = new AccountSASPermission();
+            perms.read = true;
+            perms.write = true;
+            AccountSASService service = new AccountSASService();
+            service.blob = true;
+            AccountSASResourceType resourceType = new AccountSASResourceType();
+            resourceType.object = true;
             sas.version = "2016-05-31";
             sas.protocol = SASProtocol.HTTPS_HTTP;
             sas.startTime  = null;
             sas.expiryTime= DateTime.now().plusDays(1).toDate();
-            sas.permissions = AccountSASPermission.toString(EnumSet.of(AccountSASPermission.READ, AccountSASPermission.WRITE));
+            sas.permissions = perms.toString();
             sas.ipRange = null;
-            sas.services = AccountSASService.toString(EnumSet.of(AccountSASService.BLOB));
-            sas.resourceTypes = AccountSASResourceType.toString(EnumSet.of(AccountSASResourceType.OBJECT));
+            sas.services = service.toString();
+            sas.resourceTypes = resourceType.toString();
 
             // Construct a ServiceSasSignatureValues in a pattern similar to that of the AccountSasSignatureValues.
             // Comment out the AccountSasSignatureValues creation and uncomment this to run with ServiceSasSignatureValues.

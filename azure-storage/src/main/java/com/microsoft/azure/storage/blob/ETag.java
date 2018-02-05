@@ -52,7 +52,7 @@ public final class ETag {
         if (this.eTagString == null) {
             return ((ETag) obj).eTagString == null;
         }
-        return this.eTagString.equals(obj);
+        return this.eTagString.equals(((ETag)obj).eTagString);
     }
 
     @Override

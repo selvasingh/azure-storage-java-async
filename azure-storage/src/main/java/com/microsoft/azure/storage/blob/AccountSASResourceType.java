@@ -19,58 +19,43 @@ import java.util.EnumSet;
 /**
  * Specifies the set of possible resource types for an account shared access account policy.
  */
-public enum AccountSASResourceType {
+public final class AccountSASResourceType {
     /**
      * Permission to access service level APIs granted.
      */
-    SERVICE('s'),
+    public boolean service;
 
     /**
      * Permission to access container level APIs (Blob Containers, Tables, Queues, File Shares) granted.
      */
-    CONTAINER('c'),
+    public boolean container;
 
     /**
      * Permission to access object level APIs (Blobs, Table Entities, Queue Messages, Files) granted.
      */
-    OBJECT('o');
+    public boolean object;
 
-    char value;
-
-    /**
-     * Create a {@code AccountSASResourceType}.
-     *
-     * @param c
-     *      The {@code char} which represents this resource type.
-     */
-    private AccountSASResourceType(char c) {
-        this.value = c;
-    }
+    public AccountSASResourceType() {}
 
     /**
      * Converts the given resource types to a {@code String}.
      *
-     * @param types
-     *      The resource types to convert to a {@code String}.
      * @return
      *      A {@code String} which represents the {@code AccountSASResourceTypes}.
      */
-    public static String toString(EnumSet<AccountSASResourceType> types) {
-        if (types == null) {
-            return Constants.EMPTY_STRING;
-        }
-
+    @Override
+    public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        if (types.contains(AccountSASResourceType.SERVICE)) {
+        if (this.service) {
             builder.append("s");
         }
 
-        if (types.contains(AccountSASResourceType.CONTAINER)) {
+        if (this.container) {
             builder.append("c");
         }
 
-        if (types.contains(AccountSASResourceType.OBJECT)) {
+        if (this.object) {
             builder.append("o");
         }
 
@@ -78,35 +63,35 @@ public enum AccountSASResourceType {
     }
 
     /**
-     * Creates an {@link EnumSet<AccountSASResourceType>} from the specified resource types string.
+     * Creates an {@code AccountSASResourceType} from the specified resource types string.
      *
      * @param resourceTypesString
      *      A {@code String} which represents the {@code AccountSASResourceTypes}.
      * @return
-     *      A {@link EnumSet<AccountSASResourceType>} generated from the given {@code String}.
+     *      A {@code AccountSASResourceType} generated from the given {@code String}.
      */
-    public static EnumSet<AccountSASResourceType> parse(String resourceTypesString) {
-        EnumSet<AccountSASResourceType> resources = EnumSet.noneOf(AccountSASResourceType.class);
+    public static AccountSASResourceType parse(String resourceTypesString) {
+        AccountSASResourceType resourceType = new AccountSASResourceType();
 
         for (int i=0; i<resourceTypesString.length(); i++) {
             boolean invalidCharacter = true;
             char c = resourceTypesString.charAt(i);
-
-            for (AccountSASResourceType rsrc : AccountSASResourceType.values()) {
-                if (c == rsrc.value) {
-                    resources.add(rsrc);
-                    invalidCharacter = false;
+            switch (c) {
+                case 's':
+                    resourceType.service = true;
                     break;
-                }
-            }
-
-            if (invalidCharacter) {
-                throw new IllegalArgumentException(
-                        String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE,
-                                "Resource Types", resourceTypesString, c));
+                case 'c':
+                    resourceType.container = true;
+                    break;
+                case 'o':
+                    resourceType.object = true;
+                    break;
+                default:
+                    throw new IllegalArgumentException(
+                            String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE,
+                                    "Resource Types", resourceTypesString, c));
             }
         }
-
-        return resources;
+        return resourceType;
     }
 }

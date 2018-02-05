@@ -14,143 +14,140 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import java.util.EnumSet;
-
 /**
  * Represents possible permissions to be used for an Account SAS
  */
-public enum AccountSASPermission {
+public final class AccountSASPermission {
     /**
      * Permission to read resources and list queues and tables granted.
      */
-    READ('r'),
+    public boolean read;
 
     /**
      * Permission to add messages, table entities, and append to blobs granted.
      */
-    ADD('a'),
+    public boolean add;
 
     /**
      * Permission to create blobs and files granted.
      */
-    CREATE('c'),
+    public boolean create;
 
     /**
      * Permission to write resources granted.
      */
-    WRITE('w'),
+    public boolean write;
 
     /**
      * Permission to delete resources granted.
      */
-    DELETE('d'),
+    public boolean delete;
 
     /**
      * Permission to list blob containers, blobs, shares, directories, and files granted.
      */
-    LIST('l'),
+    public boolean list;
 
     /**
      * Permissions to update messages and table entities granted.
      */
-    UPDATE('u'),
+    public boolean update;
 
     /**
      * Permission to get and delete messages granted.
      */
-    PROCESS_MESSAGES('p');
-
-    final private char value;
-
-    /**
-     * Create an {@code AccountSASPermission}.
-     *
-     * @param c
-     *      The {@code char} which represents this permission.
-     */
-    private AccountSASPermission(char c) {
-        this.value = c;
-    }
+    public boolean processMessages;
 
     /**
      * Converts the given permissions to a {@code String}.
      *
-     * @param permissions
-     *      The permissions to convert to a {@code String}.
      * @return
      *      A {@code String} which represents the {@code AccountSASPermissions}.
      */
-    public static String toString(EnumSet<AccountSASPermission> permissions) {
-        if (permissions == null) {
-            return Constants.EMPTY_STRING;
-        }
-
+    @Override
+    public String toString() {
         final StringBuilder builder = new StringBuilder();
 
-        if (permissions.contains(AccountSASPermission.READ)) {
+        if (this.read) {
             builder.append("r");
         }
 
-        if (permissions.contains(AccountSASPermission.ADD)) {
+        if (this.add) {
             builder.append("a");
         }
 
-        if (permissions.contains(AccountSASPermission.CREATE)) {
+        if (this.create) {
             builder.append("c");
         }
 
-        if (permissions.contains(AccountSASPermission.WRITE)) {
+        if (this.write) {
             builder.append("w");
         }
 
-        if (permissions.contains(AccountSASPermission.DELETE)) {
+        if (this.delete) {
             builder.append("d");
         }
 
-        if (permissions.contains(AccountSASPermission.LIST)) {
+        if (this.list) {
             builder.append("l");
         }
 
-        if (permissions.contains(AccountSASPermission.UPDATE)) {
+        if (this.update) {
             builder.append("u");
         }
 
-        if (permissions.contains(AccountSASPermission.PROCESS_MESSAGES)) {
+        if (this.processMessages) {
             builder.append("p");
         }
 
         return builder.toString();
     }
 
+    public AccountSASPermission() {}
+
     /**
-     * Creates an {@link EnumSet<AccountSASPermission>} from the specified permissions string.
+     * Creates an {@code AccountSASPermission} from the specified permissions string.
      *
      * @param permString
      *      A {@code String} which represents the {@code SharedAccessAccountPermissions}.
      * @return
-     *      A {@link EnumSet<AccountSASPermission>} generated from the given {@code String}.
+     *      A {@code AccountSASPermission} generated from the given {@code String}.
      */
-    public static EnumSet<AccountSASPermission> parse(String permString) {
-        EnumSet<AccountSASPermission> permissions = EnumSet.noneOf(AccountSASPermission.class);
+    public static AccountSASPermission parse(String permString) {
+        AccountSASPermission permissions = new AccountSASPermission();
 
         for(int i=0; i<permString.length(); i++) {
-            boolean invalidCharacterFound = true;
             char c = permString.charAt(i);
-
-            for (AccountSASPermission perm : AccountSASPermission.values()) {
-                if (c == perm.value) {
-                    permissions.add(perm);
-                    invalidCharacterFound = false;
+            switch (c) {
+                case 'r':
+                    permissions.read = true;
                     break;
-                }
-            }
-
-            if (invalidCharacterFound) {
-                throw new IllegalArgumentException(
-                        String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Permissions", permString, c));
+                case 'w':
+                    permissions.write = true;
+                    break;
+                case 'd':
+                    permissions.delete = true;
+                    break;
+                case 'l':
+                    permissions.list = true;
+                    break;
+                case 'a':
+                    permissions.add = true;
+                    break;
+                case 'c':
+                    permissions.create = true;
+                    break;
+                case 'u':
+                    permissions.update = true;
+                    break;
+                case 'p':
+                    permissions.processMessages = true;
+                    break;
+                default:
+                    throw new IllegalArgumentException(
+                            String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Permissions", permString, c));
             }
         }
-
         return permissions;
     }
 }

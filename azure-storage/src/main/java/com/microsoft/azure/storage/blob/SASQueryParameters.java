@@ -279,7 +279,7 @@ public final class SASQueryParameters {
      * @param signature
      *      A {@code String} representing the signature for the SAS token.
      */
-    public SASQueryParameters(String version, String services, String resourceTypes, String protocol,
+     SASQueryParameters(String version, String services, String resourceTypes, String protocol,
                               Date startTime, Date expiryTime, IPRange ipRange, String identifier,
                               String resource, String permissions, String signature) {
 

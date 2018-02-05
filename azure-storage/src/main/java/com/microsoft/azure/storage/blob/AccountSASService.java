@@ -19,89 +19,85 @@ import java.util.EnumSet;
 /**
  * Represents possible services to be used for an Account SAS
  */
-public enum AccountSASService {
+public final class AccountSASService {
     /**
      * Permission to access blob resources granted.
      */
-    BLOB('b'),
+    public boolean blob;
 
     /**
      * Permission to access file resources granted.
      */
-    FILE('f'),
+    public boolean file;
 
     /**
      * Permission to access queue resources granted.
      */
-    QUEUE('q'),
+    public boolean queue;
 
     /**
      * Permission to access table resources granted.
      */
-    TABLE('t');
+    public boolean table;
 
-    char value;
-
-    /**
-     * Creates a {@code AccountSASService}.
-     *
-     * @param c
-     *      The {@code char} which represents this service.
-     */
-    private AccountSASService(char c) {
-        this.value = c;
-    }
+    public AccountSASService() {}
 
     /**
      * Converts the given services to a {@code String}.
      *
-     * @param services
-     *      The services to convert to a {@code String}.
      * @return
      *      A {@code String} which represents the {@code SharedAccessAccountServices}.
      */
-    public static String toString(EnumSet<AccountSASService> services) {
-        if (services == null) {
-            return Constants.EMPTY_STRING;
-        }
-
+    @Override
+    public String toString() {
         StringBuilder value = new StringBuilder();
 
-        for (AccountSASService service : services) {
-            value.append(service.value);
+        if (this.blob) {
+            value.append('b');
+        }
+        if (this.file) {
+            value.append('f');
+        }
+        if (this.queue) {
+            value.append('q');
+        }
+        if (this.table) {
+            value.append('t');
         }
 
         return value.toString();
     }
 
     /**
-     * Creates an {@link EnumSet<AccountSASService>} from the specified services string.
+     * Creates an {@code AccountSASService} from the specified services string.
      *
      * @param servicesString
      *            A {@code String} which represents the {@code SharedAccessAccountServices}.
-     * @return A {@link EnumSet<AccountSASService>} generated from the given {@code String}.
+     * @return A {@code AccountSASService} generated from the given {@code String}.
      */
-    public static EnumSet<AccountSASService> parse(String servicesString) {
-        EnumSet<AccountSASService> services = EnumSet.noneOf(AccountSASService.class);
+    public static AccountSASService parse(String servicesString) {
+        AccountSASService services = new AccountSASService();
 
         for (int i=0; i < servicesString.length(); i++) {
-            boolean invalidCharacter = true;
             char c = servicesString.charAt(i);
-
-            for (AccountSASService service : AccountSASService.values()) {
-                if (c == service.value) {
-                    services.add(service);
-                    invalidCharacter = false;
+            switch (c) {
+                case 'b':
+                    services.blob = true;
                     break;
-                }
-            }
-
-            if (invalidCharacter) {
-                throw new IllegalArgumentException(
+                case 'f':
+                    services.file = true;
+                    break;
+                case 'q':
+                    services.queue = true;
+                    break;
+                case 't':
+                    services.table = true;
+                    break;
+                default:
+                    throw new IllegalArgumentException(
                         String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Services", servicesString, c));
             }
         }
-
         return services;
     }
 }

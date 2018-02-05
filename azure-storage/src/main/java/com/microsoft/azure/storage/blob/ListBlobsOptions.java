@@ -15,7 +15,7 @@
 package com.microsoft.azure.storage.blob;
 
 /**
- * Defines options availble when calling ListBlobs.
+ * Defines options available when calling ListBlobs.
  */
 public final class ListBlobsOptions {
 

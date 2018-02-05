@@ -19,77 +19,62 @@ import java.util.EnumSet;
 /**
  * Specifies the set of possible permissions for a blob shared access policy.
  */
-public enum BlobSASPermission {
+public final class BlobSASPermission {
     /**
      * Specifies Read access granted.
      */
-    READ('r'),
+    public boolean read;
 
     /**
      * Specifies Add access granted.
      */
-    ADD('a'),
+    public boolean add;
 
     /**
      * Specifies Create access granted.
      */
-    CREATE('c'),
+    public boolean create;
 
     /**
      * Specifies Write access granted.
      */
-    WRITE('w'),
+    public boolean write;
 
     /**
      * Specifies Delete access granted.
      */
-    DELETE('d');
+    public boolean delete;
 
-    final private char value;
-
-    /**
-     * Create a {@code BlobSASPermissions}.
-     *
-     * @param c
-     *      The {@code char} which represents this permission.
-     */
-    private BlobSASPermission(char c) {
-        this.value = c;
-    }
+    public BlobSASPermission() {}
 
     /**
      * Converts the given permissions to a {@code String}.
      *
-     * @param permissions
-     *            The permissions to convert to a {@code String}.
-     *
-     * @return A {@code String} which represents the {@code BlobSASPermission}.
+     * @return
+     *      A {@code String} which represents the {@code BlobSASPermission}.
      */
-    static String toString(EnumSet<BlobSASPermission> permissions) {
-        if (permissions == null) {
-            return Constants.EMPTY_STRING;
-        }
-
-        // The service supports a fixed order => racwdl
+    @Override
+    public String toString() {
+        // The service supports a fixed order => racwd
         final StringBuilder builder = new StringBuilder();
 
-        if (permissions.contains(BlobSASPermission.READ)) {
+        if (this.read) {
             builder.append("r");
         }
 
-        if (permissions.contains(BlobSASPermission.ADD)) {
+        if (this.add) {
             builder.append("a");
         }
 
-        if (permissions.contains(BlobSASPermission.CREATE)) {
+        if (this.create) {
             builder.append("c");
         }
 
-        if (permissions.contains(BlobSASPermission.WRITE)) {
+        if (this.write) {
             builder.append("w");
         }
 
-        if (permissions.contains(BlobSASPermission.DELETE)) {
+        if (this.delete) {
             builder.append("d");
         }
 
@@ -97,34 +82,39 @@ public enum BlobSASPermission {
     }
 
     /**
-     * Creates an {@link EnumSet<BlobSASPermission>} from the specified permissions string.
+     * Creates an {@code BlobSASPermission} from the specified permissions string.
      *
      * @param permString
      *      A {@code String} which represents the {@code BlobSASPermission}.
      * @return
-     *      A {@link EnumSet<BlobSASPermission>} generated from the given {@code String}.
+     *      A {@code BlobSASPermission} generated from the given {@code String}.
      */
-    public static EnumSet<BlobSASPermission> parse(String permString) {
-        EnumSet<BlobSASPermission> permissions = EnumSet.noneOf(BlobSASPermission.class);
+    public static BlobSASPermission parse(String permString) {
+        BlobSASPermission permissions = new BlobSASPermission();
 
         for (int i=0; i<permString.length(); i++) {
-            boolean invalidCharacter = true;
             char c = permString.charAt(i);
-
-            for (BlobSASPermission perm : BlobSASPermission.values()) {
-                if (c == perm.value) {
-                    permissions.add(perm);
-                    invalidCharacter = false;
+            switch (c) {
+                case 'r':
+                    permissions.read = true;
                     break;
-                }
-            }
-
-            if (invalidCharacter) {
-                throw new IllegalArgumentException(
+                case 'a':
+                    permissions.read = true;
+                    break;
+                case 'c':
+                    permissions.create = true;
+                    break;
+                case 'w':
+                    permissions.write = true;
+                    break;
+                case 'd':
+                    permissions.delete = true;
+                    break;
+                default:
+                    throw new IllegalArgumentException(
                         String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Permissions", permString, c));
             }
         }
-
         return permissions;
     }
 }

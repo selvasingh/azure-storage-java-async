@@ -124,12 +124,12 @@ public final class ServiceSasSignatureValues {
 
         String resource = "c";
         String verifiedPermissions;
+        // calling parse and toString guarantees the proper ordering.
         if (Utility.isNullOrEmpty(this.blobName)) {
-            verifiedPermissions = ContainerSASPermission.toString(
-                    ContainerSASPermission.parse(this.permissions));
+            verifiedPermissions = ContainerSASPermission.parse(this.permissions).toString();
         }
         else {
-            verifiedPermissions = BlobSASPermission.toString(BlobSASPermission.parse(this.permissions));
+            verifiedPermissions = BlobSASPermission.parse(this.permissions).toString();
             resource = "b";
         }
 

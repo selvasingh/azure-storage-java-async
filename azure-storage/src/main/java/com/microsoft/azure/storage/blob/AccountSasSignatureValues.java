@@ -89,9 +89,6 @@ public final class AccountSasSignatureValues {
         if (Utility.isNullOrEmpty(version)) {
             this.version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
         }
-        else {
-            this.version = version;
-        }
         IPRange ipRange;
         if (this.ipRange == null) {
             ipRange = IPRange.DEFAULT;
@@ -102,7 +99,7 @@ public final class AccountSasSignatureValues {
 
         String stringToSign = Utility.join(new String[]{
                 sharedKeyCredentials.getAccountName(),
-                AccountSASPermission.toString(AccountSASPermission.parse(this.permissions)), // guarantees ordering
+                AccountSASPermission.parse(this.permissions).toString(), // guarantees ordering
                 this.services,
                 resourceTypes,
                 Utility.getUTCTimeOrEmpty(this.startTime),
@@ -115,7 +112,7 @@ public final class AccountSasSignatureValues {
 
         String signature = sharedKeyCredentials.computeHmac256(stringToSign);
 
-        SASQueryParameters sasParams = null;
+        SASQueryParameters sasParams;
         try {
             sasParams = new SASQueryParameters(this.version, this.services, resourceTypes,
                     this.protocol.toString(), this.startTime, this.expiryTime, this.ipRange, null,

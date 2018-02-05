@@ -146,7 +146,7 @@ public class BlobURL extends StorageURL {
             metadata = Metadata.NONE;
         }
 
-        // TODO: Remove sourceURL.getLeaseId when runtime updates
+        // TODO: Remove sourceURL.toString when runtime updates
         return this.storageClient.blobs().copyWithRestResponseAsync(sourceURL.toString(), null, null,
                 sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
