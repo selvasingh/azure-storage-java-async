@@ -102,7 +102,7 @@ public final class AccountSasSignatureValues {
 
         String stringToSign = Utility.join(new String[]{
                 sharedKeyCredentials.getAccountName(),
-                AccountSASPermission.parse(this.permissions).toString(), // guarantees ordering
+                AccountSASPermission.toString(AccountSASPermission.parse(this.permissions)), // guarantees ordering
                 this.services,
                 resourceTypes,
                 Utility.getUTCTimeOrEmpty(this.startTime),

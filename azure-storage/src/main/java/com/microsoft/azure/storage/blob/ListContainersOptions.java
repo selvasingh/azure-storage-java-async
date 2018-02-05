@@ -27,7 +27,7 @@ public class ListContainersOptions {
         if (maxResults != null && maxResults <= 0) {
             throw new IllegalArgumentException("MaxResults must be greater than 0.");
         }
-        this.details = details;
+        this.details = details == null ? ContainerListingDetails.NONE : details;
         this.prefix = prefix;
         this.maxResults = maxResults;
     }

@@ -32,7 +32,7 @@ public final class URLParser {
      * @return
      *      A {@link BlobURLParts} object containing all the components of a BlobURL.
      */
-    public static BlobURLParts ParseURL(URL url) {
+    public static BlobURLParts parse(URL url) {
 
         final String scheme = url.getProtocol();
         final String host = url.getHost();
@@ -84,7 +84,7 @@ public final class URLParser {
      */
     private static TreeMap<String, String[]> parseQueryString(String queryParams, boolean lowerCaseKey)
              {
-        //Comparator<String> c = new Comparator.<String>naturalOrder();
+
         final TreeMap<String, String[]> retVals = new TreeMap<String, String[]>(new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {

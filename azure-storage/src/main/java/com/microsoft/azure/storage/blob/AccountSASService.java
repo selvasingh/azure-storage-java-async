@@ -84,8 +84,9 @@ public enum AccountSASService {
     public static EnumSet<AccountSASService> parse(String servicesString) {
         EnumSet<AccountSASService> services = EnumSet.noneOf(AccountSASService.class);
 
-        for (final char c : servicesString.toLowerCase().toCharArray()) {
+        for (int i=0; i < servicesString.length(); i++) {
             boolean invalidCharacter = true;
+            char c = servicesString.charAt(i);
 
             for (AccountSASService service : AccountSASService.values()) {
                 if (c == service.value) {
@@ -97,7 +98,7 @@ public enum AccountSASService {
 
             if (invalidCharacter) {
                 throw new IllegalArgumentException(
-                        String.format(SR.ENUM_COULD_NOT_BE_PARSED, "Services", servicesString));
+                        String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Services", servicesString, c));
             }
         }
 

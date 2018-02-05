@@ -253,7 +253,6 @@ public final class SASQueryParameters {
         }
     }
 
-
     /**
      * Creates a new {@link SASQueryParameters} object.
      *
@@ -296,8 +295,6 @@ public final class SASQueryParameters {
         this.permissions = permissions;
         this.signature = signature;
     }
-
-
 
     /**
      * Encodes all SAS query parameters into a string that can be appended to a URL.

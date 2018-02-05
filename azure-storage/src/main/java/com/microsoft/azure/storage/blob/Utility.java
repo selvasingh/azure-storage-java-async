@@ -15,6 +15,7 @@
 package com.microsoft.azure.storage.blob;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.ParseException;

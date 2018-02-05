@@ -460,16 +460,19 @@ public final class ContainerURL extends StorageURL {
      *
      * @param marker
      *      A {@code String} value that identifies the portion of the list to be returned with the next list operation.
-     * @param listBlobsOptions
+     * @param options
      *      A {@link ListBlobsOptions} object which specifies one or more datasets to include in the response.
      * @return
      *      The {@link Single&lt;RestResponse&lt;ContainerListBlobsHeaders, ListBlobsResponse&gt;&gt;} object if
      *      successful.
      */
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobs(
-            String marker, ListBlobsOptions listBlobsOptions) {
-        return this.storageClient.containers().listBlobsWithRestResponseAsync(listBlobsOptions.getPrefix(),
-                listBlobsOptions.getDelimiter(), marker, listBlobsOptions.getMaxResults(),
-                listBlobsOptions.getDetails().toList(), null, null);
+            String marker, ListBlobsOptions options) {
+        if (options == null) {
+            options = ListBlobsOptions.DEFAULT;
+        }
+        return this.storageClient.containers().listBlobsWithRestResponseAsync(options.getPrefix(),
+                options.getDelimiter(), marker, options.getMaxResults(),
+                options.getDetails().toList(), null, null);
     }
 }

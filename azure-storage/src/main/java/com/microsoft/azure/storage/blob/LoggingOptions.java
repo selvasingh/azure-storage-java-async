@@ -22,16 +22,11 @@ import java.util.logging.Level;
  */
 public final class LoggingOptions {
 
+    public static final LoggingOptions DEFAULT = new LoggingOptions(Level.SEVERE);
+
     private final long minDurationToLogSlowRequestsInMs;
 
     private final Level loggingLevel;
-
-    /**
-     * Creates a new {@link LoggingOptions} object.
-     */
-    public LoggingOptions() {
-        this(Level.SEVERE);
-    }
 
     /**
      * Creates a new {@link LoggingOptions} object.

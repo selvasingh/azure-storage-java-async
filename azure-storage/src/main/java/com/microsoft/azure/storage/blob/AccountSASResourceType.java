@@ -88,8 +88,9 @@ public enum AccountSASResourceType {
     public static EnumSet<AccountSASResourceType> parse(String resourceTypesString) {
         EnumSet<AccountSASResourceType> resources = EnumSet.noneOf(AccountSASResourceType.class);
 
-        for (final char c : resourceTypesString.toLowerCase().toCharArray()) {
+        for (int i=0; i<resourceTypesString.length(); i++) {
             boolean invalidCharacter = true;
+            char c = resourceTypesString.charAt(i);
 
             for (AccountSASResourceType rsrc : AccountSASResourceType.values()) {
                 if (c == rsrc.value) {
@@ -101,7 +102,8 @@ public enum AccountSASResourceType {
 
             if (invalidCharacter) {
                 throw new IllegalArgumentException(
-                        String.format(SR.ENUM_COULD_NOT_BE_PARSED, "Resource Types", resourceTypesString));
+                        String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE,
+                                "Resource Types", resourceTypesString, c));
             }
         }
 

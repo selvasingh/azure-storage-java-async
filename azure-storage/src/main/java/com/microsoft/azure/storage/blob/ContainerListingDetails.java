@@ -7,6 +7,8 @@ import com.microsoft.azure.storage.models.ListContainersIncludeType;
  */
 public class ContainerListingDetails {
 
+    public static final ContainerListingDetails NONE = new ContainerListingDetails(false);
+
     private final boolean metadata;
 
     /**

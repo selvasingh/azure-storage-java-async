@@ -19,13 +19,13 @@ package com.microsoft.azure.storage.blob;
  */
 public final class TelemetryOptions {
 
+    public static final TelemetryOptions DEFAULT = new TelemetryOptions(Constants.EMPTY_STRING);
+
     /**
      * userAgentPrefix is a string prepended to each request's User-Agent and sent to the service. The service records.
      * the user-agent in logs for diagnostics and tracking of client requests.
      */
     private final String userAgentPrefix;
-
-    public TelemetryOptions() { this(Constants.EMPTY_STRING); }
 
     public TelemetryOptions(String userAgentPrefix) {
         this.userAgentPrefix = userAgentPrefix;

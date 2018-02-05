@@ -57,10 +57,8 @@ public final class PipelineOptions {
         };
         this.loggingOptions = new LoggingOptions(Level.INFO);
 
-        this.requestRetryOptions = new RequestRetryOptions();
+        this.requestRetryOptions = RequestRetryOptions.DEFAULT;
 
-        this.telemetryOptions = new TelemetryOptions();
-
-        // TODO: Add retries.
+        this.telemetryOptions = TelemetryOptions.DEFAULT;
     }
 }

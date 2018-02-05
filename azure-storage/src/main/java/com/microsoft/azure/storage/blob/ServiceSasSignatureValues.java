@@ -125,17 +125,18 @@ public final class ServiceSasSignatureValues {
         String resource = "c";
         String verifiedPermissions;
         if (Utility.isNullOrEmpty(this.blobName)) {
-            verifiedPermissions = ContainerSASPermission.parse(this.permissions).toString();
+            verifiedPermissions = ContainerSASPermission.toString(
+                    ContainerSASPermission.parse(this.permissions));
         }
         else {
-            verifiedPermissions = BlobSASPermission.parse(this.permissions).toString();
+            verifiedPermissions = BlobSASPermission.toString(BlobSASPermission.parse(this.permissions));
             resource = "b";
         }
 
         // TODO: will a null string produce an empty line?
         // use the appropriate enumSet
          String stringToSign = Utility.join(new String[]{
-                        this.permissions,
+                        verifiedPermissions,
                         Utility.getUTCTimeOrEmpty(this.startTime),
                         Utility.getUTCTimeOrEmpty(this.expiryTime),
                         getCanonicalName(sharedKeyCredentials.getAccountName()),

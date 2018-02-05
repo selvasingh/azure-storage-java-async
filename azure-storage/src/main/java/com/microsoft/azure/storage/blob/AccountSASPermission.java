@@ -80,7 +80,7 @@ public enum AccountSASPermission {
      * @return
      *      A {@code String} which represents the {@code AccountSASPermissions}.
      */
-    static String toString(EnumSet<AccountSASPermission> permissions) {
+    public static String toString(EnumSet<AccountSASPermission> permissions) {
         if (permissions == null) {
             return Constants.EMPTY_STRING;
         }
@@ -133,20 +133,21 @@ public enum AccountSASPermission {
     public static EnumSet<AccountSASPermission> parse(String permString) {
         EnumSet<AccountSASPermission> permissions = EnumSet.noneOf(AccountSASPermission.class);
 
-        for (final char c : permString.toLowerCase().toCharArray()) {
-            boolean invalidCharacter = true;
+        for(int i=0; i<permString.length(); i++) {
+            boolean invalidCharacterFound = true;
+            char c = permString.charAt(i);
 
             for (AccountSASPermission perm : AccountSASPermission.values()) {
                 if (c == perm.value) {
                     permissions.add(perm);
-                    invalidCharacter = false;
+                    invalidCharacterFound = false;
                     break;
                 }
             }
 
-            if (invalidCharacter) {
+            if (invalidCharacterFound) {
                 throw new IllegalArgumentException(
-                        String.format(SR.ENUM_COULD_NOT_BE_PARSED, "Permissions", permString));
+                        String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Permissions", permString, c));
             }
         }
 

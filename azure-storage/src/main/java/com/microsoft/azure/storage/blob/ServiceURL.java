@@ -69,13 +69,16 @@ public final class ServiceURL extends StorageURL {
      *      A {@code String} that identifies the portion of the list of containers to be returned with the next listing
      *      operation.
      * @param options
-     *      A {@link ListContainersOptions} which specifies what data should be returned by the service. 
+     *      A {@link ListContainersOptions} which specifies what data should be returned by the service.
      * @return
      *      The {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if
      *      successful.
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainers(
             String marker, ListContainersOptions options) {
+        if (options == null) {
+            options = ListContainersOptions.DEFAULT;
+        }
         return this.storageClient.services().listContainersWithRestResponseAsync(options.getPrefix(), marker,
                 options.getMaxResults(), options.getDetails().toIncludeType(), null, null);
     }

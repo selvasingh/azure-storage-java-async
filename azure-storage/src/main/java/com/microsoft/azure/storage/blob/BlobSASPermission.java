@@ -109,9 +109,10 @@ public enum BlobSASPermission {
 
         for (int i=0; i<permString.length(); i++) {
             boolean invalidCharacter = true;
+            char c = permString.charAt(i);
 
             for (BlobSASPermission perm : BlobSASPermission.values()) {
-                if (permString.charAt(i) == perm.value) {
+                if (c == perm.value) {
                     permissions.add(perm);
                     invalidCharacter = false;
                     break;
@@ -120,7 +121,7 @@ public enum BlobSASPermission {
 
             if (invalidCharacter) {
                 throw new IllegalArgumentException(
-                        String.format(SR.ENUM_COULD_NOT_BE_PARSED, "Permissions", permString));
+                        String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Permissions", permString, c));
             }
         }
 
