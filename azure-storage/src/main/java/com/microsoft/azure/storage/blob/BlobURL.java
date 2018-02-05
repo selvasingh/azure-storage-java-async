@@ -198,11 +198,16 @@ public class BlobURL extends StorageURL {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
         }
+        if (range == null) {
+            range = BlobRange.DEFAULT;
+        }
 
+        // TODO: Are there other places for this? Should this be in the swagger?
+        Boolean getMD5 = rangeGetContentMD5 ? rangeGetContentMD5 : null;
 
         return this.storageClient.blobs().getWithRestResponseAsync(null, null,
                 range.toString(), accessConditions.getLeaseAccessConditions().getLeaseId(),
-                rangeGetContentMD5, accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                getMD5, accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),

@@ -4,7 +4,6 @@ import com.microsoft.azure.storage.models.BlobPutHeaders;
 import com.microsoft.azure.storage.models.BlockBlobPutBlockHeaders;
 import com.microsoft.azure.storage.models.BlockBlobPutBlockListHeaders;
 import com.microsoft.rest.v2.RestResponse;
-import com.microsoft.rest.v2.http.AsyncInputStream;
 import io.reactivex.*;
 import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.Function;
@@ -15,9 +14,7 @@ import java.util.UUID;
 
 public class Highlevel {
 
-    public class UploadToBlockBlobOptions {
-
-        private long blockSize;
+    public static class UploadToBlockBlobOptions {
 
         private IProgressReceiver progressReceiver;
 
@@ -32,9 +29,6 @@ public class Highlevel {
         /**
          * Creates a new object that configures the parallel upload behavior.
          *
-         * @param blockSize
-         *      A {@code long} that specifies the block size to use; the default (and maximum) is BlockBlobMaxPutBlock.
-         *      Must be greater than 0 (null=default).
          * @param progressReceiver
          *      An object that implements the {@link IProgressReceiver} interface which will be invoked periodically as
          *      bytes are sent in a PutBlock call to the BlockBlobURL.
@@ -48,33 +42,21 @@ public class Highlevel {
          *      A {@code int} that indicates the maximum number of blocks to upload in parallel. Must be greater than 0.
          *      The default is 5 (null=default).
          */
-        public UploadToBlockBlobOptions(Long blockSize, IProgressReceiver progressReceiver, BlobHttpHeaders httpHeaders,
+        public UploadToBlockBlobOptions(IProgressReceiver progressReceiver, BlobHttpHeaders httpHeaders,
                                         Metadata metadata, BlobAccessConditions accessConditions, Integer parallelism) {
-            if (blockSize <= 0 || blockSize > Constants.MAX_BLOCK_SIZE) {
-                throw new IllegalArgumentException(String.format("blockSize must be >= 0 and <= %d",
-                        Constants.MAX_BLOCK_SIZE));
-            }
-            if (parallelism <= 0) {
-                throw new IllegalArgumentException("Parallelism must be > 0");
-            }
-
-            if (blockSize == null) {
-                this.blockSize = Constants.MAX_BLOCK_SIZE;
-            }
-            else {
-                this.blockSize = blockSize;
-            }
             if (parallelism == null) {
                 this.parallelism = 5;
             }
-            else {
+            else if (parallelism <= 0) {
+                throw new IllegalArgumentException("Parallelism must be > 0");
+            } else {
                 this.parallelism = parallelism;
             }
 
             this.progressReceiver = progressReceiver;
             this.httpHeaders = httpHeaders;
             this.metadata = metadata;
-            this.accessConditions = accessConditions;
+            this.accessConditions = accessConditions == null ? BlobAccessConditions.NONE : accessConditions;
         }
     }
 
@@ -107,7 +89,8 @@ public class Highlevel {
                 // TODO: Wrap in a progress stream once progress is written.
             }
 
-            return blockBlobURL.putBlobAsync(Flowable.just(data.iterator().next()), options.httpHeaders,
+            ByteBuffer buf = data.iterator().next();
+            return blockBlobURL.putBlob(Flowable.just(buf), buf.remaining(), options.httpHeaders,
                     options.metadata, options.accessConditions)
                     .map(new Function<RestResponse<BlobPutHeaders, Void>, CommonRestResponse>() {
                         // Transform the specific RestResponse into a CommonRestResponse.
@@ -141,7 +124,7 @@ public class Highlevel {
 
                         // TODO: progress
 
-                        final String blockId = UUID.randomUUID().toString();
+                        final String blockId = Base64.encode(UUID.randomUUID().toString().getBytes());
 
                         // TODO: What happens if one of the calls fails? It seems like this single/observable
                         // will emit an error, which will halt the collecting into a list. Will the list still
@@ -153,7 +136,7 @@ public class Highlevel {
                          emit the blockId for this request. These will be collected below. Turn that into an Observable
                          which emits one item to comply with the signature of concatMapEager.
                          */
-                        return blockBlobURL.putBlockAsync(blockId, Flowable.just(blockData),
+                        return blockBlobURL.putBlock(blockId, Flowable.just(blockData), blockData.remaining(),
                                 options.accessConditions.getLeaseAccessConditions())
                                 .map(new Function<RestResponse<BlockBlobPutBlockHeaders,Void>, String>() {
                                     @Override
@@ -191,7 +174,7 @@ public class Highlevel {
                  */
                 .flatMap(new Function<ArrayList<String>, SingleSource<RestResponse<BlockBlobPutBlockListHeaders, Void>>>() {
                     public SingleSource<RestResponse<BlockBlobPutBlockListHeaders, Void>> apply(ArrayList<String> ids) throws Exception {
-                        return blockBlobURL.putBlockListAsync(ids, options.metadata, options.httpHeaders,
+                        return blockBlobURL.putBlockList(ids, options.metadata, options.httpHeaders,
                                 options.accessConditions);
                     }
                 })

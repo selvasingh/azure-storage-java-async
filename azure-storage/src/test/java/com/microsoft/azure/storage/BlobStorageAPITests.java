@@ -7,12 +7,14 @@ import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.*;
 import com.microsoft.rest.v2.util.FlowableUtil;
 import io.reactivex.Flowable;
+import io.reactivex.functions.BiConsumer;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
@@ -20,6 +22,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 
 public class BlobStorageAPITests {
@@ -285,4 +288,83 @@ public class BlobStorageAPITests {
         }
     }
 
+    @Test
+    public void TestPutBlobParallel() throws InvalidKeyException, MalformedURLException {
+        // Creating a pipeline requires a credentials object and a structure of pipeline options to customize the behavior.
+        // Set your system environment variables of ACCOUNT_NAME and ACCOUNT_KEY to pull the appropriate credentials.
+        // Credentials may be SharedKey as shown here or Anonymous as shown below.
+        SharedKeyCredentials creds = new SharedKeyCredentials(System.getenv().get("ACCOUNT_NAME"),
+                System.getenv().get("ACCOUNT_KEY"));
+
+        // Currently only the default PipelineOptions are supported.
+        HttpPipeline pipeline = StorageURL.createPipeline(creds, new PipelineOptions());
+
+        // Create a reference to the service.
+        ServiceURL su = new ServiceURL(
+                new URL("http://" + System.getenv().get("ACCOUNT_NAME") + ".blob.core.windows.net"), pipeline);
+
+        // Create a reference to a container. Using the ServiceURL to create the ContainerURL appends
+        // the container name to the ServiceURL. A ContainerURL may also be created by calling its
+        // constructor with a full path to the container and a pipeline.
+        String containerName = "javatestcontainer" + System.currentTimeMillis();
+        ContainerURL cu = su.createContainerURL(containerName);
+
+        // Create a reference to a blob. Same pattern as containers.
+        BlockBlobURL bu = cu.createBlockBlobURL("javatestblob");
+        try {
+            // Calls to blockingGet force the call to be synchronous. This whole test is synchronous.
+            // APIs will typically return a RestResponse<*HeadersType*, *BodyType*>. It is therefore possible to
+            // retrieve the headers and the deserialized body of every request. If there is no body in the request,
+            // the body type will be Void.
+            // Errors are thrown as exceptions in the synchronous (blockingGet) case.
+
+            // Create the container. NOTE: Metadata is not currently supported on any resource.
+            cu.create(null, PublicAccessType.BLOB).blockingGet();
+
+            Random rand = new Random();
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            for(int i=0; i<1024; i++) {
+                os.write(rand.nextInt(50));
+            }
+
+            // Single shot.
+            ByteBuffer data = ByteBuffer.wrap(os.toByteArray());
+            List<ByteBuffer> buffers = Arrays.asList(new ByteBuffer[]{data});
+            Highlevel.UploadToBlockBlobOptions options = new Highlevel.UploadToBlockBlobOptions(null,
+                    null, null, null, null);
+            int status = Highlevel.uploadByteBuffersToBlockBlob(buffers, bu, options).blockingGet().response().statusCode();
+            assertEquals(201, status);
+
+            // Parallel.
+            buffers = new ArrayList<>();
+            for (int i=0; i<10; i++) {
+                os = new ByteArrayOutputStream();
+                for (int j=0; j<1024; j++) {
+                    os.write(rand.nextInt(30));
+                }
+                buffers.add(ByteBuffer.wrap(os.toByteArray()));
+            }
+            status = Highlevel.uploadByteBuffersToBlockBlob(buffers, bu, options).blockingGet().response().statusCode();
+            assertEquals(201, status);
+
+            ArrayList<ByteBuffer> received = new ArrayList<>();
+            bu.getBlob(null, null, false).blockingGet().body()
+                    .collectInto(received, new BiConsumer<ArrayList<ByteBuffer>, ByteBuffer>() {
+                        @Override
+                        public void accept(ArrayList<ByteBuffer> byteBuffers, ByteBuffer byteBuffer) throws Exception {
+                            byteBuffers.add(byteBuffer);
+                        }
+                    }).blockingGet();
+            ByteBuffer receivedTruncated = received.get(0).duplicate();
+            receivedTruncated.limit(1024);
+            assertEquals(receivedTruncated.compareTo(buffers.get(0)), 0);
+            receivedTruncated = received.get(received.size()-1).duplicate();
+            receivedTruncated.position(1024*9-received.get(received.size()-2).remaining()); // 4 bytes per int * 1024 int * 9 blocks to get the start of the last block
+            assertEquals(receivedTruncated.compareTo(buffers.get(9)), 0);
+            // TODO: Test different size buffers. Variable sizes, etc.
+        }
+        finally {
+            cu.delete(null).blockingGet();
+        }
+    }
 }
