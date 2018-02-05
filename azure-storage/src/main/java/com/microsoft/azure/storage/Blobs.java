@@ -37,6 +37,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import java.nio.ByteBuffer;
 import org.joda.time.DateTime;
 
 /**
@@ -50,34 +51,34 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Flowable&lt;byte[]&gt; object if successful.
+     * @return the Flowable&lt;ByteBuffer&gt; object if successful.
      */
-    Flowable<byte[]> get();
+    Flowable<ByteBuffer> get();
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link ServiceFuture&lt;Flowable&lt;byte[]&gt;&gt;} object.
+     * @return the {@link ServiceFuture&lt;Flowable&lt;ByteBuffer&gt;&gt;} object.
      */
-    ServiceFuture<Flowable<byte[]>> getAsync(final ServiceCallback<Flowable<byte[]>> serviceCallback);
+    ServiceFuture<Flowable<ByteBuffer>> getAsync(final ServiceCallback<Flowable<ByteBuffer>> serviceCallback);
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;byte[]&gt;&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;ByteBuffer&gt;&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> getWithRestResponseAsync();
+    Single<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>> getWithRestResponseAsync();
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link Maybe&lt;Flowable&lt;byte[]&gt;&gt;} object if successful.
+     * @return the {@link Maybe&lt;Flowable&lt;ByteBuffer&gt;&gt;} object if successful.
      */
-    Maybe<Flowable<byte[]>> getAsync();
+    Maybe<Flowable<ByteBuffer>> getAsync();
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
@@ -95,9 +96,9 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Flowable&lt;byte[]&gt; object if successful.
+     * @return the Flowable&lt;ByteBuffer&gt; object if successful.
      */
-    Flowable<byte[]> get(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Flowable<ByteBuffer> get(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
@@ -114,9 +115,9 @@ public interface Blobs {
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link ServiceFuture&lt;Flowable&lt;byte[]&gt;&gt;} object.
+     * @return the {@link ServiceFuture&lt;Flowable&lt;ByteBuffer&gt;&gt;} object.
      */
-    ServiceFuture<Flowable<byte[]>> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Flowable<byte[]>> serviceCallback);
+    ServiceFuture<Flowable<ByteBuffer>> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Flowable<ByteBuffer>> serviceCallback);
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
@@ -132,9 +133,9 @@ public interface Blobs {
      * @param ifNoneMatch Specify an ETag value to operate only on blobs without a matching value.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;byte[]&gt;&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;ByteBuffer&gt;&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> getWithRestResponseAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>> getWithRestResponseAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
@@ -150,9 +151,9 @@ public interface Blobs {
      * @param ifNoneMatch Specify an ETag value to operate only on blobs without a matching value.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link Maybe&lt;Flowable&lt;byte[]&gt;&gt;} object if successful.
+     * @return the {@link Maybe&lt;Flowable&lt;ByteBuffer&gt;&gt;} object if successful.
      */
-    Maybe<Flowable<byte[]>> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Maybe<Flowable<ByteBuffer>> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Blob Properties operation returns all user-defined metadata, standard HTTP properties, and system properties for the blob. It does not return the content of the blob.
@@ -426,7 +427,7 @@ public interface Blobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void put(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
+    void put(long contentLength, BlobType blobType, Flowable<ByteBuffer> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
@@ -454,7 +455,7 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> putAsync(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putAsync(long contentLength, BlobType blobType, Flowable<ByteBuffer> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
@@ -481,7 +482,7 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlobPutHeaders, Void>> putWithRestResponseAsync(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
+    Single<RestResponse<BlobPutHeaders, Void>> putWithRestResponseAsync(long contentLength, BlobType blobType, Flowable<ByteBuffer> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
 
     /**
      * The Put Blob operation creates a new block, page, or append blob, or updates the content of an existing block blob. Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not supported with Put Blob; the content of the existing blob is overwritten with the content of the new blob. To perform a partial update of the content of a block blob, use the Put Block List operation.
@@ -508,7 +509,7 @@ public interface Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable putAsync(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
+    Completable putAsync(long contentLength, BlobType blobType, Flowable<ByteBuffer> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId);
 
     /**
      * Undelete a blob that was previously soft deleted.

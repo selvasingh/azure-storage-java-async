@@ -14,6 +14,7 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -93,11 +94,11 @@ public class BlobStorageAPITests {
             Assert.assertEquals(containerList.get(0).name(), containerName);
 
             // Create the blob with a single put. See below for the putBlock(List) scenario.
-            bu.putBlob(Flowable.just(new byte[]{0, 0, 0}), 3, null, null,
-                    null).blockingGet();
+            bu.putBlob(Flowable.just(ByteBuffer.wrap(new byte[]{0, 0, 0})), 3, null,
+                    null,null).blockingGet();
 
             // Download the blob contents.
-            Flowable<byte[]> data = bu.getBlob(new BlobRange(0L, 3L),
+            Flowable<ByteBuffer> data = bu.getBlob(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
             byte[] dataByte = FlowableUtil.collectBytes(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
@@ -147,7 +148,7 @@ public class BlobStorageAPITests {
             BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
             ArrayList<String> blockIDs = new ArrayList<>();
             blockIDs.add(Base64.encode(new byte[]{0}));
-            bu3.putBlock(blockIDs.get(0), Flowable.just(new byte[]{0,0,0}), 3,
+            bu3.putBlock(blockIDs.get(0), Flowable.just(ByteBuffer.wrap(new byte[]{0,0,0})), 3,
                     null).blockingGet();
 
             // Get the list of blocks on this blob. For demonstration purposes.
@@ -182,8 +183,8 @@ public class BlobStorageAPITests {
             sas.expiryTime= DateTime.now().plusDays(1).toDate();
             sas.permissions = AccountSASPermission.toString(EnumSet.of(AccountSASPermission.READ, AccountSASPermission.WRITE));
             sas.ipRange = null;
-            sas.services = EnumSet.of(AccountSASService.BLOB).toString();
-            sas.resourceTypes = EnumSet.of(AccountSASResourceType.OBJECT).toString();
+            sas.services = AccountSASService.toString(EnumSet.of(AccountSASService.BLOB));
+            sas.resourceTypes = AccountSASResourceType.toString(EnumSet.of(AccountSASResourceType.OBJECT));
 
             // Construct a ServiceSasSignatureValues in a pattern similar to that of the AccountSasSignatureValues.
             // Comment out the AccountSasSignatureValues creation and uncomment this to run with ServiceSasSignatureValues.
@@ -214,7 +215,7 @@ public class BlobStorageAPITests {
             // --------------APPEND BLOBS-------------
             AppendBlobURL abu = cu.createAppendBlobURL("appendblob");
             abu.create(null, null, null).blockingGet();
-            abu.appendBlock(Flowable.just(new byte[]{0,0,0}), 3,  null).blockingGet();
+            abu.appendBlock(Flowable.just(ByteBuffer.wrap(new byte[]{0,0,0})), 3,  null).blockingGet();
 
             data = abu.getBlob(new BlobRange(0L, 3L), null, false).blockingGet().body();
             dataByte = FlowableUtil.collectBytes(data).blockingGet();
@@ -227,7 +228,7 @@ public class BlobStorageAPITests {
             for(int i=0; i<1024; i++) {
                 os.write(1);
             }
-            pbu.putPages(new PageRange().withStart(0).withEnd(1023), Flowable.just(os.toByteArray()),
+            pbu.putPages(new PageRange().withStart(0).withEnd(1023), Flowable.just(ByteBuffer.wrap(os.toByteArray())),
                     null).blockingGet();
             String pageSnap = pbu.createSnapshot(null, null).blockingGet().headers().snapshot();
             pbu.clearPages(new PageRange().withStart(0).withEnd(511), null).blockingGet();

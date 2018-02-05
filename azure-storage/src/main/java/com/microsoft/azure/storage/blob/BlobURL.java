@@ -23,6 +23,7 @@ import io.reactivex.Single;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 
 /**
  * Represents a URL to an Azure Storage blob; the blob may be a block blob, append blob, or page blob.
@@ -192,7 +193,7 @@ public class BlobURL extends StorageURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;byte[]&gt;&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> getBlob(
+    public Single<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>> getBlob(
             BlobRange range, BlobAccessConditions accessConditions, boolean rangeGetContentMD5) {
         if (accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;

@@ -25,6 +25,7 @@ import io.reactivex.Single;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -126,7 +127,7 @@ public final class AppendBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlock(
-            Flowable<byte[]> data, long length, BlobAccessConditions accessConditions) {
+            Flowable<ByteBuffer> data, long length, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
         }

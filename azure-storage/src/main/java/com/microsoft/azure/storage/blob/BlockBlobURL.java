@@ -23,6 +23,7 @@ import io.reactivex.Single;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 /**
@@ -93,7 +94,7 @@ public final class BlockBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobPutHeaders, Void>> putBlob(
-            Flowable<byte[]> data, long contentLength, BlobHttpHeaders headers, Metadata metadata,
+            Flowable<ByteBuffer> data, long contentLength, BlobHttpHeaders headers, Metadata metadata,
             BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
@@ -131,7 +132,7 @@ public final class BlockBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlock(
-            String base64BlockID, Flowable<byte[]> data, long contentLength,
+            String base64BlockID, Flowable<ByteBuffer> data, long contentLength,
             LeaseAccessConditions leaseAccessConditions) {
         if(leaseAccessConditions == null) {
             leaseAccessConditions = LeaseAccessConditions.NONE;

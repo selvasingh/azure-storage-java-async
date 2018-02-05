@@ -55,7 +55,7 @@ public enum AccountSASResourceType {
      * @return
      *      A {@code String} which represents the {@code AccountSASResourceTypes}.
      */
-    static String toString(EnumSet<AccountSASResourceType> types) {
+    public static String toString(EnumSet<AccountSASResourceType> types) {
         if (types == null) {
             return Constants.EMPTY_STRING;
         }

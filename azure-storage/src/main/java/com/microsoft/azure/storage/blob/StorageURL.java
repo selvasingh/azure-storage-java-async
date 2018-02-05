@@ -19,6 +19,7 @@ import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.http.HttpRequest;
 import com.microsoft.rest.v2.http.HttpResponse;
 import com.microsoft.rest.v2.http.UrlBuilder;
+import com.microsoft.rest.v2.policy.DecodingPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicy;
 import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
@@ -93,9 +94,11 @@ public abstract class StorageURL {
         RequestRetryFactory requestRetryFactory = new RequestRetryFactory(pipelineOptions.requestRetryOptions);
         TelemetryFactory telemetryFactory = new TelemetryFactory(pipelineOptions.telemetryOptions);
         AddDatePolicy addDate = new AddDatePolicy();
+        DecodingPolicyFactory decodingPolicyFactory = new DecodingPolicyFactory();
+        // TODO: Add decodingPolicy to pipeline
         return HttpPipeline.build(
                 pipelineOptions.client, telemetryFactory, requestIDFactory, requestRetryFactory, addDate, credentials,
-                loggingFactory);
+                decodingPolicyFactory, loggingFactory);
     }
 
     // TODO: revisit.

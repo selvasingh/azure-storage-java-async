@@ -39,6 +39,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
+import java.nio.ByteBuffer;
 import org.joda.time.DateTime;
 
 /**
@@ -74,7 +75,7 @@ public class BlockBlobsImpl implements BlockBlobs {
     interface BlockBlobsService {
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
-        Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlock(@HostParam("url") String url, @QueryParam("blockid") String blockId, @HeaderParam("Content-Length") long contentLength, @BodyParam("application/octet-stream") Flowable<byte[]> body, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
+        Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlock(@HostParam("url") String url, @QueryParam("blockid") String blockId, @HeaderParam("Content-Length") long contentLength, @BodyParam("application/octet-stream") Flowable<ByteBuffer> body, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("comp") String comp);
 
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
@@ -95,7 +96,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void putBlock(String blockId, long contentLength, Flowable<byte[]> body) {
+    public void putBlock(String blockId, long contentLength, Flowable<ByteBuffer> body) {
         putBlockAsync(blockId, contentLength, body).blockingAwait();
     }
 
@@ -109,7 +110,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<ByteBuffer> body, final ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(putBlockAsync(blockId, contentLength, body), serviceCallback);
     }
 
@@ -122,7 +123,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<byte[]> body) {
+    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<ByteBuffer> body) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -151,7 +152,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body) {
+    public Completable putBlockAsync(String blockId, long contentLength, Flowable<ByteBuffer> body) {
         return putBlockWithRestResponseAsync(blockId, contentLength, body)
             .toCompletable();
     }
@@ -169,7 +170,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void putBlock(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId) {
+    public void putBlock(String blockId, long contentLength, Flowable<ByteBuffer> body, Integer timeout, String leaseId, String requestId) {
         putBlockAsync(blockId, contentLength, body, timeout, leaseId, requestId).blockingAwait();
     }
 
@@ -186,7 +187,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<ByteBuffer> body, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(putBlockAsync(blockId, contentLength, body, timeout, leaseId, requestId), serviceCallback);
     }
 
@@ -202,7 +203,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId) {
+    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<ByteBuffer> body, Integer timeout, String leaseId, String requestId) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -231,7 +232,7 @@ public class BlockBlobsImpl implements BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId) {
+    public Completable putBlockAsync(String blockId, long contentLength, Flowable<ByteBuffer> body, Integer timeout, String leaseId, String requestId) {
         return putBlockWithRestResponseAsync(blockId, contentLength, body, timeout, leaseId, requestId)
             .toCompletable();
     }

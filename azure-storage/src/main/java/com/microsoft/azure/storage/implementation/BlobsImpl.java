@@ -52,6 +52,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
+import java.nio.ByteBuffer;
 import org.joda.time.DateTime;
 
 /**
@@ -87,7 +88,7 @@ public class BlobsImpl implements Blobs {
     interface BlobsService {
         @GET("{containerName}/{blob}")
         @ExpectedResponses({200, 206})
-        Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> get(@HostParam("url") String url, @QueryParam("snapshot") String snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-range-get-content-md5") Boolean rangeGetContentMD5, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
+        Single<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>> get(@HostParam("url") String url, @QueryParam("snapshot") String snapshot, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-range") String range, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-range-get-content-md5") Boolean rangeGetContentMD5, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
         @HEAD("{containerName}/{blob}")
         @ExpectedResponses({200})
@@ -99,7 +100,7 @@ public class BlobsImpl implements Blobs {
 
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({201})
-        Single<RestResponse<BlobPutHeaders, Void>> put(@HostParam("url") String url, @BodyParam("application/octet-stream") Flowable<byte[]> optionalbody, @QueryParam("timeout") Integer timeout, @HeaderParam("Content-Length") long contentLength, @HeaderParam("x-ms-blob-content-type") String blobContentType, @HeaderParam("x-ms-blob-content-encoding") String blobContentEncoding, @HeaderParam("x-ms-blob-content-language") String blobContentLanguage, @HeaderParam("x-ms-blob-content-md5") String blobContentMD5, @HeaderParam("x-ms-blob-cache-control") String blobCacheControl, @HeaderParam("x-ms-blob-type") BlobType blobType, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-blob-content-disposition") String blobContentDisposition, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-blob-content-length") Long blobContentLength, @HeaderParam("x-ms-blob-sequence-number") Long blobSequenceNumber, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
+        Single<RestResponse<BlobPutHeaders, Void>> put(@HostParam("url") String url, @BodyParam("application/octet-stream") Flowable<ByteBuffer> optionalbody, @QueryParam("timeout") Integer timeout, @HeaderParam("Content-Length") long contentLength, @HeaderParam("x-ms-blob-content-type") String blobContentType, @HeaderParam("x-ms-blob-content-encoding") String blobContentEncoding, @HeaderParam("x-ms-blob-content-language") String blobContentLanguage, @HeaderParam("x-ms-blob-content-md5") String blobContentMD5, @HeaderParam("x-ms-blob-cache-control") String blobCacheControl, @HeaderParam("x-ms-blob-type") BlobType blobType, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-blob-content-disposition") String blobContentDisposition, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("If-Unmodified-Since") DateTimeRfc1123 ifUnmodifiedSince, @HeaderParam("If-Match") String ifMatches, @HeaderParam("If-None-Match") String ifNoneMatch, @HeaderParam("x-ms-blob-content-length") Long blobContentLength, @HeaderParam("x-ms-blob-sequence-number") Long blobSequenceNumber, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId);
 
         @PUT("{containerName}/{blob}")
         @ExpectedResponses({200})
@@ -144,9 +145,9 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Flowable&lt;byte[]&gt; object if successful.
+     * @return the Flowable&lt;ByteBuffer&gt; object if successful.
      */
-    public Flowable<byte[]> get() {
+    public Flowable<ByteBuffer> get() {
         return getAsync().blockingGet();
     }
 
@@ -155,9 +156,9 @@ public class BlobsImpl implements Blobs {
      *
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link ServiceFuture&lt;Flowable&lt;byte[]&gt;&gt;} object.
+     * @return the {@link ServiceFuture&lt;Flowable&lt;ByteBuffer&gt;&gt;} object.
      */
-    public ServiceFuture<Flowable<byte[]>> getAsync(final ServiceCallback<Flowable<byte[]>> serviceCallback) {
+    public ServiceFuture<Flowable<ByteBuffer>> getAsync(final ServiceCallback<Flowable<ByteBuffer>> serviceCallback) {
         return ServiceFuture.fromBody(getAsync(), serviceCallback);
     }
 
@@ -165,9 +166,9 @@ public class BlobsImpl implements Blobs {
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;byte[]&gt;&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;ByteBuffer&gt;&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> getWithRestResponseAsync() {
+    public Single<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>> getWithRestResponseAsync() {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -199,12 +200,12 @@ public class BlobsImpl implements Blobs {
      * The Get Blob operation reads or downloads a blob from the system, including its metadata and properties. You can also call Get Blob to read a snapshot.
      *
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link Maybe&lt;Flowable&lt;byte[]&gt;&gt;} object if successful.
+     * @return the {@link Maybe&lt;Flowable&lt;ByteBuffer&gt;&gt;} object if successful.
      */
-    public Maybe<Flowable<byte[]>> getAsync() {
+    public Maybe<Flowable<ByteBuffer>> getAsync() {
         return getWithRestResponseAsync()
-            .flatMapMaybe(new Function<RestResponse<BlobGetHeaders, Flowable<byte[]>>, Maybe<Flowable<byte[]>>>() {
-                public Maybe<Flowable<byte[]>> apply(RestResponse<BlobGetHeaders, Flowable<byte[]>> restResponse) {
+            .flatMapMaybe(new Function<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>, Maybe<Flowable<ByteBuffer>>>() {
+                public Maybe<Flowable<ByteBuffer>> apply(RestResponse<BlobGetHeaders, Flowable<ByteBuffer>> restResponse) {
                     if (restResponse.body() == null) {
                         return Maybe.empty();
                     } else {
@@ -230,9 +231,9 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Flowable&lt;byte[]&gt; object if successful.
+     * @return the Flowable&lt;ByteBuffer&gt; object if successful.
      */
-    public Flowable<byte[]> get(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Flowable<ByteBuffer> get(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         return getAsync(snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId).blockingGet();
     }
 
@@ -251,9 +252,9 @@ public class BlobsImpl implements Blobs {
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @param serviceCallback the async ServiceCallback to handle successful and failed responses.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link ServiceFuture&lt;Flowable&lt;byte[]&gt;&gt;} object.
+     * @return the {@link ServiceFuture&lt;Flowable&lt;ByteBuffer&gt;&gt;} object.
      */
-    public ServiceFuture<Flowable<byte[]>> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Flowable<byte[]>> serviceCallback) {
+    public ServiceFuture<Flowable<ByteBuffer>> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Flowable<ByteBuffer>> serviceCallback) {
         return ServiceFuture.fromBody(getAsync(snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId), serviceCallback);
     }
 
@@ -271,9 +272,9 @@ public class BlobsImpl implements Blobs {
      * @param ifNoneMatch Specify an ETag value to operate only on blobs without a matching value.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;byte[]&gt;&gt;&gt;} object if successful.
+     * @return the {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;ByteBuffer&gt;&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobGetHeaders, Flowable<byte[]>>> getWithRestResponseAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Single<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>> getWithRestResponseAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -305,12 +306,12 @@ public class BlobsImpl implements Blobs {
      * @param ifNoneMatch Specify an ETag value to operate only on blobs without a matching value.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @return the {@link Maybe&lt;Flowable&lt;byte[]&gt;&gt;} object if successful.
+     * @return the {@link Maybe&lt;Flowable&lt;ByteBuffer&gt;&gt;} object if successful.
      */
-    public Maybe<Flowable<byte[]>> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
+    public Maybe<Flowable<ByteBuffer>> getAsync(String snapshot, Integer timeout, String range, String leaseId, Boolean rangeGetContentMD5, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId) {
         return getWithRestResponseAsync(snapshot, timeout, range, leaseId, rangeGetContentMD5, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, requestId)
-            .flatMapMaybe(new Function<RestResponse<BlobGetHeaders, Flowable<byte[]>>, Maybe<Flowable<byte[]>>>() {
-                public Maybe<Flowable<byte[]>> apply(RestResponse<BlobGetHeaders, Flowable<byte[]>> restResponse) {
+            .flatMapMaybe(new Function<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>, Maybe<Flowable<ByteBuffer>>>() {
+                public Maybe<Flowable<ByteBuffer>> apply(RestResponse<BlobGetHeaders, Flowable<ByteBuffer>> restResponse) {
                     if (restResponse.body() == null) {
                         return Maybe.empty();
                     } else {
@@ -677,7 +678,7 @@ public class BlobsImpl implements Blobs {
         if (this.client.version() == null) {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
-        final Flowable<byte[]> optionalbody = null;
+        final Flowable<ByteBuffer> optionalbody = null;
         final Integer timeout = null;
         final String blobContentType = null;
         final String blobContentEncoding = null;
@@ -744,7 +745,7 @@ public class BlobsImpl implements Blobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void put(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
+    public void put(long contentLength, BlobType blobType, Flowable<ByteBuffer> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
         putAsync(contentLength, blobType, optionalbody, timeout, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId).blockingAwait();
     }
 
@@ -774,7 +775,7 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> putAsync(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> putAsync(long contentLength, BlobType blobType, Flowable<ByteBuffer> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId, final ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(putAsync(contentLength, blobType, optionalbody, timeout, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId), serviceCallback);
     }
 
@@ -803,7 +804,7 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobPutHeaders, Void>> putWithRestResponseAsync(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
+    public Single<RestResponse<BlobPutHeaders, Void>> putWithRestResponseAsync(long contentLength, BlobType blobType, Flowable<ByteBuffer> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -849,7 +850,7 @@ public class BlobsImpl implements Blobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable putAsync(long contentLength, BlobType blobType, Flowable<byte[]> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
+    public Completable putAsync(long contentLength, BlobType blobType, Flowable<ByteBuffer> optionalbody, Integer timeout, String blobContentType, String blobContentEncoding, String blobContentLanguage, String blobContentMD5, String blobCacheControl, String metadata, String leaseId, String blobContentDisposition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, Long blobContentLength, Long blobSequenceNumber, String requestId) {
         return putWithRestResponseAsync(contentLength, blobType, optionalbody, timeout, blobContentType, blobContentEncoding, blobContentLanguage, blobContentMD5, blobCacheControl, metadata, leaseId, blobContentDisposition, ifModifiedSince, ifUnmodifiedSince, ifMatches, ifNoneMatch, blobContentLength, blobSequenceNumber, requestId)
             .toCompletable();
     }

@@ -19,6 +19,7 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import java.nio.ByteBuffer;
 import org.joda.time.DateTime;
 
 /**
@@ -35,7 +36,7 @@ public interface AppendBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void appendBlock(Flowable<byte[]> body, long contentLength);
+    void appendBlock(Flowable<ByteBuffer> body, long contentLength);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
@@ -46,7 +47,7 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, long contentLength, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> appendBlockAsync(Flowable<ByteBuffer> body, long contentLength, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
@@ -56,7 +57,7 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body, long contentLength);
+    Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<ByteBuffer> body, long contentLength);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
@@ -66,7 +67,7 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable appendBlockAsync(Flowable<byte[]> body, long contentLength);
+    Completable appendBlockAsync(Flowable<ByteBuffer> body, long contentLength);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
@@ -86,7 +87,7 @@ public interface AppendBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void appendBlock(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void appendBlock(Flowable<ByteBuffer> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
@@ -106,7 +107,7 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> appendBlockAsync(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> appendBlockAsync(Flowable<ByteBuffer> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
@@ -125,7 +126,7 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlockWithRestResponseAsync(Flowable<ByteBuffer> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Append Block operation commits a new block of data to the end of an existing append blob. The Append Block operation is permitted only if the blob was created with x-ms-blob-type set to AppendBlob. Append Block is supported only on version 2015-02-21 version or later.
@@ -144,5 +145,5 @@ public interface AppendBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable appendBlockAsync(Flowable<byte[]> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable appendBlockAsync(Flowable<ByteBuffer> body, long contentLength, Integer timeout, String leaseId, Integer maxSize, Integer appendPosition, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 }

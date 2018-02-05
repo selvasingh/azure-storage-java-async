@@ -60,7 +60,7 @@ public enum AccountSASService {
      * @return
      *      A {@code String} which represents the {@code SharedAccessAccountServices}.
      */
-    static String toString(EnumSet<AccountSASService> services) {
+    public static String toString(EnumSet<AccountSASService> services) {
         if (services == null) {
             return Constants.EMPTY_STRING;
         }

@@ -24,6 +24,7 @@ import io.reactivex.Single;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 
 /**
  * Represents a URL to a page blob.
@@ -144,7 +145,7 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<PageBlobPutPageHeaders, Void>> putPages(
-            PageRange pageRange, Flowable<byte[]> body, BlobAccessConditions accessConditions) {
+            PageRange pageRange, Flowable<ByteBuffer> body, BlobAccessConditions accessConditions) {
         if(accessConditions == null) {
             accessConditions = BlobAccessConditions.NONE;
         }

@@ -25,6 +25,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import java.nio.ByteBuffer;
 import org.joda.time.DateTime;
 
 /**
@@ -42,7 +43,7 @@ public interface BlockBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void putBlock(String blockId, long contentLength, Flowable<byte[]> body);
+    void putBlock(String blockId, long contentLength, Flowable<ByteBuffer> body);
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
@@ -54,7 +55,7 @@ public interface BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<ByteBuffer> body, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
@@ -65,7 +66,7 @@ public interface BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<byte[]> body);
+    Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<ByteBuffer> body);
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
@@ -76,7 +77,7 @@ public interface BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body);
+    Completable putBlockAsync(String blockId, long contentLength, Flowable<ByteBuffer> body);
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
@@ -91,7 +92,7 @@ public interface BlockBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void putBlock(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId);
+    void putBlock(String blockId, long contentLength, Flowable<ByteBuffer> body, Integer timeout, String leaseId, String requestId);
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
@@ -106,7 +107,7 @@ public interface BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putBlockAsync(String blockId, long contentLength, Flowable<ByteBuffer> body, Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
@@ -120,7 +121,7 @@ public interface BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId);
+    Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockWithRestResponseAsync(String blockId, long contentLength, Flowable<ByteBuffer> body, Integer timeout, String leaseId, String requestId);
 
     /**
      * The Put Block operation creates a new block to be committed as part of a blob.
@@ -134,7 +135,7 @@ public interface BlockBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable putBlockAsync(String blockId, long contentLength, Flowable<byte[]> body, Integer timeout, String leaseId, String requestId);
+    Completable putBlockAsync(String blockId, long contentLength, Flowable<ByteBuffer> body, Integer timeout, String leaseId, String requestId);
 
     /**
      * The Put Block List operation writes a blob by specifying the list of block IDs that make up the blob. In order to be written as part of a blob, a block must have been successfully written to the server in a prior Put Block operation. You can call Put Block List to update a blob by uploading only those blocks that have changed, then committing the new and existing blocks together. You can do this by specifying whether to commit a block from the committed block list or from the uncommitted block list, or to commit the most recently uploaded version of the block, whichever list it may belong to.

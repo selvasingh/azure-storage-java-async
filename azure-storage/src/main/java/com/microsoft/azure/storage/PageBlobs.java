@@ -24,6 +24,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import java.nio.ByteBuffer;
 import org.joda.time.DateTime;
 
 /**
@@ -104,7 +105,7 @@ public interface PageBlobs {
      * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void putPage(long contentLength, PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    void putPage(long contentLength, PageWriteType pageWrite, Flowable<ByteBuffer> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
@@ -129,7 +130,7 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> putPageAsync(long contentLength, PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> putPageAsync(long contentLength, PageWriteType pageWrite, Flowable<ByteBuffer> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId, final ServiceCallback<Void> serviceCallback);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
@@ -153,7 +154,7 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;PageBlobPutPageHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<PageBlobPutPageHeaders, Void>> putPageWithRestResponseAsync(long contentLength, PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Single<RestResponse<PageBlobPutPageHeaders, Void>> putPageWithRestResponseAsync(long contentLength, PageWriteType pageWrite, Flowable<ByteBuffer> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Put Page operation writes a range of pages to a page blob.
@@ -177,7 +178,7 @@ public interface PageBlobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable putPageAsync(long contentLength, PageWriteType pageWrite, Flowable<byte[]> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
+    Completable putPageAsync(long contentLength, PageWriteType pageWrite, Flowable<ByteBuffer> optionalbody, Integer timeout, String range, String leaseId, Long ifSequenceNumberLessThanOrEqualTo, Long ifSequenceNumberLessThan, Long ifSequenceNumberEqualTo, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String ifMatches, String ifNoneMatch, String requestId);
 
     /**
      * The Get Page Ranges operation returns the list of valid page ranges for a page blob or snapshot of a page blob.
