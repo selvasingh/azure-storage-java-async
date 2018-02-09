@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,8 @@ import com.microsoft.rest.v2.policy.RequestPolicyFactory;
 import com.microsoft.rest.v2.policy.RequestPolicyOptions;
 import io.reactivex.Single;
 
+import java.util.Locale;
+
 public final class TelemetryFactory implements RequestPolicyFactory {
 
     private final String userAgent;
@@ -34,11 +36,11 @@ public final class TelemetryFactory implements RequestPolicyFactory {
      *      factory.
      */
     public TelemetryFactory(TelemetryOptions telemetryOptions) {
-        String userAgentPrefix = telemetryOptions.UserAgentPrefix() == null ?
-                Constants.EMPTY_STRING : telemetryOptions.UserAgentPrefix();
+        String userAgentPrefix = telemetryOptions.getUserAgentPrefix() == null ?
+                Constants.EMPTY_STRING : telemetryOptions.getUserAgentPrefix();
         this.userAgent = userAgentPrefix + ' ' +
                 Constants.HeaderConstants.USER_AGENT_PREFIX + '/' + Constants.HeaderConstants.USER_AGENT_VERSION +
-                String.format(Utility.LOCALE_US, "(JavaJRE %s; %s %s)",
+                String.format(Locale.US, "(JavaJRE %s; %s %s)",
                     System.getProperty("java.version"),
                     System.getProperty("os.name").replaceAll(" ", ""),
                     System.getProperty("os.version"));

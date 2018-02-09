@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,6 @@
  * limitations under the License.
  */
 package com.microsoft.azure.storage.blob;
-
-import java.util.EnumSet;
 
 /**
  * Represents possible services to be used for an Account SAS
@@ -50,19 +48,21 @@ public final class AccountSASService {
      */
     @Override
     public String toString() {
+        // The order of the characters should be as specified here to ensure correctness:
+        // https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
         StringBuilder value = new StringBuilder();
 
         if (this.blob) {
             value.append('b');
-        }
-        if (this.file) {
-            value.append('f');
         }
         if (this.queue) {
             value.append('q');
         }
         if (this.table) {
             value.append('t');
+        }
+        if (this.file) {
+            value.append('f');
         }
 
         return value.toString();

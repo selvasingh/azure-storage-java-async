@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +20,9 @@ import java.security.InvalidKeyException;
 import java.util.Date;
 
 /**
- * AccountSasSignatureValues is used to generate a Shared Access Signature (SAS) for an Azure Storage account.
+ * AccountSASSignatureValues is used to generate a Shared Access Signature (SAS) for an Azure Storage account.
  */
-public final class AccountSasSignatureValues {
+public final class AccountSASSignatureValues {
 
     /**
      * If null or empty, this defaults to {@code Constants.HeaderConstants.TARGET_STORAGE_VERSION}
@@ -67,7 +67,9 @@ public final class AccountSasSignatureValues {
      */
     public String resourceTypes;
 
-    public AccountSasSignatureValues() {}
+    public AccountSASSignatureValues() {
+
+    }
 
     /**
      * Generates {@link SASQueryParameters} object which contains all SAS query parameters.
@@ -97,13 +99,14 @@ public final class AccountSasSignatureValues {
             ipRange = this.ipRange;
         }
 
+        // Signature is generated on the un-url-encoded values.
         String stringToSign = Utility.join(new String[]{
                 sharedKeyCredentials.getAccountName(),
                 AccountSASPermission.parse(this.permissions).toString(), // guarantees ordering
                 this.services,
                 resourceTypes,
-                Utility.getUTCTimeOrEmpty(this.startTime),
-                Utility.getUTCTimeOrEmpty(this.expiryTime),
+                this.startTime == null ? "" : Utility.ISO8601UTCDateFormat.format(this.startTime),
+                this.expiryTime == null ? "" : Utility.ISO8601UTCDateFormat.format(this.expiryTime),
                 ipRange.toString(),
                 this.protocol.toString(),
                 this.version,
@@ -112,15 +115,8 @@ public final class AccountSasSignatureValues {
 
         String signature = sharedKeyCredentials.computeHmac256(stringToSign);
 
-        SASQueryParameters sasParams;
-        try {
-            sasParams = new SASQueryParameters(this.version, this.services, resourceTypes,
-                    this.protocol.toString(), this.startTime, this.expiryTime, this.ipRange, null,
-                    null, this.permissions, URLEncoder.encode(signature, Constants.UTF8_CHARSET));
-        } catch (UnsupportedEncodingException e) {
-            throw new Error(e);
-        }
-
-        return sasParams;
+        return new SASQueryParameters(this.version, this.services, resourceTypes,
+                this.protocol, this.startTime, this.expiryTime, this.ipRange, null,
+                null, this.permissions, signature);
     }
 }

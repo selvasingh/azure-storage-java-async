@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ public final class ContainerAccessConditions {
     public static final ContainerAccessConditions NONE = new ContainerAccessConditions(null,
             null);
 
-    private final HttpAccessConditions httpAccessConditions;
+    private final HTTPAccessConditions httpAccessConditions;
 
     private final LeaseAccessConditions leaseID;
 
@@ -30,20 +30,20 @@ public final class ContainerAccessConditions {
      * Creates a {@link ContainerAccessConditions} object.
      *
      * @param httpAccessConditions
-     *      An {@link HttpAccessConditions} object.
+     *      An {@link HTTPAccessConditions} object.
      * @param leaseID
      *      A {@link LeaseAccessConditions} object.
      */
-    public ContainerAccessConditions(HttpAccessConditions httpAccessConditions, LeaseAccessConditions leaseID) {
-        this.httpAccessConditions = httpAccessConditions == null ? HttpAccessConditions.NONE : httpAccessConditions;
+    public ContainerAccessConditions(HTTPAccessConditions httpAccessConditions, LeaseAccessConditions leaseID) {
+        this.httpAccessConditions = httpAccessConditions == null ? HTTPAccessConditions.NONE : httpAccessConditions;
         this.leaseID = leaseID == null ? LeaseAccessConditions.NONE : leaseID;
     }
 
     /**
      * @return
-     *      A {@link HttpAccessConditions} object
+     *      A {@link HTTPAccessConditions} object
      */
-    public HttpAccessConditions getHttpAccessConditions() {
+    public HTTPAccessConditions getHttpAccessConditions() {
         return httpAccessConditions;
     }
 

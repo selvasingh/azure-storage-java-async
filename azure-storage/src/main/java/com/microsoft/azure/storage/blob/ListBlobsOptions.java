@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@ public final class ListBlobsOptions {
         if (maxResults != null && maxResults <= 0) {
             throw new IllegalArgumentException("MaxResults must be greater than 0.");
         }
-        this.details = details;
+        this.details = details == null ? BlobListingDetails.NONE : details;
         this.prefix = prefix;
         this.delimiter = delimiter;
         this.maxResults = maxResults;
@@ -62,7 +62,7 @@ public final class ListBlobsOptions {
      *           with each blob.
      */
     public BlobListingDetails getDetails() {
-        return details;
+        return this.details;
     }
 
     /**
@@ -70,7 +70,7 @@ public final class ListBlobsOptions {
      *           prefix.
      */
     public String getPrefix() {
-        return prefix;
+        return this.prefix;
     }
 
     /**
@@ -79,7 +79,7 @@ public final class ListBlobsOptions {
      *           up to the appearance of the delimiter character. The delimiter may be a single character or a string.
      */
     public String getDelimiter() {
-        return delimiter;
+        return this.delimiter;
     }
 
     /**
@@ -88,6 +88,6 @@ public final class ListBlobsOptions {
      *           items.
      */
     public Integer getMaxResults() {
-        return maxResults;
+        return this.maxResults;
     }
 }

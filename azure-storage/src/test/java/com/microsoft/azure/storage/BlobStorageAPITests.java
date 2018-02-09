@@ -1,7 +1,6 @@
 package com.microsoft.azure.storage;
 
 import com.microsoft.azure.storage.blob.*;
-import com.microsoft.azure.storage.blob.Base64;
 import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.*;
@@ -11,6 +10,7 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -104,7 +104,7 @@ public class BlobStorageAPITests {
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
             // Set and retrieve the blob properties. Metadata is not yet supported.
-            BlobHttpHeaders headers = new BlobHttpHeaders("myControl", "myDisposition",
+            BlobHTTPHeaders headers = new BlobHTTPHeaders("myControl", "myDisposition",
                     "myContentEncoding", "myLanguage", null,
                     "myType");
             bu.setProperties(headers, null).blockingGet();
@@ -147,7 +147,7 @@ public class BlobStorageAPITests {
             // Create a reference to a new blob within the same container to upload blocks. Upload a single block.
             BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
             ArrayList<String> blockIDs = new ArrayList<>();
-            blockIDs.add(Base64.encode(new byte[]{0}));
+            blockIDs.add(DatatypeConverter.printBase64Binary(new byte[]{0}));
             bu3.putBlock(blockIDs.get(0), Flowable.just(ByteBuffer.wrap(new byte[]{0,0,0})), 3,
                     null).blockingGet();
 
@@ -175,8 +175,8 @@ public class BlobStorageAPITests {
             // Parses a URL into its constituent components. This structure's URL fields may be modified.
             BlobURLParts parts = URLParser.parse(bu.toURL());
 
-            // Construct the AccountSasSignatureValues values object. This encapsulates all the values needed to create an AccountSasSignatureValues.
-            AccountSasSignatureValues sas = new AccountSasSignatureValues();
+            // Construct the AccountSASSignatureValues values object. This encapsulates all the values needed to create an AccountSASSignatureValues.
+            AccountSASSignatureValues sas = new AccountSASSignatureValues();
             AccountSASPermission perms = new AccountSASPermission();
             perms.read = true;
             perms.write = true;
@@ -193,9 +193,9 @@ public class BlobStorageAPITests {
             sas.services = service.toString();
             sas.resourceTypes = resourceType.toString();
 
-            // Construct a ServiceSasSignatureValues in a pattern similar to that of the AccountSasSignatureValues.
-            // Comment out the AccountSasSignatureValues creation and uncomment this to run with ServiceSasSignatureValues.
-            /*ServiceSasSignatureValues sas = new ServiceSasSignatureValues("2016-05-31", SASProtocol.HTTPS_HTTP,
+            // Construct a ServiceSASSignatureValues in a pattern similar to that of the AccountSASSignatureValues.
+            // Comment out the AccountSASSignatureValues creation and uncomment this to run with ServiceSASSignatureValues.
+            /*ServiceSASSignatureValues sas = new ServiceSASSignatureValues("2016-05-31", SASProtocol.HTTPS_HTTP,
                     DateTime.now().minusDays(1).toDate(), DateTime.now().plusDays(1).toDate(),
                     EnumSet.of(ContainerSASPermission.READ, ContainerSASPermission.WRITE),
                     null, containerName, null, null,
@@ -204,7 +204,7 @@ public class BlobStorageAPITests {
 
             // GenerateSASQueryParameters hashes the sas using your account's credentials and then associates the
             // sasQueryParameters with the blobURLParts.
-            parts.setSasQueryParameters(sas.GenerateSASQueryParameters(creds));
+            parts.sasQueryParameters = sas.GenerateSASQueryParameters(creds);
 
             // Using a SAS requires AnonymousCredentials on the pipeline.
             pipeline = StorageURL.createPipeline(new AnonymousCredentials(), new PipelineOptions());

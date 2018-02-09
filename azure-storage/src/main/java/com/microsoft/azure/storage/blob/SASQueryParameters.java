@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +14,16 @@
  */
 package com.microsoft.azure.storage.blob;
 
+import java.io.UnsupportedEncodingException;
+import java.net.Inet4Address;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Map;
 
 /**
  * Represents the components that make up an Azure Storage SAS' query parameters.
- * NOTE: Changing any field requires computing a new SAS signature using a XxxSASSignatureValues type.
+ * NOTE: Instances of this class are immutable.
  */
 public final class SASQueryParameters {
 
@@ -29,7 +33,7 @@ public final class SASQueryParameters {
 
     private final String resourceTypes;
 
-    private final String protocol;
+    private final SASProtocol protocol;
 
     private final Date startTime;
 
@@ -69,7 +73,7 @@ public final class SASQueryParameters {
     /**
      * A {@code String} representing the allowed HTTP protocol(s) or {@code null}.
      */
-    public String getProtocol() {
+    public SASProtocol getProtocol() {
         return protocol;
     }
 
@@ -127,16 +131,18 @@ public final class SASQueryParameters {
      *
      * @param queryParamsMap
      *      A {@code java.util.Map} representing all query parameters for the request as key-value pairs
-     * @param removeSASParams
+     * @param removeSASParametersFromMap
      *      When {@code true}, the SAS query parameters will be removed from queryParamsMap
      */
-    public SASQueryParameters(Map<String, String[]> queryParamsMap, boolean removeSASParams) {
-            String[] queryValue = queryParamsMap.get("sv");
+    SASQueryParameters(Map<String, String[]> queryParamsMap, boolean removeSASParametersFromMap)
+            throws UnknownHostException {
+
+        String[] queryValue = queryParamsMap.get("sv");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.version = queryValue[0];
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("sv");
             }
-            this.version = queryValue[0];
         }
         else {
             this.version = null;
@@ -144,10 +150,10 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("ss");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.services = queryValue[0];
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("ss");
             }
-            this.services = queryValue[0];
         }
         else {
             this.services = null;
@@ -155,10 +161,10 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("srt");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.resourceTypes = queryValue[0];
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("srt");
             }
-            this.resourceTypes = queryValue[0];
         }
         else {
             this.resourceTypes = null;
@@ -166,10 +172,10 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("spr");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.protocol = SASProtocol.parse(queryValue[0]);
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("spr");
             }
-            this.protocol = queryValue[0];
         }
         else {
             this.protocol = null;
@@ -177,10 +183,10 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("st");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.startTime = Utility.parseDate(queryValue[0]);
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("st");
             }
-            this.startTime = Utility.parseDate(queryValue[0]);
         }
         else {
             this.startTime = null;
@@ -188,10 +194,10 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("se");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.expiryTime = Utility.parseDate(queryValue[0]);
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("se");
             }
-            this.expiryTime = Utility.parseDate(queryValue[0]);
         }
         else {
             this.expiryTime = null;
@@ -199,10 +205,11 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("sip");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.ipRange = new IPRange();
+            this.ipRange.ipMin = (Inet4Address)(Inet4Address.getByName(queryValue[0]));
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("sip");
             }
-            this.ipRange = new IPRange(queryValue[0]);
         }
         else {
             this.ipRange = null;
@@ -210,10 +217,10 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("si");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.identifier = queryValue[0];
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("si");
             }
-            this.identifier = queryValue[0];
         }
         else {
             this.identifier = null;
@@ -221,10 +228,10 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("sr");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.resource = queryValue[0];
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("sr");
             }
-            this.resource = queryValue[0];
         }
         else {
             this.resource = null;
@@ -232,10 +239,10 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("sp");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.permissions = queryValue[0];
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("sp");
             }
-            this.permissions = queryValue[0];
         }
         else {
             this.permissions = null;
@@ -243,10 +250,10 @@ public final class SASQueryParameters {
 
         queryValue = queryParamsMap.get("sig");
         if (queryValue != null) {
-            if (removeSASParams) {
+            this.signature = queryValue[0];
+            if (removeSASParametersFromMap) {
                 queryParamsMap.remove("sig");
             }
-            this.signature = queryValue[0];
         }
         else {
             this.signature = null;
@@ -254,7 +261,8 @@ public final class SASQueryParameters {
     }
 
     /**
-     * Creates a new {@link SASQueryParameters} object.
+     * Creates a new {@link SASQueryParameters} object. These objects are only created internally by
+     * *SASSignatureValues classes.
      *
      * @param version
      *      A {@code String} representing the storage version.
@@ -279,7 +287,7 @@ public final class SASQueryParameters {
      * @param signature
      *      A {@code String} representing the signature for the SAS token.
      */
-     SASQueryParameters(String version, String services, String resourceTypes, String protocol,
+     SASQueryParameters(String version, String services, String resourceTypes, SASProtocol protocol,
                               Date startTime, Date expiryTime, IPRange ipRange, String identifier,
                               String resource, String permissions, String signature) {
 
@@ -296,6 +304,19 @@ public final class SASQueryParameters {
         this.signature = signature;
     }
 
+    private void tryAppendQueryParameter(StringBuilder sb, String param, Object value) {
+         if (value != null) {
+             if (sb.length() == 0) {
+                 sb.append('&');
+             }
+             try {
+                 sb.append(URLEncoder.encode(param, Constants.UTF8_CHARSET))
+                         .append('=').append(URLEncoder.encode(value.toString(), Constants.UTF8_CHARSET));
+             } catch (UnsupportedEncodingException e) {
+                 throw new Error(e); // If we can't encode with UTF-8, we fail.
+             }
+         }
+    }
     /**
      * Encodes all SAS query parameters into a string that can be appended to a URL.
      *
@@ -303,123 +324,51 @@ public final class SASQueryParameters {
      *      A {@code String} representing all SAS query parameters.
      */
     public String encode() {
+        /*
+         We should be url-encoding each key and each value, but because we know all the keys and values will encode to
+         themselves, we cheat except for the signature value.
+         */
+        String[] params = {"sv", "ss", "srt", "spr", "st", "se", "sip", "si", "sr", "sp", "sig"};
         StringBuilder sb = new StringBuilder();
-        boolean first = true;
-        if (this.version != null) {
-            first = false;
-            sb.append("sv=").append(this.version);
+        for (String param : params) {
+            switch (param) {
+                case "sv":
+                    tryAppendQueryParameter(sb, param, this.version);
+                    break;
+                case "ss":
+                    tryAppendQueryParameter(sb, param, this.services);
+                    break;
+                case "srt":
+                    tryAppendQueryParameter(sb, param, this.resourceTypes);
+                    break;
+                case "spr":
+                    tryAppendQueryParameter(sb, param, this.protocol);
+                    break;
+                case "st":
+                    tryAppendQueryParameter(sb, param,
+                            this.startTime == null ? null : Utility.ISO8601UTCDateFormat.format(this.startTime));
+                    break;
+                case "se":
+                    tryAppendQueryParameter(sb, param,
+                            this.expiryTime == null ? null : Utility.ISO8601UTCDateFormat.format(this.expiryTime));
+                    break;
+                case "sip":
+                    tryAppendQueryParameter(sb, param, this.ipRange);
+                    break;
+                case "si":
+                    tryAppendQueryParameter(sb, param, this.identifier);
+                    break;
+                case "sr":
+                    tryAppendQueryParameter(sb, param, this.resource);
+                    break;
+                case "sp":
+                    tryAppendQueryParameter(sb, param, this.permissions);
+                    break;
+                case "sig":
+                    tryAppendQueryParameter(sb, param, this.signature);
+                    break;
+            }
         }
-
-        if (this.services != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("ss=").append(this.services);
-        }
-
-        if (this.resourceTypes != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("srt=").append(this.resourceTypes);
-        }
-
-        if (this.protocol != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("spr=").append(this.protocol);
-        }
-
-        if (this.startTime != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("st=").append(Utility.getUTCTimeOrEmpty(this.startTime));
-        }
-
-        if (this.expiryTime != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("se=").append(Utility.getUTCTimeOrEmpty(this.expiryTime));
-        }
-
-        if (this.ipRange != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("sip").append(this.ipRange.toString());
-        }
-
-        if (this.identifier != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("si=").append(this.identifier);
-        }
-
-        if (this.resource != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("sr=").append(this.resource);
-        }
-
-        if (this.permissions != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("sp=").append(this.permissions);
-        }
-
-        if (this.signature != null) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append('&');
-            }
-
-            sb.append("sig=").append(this.signature);
-        }
-
         return sb.toString();
     }
 }

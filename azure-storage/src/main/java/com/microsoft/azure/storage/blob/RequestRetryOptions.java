@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -141,7 +141,7 @@ public final class RequestRetryOptions {
      * @return
      *      A {@code long} value of how many milliseconds to delay.
      */
-    public long calculatedDelayInMs(int tryCount) {
+    long calculatedDelayInMs(int tryCount) {
         long delay = 0;
         switch (this.retryPolicyType) {
             case EXPONENTIAL:

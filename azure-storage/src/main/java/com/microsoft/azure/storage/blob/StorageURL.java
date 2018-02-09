@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,8 +28,6 @@ import io.reactivex.Single;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-
-import static com.microsoft.azure.storage.blob.Utility.getGMTTime;
 
 public abstract class StorageURL {
 
@@ -70,7 +68,7 @@ public abstract class StorageURL {
      * @return
      *      A {@code String} with the name appended to the URL.
      */
-    protected URL appendToURLPath(URL baseURL, String name) throws MalformedURLException {
+    protected static URL appendToURLPath(URL baseURL, String name) throws MalformedURLException {
         UrlBuilder url = UrlBuilder.parse(baseURL.toString());
         if(url.path() == null) {
             url.withPath("/"); // .path() will return null if it is empty, so we have to process separately from below.
@@ -118,7 +116,7 @@ public abstract class StorageURL {
 
             @Override
             public Single<HttpResponse> sendAsync(HttpRequest request) {
-                request.headers().set(Constants.HeaderConstants.DATE, getGMTTime(new Date()));
+                request.headers().set(Constants.HeaderConstants.DATE, Utility.RFC1123GMTDateFormat.format(new Date()));
                 return this.next.sendAsync(request);
             }
         }

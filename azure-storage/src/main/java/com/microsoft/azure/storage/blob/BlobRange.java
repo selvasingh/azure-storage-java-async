@@ -1,13 +1,37 @@
+/*
+ * Copyright Microsoft Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.microsoft.azure.storage.blob;
+
+import java.util.Locale;
 
 public final class BlobRange {
 
     public static final BlobRange DEFAULT = new BlobRange(0, 0);
 
-    public final long offset;
+    private final long offset;
 
-    public final long count;
+    private final long count;
 
+    /**
+     * A {@code BlobRange} object represents a range on a blob to be retrieved.
+     *
+     * @param offset
+     *      A {@code long} that indicates the start of the range.
+     * @param count
+     *      A {@code long} that indicates how many bytes to include in the range.
+     */
     public BlobRange(long offset, long count) {
         if (offset < 0) {
             throw new IllegalArgumentException("BlobRange offset must be greater than or equal to 0 if specified.");
@@ -19,16 +43,32 @@ public final class BlobRange {
         this.count = count;
     }
 
+    /**
+     * @return
+     *      A {@code long} that indicates the start of the range.
+     */
+    public long getOffset() {
+        return offset;
+    }
+
+    /**
+     * @return
+     *      A {@code long} that indicates how many bytes to include in the range.
+     */
+    public long getCount() {
+        return count;
+    }
+
     @Override
     public String toString() {
 
         if (count != 0) {
             long rangeEnd = this.offset + this.count - 1;
             return String.format(
-                    Utility.LOCALE_US, Constants.HeaderConstants.RANGE_HEADER_FORMAT, this.offset, rangeEnd);
+                    Locale.US, Constants.HeaderConstants.RANGE_HEADER_FORMAT, this.offset, rangeEnd);
         }
 
         return String.format(
-                Utility.LOCALE_US, Constants.HeaderConstants.BEGIN_RANGE_HEADER_FORMAT, this.offset);
+                Locale.US, Constants.HeaderConstants.BEGIN_RANGE_HEADER_FORMAT, this.offset);
     }
 }

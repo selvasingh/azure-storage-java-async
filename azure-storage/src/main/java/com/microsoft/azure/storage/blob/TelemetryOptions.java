@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ public final class TelemetryOptions {
         this.userAgentPrefix = userAgentPrefix;
     }
 
-    public String UserAgentPrefix() {
+    public String getUserAgentPrefix() {
         return this.userAgentPrefix;
     }
 }

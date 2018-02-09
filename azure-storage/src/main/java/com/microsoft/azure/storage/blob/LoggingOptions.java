@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,41 +22,20 @@ import java.util.logging.Level;
  */
 public final class LoggingOptions {
 
-    public static final LoggingOptions DEFAULT = new LoggingOptions(Level.SEVERE);
+    public static final LoggingOptions DEFAULT = new LoggingOptions(3000);
 
     private final long minDurationToLogSlowRequestsInMs;
 
-    private final Level loggingLevel;
+
 
     /**
      * Creates a new {@link LoggingOptions} object.
      *
-     * @param loggingLevel
-     *      The minimum {@code java.util.logging.Level} to log requests
-     */
-    public LoggingOptions(Level loggingLevel) {
-        this(loggingLevel, 3000L);
-    }
-
-    /**
-     * Creates a new {@link LoggingOptions} object.
-     *
-     * @param loggingLevel
-     *      The minimum {@code java.util.logging.Level} to log requests.
      * @param minDurationToLogSlowRequestsInMs
      *      A {@code long} representing the minimum duration for a tried operation to log a warning.
      */
-    public LoggingOptions(Level loggingLevel, long minDurationToLogSlowRequestsInMs) {
-        this.loggingLevel = loggingLevel;
+    public LoggingOptions(long minDurationToLogSlowRequestsInMs) {
         this.minDurationToLogSlowRequestsInMs = minDurationToLogSlowRequestsInMs;
-    }
-
-    /**
-     * @return
-     *      The minimum {@code java.util.logging.Level} to log requests.
-     */
-    public Level getLoggingLevel() {
-        return loggingLevel;
     }
 
     /**

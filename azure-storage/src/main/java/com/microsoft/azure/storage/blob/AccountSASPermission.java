@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,38 +66,40 @@ public final class AccountSASPermission {
      */
     @Override
     public String toString() {
+        // The order of the characters should be as specified here to ensure correctness:
+        // https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
         final StringBuilder builder = new StringBuilder();
 
         if (this.read) {
-            builder.append("r");
-        }
-
-        if (this.add) {
-            builder.append("a");
-        }
-
-        if (this.create) {
-            builder.append("c");
+            builder.append('r');
         }
 
         if (this.write) {
-            builder.append("w");
+            builder.append('w');
         }
 
         if (this.delete) {
-            builder.append("d");
+            builder.append('d');
         }
 
         if (this.list) {
-            builder.append("l");
+            builder.append('l');
+        }
+
+        if (this.add) {
+            builder.append('a');
+        }
+
+        if (this.create) {
+            builder.append('c');
         }
 
         if (this.update) {
-            builder.append("u");
+            builder.append('u');
         }
 
         if (this.processMessages) {
-            builder.append("p");
+            builder.append('p');
         }
 
         return builder.toString();

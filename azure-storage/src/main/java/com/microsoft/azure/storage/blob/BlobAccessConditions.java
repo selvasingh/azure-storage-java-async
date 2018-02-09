@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ public final class BlobAccessConditions {
                     null);
 
     // Optional standard HTTP access conditions which are optionally set
-    private final HttpAccessConditions httpAccessConditions;
+    private final HTTPAccessConditions httpAccessConditions;
 
     // Optional access conditions for a lease on a container or blob
     private final LeaseAccessConditions leaseAccessConditions;
@@ -49,12 +49,12 @@ public final class BlobAccessConditions {
      *      Optional access conditions which are specific to page blobs
      */
     public BlobAccessConditions(
-            HttpAccessConditions httpAccessConditions,
+            HTTPAccessConditions httpAccessConditions,
             LeaseAccessConditions leaseAccessConditions,
             AppendBlobAccessConditions appendBlobAccessConditions,
             PageBlobAccessConditions pageBlobAccessConditions) {
         this.httpAccessConditions = httpAccessConditions == null ?
-                HttpAccessConditions.NONE : httpAccessConditions;
+                HTTPAccessConditions.NONE : httpAccessConditions;
         this.leaseAccessConditions = leaseAccessConditions == null ?
                 LeaseAccessConditions.NONE : leaseAccessConditions;
         this.appendBlobAccessConditions = appendBlobAccessConditions == null ?
@@ -63,7 +63,7 @@ public final class BlobAccessConditions {
                 PageBlobAccessConditions.NONE : pageBlobAccessConditions;
     }
 
-    HttpAccessConditions getHttpAccessConditions() {
+    HTTPAccessConditions getHttpAccessConditions() {
         return httpAccessConditions;
     }
 

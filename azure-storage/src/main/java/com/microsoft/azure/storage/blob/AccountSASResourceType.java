@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,6 @@
  * limitations under the License.
  */
 package com.microsoft.azure.storage.blob;
-
-import java.util.EnumSet;
 
 /**
  * Specifies the set of possible resource types for an account shared access account policy.
@@ -45,18 +43,20 @@ public final class AccountSASResourceType {
      */
     @Override
     public String toString() {
+        // The order of the characters should be as specified here to ensure correctness:
+        // https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
         StringBuilder builder = new StringBuilder();
 
         if (this.service) {
-            builder.append("s");
+            builder.append('s');
         }
 
         if (this.container) {
-            builder.append("c");
+            builder.append('c');
         }
 
         if (this.object) {
-            builder.append("o");
+            builder.append('o');
         }
 
         return builder.toString();
@@ -74,7 +74,6 @@ public final class AccountSASResourceType {
         AccountSASResourceType resourceType = new AccountSASResourceType();
 
         for (int i=0; i<resourceTypesString.length(); i++) {
-            boolean invalidCharacter = true;
             char c = resourceTypesString.charAt(i);
             switch (c) {
                 case 's':

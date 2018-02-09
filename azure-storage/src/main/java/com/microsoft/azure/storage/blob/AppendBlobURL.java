@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,9 +22,9 @@ import com.microsoft.rest.v2.http.HttpPipeline;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 
@@ -32,6 +32,16 @@ import java.nio.ByteBuffer;
  * Represents a URL to a append blob.
  */
 public final class AppendBlobURL extends BlobURL {
+
+    /**
+     * Indicates the maximum number of bytes that can be sent in a call to appendBlock.
+     */
+    public static final int MAX_APPEND_BLOCK_BYTES = 4 * Constants.MB;
+
+    /**
+     * Indicates the maximum number of blocks allowed in an append blob.
+     */
+    public static final int MAX_BLOCKS = 50000;
 
     /**
      * Creates a new {@link AppendBlobURL} object.
@@ -71,9 +81,9 @@ public final class AppendBlobURL extends BlobURL {
      * @return
      *      A {@link BlobURL} object with the given pipeline.
      */
-    public AppendBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
+    public AppendBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnknownHostException {
         BlobURLParts blobURLParts = URLParser.parse(new URL(this.storageClient.url()));
-        blobURLParts.setSnapshot(snapshot);
+        blobURLParts.snapshot = snapshot;
         return new AppendBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
 
@@ -82,7 +92,7 @@ public final class AppendBlobURL extends BlobURL {
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
      *
      * @param headers
-     *      A {@link BlobHttpHeaders} object that specifies which properties to set on the blob.
+     *      A {@link BlobHTTPHeaders} object that specifies which properties to set on the blob.
      * @param metadata
      *      A {@link Metadata} object that specifies key value pairs to set on the blob.
      * @param accessConditions
@@ -92,16 +102,11 @@ public final class AppendBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobPutHeaders, Void>> create(
-            Metadata metadata, BlobHttpHeaders headers, BlobAccessConditions accessConditions) {
-        if(metadata == null) {
-            metadata = Metadata.NONE;
-        }
-        if(headers == null) {
-            headers = BlobHttpHeaders.NONE;
-        }
-        if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.NONE;
-        }
+            BlobHTTPHeaders headers, Metadata metadata, BlobAccessConditions accessConditions) {
+        headers = headers == null ? BlobHTTPHeaders.NONE : headers;
+        metadata = metadata == null ? Metadata.NONE : metadata;
+        accessConditions = accessConditions == null ? BlobAccessConditions.NONE : accessConditions;
+
         return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.APPEND_BLOB,
                 null,null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
@@ -120,6 +125,8 @@ public final class AppendBlobURL extends BlobURL {
      *
      * @param data
      *      A {@code Flowable&lt;byte[]&gt;} which represents the data to write to the blob.
+     * @param length
+     *      A {@code long} indicating how long the total data is.
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
@@ -128,9 +135,7 @@ public final class AppendBlobURL extends BlobURL {
      */
     public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlock(
             Flowable<ByteBuffer> data, long length, BlobAccessConditions accessConditions) {
-        if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.NONE;
-        }
+        accessConditions = accessConditions == null ? BlobAccessConditions.NONE : accessConditions;
 
         return this.storageClient.appendBlobs().appendBlockWithRestResponseAsync(data, length, null,
                 accessConditions.getLeaseAccessConditions().getLeaseId(),

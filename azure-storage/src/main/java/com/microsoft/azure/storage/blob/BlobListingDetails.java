@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,9 @@ import java.util.ArrayList;
  * Details indicating what additional information the service should return with each blob.
  */
 public final class BlobListingDetails {
+
+    public static final BlobListingDetails NONE = new BlobListingDetails(false, false, false,
+            false);
 
     private final boolean copy;
 
@@ -85,6 +88,10 @@ public final class BlobListingDetails {
         return uncommittedBlobs;
     }
 
+    /*
+     This is used internally to convert the details structure into a list to pass to the protocol layer. The customer
+     should never have need for this.
+     */
     ArrayList<ListBlobsIncludeItem> toList() {
         ArrayList<ListBlobsIncludeItem> details = new ArrayList<ListBlobsIncludeItem>();
         if(this.copy) {

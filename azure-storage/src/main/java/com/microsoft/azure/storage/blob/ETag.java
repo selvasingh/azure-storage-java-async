@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ public final class ETag {
     /**
      * Used for matching with no ETag.
      */
-    public static final ETag NONE = new ETag(Constants.EMPTY_STRING);
+    public static final ETag NONE = new ETag(null);
 
     /**
      * Used for matching with any ETag.

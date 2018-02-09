@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,14 +42,14 @@ public final class RequestRetryFactory implements RequestPolicyFactory {
      *      A {@link RequestRetryOptions} object configuring this factory and all its resultant policies.
      */
     public RequestRetryFactory(RequestRetryOptions requestRetryOptions) {
-        this.requestRetryOptions = requestRetryOptions;
+        this.requestRetryOptions = requestRetryOptions == null ? RequestRetryOptions.DEFAULT : requestRetryOptions;
     }
 
     private final class RequestRetryPolicy implements RequestPolicy {
 
         private final RequestPolicy nextPolicy;
 
-        final private RequestRetryOptions requestRetryOptions;
+        private final RequestRetryOptions requestRetryOptions;
 
         // TODO: It looked like there was some stuff in here to log how long the operation took. Do we want that?
 
@@ -60,15 +60,16 @@ public final class RequestRetryFactory implements RequestPolicyFactory {
 
         @Override
         public Single<HttpResponse> sendAsync(HttpRequest httpRequest) {
-            boolean considerSecondary = (httpRequest.httpMethod().toString().equals("GET") ||
-                    httpRequest.httpMethod().toString().equals("HEAD"))
+            boolean considerSecondary = (httpRequest.httpMethod().equals(HttpMethod.GET) ||
+                    httpRequest.httpMethod().equals(HttpMethod.HEAD))
                     && (this.requestRetryOptions.getSecondaryHost() != null);
 
             return this.attemptAsync(httpRequest, 1, considerSecondary, 1);
         }
 
+        // This is to log for debugging purposes only. Comment/uncomment as necessary for releasing/debugging.
         private void logf(String s, Object... args) {
-            System.out.println(String.format(s, args));
+            //System.out.println(String.format(s, args));
         }
 
         /**
