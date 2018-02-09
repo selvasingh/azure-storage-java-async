@@ -91,19 +91,19 @@ public final class BlobURLParts {
         url.withPath(path.toString());
 
         if (this.snapshot != null) {
-            url.addQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, this.snapshot);
+            url.setQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, this.snapshot);
         }
         String encodedSAS = this.sasQueryParameters.encode();
         if (encodedSAS.length() > 0) {
-            String query = url.query() != null ?
-                    url.query() + "&" + this.sasQueryParameters.encode() : this.sasQueryParameters.encode();
+            String query = url.query() != null && url.query().size() != 0 ?
+                    url.query() + encodedSAS : encodedSAS;
             url.withQuery(query);
         }
         for (Map.Entry<String, String[]> entry : this.unparsedParameters.entrySet()) {
             // TODO: Test this is the proper encoding
             // The commas are intentionally encoded.
             try {
-                url.addQueryParameter(entry.getKey(), URLEncoder.encode(
+                url.setQueryParameter(entry.getKey(), URLEncoder.encode(
                         Utility.join(entry.getValue(), ','), Constants.UTF8_CHARSET));
             }
             catch (UnsupportedEncodingException e) {

@@ -29,13 +29,13 @@ public final class RequestRetryOptions {
      */
     private RetryPolicyType retryPolicyType = RetryPolicyType.EXPONENTIAL;
 
-    private int maxTries = 4;
+    final private int maxTries;
 
-    private int tryTimeout = 30;
+    final private int tryTimeout;
 
-    private long retryDelayInMs = TimeUnit.SECONDS.toMillis(4);
+    final private long retryDelayInMs;
 
-    private long maxRetryDelayInMs = TimeUnit.SECONDS.toMillis(120);
+    final private long maxRetryDelayInMs;
 
     private String secondaryHost;
 
@@ -75,10 +75,16 @@ public final class RequestRetryOptions {
             Utility.assertInBounds("maxRetries", maxTries, 1, Integer.MAX_VALUE);
             this.maxTries = maxTries;
         }
+        else {
+            this.maxTries = 4;
+        }
 
         if (tryTimeout != 0) {
             Utility.assertInBounds("tryTimeoutInMs", tryTimeout, 1, Long.MAX_VALUE);
             this.tryTimeout = tryTimeout;
+        }
+        else {
+            this.tryTimeout = 30;
         }
 
         if (retryDelayInMs != null && maxRetryDelayInMs != null) {
@@ -90,12 +96,16 @@ public final class RequestRetryOptions {
         else if (retryDelayInMs != null) {
             Utility.assertInBounds("retryDelayInMs", retryDelayInMs, 1, Long.MAX_VALUE);
             this.retryDelayInMs = retryDelayInMs;
-            if (retryDelayInMs > this.maxRetryDelayInMs) {
+            if (retryDelayInMs > TimeUnit.SECONDS.toMillis(120)) {
                 this.maxRetryDelayInMs = retryDelayInMs;
+            }
+            else {
+                this.maxRetryDelayInMs = TimeUnit.SECONDS.toMillis(120);
             }
         }
         else {
-            this.retryDelayInMs = Math.min(this.retryDelayInMs, this.maxRetryDelayInMs);
+            this.maxRetryDelayInMs = TimeUnit.SECONDS.toMillis(120);
+            this.retryDelayInMs = Math.min(TimeUnit.SECONDS.toMillis(4), this.maxRetryDelayInMs);
         }
     }
 

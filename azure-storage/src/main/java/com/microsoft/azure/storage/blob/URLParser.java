@@ -14,7 +14,6 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import javax.rmi.CORBA.Util;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Comparator;
@@ -114,8 +113,8 @@ public final class URLParser {
         for (int m = 0; m < valuePairs.length; m++) {
             // Getting key and value for a single query parameter
             final int equalDex = valuePairs[m].indexOf("=");
-            String key = Utility.safeDecode(valuePairs[m].substring(0, equalDex)).toLowerCase(Locale.US);
-            String value = Utility.safeDecode(valuePairs[m].substring(equalDex + 1));
+            String key = Utility.safeURLDecode(valuePairs[m].substring(0, equalDex)).toLowerCase(Locale.US);
+            String value = Utility.safeURLDecode(valuePairs[m].substring(equalDex + 1));
 
             // add to map
             String[] keyValues = retVals.get(key);

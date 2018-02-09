@@ -57,21 +57,24 @@ public final class SASQueryParameters {
     }
 
     /**
-     * A {@code String} representing the storage services being accessed (only for Account SAS).
+     * A {@code String} representing the storage services being accessed (only for Account SAS). Please refer to
+     * {@link AccountSASService} for more details.
      */
     public String getServices() {
         return services;
     }
 
     /**
-     * A {@code String} representing the storage resource types being accessed (only for Account SAS).
+     * A {@code String} representing the storage resource types being accessed (only for Account SAS). Please refer to
+     * {@link AccountSASResourceType} for more details.
      */
     public String getResourceTypes() {
         return resourceTypes;
     }
 
     /**
-     * A {@code String} representing the allowed HTTP protocol(s) or {@code null}.
+     * A {@code String} representing the allowed HTTP protocol(s) or {@code null}. Please refer to {@link SASProtocol}
+     * for more details.
      */
     public SASProtocol getProtocol() {
         return protocol;
@@ -113,7 +116,8 @@ public final class SASQueryParameters {
     }
 
     /**
-     * A {@code String} representing the storage permissions or {@code null}.
+     * A {@code String} representing the storage permissions or {@code null}. Please refer to
+     * {@link AccountSASPermission}, {@link BlobSASPermission}, or {@link ContainerSASPermission} for more details.
      */
     public String getPermissions() {
         return permissions;
@@ -307,6 +311,9 @@ public final class SASQueryParameters {
     private void tryAppendQueryParameter(StringBuilder sb, String param, Object value) {
          if (value != null) {
              if (sb.length() == 0) {
+                 sb.append('?');
+             }
+             else {
                  sb.append('&');
              }
              try {

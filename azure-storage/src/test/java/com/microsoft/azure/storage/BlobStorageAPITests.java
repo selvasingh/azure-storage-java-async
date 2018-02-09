@@ -100,7 +100,7 @@ public class BlobStorageAPITests {
             // Download the blob contents.
             Flowable<ByteBuffer> data = bu.getBlob(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
-            byte[] dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            byte[] dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
             // Set and retrieve the blob properties. Metadata is not yet supported.
@@ -127,7 +127,7 @@ public class BlobStorageAPITests {
             // Download the contents of the snapshot.
             data = buSnapshot.getBlob(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
-            dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0,0,0});
 
             // Create a reference to another blob within the same container and copies the first blob into this location.
@@ -168,7 +168,7 @@ public class BlobStorageAPITests {
             bu3.putBlockList(blockIDs, null, null, null).blockingGet();
             data = bu3.getBlob(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
-            dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0,0,0});
 
             // SAS -----------------------------
@@ -216,7 +216,7 @@ public class BlobStorageAPITests {
             // Download the blob using the SAS. To perform other operations, ensure the appropriate permissions are
             // specified above.
             data = sasBlob.getBlob(new BlobRange(0L, 3L), null, false).blockingGet().body();
-            dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
             // --------------APPEND BLOBS-------------
@@ -225,7 +225,7 @@ public class BlobStorageAPITests {
             abu.appendBlock(Flowable.just(ByteBuffer.wrap(new byte[]{0,0,0})), 3,  null).blockingGet();
 
             data = abu.getBlob(new BlobRange(0L, 3L), null, false).blockingGet().body();
-            dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
             // ---------------PAGE BLOBS-------------

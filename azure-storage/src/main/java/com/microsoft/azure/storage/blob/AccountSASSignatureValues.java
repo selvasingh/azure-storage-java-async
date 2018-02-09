@@ -27,7 +27,7 @@ public final class AccountSASSignatureValues {
     /**
      * If null or empty, this defaults to {@code Constants.HeaderConstants.TARGET_STORAGE_VERSION}
      */
-    public String version;
+    public String version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
 
     /**
      * A {@link SASProtocol} value representing the allowed Internet protocols.
@@ -67,9 +67,7 @@ public final class AccountSASSignatureValues {
      */
     public String resourceTypes;
 
-    public AccountSASSignatureValues() {
-
-    }
+    public AccountSASSignatureValues() { }
 
     /**
      * Generates {@link SASQueryParameters} object which contains all SAS query parameters.
@@ -88,9 +86,6 @@ public final class AccountSASSignatureValues {
         Utility.assertNotNull("expiryTime", this.expiryTime);
         Utility.assertNotNull("permissions", this.permissions);
 
-        if (Utility.isNullOrEmpty(version)) {
-            this.version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
-        }
         IPRange ipRange;
         if (this.ipRange == null) {
             ipRange = IPRange.DEFAULT;

@@ -27,6 +27,7 @@ import io.reactivex.Single;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 
 public abstract class StorageURL {
@@ -87,16 +88,25 @@ public abstract class StorageURL {
         methods, but the PipelineOptions object itself can only be used for the duration of this call; it must not be
         passed to anything with a longer lifetime.
          */
-        LoggingFactory loggingFactory = new LoggingFactory(pipelineOptions.loggingOptions);
-        RequestIDFactory requestIDFactory = new RequestIDFactory();
-        RequestRetryFactory requestRetryFactory = new RequestRetryFactory(pipelineOptions.requestRetryOptions);
-        TelemetryFactory telemetryFactory = new TelemetryFactory(pipelineOptions.telemetryOptions);
-        AddDatePolicy addDate = new AddDatePolicy();
-        DecodingPolicyFactory decodingPolicyFactory = new DecodingPolicyFactory();
-        // TODO: Add decodingPolicy to pipeline
-        return HttpPipeline.build(
-                pipelineOptions.client, telemetryFactory, requestIDFactory, requestRetryFactory, addDate, credentials,
-                decodingPolicyFactory, loggingFactory);
+        if (credentials == null) {
+            throw new IllegalArgumentException(
+                    "Credentials cannot be null. For anonymous access use Anonymous Credentials.");
+        }
+
+        // Closest to API goes first, closest to wire goes last.
+        ArrayList<RequestPolicyFactory> factories = new ArrayList<>();
+        factories.add(new TelemetryFactory(pipelineOptions.telemetryOptions));
+        factories.add(new RequestIDFactory());
+        factories.add(new RequestRetryFactory(pipelineOptions.requestRetryOptions));
+        factories.add(new AddDatePolicy());
+        if (!(credentials instanceof AnonymousCredentials)) {
+            factories.add(credentials);
+        }
+        factories.add(new DecodingPolicyFactory());
+        factories.add(new LoggingFactory(pipelineOptions.loggingOptions));
+
+        return HttpPipeline.build(pipelineOptions.client,
+                factories.toArray(new RequestPolicyFactory[factories.size()]));
     }
 
     // TODO: revisit.

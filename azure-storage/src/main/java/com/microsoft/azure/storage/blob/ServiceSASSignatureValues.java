@@ -25,7 +25,7 @@ public final class ServiceSASSignatureValues {
      * The version of the service this SAS will target. If not specified, it will default to the version targeted by the
      * library.
      */
-    public String version;
+    public String version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
 
     /**
      * A {@link SASProtocol} value representing the allowed Internet protocols.
@@ -95,9 +95,7 @@ public final class ServiceSASSignatureValues {
      */
     public String contentType;
 
-    public ServiceSASSignatureValues() {
-
-    }
+    public ServiceSASSignatureValues() { }
 
     /**
      * Uses an account's shared key credential to sign these signature values to produce the proper SAS query
@@ -109,16 +107,9 @@ public final class ServiceSASSignatureValues {
      *      A {@link SASQueryParameters} object containing the signed query parameters.
      * @throws InvalidKeyException
      */
-    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials)
-            throws InvalidKeyException {
+    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials) {
         if (sharedKeyCredentials == null) {
             throw new IllegalArgumentException("SharedKeyCredentials cannot be null.");
-        }
-        if (expiryTime == null || permissions == null) {
-            throw new IllegalArgumentException("ExpiryTime and Permissions cannot be null.");
-        }
-        if (Utility.isNullOrEmpty(version)) {
-            this.version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
         }
 
         String resource = "c";
@@ -149,7 +140,12 @@ public final class ServiceSASSignatureValues {
                  this.contentType
          }, '\n');
 
-        String signature = sharedKeyCredentials.computeHmac256(stringToSign);
+        String signature = null;
+        try {
+            signature = sharedKeyCredentials.computeHmac256(stringToSign);
+        } catch (InvalidKeyException e) {
+            throw new Error(e); // The key should have been validated by now. If it is no longer valid here, we fail.
+        }
 
         return new SASQueryParameters(this.version, null, null,
                 this.protocol, this.startTime, this.expiryTime, this.ipRange, this.identifier, resource,
