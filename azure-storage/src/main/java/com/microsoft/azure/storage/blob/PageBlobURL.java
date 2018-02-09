@@ -353,12 +353,17 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link Single &lt;RestResponse&lt;PageBlobIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<PageBlobIncrementalCopyHeaders, Void>> startIncrementalCopy(
-            URL source, String snapshot, BlobAccessConditions accessConditions) throws MalformedURLException {
+            URL source, String snapshot, BlobAccessConditions accessConditions) {
         accessConditions = accessConditions == null ? BlobAccessConditions.NONE : accessConditions;
 
-        UrlBuilder builder = UrlBuilder.parse(source.toString());
-        builder.addQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, snapshot);
-        source = builder.toURL();
+        UrlBuilder builder = UrlBuilder.parse(source);
+        builder.setQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, snapshot);
+        try {
+            source = builder.toURL();
+        } catch (MalformedURLException e) {
+            // We are parsing a valid url and adding a query parameter. If this fails, we can't recover.
+            throw new Error(e);
+        }
 
         return this.storageClient.pageBlobs().incrementalCopyWithRestResponseAsync(source.toString(),
                 null, null,

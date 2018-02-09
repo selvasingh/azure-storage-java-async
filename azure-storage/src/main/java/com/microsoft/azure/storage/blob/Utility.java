@@ -42,23 +42,6 @@ final class Utility {
     static final DateFormat ISO8601UTCDateFormat = new ISO8601UTCDateFormat();
 
     /**
-     * Returns the UTC date/time for the specified value using the ISO8601 pattern.
-     *
-     * @param value
-     *            A <code>Date</code> object that represents the date to convert to UTC date/time in the ISO8601
-     *            pattern. If this value is <code>null</code>, this method returns an empty string.
-     *
-     * @return A {@code String} that represents the UTC date/time for the specified value using the ISO8601
-     *         pattern, or an empty string if <code>value</code> is <code>null</code>.
-     */
-    static String getUTCTimeOrEmpty(final Date value) {
-        if (value == null) {
-            return Constants.EMPTY_STRING;
-        }
-        return ISO8601UTCDateFormat.format(value);
-    }
-
-    /**
      * Asserts that a value is not <code>null</code>.
      *
      * @param param
@@ -98,7 +81,7 @@ final class Utility {
      * @throws UnsupportedEncodingException
      *             If a storage service error occurred.
      */
-    static String safeDecode(final String stringToDecode) {
+    static String safeURLDecode(final String stringToDecode) {
         if (stringToDecode.length() == 0) {
             return Constants.EMPTY_STRING;
         }
@@ -178,6 +161,7 @@ final class Utility {
      *
      * @return the corresponding <code>Date</code> object
      */
+    // TODO: Get rid of this with Java 8 if possible.
     public static Date parseDate(String dateString) {
         String pattern = MAX_PRECISION_PATTERN;
         switch(dateString.length()) {
