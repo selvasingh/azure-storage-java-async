@@ -32,7 +32,7 @@ final class Utility {
 
     static final class ISO8601UTCDateFormat extends SimpleDateFormat {
         ISO8601UTCDateFormat() {
-            super("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+            super("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
             this.setTimeZone(TimeZone.getTimeZone("UTC"));
         }
     }
