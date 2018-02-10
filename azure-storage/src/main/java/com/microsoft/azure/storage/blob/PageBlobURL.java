@@ -370,7 +370,7 @@ public final class PageBlobURL extends BlobURL {
 
 
         UrlBuilder builder = UrlBuilder.parse(source.toString());
-        builder.addQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, snapshot);
+        builder.setQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, snapshot);
         source = builder.toURL();
 
         return this.storageClient.pageBlobs().incrementalCopyWithRestResponseAsync(source.toString(),

@@ -183,16 +183,21 @@ public final class BlobURLParts {
         url.withPath(path.toString());
 
         for (Map.Entry<String, String[]> entry : this.unparsedParameters.entrySet()) {
-            url.addQueryParameter(entry.getKey(), Utility.join(entry.getValue(), ','));
+            url.setQueryParameter(entry.getKey(), Utility.join(entry.getValue(), ','));
         }
 
         if (this.snapshot != null) {
-            url.addQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, this.snapshot);
+            url.setQueryParameter(Constants.SNAPSHOT_QUERY_PARAMETER, this.snapshot);
         }
 
-        String query = url.query() != null ?
+        String sasString = this.sasQueryParameters.encode();
+        if (sasString.length() != 0) {
+            url.withQuery(sasString);
+        }
+
+        /*String query = url.query() != null && url.query().size() != 0 ?
                 url.query() + this.sasQueryParameters.encode() : this.sasQueryParameters.encode();
-        url.withQuery(query);
+        url.withQuery(query);*/
         return new URL(url.toString()); // TODO: replace with toURL when new autorest publishes
     }
 }
