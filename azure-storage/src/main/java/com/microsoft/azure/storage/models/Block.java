@@ -10,7 +10,7 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
@@ -18,17 +18,17 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * size.
  */
 @JacksonXmlRootElement(localName = "Block")
-public class Block {
+public final class Block {
     /**
      * The base64 encoded block ID.
      */
-    @JsonProperty(value = "Name", required = true)
+    @JacksonXmlProperty(localName = "Name")
     private String name;
 
     /**
      * The block size in bytes.
      */
-    @JsonProperty(value = "Size", required = true)
+    @JacksonXmlProperty(localName = "Size")
     private int size;
 
     /**

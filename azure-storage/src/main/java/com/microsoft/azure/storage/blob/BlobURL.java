@@ -142,7 +142,7 @@ public class BlobURL extends StorageURL {
 
         // TODO: Remove sourceURL.toString when runtime updates
         return this.storageClient.blobs().copyWithRestResponseAsync(
-                sourceURL.toString(), null, metadata.toString(),
+                sourceURL, null, metadata,
                 sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 sourceAccessConditions.getHttpAccessConditions().getIfMatch().toString(),
@@ -292,7 +292,7 @@ public class BlobURL extends StorageURL {
         metadata = metadata == null ? Metadata.NONE : metadata;
         accessConditions = accessConditions == null ? BlobAccessConditions.NONE : accessConditions;
 
-        return this.storageClient.blobs().setMetadataWithRestResponseAsync(null, metadata.toString(),
+        return this.storageClient.blobs().setMetadataWithRestResponseAsync(null, metadata,
                 accessConditions.getLeaseAccessConditions().getLeaseId(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -318,7 +318,7 @@ public class BlobURL extends StorageURL {
         accessConditions = accessConditions == null ? BlobAccessConditions.NONE : accessConditions;
 
         return this.storageClient.blobs().takeSnapshotWithRestResponseAsync(null,
-                metadata.toString(),
+                metadata,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),

@@ -10,42 +10,42 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Azure Analytics Logging settings.
  */
 @JacksonXmlRootElement(localName = "Logging")
-public class Logging {
+public final class Logging {
     /**
      * The version of Storage Analytics to configure.
      */
-    @JsonProperty(value = "Version", required = true)
+    @JacksonXmlProperty(localName = "Version")
     private String version;
 
     /**
      * Indicates whether all delete requests should be logged.
      */
-    @JsonProperty(value = "Delete", required = true)
+    @JacksonXmlProperty(localName = "Delete")
     private boolean delete;
 
     /**
      * Indicates whether all read requests should be logged.
      */
-    @JsonProperty(value = "Read", required = true)
+    @JacksonXmlProperty(localName = "Read")
     private boolean read;
 
     /**
      * Indicates whether all write requests should be logged.
      */
-    @JsonProperty(value = "Write", required = true)
+    @JacksonXmlProperty(localName = "Write")
     private boolean write;
 
     /**
      * The retentionPolicy property.
      */
-    @JsonProperty(value = "RetentionPolicy", required = true)
+    @JacksonXmlProperty(localName = "RetentionPolicy")
     private RetentionPolicy retentionPolicy;
 
     /**

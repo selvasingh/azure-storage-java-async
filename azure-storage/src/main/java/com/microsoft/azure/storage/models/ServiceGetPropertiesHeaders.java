@@ -10,19 +10,19 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Defines headers for GetProperties operation.
  */
 @JacksonXmlRootElement(localName = "Service-GetProperties-Headers")
-public class ServiceGetPropertiesHeaders {
+public final class ServiceGetPropertiesHeaders {
     /**
      * This header uniquely identifies the request that was made and can be
      * used for troubleshooting the request.
      */
-    @JsonProperty(value = "x-ms-request-id")
+    @JacksonXmlProperty(localName = "x-ms-request-id")
     private String requestId;
 
     /**
@@ -30,7 +30,7 @@ public class ServiceGetPropertiesHeaders {
      * This header is returned for requests made against version 2009-09-19 and
      * above.
      */
-    @JsonProperty(value = "x-ms-version")
+    @JacksonXmlProperty(localName = "x-ms-version")
     private String version;
 
     /**

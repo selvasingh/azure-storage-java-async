@@ -10,7 +10,7 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * one domain (the origin domain) to call APIs in another domain.
  */
 @JacksonXmlRootElement(localName = "CorsRule")
-public class CorsRule {
+public final class CorsRule {
     /**
      * The origin domains that are permitted to make a request against the
      * storage service via CORS. The origin domain is the domain from which the
@@ -30,35 +30,35 @@ public class CorsRule {
      * also use the wildcard character '*' to allow all origin domains to make
      * requests via CORS.
      */
-    @JsonProperty(value = "AllowedOrigins", required = true)
+    @JacksonXmlProperty(localName = "AllowedOrigins")
     private String allowedOrigins;
 
     /**
      * The methods (HTTP request verbs) that the origin domain may use for a
      * CORS request. (comma separated).
      */
-    @JsonProperty(value = "AllowedMethods", required = true)
+    @JacksonXmlProperty(localName = "AllowedMethods")
     private String allowedMethods;
 
     /**
      * the request headers that the origin domain may specify on the CORS
      * request.
      */
-    @JsonProperty(value = "AllowedHeaders", required = true)
+    @JacksonXmlProperty(localName = "AllowedHeaders")
     private String allowedHeaders;
 
     /**
      * The response headers that may be sent in the response to the CORS
      * request and exposed by the browser to the request issuer.
      */
-    @JsonProperty(value = "ExposedHeaders", required = true)
+    @JacksonXmlProperty(localName = "ExposedHeaders")
     private String exposedHeaders;
 
     /**
      * The maximum amount time that a browser should cache the preflight
      * OPTIONS request.
      */
-    @JsonProperty(value = "MaxAgeInSeconds", required = true)
+    @JacksonXmlProperty(localName = "MaxAgeInSeconds")
     private int maxAgeInSeconds;
 
     /**

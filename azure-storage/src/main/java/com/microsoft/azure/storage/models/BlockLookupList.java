@@ -10,7 +10,8 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
 
@@ -18,24 +19,54 @@ import java.util.List;
  * The BlockLookupList model.
  */
 @JacksonXmlRootElement(localName = "BlockList")
-public class BlockLookupList {
+public final class BlockLookupList {
+    private static final class CommittedWrapper {
+        @JacksonXmlProperty(localName = "Committed")
+        private final List<String> items;
+
+        @JsonCreator
+        private CommittedWrapper(@JacksonXmlProperty(localName = "Committed") List<String> items) {
+            this.items = items;
+        }
+    }
+
     /**
      * The committed property.
      */
-    @JsonProperty(value = "Committed")
-    private List<String> committed;
+    @JacksonXmlProperty(localName = "Committed")
+    private CommittedWrapper committed;
+
+    private static final class UncommittedWrapper {
+        @JacksonXmlProperty(localName = "Uncommitted")
+        private final List<String> items;
+
+        @JsonCreator
+        private UncommittedWrapper(@JacksonXmlProperty(localName = "Uncommitted") List<String> items) {
+            this.items = items;
+        }
+    }
 
     /**
      * The uncommitted property.
      */
-    @JsonProperty(value = "Uncommitted")
-    private List<String> uncommitted;
+    @JacksonXmlProperty(localName = "Uncommitted")
+    private UncommittedWrapper uncommitted;
+
+    private static final class LatestWrapper {
+        @JacksonXmlProperty(localName = "Latest")
+        private final List<String> items;
+
+        @JsonCreator
+        private LatestWrapper(@JacksonXmlProperty(localName = "Latest") List<String> items) {
+            this.items = items;
+        }
+    }
 
     /**
      * The latest property.
      */
-    @JsonProperty(value = "Latest")
-    private List<String> latest;
+    @JacksonXmlProperty(localName = "Latest")
+    private LatestWrapper latest;
 
     /**
      * Get the committed value.
@@ -43,7 +74,7 @@ public class BlockLookupList {
      * @return the committed value.
      */
     public List<String> committed() {
-        return this.committed;
+        return this.committed.items;
     }
 
     /**
@@ -53,7 +84,7 @@ public class BlockLookupList {
      * @return the BlockLookupList object itself.
      */
     public BlockLookupList withCommitted(List<String> committed) {
-        this.committed = committed;
+        this.committed = new CommittedWrapper(committed);
         return this;
     }
 
@@ -63,7 +94,7 @@ public class BlockLookupList {
      * @return the uncommitted value.
      */
     public List<String> uncommitted() {
-        return this.uncommitted;
+        return this.uncommitted.items;
     }
 
     /**
@@ -73,7 +104,7 @@ public class BlockLookupList {
      * @return the BlockLookupList object itself.
      */
     public BlockLookupList withUncommitted(List<String> uncommitted) {
-        this.uncommitted = uncommitted;
+        this.uncommitted = new UncommittedWrapper(uncommitted);
         return this;
     }
 
@@ -83,7 +114,7 @@ public class BlockLookupList {
      * @return the latest value.
      */
     public List<String> latest() {
-        return this.latest;
+        return this.latest.items;
     }
 
     /**
@@ -93,7 +124,7 @@ public class BlockLookupList {
      * @return the BlockLookupList object itself.
      */
     public BlockLookupList withLatest(List<String> latest) {
-        this.latest = latest;
+        this.latest = new LatestWrapper(latest);
         return this;
     }
 }

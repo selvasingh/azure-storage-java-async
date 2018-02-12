@@ -10,7 +10,7 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
@@ -19,42 +19,42 @@ import org.joda.time.DateTime;
  * Properties of a container.
  */
 @JacksonXmlRootElement(localName = "ContainerProperties")
-public class ContainerProperties {
+public final class ContainerProperties {
     /**
      * The lastModified property.
      */
-    @JsonProperty(value = "Last-Modified", required = true)
+    @JacksonXmlProperty(localName = "Last-Modified")
     private DateTimeRfc1123 lastModified;
 
     /**
      * The etag property.
      */
-    @JsonProperty(value = "Etag", required = true)
+    @JacksonXmlProperty(localName = "Etag")
     private String etag;
 
     /**
      * Possible values include: 'locked', 'unlocked'.
      */
-    @JsonProperty(value = "LeaseStatus")
+    @JacksonXmlProperty(localName = "LeaseStatus")
     private LeaseStatusType leaseStatus;
 
     /**
      * Possible values include: 'available', 'leased', 'expired', 'breaking',
      * 'broken'.
      */
-    @JsonProperty(value = "LeaseState")
+    @JacksonXmlProperty(localName = "LeaseState")
     private LeaseStateType leaseState;
 
     /**
      * Possible values include: 'infinite', 'fixed'.
      */
-    @JsonProperty(value = "LeaseDuration")
+    @JacksonXmlProperty(localName = "LeaseDuration")
     private LeaseDurationType leaseDuration;
 
     /**
      * Possible values include: 'container', 'blob'.
      */
-    @JsonProperty(value = "PublicAccess")
+    @JacksonXmlProperty(localName = "PublicAccess")
     private PublicAccessType publicAccess;
 
     /**

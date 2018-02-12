@@ -125,7 +125,7 @@ public final class PageBlobURL extends BlobURL {
         return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.PAGE_BLOB, null,
                 null, headers.getContentType(), headers.getContentEncoding(),
                 headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(),
-                metadata.toString(), accessConditions.getLeaseAccessConditions().getLeaseId(),
+                metadata, accessConditions.getLeaseAccessConditions().getLeaseId(),
                 headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -365,7 +365,7 @@ public final class PageBlobURL extends BlobURL {
             throw new Error(e);
         }
 
-        return this.storageClient.pageBlobs().incrementalCopyWithRestResponseAsync(source.toString(),
+        return this.storageClient.pageBlobs().incrementalCopyWithRestResponseAsync(source,
                 null, null,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),

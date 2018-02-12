@@ -10,25 +10,25 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * the retention policy.
  */
 @JacksonXmlRootElement(localName = "RetentionPolicy")
-public class RetentionPolicy {
+public final class RetentionPolicy {
     /**
      * Indicates whether a retention policy is enabled for the storage service.
      */
-    @JsonProperty(value = "Enabled", required = true)
+    @JacksonXmlProperty(localName = "Enabled")
     private boolean enabled;
 
     /**
      * Indicates the number of days that metrics or logging or soft-deleted
      * data should be retained. All data older than this value will be deleted.
      */
-    @JsonProperty(value = "Days")
+    @JacksonXmlProperty(localName = "Days")
     private Integer days;
 
     /**

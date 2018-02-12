@@ -10,24 +10,24 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * The PageRange model.
  */
 @JacksonXmlRootElement(localName = "PageRange")
-public class PageRange {
+public final class PageRange {
     /**
      * The start property.
      */
-    @JsonProperty(value = "Start", required = true)
+    @JacksonXmlProperty(localName = "Start")
     private long start;
 
     /**
      * The end property.
      */
-    @JsonProperty(value = "End", required = true)
+    @JacksonXmlProperty(localName = "End")
     private long end;
 
     /**

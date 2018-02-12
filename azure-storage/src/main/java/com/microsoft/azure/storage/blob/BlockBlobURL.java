@@ -119,7 +119,7 @@ public final class BlockBlobURL extends BlobURL {
         // TODO: Metadata protocol layer broken.
         return this.storageClient.blobs().putWithRestResponseAsync(length, BlobType.BLOCK_BLOB, data,
                 null, headers.getContentType(), headers.getContentEncoding(),
-                headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
+                headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata,
                 accessConditions.getLeaseAccessConditions().getLeaseId(),
                 headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
@@ -199,7 +199,7 @@ public final class BlockBlobURL extends BlobURL {
         return this.storageClient.blockBlobs().putBlockListWithRestResponseAsync(
                 new BlockLookupList().withLatest(base64BlockIDs), null,
                 headers.getCacheControl(), headers.getContentType(),headers.getContentEncoding(),
-                headers.getContentLanguage(), headers.getContentMD5(), metadata.toString(),
+                headers.getContentLanguage(), headers.getContentMD5(), metadata,
                 accessConditions.getLeaseAccessConditions().getLeaseId(), headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),

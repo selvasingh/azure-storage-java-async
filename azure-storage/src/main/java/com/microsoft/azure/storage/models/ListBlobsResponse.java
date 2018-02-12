@@ -10,7 +10,6 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
@@ -18,7 +17,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * An enumeration of blobs.
  */
 @JacksonXmlRootElement(localName = "EnumerationResults")
-public class ListBlobsResponse {
+public final class ListBlobsResponse {
     /**
      * The serviceEndpoint property.
      */
@@ -34,37 +33,37 @@ public class ListBlobsResponse {
     /**
      * The prefix property.
      */
-    @JsonProperty(value = "Prefix", required = true)
+    @JacksonXmlProperty(localName = "Prefix")
     private String prefix;
 
     /**
      * The marker property.
      */
-    @JsonProperty(value = "Marker", required = true)
+    @JacksonXmlProperty(localName = "Marker")
     private String marker;
 
     /**
      * The maxResults property.
      */
-    @JsonProperty(value = "MaxResults", required = true)
+    @JacksonXmlProperty(localName = "MaxResults")
     private int maxResults;
 
     /**
      * The delimiter property.
      */
-    @JsonProperty(value = "Delimiter", required = true)
+    @JacksonXmlProperty(localName = "Delimiter")
     private String delimiter;
 
     /**
      * The blobs property.
      */
-    @JsonProperty(value = "Blobs", required = true)
+    @JacksonXmlProperty(localName = "Blobs")
     private Blobs blobs;
 
     /**
      * The nextMarker property.
      */
-    @JsonProperty(value = "NextMarker", required = true)
+    @JacksonXmlProperty(localName = "NextMarker")
     private String nextMarker;
 
     /**

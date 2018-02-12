@@ -10,7 +10,8 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
 
@@ -18,18 +19,38 @@ import java.util.List;
  * the list of pages.
  */
 @JacksonXmlRootElement(localName = "PageList")
-public class PageList {
+public final class PageList {
+    private static final class PageRangeWrapper {
+        @JacksonXmlProperty(localName = "PageRange")
+        private final List<PageRange> items;
+
+        @JsonCreator
+        private PageRangeWrapper(@JacksonXmlProperty(localName = "PageRange") List<PageRange> items) {
+            this.items = items;
+        }
+    }
+
     /**
      * The pageRange property.
      */
-    @JsonProperty(value = "PageRange")
-    private List<PageRange> pageRange;
+    @JacksonXmlProperty(localName = "PageRange")
+    private PageRangeWrapper pageRange;
+
+    private static final class ClearRangeWrapper {
+        @JacksonXmlProperty(localName = "ClearRange")
+        private final List<ClearRange> items;
+
+        @JsonCreator
+        private ClearRangeWrapper(@JacksonXmlProperty(localName = "ClearRange") List<ClearRange> items) {
+            this.items = items;
+        }
+    }
 
     /**
      * The clearRange property.
      */
-    @JsonProperty(value = "ClearRange")
-    private List<ClearRange> clearRange;
+    @JacksonXmlProperty(localName = "ClearRange")
+    private ClearRangeWrapper clearRange;
 
     /**
      * Get the pageRange value.
@@ -37,7 +58,7 @@ public class PageList {
      * @return the pageRange value.
      */
     public List<PageRange> pageRange() {
-        return this.pageRange;
+        return this.pageRange.items;
     }
 
     /**
@@ -47,7 +68,7 @@ public class PageList {
      * @return the PageList object itself.
      */
     public PageList withPageRange(List<PageRange> pageRange) {
-        this.pageRange = pageRange;
+        this.pageRange = new PageRangeWrapper(pageRange);
         return this;
     }
 
@@ -57,7 +78,7 @@ public class PageList {
      * @return the clearRange value.
      */
     public List<ClearRange> clearRange() {
-        return this.clearRange;
+        return this.clearRange.items;
     }
 
     /**
@@ -67,7 +88,7 @@ public class PageList {
      * @return the PageList object itself.
      */
     public PageList withClearRange(List<ClearRange> clearRange) {
-        this.clearRange = clearRange;
+        this.clearRange = new ClearRangeWrapper(clearRange);
         return this;
     }
 }

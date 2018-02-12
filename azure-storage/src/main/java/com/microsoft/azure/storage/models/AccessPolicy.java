@@ -10,7 +10,7 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.joda.time.DateTime;
 
@@ -18,23 +18,23 @@ import org.joda.time.DateTime;
  * An Access policy.
  */
 @JacksonXmlRootElement(localName = "AccessPolicy")
-public class AccessPolicy {
+public final class AccessPolicy {
     /**
      * the date-time the policy is active.
      */
-    @JsonProperty(value = "Start", required = true)
+    @JacksonXmlProperty(localName = "Start")
     private DateTime start;
 
     /**
      * the date-time the policy expires.
      */
-    @JsonProperty(value = "Expiry", required = true)
+    @JacksonXmlProperty(localName = "Expiry")
     private DateTime expiry;
 
     /**
      * the permissions for the acl policy.
      */
-    @JsonProperty(value = "Permission", required = true)
+    @JacksonXmlProperty(localName = "Permission")
     private String permission;
 
     /**

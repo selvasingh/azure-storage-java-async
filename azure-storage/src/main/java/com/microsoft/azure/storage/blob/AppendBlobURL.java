@@ -109,7 +109,7 @@ public final class AppendBlobURL extends BlobURL {
 
         return this.storageClient.blobs().putWithRestResponseAsync(0, BlobType.APPEND_BLOB,
                 null,null, headers.getContentType(), headers.getContentEncoding(),
-                headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
+                headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata,
                 accessConditions.getLeaseAccessConditions().getLeaseId(),
                 headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),

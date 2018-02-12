@@ -35,9 +35,9 @@ public enum SequenceNumberActionType {
     /**
      * The actual serialized value for a SequenceNumberActionType instance.
      */
-    private String value;
+    private final String value;
 
-    SequenceNumberActionType(String value) {
+    private SequenceNumberActionType(String value) {
         this.value = value;
     }
 

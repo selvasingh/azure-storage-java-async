@@ -153,7 +153,7 @@ public final class ContainerURL extends StorageURL {
             Metadata metadata, PublicAccessType accessType) {
         metadata = metadata == null ? Metadata.NONE : metadata;
         return this.storageClient.containers().createWithRestResponseAsync(
-                null, metadata.toString(), accessType, null);
+                null, metadata, accessType, null);
     }
 
     /**
@@ -229,7 +229,7 @@ public final class ContainerURL extends StorageURL {
 
 
         return this.storageClient.containers().setMetadataWithRestResponseAsync(null,
-                accessConditions.getLeaseID().getLeaseId(), metadata.toString(),
+                accessConditions.getLeaseID().getLeaseId(), metadata,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),null);
     }
 

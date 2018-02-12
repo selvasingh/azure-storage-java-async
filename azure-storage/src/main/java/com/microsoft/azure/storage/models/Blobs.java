@@ -10,7 +10,8 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
 
@@ -18,18 +19,38 @@ import java.util.List;
  * The Blobs model.
  */
 @JacksonXmlRootElement(localName = "Blobs")
-public class Blobs {
+public final class Blobs {
+    private static final class BlobPrefixWrapper {
+        @JacksonXmlProperty(localName = "BlobPrefix")
+        private final List<BlobPrefix> items;
+
+        @JsonCreator
+        private BlobPrefixWrapper(@JacksonXmlProperty(localName = "BlobPrefix") List<BlobPrefix> items) {
+            this.items = items;
+        }
+    }
+
     /**
      * The blobPrefix property.
      */
-    @JsonProperty(value = "BlobPrefix")
-    private List<BlobPrefix> blobPrefix;
+    @JacksonXmlProperty(localName = "BlobPrefix")
+    private BlobPrefixWrapper blobPrefix;
+
+    private static final class BlobWrapper {
+        @JacksonXmlProperty(localName = "Blob")
+        private final List<Blob> items;
+
+        @JsonCreator
+        private BlobWrapper(@JacksonXmlProperty(localName = "Blob") List<Blob> items) {
+            this.items = items;
+        }
+    }
 
     /**
      * The blob property.
      */
-    @JsonProperty(value = "Blob")
-    private List<Blob> blob;
+    @JacksonXmlProperty(localName = "Blob")
+    private BlobWrapper blob;
 
     /**
      * Get the blobPrefix value.
@@ -37,7 +58,7 @@ public class Blobs {
      * @return the blobPrefix value.
      */
     public List<BlobPrefix> blobPrefix() {
-        return this.blobPrefix;
+        return this.blobPrefix.items;
     }
 
     /**
@@ -47,7 +68,7 @@ public class Blobs {
      * @return the Blobs object itself.
      */
     public Blobs withBlobPrefix(List<BlobPrefix> blobPrefix) {
-        this.blobPrefix = blobPrefix;
+        this.blobPrefix = new BlobPrefixWrapper(blobPrefix);
         return this;
     }
 
@@ -57,7 +78,7 @@ public class Blobs {
      * @return the blob value.
      */
     public List<Blob> blob() {
-        return this.blob;
+        return this.blob.items;
     }
 
     /**
@@ -67,7 +88,7 @@ public class Blobs {
      * @return the Blobs object itself.
      */
     public Blobs withBlob(List<Blob> blob) {
-        this.blob = blob;
+        this.blob = new BlobWrapper(blob);
         return this;
     }
 }

@@ -10,8 +10,8 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
 
@@ -19,18 +19,38 @@ import java.util.List;
  * The BlockList model.
  */
 @JacksonXmlRootElement(localName = "BlockList")
-public class BlockList {
+public final class BlockList {
+    private static final class CommittedBlocksWrapper {
+        @JacksonXmlProperty(localName = "Block")
+        private final List<Block> items;
+
+        @JsonCreator
+        private CommittedBlocksWrapper(@JacksonXmlProperty(localName = "Block") List<Block> items) {
+            this.items = items;
+        }
+    }
+
     /**
      * The committedBlocks property.
      */
-    @JacksonXmlElementWrapper(localName = "CommittedBlocks")
-    private List<Block> committedBlocks;
+    @JacksonXmlProperty(localName = "CommittedBlocks")
+    private CommittedBlocksWrapper committedBlocks;
+
+    private static final class UncommittedBlocksWrapper {
+        @JacksonXmlProperty(localName = "Block")
+        private final List<Block> items;
+
+        @JsonCreator
+        private UncommittedBlocksWrapper(@JacksonXmlProperty(localName = "Block") List<Block> items) {
+            this.items = items;
+        }
+    }
 
     /**
      * The uncommittedBlocks property.
      */
-    @JacksonXmlElementWrapper(localName = "UncommittedBlocks")
-    private List<Block> uncommittedBlocks;
+    @JacksonXmlProperty(localName = "UncommittedBlocks")
+    private UncommittedBlocksWrapper uncommittedBlocks;
 
     /**
      * Get the committedBlocks value.
@@ -38,7 +58,7 @@ public class BlockList {
      * @return the committedBlocks value.
      */
     public List<Block> committedBlocks() {
-        return this.committedBlocks;
+        return this.committedBlocks.items;
     }
 
     /**
@@ -48,7 +68,7 @@ public class BlockList {
      * @return the BlockList object itself.
      */
     public BlockList withCommittedBlocks(List<Block> committedBlocks) {
-        this.committedBlocks = committedBlocks;
+        this.committedBlocks = new CommittedBlocksWrapper(committedBlocks);
         return this;
     }
 
@@ -58,7 +78,7 @@ public class BlockList {
      * @return the uncommittedBlocks value.
      */
     public List<Block> uncommittedBlocks() {
-        return this.uncommittedBlocks;
+        return this.uncommittedBlocks.items;
     }
 
     /**
@@ -68,7 +88,7 @@ public class BlockList {
      * @return the BlockList object itself.
      */
     public BlockList withUncommittedBlocks(List<Block> uncommittedBlocks) {
-        this.uncommittedBlocks = uncommittedBlocks;
+        this.uncommittedBlocks = new UncommittedBlocksWrapper(uncommittedBlocks);
         return this;
     }
 }
