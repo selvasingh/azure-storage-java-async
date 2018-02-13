@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Factory for retrying requests
  */
+//TODO: This was retrying when I got the xml bom issue. Investigate that
 public final class RequestRetryFactory implements RequestPolicyFactory {
 
     private final RequestRetryOptions requestRetryOptions;
