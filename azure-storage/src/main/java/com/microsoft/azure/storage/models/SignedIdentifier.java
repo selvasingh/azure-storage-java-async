@@ -10,24 +10,24 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * signed identifier.
  */
 @JacksonXmlRootElement(localName = "SignedIdentifier")
-public final class SignedIdentifier {
+public class SignedIdentifier {
     /**
      * a unique id.
      */
-    @JacksonXmlProperty(localName = "Id")
+    @JsonProperty(value = "Id", required = true)
     private String id;
 
     /**
      * The access policy.
      */
-    @JacksonXmlProperty(localName = "AccessPolicy")
+    @JsonProperty(value = "AccessPolicy", required = true)
     private AccessPolicy accessPolicy;
 
     /**

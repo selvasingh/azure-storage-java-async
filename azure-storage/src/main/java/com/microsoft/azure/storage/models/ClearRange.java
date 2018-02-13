@@ -10,24 +10,24 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * The ClearRange model.
  */
 @JacksonXmlRootElement(localName = "ClearRange")
-public final class ClearRange {
+public class ClearRange {
     /**
      * The start property.
      */
-    @JacksonXmlProperty(localName = "Start")
+    @JsonProperty(value = "Start", required = true)
     private int start;
 
     /**
      * The end property.
      */
-    @JacksonXmlProperty(localName = "End")
+    @JsonProperty(value = "End", required = true)
     private int end;
 
     /**

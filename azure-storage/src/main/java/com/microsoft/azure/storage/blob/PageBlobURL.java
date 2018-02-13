@@ -47,7 +47,7 @@ public final class PageBlobURL extends BlobURL {
      * @param url
      *      A {@code java.net.URL} to a page blob.
      * @param pipeline
-     *      A {@link HttpPipeline} object representing the pipeline for requests.
+     *      A {@link HttpPipeline} for sending requests.
      */
     public PageBlobURL(URL url, HttpPipeline pipeline) {
         super( url, pipeline);

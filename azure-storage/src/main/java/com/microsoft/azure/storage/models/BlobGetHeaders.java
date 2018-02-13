@@ -10,10 +10,9 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
-import com.microsoft.rest.v2.annotations.HeaderCollection;
 import java.util.Map;
 import org.joda.time.DateTime;
 
@@ -21,39 +20,39 @@ import org.joda.time.DateTime;
  * Defines headers for Get operation.
  */
 @JacksonXmlRootElement(localName = "Blob-Get-Headers")
-public final class BlobGetHeaders {
+public class BlobGetHeaders {
     /**
      * Returns the date and time the container was last modified. Any operation
      * that modifies the blob, including an update of the blob's metadata or
      * properties, changes the last-modified time of the blob.
      */
-    @JacksonXmlProperty(localName = "Last-Modified")
+    @JsonProperty(value = "Last-Modified")
     private DateTimeRfc1123 lastModified;
 
     /**
      * The metadata property.
      */
-    @HeaderCollection("x-ms-meta-")
+    @JsonProperty(value = "x-ms-meta")
     private Map<String, String> metadata;
 
     /**
      * The number of bytes present in the response body.
      */
-    @JacksonXmlProperty(localName = "Content-Length")
+    @JsonProperty(value = "Content-Length")
     private Long contentLength;
 
     /**
      * The content type specified for the blob. The default content type is
      * 'application/octet-stream'.
      */
-    @JacksonXmlProperty(localName = "Content-Type")
+    @JsonProperty(value = "Content-Type")
     private String contentType;
 
     /**
      * Indicates the range of bytes returned in the event that the client
      * requested a subset of the blob by setting the 'Range' request header.
      */
-    @JacksonXmlProperty(localName = "Content-Range")
+    @JsonProperty(value = "Content-Range")
     private String contentRange;
 
     /**
@@ -61,7 +60,7 @@ public final class BlobGetHeaders {
      * conditionally. If the request version is 2011-08-18 or newer, the ETag
      * value will be in quotes.
      */
-    @JacksonXmlProperty(localName = "ETag")
+    @JsonProperty(value = "ETag")
     private String eTag;
 
     /**
@@ -69,20 +68,20 @@ public final class BlobGetHeaders {
      * this response header is returned so that the client can check for
      * message content integrity.
      */
-    @JacksonXmlProperty(localName = "Content-MD5")
+    @JsonProperty(value = "Content-MD5")
     private String contentMD5;
 
     /**
      * This header returns the value that was specified for the
      * Content-Encoding request header.
      */
-    @JacksonXmlProperty(localName = "Content-Encoding")
+    @JsonProperty(value = "Content-Encoding")
     private String contentEncoding;
 
     /**
      * This header is returned if it was previously specified for the blob.
      */
-    @JacksonXmlProperty(localName = "Cache-Control")
+    @JsonProperty(value = "Cache-Control")
     private String cacheControl;
 
     /**
@@ -94,28 +93,28 @@ public final class BlobGetHeaders {
      * should not display the response, but instead show a Save As dialog with
      * a filename other than the blob name specified.
      */
-    @JacksonXmlProperty(localName = "Content-Disposition")
+    @JsonProperty(value = "Content-Disposition")
     private String contentDisposition;
 
     /**
      * This header returns the value that was specified for the
      * Content-Language request header.
      */
-    @JacksonXmlProperty(localName = "Content-Language")
+    @JsonProperty(value = "Content-Language")
     private String contentLanguage;
 
     /**
      * The current sequence number for a page blob. This header is not returned
      * for block blobs or append blobs.
      */
-    @JacksonXmlProperty(localName = "x-ms-blob-sequence-number")
+    @JsonProperty(value = "x-ms-blob-sequence-number")
     private String blobSequenceNumber;
 
     /**
      * The blob's type. Possible values include: 'BlockBlob', 'PageBlob',
      * 'AppendBlob'.
      */
-    @JacksonXmlProperty(localName = "x-ms-blob-type")
+    @JsonProperty(value = "x-ms-blob-type")
     private BlobType blobType;
 
     /**
@@ -127,7 +126,7 @@ public final class BlobGetHeaders {
      * Copy Blob operation using Set Blob Properties, Put Blob, or Put Block
      * List.
      */
-    @JacksonXmlProperty(localName = "x-ms-copy-completion-time")
+    @JsonProperty(value = "x-ms-copy-completion-time")
     private DateTimeRfc1123 copyCompletionTime;
 
     /**
@@ -137,7 +136,7 @@ public final class BlobGetHeaders {
      * Blob operation, or if this blob has been modified after a concluded Copy
      * Blob operation using Set Blob Properties, Put Blob, or Put Block List.
      */
-    @JacksonXmlProperty(localName = "x-ms-copy-status-description")
+    @JsonProperty(value = "x-ms-copy-status-description")
     private String copyStatusDescription;
 
     /**
@@ -145,7 +144,7 @@ public final class BlobGetHeaders {
      * to check the status of this copy operation, or pass to Abort Copy Blob
      * to abort a pending copy.
      */
-    @JacksonXmlProperty(localName = "x-ms-copy-id")
+    @JsonProperty(value = "x-ms-copy-id")
     private String copyId;
 
     /**
@@ -157,7 +156,7 @@ public final class BlobGetHeaders {
      * concluded Copy Blob operation using Set Blob Properties, Put Blob, or
      * Put Block List.
      */
-    @JacksonXmlProperty(localName = "x-ms-copy-progress")
+    @JsonProperty(value = "x-ms-copy-progress")
     private String copyProgress;
 
     /**
@@ -168,42 +167,42 @@ public final class BlobGetHeaders {
      * modified after a concluded Copy Blob operation using Set Blob
      * Properties, Put Blob, or Put Block List.
      */
-    @JacksonXmlProperty(localName = "x-ms-copy-source")
+    @JsonProperty(value = "x-ms-copy-source")
     private String copySource;
 
     /**
      * State of the copy operation identified by x-ms-copy-id. Possible values
      * include: 'pending', 'success', 'aborted', 'failed'.
      */
-    @JacksonXmlProperty(localName = "x-ms-copy-status")
+    @JsonProperty(value = "x-ms-copy-status")
     private CopyStatusType copyStatus;
 
     /**
      * When a blob is leased, specifies whether the lease is of infinite or
      * fixed duration. Possible values include: 'infinite', 'fixed'.
      */
-    @JacksonXmlProperty(localName = "x-ms-lease-duration")
+    @JsonProperty(value = "x-ms-lease-duration")
     private LeaseDurationType leaseDuration;
 
     /**
      * Lease state of the blob. Possible values include: 'available', 'leased',
      * 'expired', 'breaking', 'broken'.
      */
-    @JacksonXmlProperty(localName = "x-ms-lease-state")
+    @JsonProperty(value = "x-ms-lease-state")
     private LeaseStateType leaseState;
 
     /**
      * The current lease status of the blob. Possible values include: 'locked',
      * 'unlocked'.
      */
-    @JacksonXmlProperty(localName = "x-ms-lease-status")
+    @JsonProperty(value = "x-ms-lease-status")
     private LeaseStatusType leaseStatus;
 
     /**
      * This header uniquely identifies the request that was made and can be
      * used for troubleshooting the request.
      */
-    @JacksonXmlProperty(localName = "x-ms-request-id")
+    @JsonProperty(value = "x-ms-request-id")
     private String requestId;
 
     /**
@@ -211,27 +210,27 @@ public final class BlobGetHeaders {
      * This header is returned for requests made against version 2009-09-19 and
      * above.
      */
-    @JacksonXmlProperty(localName = "x-ms-version")
+    @JsonProperty(value = "x-ms-version")
     private String version;
 
     /**
      * Indicates that the service supports requests for partial blob content.
      */
-    @JacksonXmlProperty(localName = "Accept-Ranges")
+    @JsonProperty(value = "Accept-Ranges")
     private String acceptRanges;
 
     /**
      * UTC date/time value generated by the service that indicates the time at
      * which the response was initiated.
      */
-    @JacksonXmlProperty(localName = "Date")
+    @JsonProperty(value = "Date")
     private DateTimeRfc1123 dateProperty;
 
     /**
      * The number of committed blocks present in the blob. This header is
      * returned only for append blobs.
      */
-    @JacksonXmlProperty(localName = "x-ms-blob-committed-block-count")
+    @JsonProperty(value = "x-ms-blob-committed-block-count")
     private String blobCommittedBlockCount;
 
     /**
@@ -240,7 +239,7 @@ public final class BlobGetHeaders {
      * Otherwise, the value is set to false (when the blob is unencrypted, or
      * if only parts of the blob/application metadata are encrypted).
      */
-    @JacksonXmlProperty(localName = "x-ms-server-encrypted")
+    @JsonProperty(value = "x-ms-server-encrypted")
     private Boolean isServerEncrypted;
 
     /**
@@ -250,7 +249,7 @@ public final class BlobGetHeaders {
      * returned in Content-MD5 header, with the latter calculated from the
      * requested range.
      */
-    @JacksonXmlProperty(localName = "x-ms-blob-content-md5")
+    @JsonProperty(value = "x-ms-blob-content-md5")
     private String blobContentMD5;
 
     /**

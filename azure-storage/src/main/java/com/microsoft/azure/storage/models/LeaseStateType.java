@@ -45,9 +45,9 @@ public enum LeaseStateType {
     /**
      * The actual serialized value for a LeaseStateType instance.
      */
-    private final String value;
+    private String value;
 
-    private LeaseStateType(String value) {
+    LeaseStateType(String value) {
         this.value = value;
     }
 

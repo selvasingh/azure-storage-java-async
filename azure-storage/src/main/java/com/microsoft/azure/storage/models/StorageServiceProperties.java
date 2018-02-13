@@ -10,8 +10,8 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
 
@@ -19,55 +19,46 @@ import java.util.List;
  * Storage Service Properties.
  */
 @JacksonXmlRootElement(localName = "StorageServiceProperties")
-public final class StorageServiceProperties {
+public class StorageServiceProperties {
     /**
      * Azure Analytics Logging settings.
      */
-    @JacksonXmlProperty(localName = "Logging")
+    @JsonProperty(value = "Logging")
     private Logging logging;
 
     /**
      * A summary of request statistics grouped by API in hourly aggregates for
      * blobs.
      */
-    @JacksonXmlProperty(localName = "HourMetrics")
+    @JsonProperty(value = "HourMetrics")
     private Metrics hourMetrics;
 
     /**
      * a summary of request statistics grouped by API in minute aggregates for
      * blobs.
      */
-    @JacksonXmlProperty(localName = "MinuteMetrics")
+    @JsonProperty(value = "MinuteMetrics")
     private Metrics minuteMetrics;
-
-    private static final class CorsWrapper {
-        @JacksonXmlProperty(localName = "CorsRule")
-        private final List<CorsRule> items;
-
-        @JsonCreator
-        private CorsWrapper(@JacksonXmlProperty(localName = "CorsRule") List<CorsRule> items) {
-            this.items = items;
-        }
-    }
 
     /**
      * The set of CORS rules.
      */
-    @JacksonXmlProperty(localName = "Cors")
-    private CorsWrapper cors;
+    @JacksonXmlElementWrapper(localName = "Cors")
+    @JsonProperty("CorsRule")
+    private List<CorsRule> cors;
 
     /**
      * The default version to use for requests to the Blob service if an
      * incoming request's version is not specified. Possible values include
      * version 2008-10-27 and all more recent versions.
      */
-    @JacksonXmlProperty(localName = "DefaultServiceVersion")
+    @JsonProperty(value = "DefaultServiceVersion")
     private String defaultServiceVersion;
 
     /**
      * The Delete Retention Policy for the service.
      */
-    @JacksonXmlProperty(localName = "DeleteRetentionPolicy")
+    @JsonProperty(value = "DeleteRetentionPolicy")
     private RetentionPolicy deleteRetentionPolicy;
 
     /**
@@ -136,7 +127,7 @@ public final class StorageServiceProperties {
      * @return the cors value.
      */
     public List<CorsRule> cors() {
-        return this.cors.items;
+        return this.cors;
     }
 
     /**
@@ -146,7 +137,7 @@ public final class StorageServiceProperties {
      * @return the StorageServiceProperties object itself.
      */
     public StorageServiceProperties withCors(List<CorsRule> cors) {
-        this.cors = new CorsWrapper(cors);
+        this.cors = cors;
         return this;
     }
 

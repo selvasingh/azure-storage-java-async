@@ -52,7 +52,7 @@ public final class BlockBlobURL extends BlobURL {
      * @param url
      *      A {@code java.net.URL} to a block blob.
      * @param pipeline
-     *      An {@link HttpPipeline} object representing the pipeline for requests.
+     *      An {@link HttpPipeline} for sending requests.
      */
     public BlockBlobURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);

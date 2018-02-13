@@ -10,37 +10,37 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * The Metrics model.
  */
 @JacksonXmlRootElement(localName = "Metrics")
-public final class Metrics {
+public class Metrics {
     /**
      * The version of Storage Analytics to configure.
      */
-    @JacksonXmlProperty(localName = "Version")
+    @JsonProperty(value = "Version")
     private String version;
 
     /**
      * Indicates whether metrics are enabled for the Blob service.
      */
-    @JacksonXmlProperty(localName = "Enabled")
+    @JsonProperty(value = "Enabled", required = true)
     private boolean enabled;
 
     /**
      * Indicates whether metrics should generate summary statistics for called
      * API operations.
      */
-    @JacksonXmlProperty(localName = "IncludeAPIs")
+    @JsonProperty(value = "IncludeAPIs")
     private Boolean includeAPIs;
 
     /**
      * The retentionPolicy property.
      */
-    @JacksonXmlProperty(localName = "RetentionPolicy")
+    @JsonProperty(value = "RetentionPolicy")
     private RetentionPolicy retentionPolicy;
 
     /**

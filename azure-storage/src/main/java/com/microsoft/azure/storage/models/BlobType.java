@@ -35,9 +35,9 @@ public enum BlobType {
     /**
      * The actual serialized value for a BlobType instance.
      */
-    private final String value;
+    private String value;
 
-    private BlobType(String value) {
+    BlobType(String value) {
         this.value = value;
     }
 

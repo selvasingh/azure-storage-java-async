@@ -43,10 +43,14 @@ public final class BlobSASPermission {
      */
     public boolean delete;
 
+    /**
+     * Initializes an {@code BlobSASPermission} object with all fields set to false.
+     */
     public BlobSASPermission() {}
 
     /**
-     * Converts the given permissions to a {@code String}.
+     * Converts the given permissions to a {@code String}. Using this method will guarantee the permissions are in an
+     * order accepted by the service.
      *
      * @return
      *      A {@code String} which represents the {@code BlobSASPermission}.
@@ -82,7 +86,8 @@ public final class BlobSASPermission {
     }
 
     /**
-     * Creates an {@code BlobSASPermission} from the specified permissions string.
+     * Creates an {@code BlobSASPermission} from the specified permissions string. This method will throw an
+     * {@code IllegalArgumentException} if it encounters a character that does not correspond to a valid permission.
      *
      * @param permString
      *      A {@code String} which represents the {@code BlobSASPermission}.

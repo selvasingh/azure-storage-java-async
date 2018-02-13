@@ -10,7 +10,7 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
@@ -19,12 +19,12 @@ import org.joda.time.DateTime;
  * The GeoReplication model.
  */
 @JacksonXmlRootElement(localName = "GeoReplication")
-public final class GeoReplication {
+public class GeoReplication {
     /**
      * The status of the secondary location. Possible values include: 'live',
      * 'bootstrap', 'unavailable'.
      */
-    @JacksonXmlProperty(localName = "Status")
+    @JsonProperty(value = "Status", required = true)
     private GeoReplicationStatusType status;
 
     /**
@@ -33,7 +33,7 @@ public final class GeoReplication {
      * secondary. Primary writes after this point in time may or may not be
      * available for reads.
      */
-    @JacksonXmlProperty(localName = "LastSyncTime")
+    @JsonProperty(value = "LastSyncTime", required = true)
     private DateTimeRfc1123 lastSyncTime;
 
     /**

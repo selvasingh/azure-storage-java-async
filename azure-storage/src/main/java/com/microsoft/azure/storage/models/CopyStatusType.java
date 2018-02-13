@@ -40,9 +40,9 @@ public enum CopyStatusType {
     /**
      * The actual serialized value for a CopyStatusType instance.
      */
-    private final String value;
+    private String value;
 
-    private CopyStatusType(String value) {
+    CopyStatusType(String value) {
         this.value = value;
     }
 

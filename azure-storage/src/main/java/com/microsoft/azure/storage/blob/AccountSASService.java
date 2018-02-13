@@ -15,7 +15,7 @@
 package com.microsoft.azure.storage.blob;
 
 /**
- * Represents possible services to be used for an Account SAS
+ * Represents possible services to be used for an Account SAS.
  */
 public final class AccountSASService {
     /**
@@ -38,13 +38,17 @@ public final class AccountSASService {
      */
     public boolean table;
 
+    /**
+     * Initializes an {@code AccountSASService} object with all fields set to false.
+     */
     public AccountSASService() {}
 
     /**
-     * Converts the given services to a {@code String}.
+     * Converts the given services to a {@code String}. Using this method will guarantee the services are in an order
+     * accepted by the service.
      *
      * @return
-     *      A {@code String} which represents the {@code SharedAccessAccountServices}.
+     *      A {@code String} which represents the {@code AccountSASServices}.
      */
     @Override
     public String toString() {
@@ -69,11 +73,13 @@ public final class AccountSASService {
     }
 
     /**
-     * Creates an {@code AccountSASService} from the specified services string.
+     * Creates an {@code AccountSASService} from the specified services string. This method will throw an
+     * {@code IllegalArgumentException} if it encounters a character that does not correspond to a valid service.
      *
      * @param servicesString
-     *            A {@code String} which represents the {@code SharedAccessAccountServices}.
-     * @return A {@code AccountSASService} generated from the given {@code String}.
+     *      A {@code String} which represents the {@code SharedAccessAccountServices}.
+     * @return
+     *      A {@code AccountSASService} generated from the given {@code String}.
      */
     public static AccountSASService parse(String servicesString) {
         AccountSASService services = new AccountSASService();

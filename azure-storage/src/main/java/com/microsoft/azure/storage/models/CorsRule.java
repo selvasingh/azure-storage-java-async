@@ -10,7 +10,7 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * one domain (the origin domain) to call APIs in another domain.
  */
 @JacksonXmlRootElement(localName = "CorsRule")
-public final class CorsRule {
+public class CorsRule {
     /**
      * The origin domains that are permitted to make a request against the
      * storage service via CORS. The origin domain is the domain from which the
@@ -30,35 +30,35 @@ public final class CorsRule {
      * also use the wildcard character '*' to allow all origin domains to make
      * requests via CORS.
      */
-    @JacksonXmlProperty(localName = "AllowedOrigins")
+    @JsonProperty(value = "AllowedOrigins", required = true)
     private String allowedOrigins;
 
     /**
      * The methods (HTTP request verbs) that the origin domain may use for a
      * CORS request. (comma separated).
      */
-    @JacksonXmlProperty(localName = "AllowedMethods")
+    @JsonProperty(value = "AllowedMethods", required = true)
     private String allowedMethods;
 
     /**
      * the request headers that the origin domain may specify on the CORS
      * request.
      */
-    @JacksonXmlProperty(localName = "AllowedHeaders")
+    @JsonProperty(value = "AllowedHeaders", required = true)
     private String allowedHeaders;
 
     /**
      * The response headers that may be sent in the response to the CORS
      * request and exposed by the browser to the request issuer.
      */
-    @JacksonXmlProperty(localName = "ExposedHeaders")
+    @JsonProperty(value = "ExposedHeaders", required = true)
     private String exposedHeaders;
 
     /**
      * The maximum amount time that a browser should cache the preflight
      * OPTIONS request.
      */
-    @JacksonXmlProperty(localName = "MaxAgeInSeconds")
+    @JsonProperty(value = "MaxAgeInSeconds", required = true)
     private int maxAgeInSeconds;
 
     /**

@@ -45,9 +45,9 @@ public enum ListBlobsIncludeItem {
     /**
      * The actual serialized value for a ListBlobsIncludeItem instance.
      */
-    private final String value;
+    private String value;
 
-    private ListBlobsIncludeItem(String value) {
+    ListBlobsIncludeItem(String value) {
         this.value = value;
     }
 

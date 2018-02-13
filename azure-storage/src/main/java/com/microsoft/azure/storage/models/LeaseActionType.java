@@ -45,9 +45,9 @@ public enum LeaseActionType {
     /**
      * The actual serialized value for a LeaseActionType instance.
      */
-    private final String value;
+    private String value;
 
-    private LeaseActionType(String value) {
+    LeaseActionType(String value) {
         this.value = value;
     }
 

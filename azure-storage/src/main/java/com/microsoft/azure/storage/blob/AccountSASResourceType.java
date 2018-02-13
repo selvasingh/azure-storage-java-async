@@ -33,10 +33,14 @@ public final class AccountSASResourceType {
      */
     public boolean object;
 
+    /**
+     * Initializes an {@code AccountSASResourceType} object with all fields set to false.
+     */
     public AccountSASResourceType() {}
 
     /**
-     * Converts the given resource types to a {@code String}.
+     * Converts the given resource types to a {@code String}. Using this method will guarantee the resource types are in
+     * an order accepted by the service.
      *
      * @return
      *      A {@code String} which represents the {@code AccountSASResourceTypes}.
@@ -63,7 +67,8 @@ public final class AccountSASResourceType {
     }
 
     /**
-     * Creates an {@code AccountSASResourceType} from the specified resource types string.
+     * Creates an {@code AccountSASResourceType} from the specified resource types string. This method will throw an
+     * {@code IllegalArgumentException} if it encounters a character that does not correspond to a valid resource type.
      *
      * @param resourceTypesString
      *      A {@code String} which represents the {@code AccountSASResourceTypes}.

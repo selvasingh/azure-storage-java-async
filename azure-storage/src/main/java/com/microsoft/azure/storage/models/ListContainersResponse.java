@@ -10,7 +10,8 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
  * An enumeration of containers.
  */
 @JacksonXmlRootElement(localName = "EnumerationResults")
-public final class ListContainersResponse {
+public class ListContainersResponse {
     /**
      * The serviceEndpoint property.
      */
@@ -29,41 +30,32 @@ public final class ListContainersResponse {
     /**
      * The prefix property.
      */
-    @JacksonXmlProperty(localName = "Prefix")
+    @JsonProperty(value = "Prefix", required = true)
     private String prefix;
 
     /**
      * The marker property.
      */
-    @JacksonXmlProperty(localName = "Marker")
+    @JsonProperty(value = "Marker")
     private String marker;
 
     /**
      * The maxResults property.
      */
-    @JacksonXmlProperty(localName = "MaxResults")
+    @JsonProperty(value = "MaxResults", required = true)
     private int maxResults;
-
-    private static final class ContainersWrapper {
-        @JacksonXmlProperty(localName = "Container")
-        private final List<Container> items;
-
-        @JsonCreator
-        private ContainersWrapper(@JacksonXmlProperty(localName = "Container") List<Container> items) {
-            this.items = items;
-        }
-    }
 
     /**
      * The containers property.
      */
-    @JacksonXmlProperty(localName = "Containers")
-    private ContainersWrapper containers;
+    @JacksonXmlElementWrapper(localName = "Containers")
+    @JsonProperty("Container")
+    private List<Container> containers;
 
     /**
      * The nextMarker property.
      */
-    @JacksonXmlProperty(localName = "NextMarker")
+    @JsonProperty(value = "NextMarker", required = true)
     private String nextMarker;
 
     /**
@@ -152,7 +144,7 @@ public final class ListContainersResponse {
      * @return the containers value.
      */
     public List<Container> containers() {
-        return this.containers.items;
+        return this.containers;
     }
 
     /**
@@ -162,7 +154,7 @@ public final class ListContainersResponse {
      * @return the ListContainersResponse object itself.
      */
     public ListContainersResponse withContainers(List<Container> containers) {
-        this.containers = new ContainersWrapper(containers);
+        this.containers = containers;
         return this;
     }
 

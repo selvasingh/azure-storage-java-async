@@ -47,9 +47,9 @@ public final class AppendBlobURL extends BlobURL {
      * Creates a new {@link AppendBlobURL} object.
      *
      * @param url
-     *      A {@code java.net.URL} to a page blob.
+     *      A {@link URL} to a page blob.
      * @param pipeline
-     *      An {@link HttpPipeline} object representing the pipeline for requests.
+     *      An {@link HttpPipeline} for sending requests.
      */
     public AppendBlobURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
@@ -77,9 +77,9 @@ public final class AppendBlobURL extends BlobURL {
      * Creates a new {@link AppendBlobURL} with the given snapshot.
      *
      * @param snapshot
-     *      A {@code String} to set.
+     *      A {@code String} of the snapshot identifier.
      * @return
-     *      A {@link BlobURL} object with the given pipeline.
+     *      An {@code AppendBlobURL} object with the given pipeline.
      */
     public AppendBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnknownHostException {
         BlobURLParts blobURLParts = URLParser.parse(new URL(this.storageClient.url()));
@@ -88,7 +88,7 @@ public final class AppendBlobURL extends BlobURL {
     }
 
     /**
-     * Create creates a 0-length append blob. Call AppendBlock to append data to an append blob.
+     * Creates a 0-length append blob. Call AppendBlock to append data to an append blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
      *
      * @param headers
@@ -99,7 +99,7 @@ public final class AppendBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
+     *      The {@code Single&lt;RestResponse&lt;{@link BlobPutHeaders}, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<BlobPutHeaders, Void>> create(
             BlobHTTPHeaders headers, Metadata metadata, BlobAccessConditions accessConditions) {
@@ -120,18 +120,19 @@ public final class AppendBlobURL extends BlobURL {
     }
 
     /**
-     * AppendBlock commits a new block of data to the end of the existing append blob.
+     * Commits a new block of data to the end of the existing append blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/append-block.
      *
      * @param data
-     *      A {@code Flowable&lt;byte[]&gt;} which represents the data to write to the blob.
+     *      A {@code Flowable} which emits {@code byte[]} which represents the data to write to the blob.
      * @param length
      *      A {@code long} indicating how long the total data is.
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;AppendBlobAppendBlockHeaders, Void&gt;&gt;} object if successful.
+     *      The {@code Single&lt;RestResponse&lt;{@link AppendBlobAppendBlockHeaders}, Void&gt;&gt;} object if
+     *      successful.
      */
     public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlock(
             Flowable<ByteBuffer> data, long length, BlobAccessConditions accessConditions) {

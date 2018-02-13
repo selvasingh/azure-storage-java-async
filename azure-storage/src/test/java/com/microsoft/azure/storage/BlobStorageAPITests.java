@@ -202,9 +202,9 @@ public class BlobStorageAPITests {
                     null, null, null, null);*/
 
 
-            // GenerateSASQueryParameters hashes the sas using your account's credentials and then associates the
+            // generateSASQueryParameters hashes the sas using your account's credentials and then associates the
             // sasQueryParameters with the blobURLParts.
-            parts.sasQueryParameters = sas.GenerateSASQueryParameters(creds);
+            parts.sasQueryParameters = sas.generateSASQueryParameters(creds);
 
             // Using a SAS requires AnonymousCredentials on the pipeline.
             pipeline = StorageURL.createPipeline(new AnonymousCredentials(), new PipelineOptions());

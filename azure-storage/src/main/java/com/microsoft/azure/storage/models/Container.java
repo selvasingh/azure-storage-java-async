@@ -10,7 +10,7 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.Map;
 
@@ -18,23 +18,23 @@ import java.util.Map;
  * An Azure Storage container.
  */
 @JacksonXmlRootElement(localName = "Container")
-public final class Container {
+public class Container {
     /**
      * The name property.
      */
-    @JacksonXmlProperty(localName = "Name")
+    @JsonProperty(value = "Name", required = true)
     private String name;
 
     /**
      * The properties property.
      */
-    @JacksonXmlProperty(localName = "Properties")
+    @JsonProperty(value = "Properties", required = true)
     private ContainerProperties properties;
 
     /**
      * The metadata property.
      */
-    @JacksonXmlProperty(localName = "Metadata")
+    @JsonProperty(value = "Metadata")
     private Map<String, String> metadata;
 
     /**

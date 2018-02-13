@@ -23,6 +23,9 @@ import java.util.ArrayList;
  */
 public final class BlobListingDetails {
 
+    /**
+     * An object representing no listing details.
+     */
     public static final BlobListingDetails NONE = new BlobListingDetails(false, false, false,
             false);
 
@@ -47,7 +50,7 @@ public final class BlobListingDetails {
      *      newest.
      * @param uncommittedBlobs
      *      A {@code boolean} indicating if blobs for which blocks have been uploaded, but which have not
-     *      been committed using Put Block List, be included in the response.
+     *      been committed using Put Block List, should be included in the response.
      */
     public BlobListingDetails(boolean copy, boolean metadata, boolean snapshots, boolean uncommittedBlobs) {
         this.copy = copy;
@@ -82,7 +85,7 @@ public final class BlobListingDetails {
 
     /**
      * @return
-     *      A {@code boolean} indicating if uncomitted blobs should be returned.
+     *      A {@code boolean} indicating if uncommitted blobs should be returned.
      */
     public boolean getUncommittedBlobs() {
         return uncommittedBlobs;

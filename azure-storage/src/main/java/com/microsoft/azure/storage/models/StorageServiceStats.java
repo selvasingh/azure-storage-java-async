@@ -10,18 +10,18 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Stats for the storage service.
  */
 @JacksonXmlRootElement(localName = "StorageServiceStats")
-public final class StorageServiceStats {
+public class StorageServiceStats {
     /**
      * Geo-Replication information for the Secondary Storage Service.
      */
-    @JacksonXmlProperty(localName = "GeoReplication")
+    @JsonProperty(value = "GeoReplication")
     private GeoReplication geoReplication;
 
     /**

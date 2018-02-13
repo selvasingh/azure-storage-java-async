@@ -10,7 +10,7 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
@@ -19,176 +19,176 @@ import org.joda.time.DateTime;
  * Properties of a blob.
  */
 @JacksonXmlRootElement(localName = "BlobProperties")
-public final class BlobProperties {
+public class BlobProperties {
     /**
      * The lastModified property.
      */
-    @JacksonXmlProperty(localName = "Last-Modified")
+    @JsonProperty(value = "Last-Modified", required = true)
     private DateTimeRfc1123 lastModified;
 
     /**
      * The etag property.
      */
-    @JacksonXmlProperty(localName = "Etag")
+    @JsonProperty(value = "Etag", required = true)
     private String etag;
 
     /**
      * Size in bytes.
      */
-    @JacksonXmlProperty(localName = "Content-Length")
+    @JsonProperty(value = "Content-Length")
     private Long contentLength;
 
     /**
      * The contentType property.
      */
-    @JacksonXmlProperty(localName = "Content-Type")
+    @JsonProperty(value = "Content-Type")
     private String contentType;
 
     /**
      * The contentEncoding property.
      */
-    @JacksonXmlProperty(localName = "Content-Encoding")
+    @JsonProperty(value = "Content-Encoding")
     private String contentEncoding;
 
     /**
      * The contentLanguage property.
      */
-    @JacksonXmlProperty(localName = "Content-Language")
+    @JsonProperty(value = "Content-Language")
     private String contentLanguage;
 
     /**
      * The contentMD5 property.
      */
-    @JacksonXmlProperty(localName = "Content-MD5")
+    @JsonProperty(value = "Content-MD5")
     private String contentMD5;
 
     /**
      * The contentDisposition property.
      */
-    @JacksonXmlProperty(localName = "Content-Disposition")
+    @JsonProperty(value = "Content-Disposition")
     private String contentDisposition;
 
     /**
      * The cacheControl property.
      */
-    @JacksonXmlProperty(localName = "Cache-Control")
+    @JsonProperty(value = "Cache-Control")
     private String cacheControl;
 
     /**
      * The blobSequenceNumber property.
      */
-    @JacksonXmlProperty(localName = "x-ms-blob-sequence-number")
+    @JsonProperty(value = "x-ms-blob-sequence-number")
     private Integer blobSequenceNumber;
 
     /**
      * Possible values include: 'BlockBlob', 'PageBlob', 'AppendBlob'.
      */
-    @JacksonXmlProperty(localName = "BlobType")
+    @JsonProperty(value = "BlobType")
     private BlobType blobType;
 
     /**
      * Possible values include: 'locked', 'unlocked'.
      */
-    @JacksonXmlProperty(localName = "LeaseStatus")
+    @JsonProperty(value = "LeaseStatus")
     private LeaseStatusType leaseStatus;
 
     /**
      * Possible values include: 'available', 'leased', 'expired', 'breaking',
      * 'broken'.
      */
-    @JacksonXmlProperty(localName = "LeaseState")
+    @JsonProperty(value = "LeaseState")
     private LeaseStateType leaseState;
 
     /**
      * Possible values include: 'infinite', 'fixed'.
      */
-    @JacksonXmlProperty(localName = "LeaseDuration")
+    @JsonProperty(value = "LeaseDuration")
     private LeaseDurationType leaseDuration;
 
     /**
      * The copyId property.
      */
-    @JacksonXmlProperty(localName = "CopyId")
+    @JsonProperty(value = "CopyId")
     private String copyId;
 
     /**
      * Possible values include: 'pending', 'success', 'aborted', 'failed'.
      */
-    @JacksonXmlProperty(localName = "CopyStatus")
+    @JsonProperty(value = "CopyStatus")
     private CopyStatusType copyStatus;
 
     /**
      * The copySource property.
      */
-    @JacksonXmlProperty(localName = "CopySource")
+    @JsonProperty(value = "CopySource")
     private String copySource;
 
     /**
      * The copyProgress property.
      */
-    @JacksonXmlProperty(localName = "CopyProgress")
+    @JsonProperty(value = "CopyProgress")
     private String copyProgress;
 
     /**
      * The copyCompletionTime property.
      */
-    @JacksonXmlProperty(localName = "CopyCompletionTime")
+    @JsonProperty(value = "CopyCompletionTime")
     private DateTimeRfc1123 copyCompletionTime;
 
     /**
      * The copyStatusDescription property.
      */
-    @JacksonXmlProperty(localName = "CopyStatusDescription")
+    @JsonProperty(value = "CopyStatusDescription")
     private String copyStatusDescription;
 
     /**
      * The serverEncrypted property.
      */
-    @JacksonXmlProperty(localName = "ServerEncrypted")
+    @JsonProperty(value = "ServerEncrypted")
     private Boolean serverEncrypted;
 
     /**
      * The incrementalCopy property.
      */
-    @JacksonXmlProperty(localName = "IncrementalCopy")
+    @JsonProperty(value = "IncrementalCopy")
     private Boolean incrementalCopy;
 
     /**
      * The destinationSnapshot property.
      */
-    @JacksonXmlProperty(localName = "DestinationSnapshot")
+    @JsonProperty(value = "DestinationSnapshot")
     private String destinationSnapshot;
 
     /**
      * The deletedTime property.
      */
-    @JacksonXmlProperty(localName = "DeletedTime")
+    @JsonProperty(value = "DeletedTime")
     private DateTimeRfc1123 deletedTime;
 
     /**
      * The remainingRetentionDays property.
      */
-    @JacksonXmlProperty(localName = "RemainingRetentionDays")
+    @JsonProperty(value = "RemainingRetentionDays")
     private Integer remainingRetentionDays;
 
     /**
      * Possible values include: 'P4', 'P6', 'P10', 'P20', 'P30', 'P40', 'P50',
      * 'Hot', 'Cool', 'Archive'.
      */
-    @JacksonXmlProperty(localName = "AccessTier")
+    @JsonProperty(value = "AccessTier")
     private AccessTier accessTier;
 
     /**
      * The accessTierInferred property.
      */
-    @JacksonXmlProperty(localName = "AccessTierInferred")
+    @JsonProperty(value = "AccessTierInferred")
     private Boolean accessTierInferred;
 
     /**
      * Possible values include: 'rehydrate-pending-to-hot',
      * 'rehydrate-pending-to-cool'.
      */
-    @JacksonXmlProperty(localName = "ArchiveStatus")
+    @JsonProperty(value = "ArchiveStatus")
     private ArchiveStatus archiveStatus;
 
     /**

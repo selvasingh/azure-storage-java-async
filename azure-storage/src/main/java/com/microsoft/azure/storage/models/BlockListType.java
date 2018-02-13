@@ -35,9 +35,9 @@ public enum BlockListType {
     /**
      * The actual serialized value for a BlockListType instance.
      */
-    private final String value;
+    private String value;
 
-    private BlockListType(String value) {
+    BlockListType(String value) {
         this.value = value;
     }
 

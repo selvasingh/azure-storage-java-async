@@ -10,7 +10,7 @@
 
 package com.microsoft.azure.storage.models;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.Map;
 
@@ -18,35 +18,35 @@ import java.util.Map;
  * An Azure Storage blob.
  */
 @JacksonXmlRootElement(localName = "Blob")
-public final class Blob {
+public class Blob {
     /**
      * The name property.
      */
-    @JacksonXmlProperty(localName = "Name")
+    @JsonProperty(value = "Name", required = true)
     private String name;
 
     /**
      * The deleted property.
      */
-    @JacksonXmlProperty(localName = "Deleted")
+    @JsonProperty(value = "Deleted", required = true)
     private boolean deleted;
 
     /**
      * The snapshot property.
      */
-    @JacksonXmlProperty(localName = "Snapshot")
+    @JsonProperty(value = "Snapshot", required = true)
     private String snapshot;
 
     /**
      * The properties property.
      */
-    @JacksonXmlProperty(localName = "Properties")
+    @JsonProperty(value = "Properties", required = true)
     private BlobProperties properties;
 
     /**
      * The metadata property.
      */
-    @JacksonXmlProperty(localName = "Metadata")
+    @JsonProperty(value = "Metadata")
     private Map<String, String> metadata;
 
     /**

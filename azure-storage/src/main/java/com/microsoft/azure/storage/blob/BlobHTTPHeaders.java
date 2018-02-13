@@ -15,10 +15,13 @@
 package com.microsoft.azure.storage.blob;
 
 /**
- * Blob HTTP headers for getting and setting blob properties
+ * Blob HTTP headers for getting and setting blob properties.
  */
 public final class BlobHTTPHeaders {
 
+    /**
+     * An object representing no blob properties.
+     */
     public static final BlobHTTPHeaders NONE = new BlobHTTPHeaders(null, null,
             null,null, null, null);
 

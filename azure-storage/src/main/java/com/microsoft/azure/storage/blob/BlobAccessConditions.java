@@ -19,6 +19,9 @@ package com.microsoft.azure.storage.blob;
  */
 public final class BlobAccessConditions {
 
+    /**
+     * An object representing no access conditions.
+     */
     public static final BlobAccessConditions NONE =
             new BlobAccessConditions(null, null, null,
                     null);
@@ -40,13 +43,13 @@ public final class BlobAccessConditions {
      * default value.
      *
      * @param httpAccessConditions
-     *      Optional standard HTTP access conditions which are optionally set
+     *      Optional standard HTTP access conditions.
      * @param leaseAccessConditions
-     *      Optional access conditions for a lease on a container or blob
+     *      Optional access conditions for a lease on a container or blob.
      * @param appendBlobAccessConditions
-     *      Optional access conditions which are specific to append blobs
+     *      Optional access conditions which are specific to append blobs.
      * @param pageBlobAccessConditions
-     *      Optional access conditions which are specific to page blobs
+     *      Optional access conditions which are specific to page blobs.
      */
     public BlobAccessConditions(
             HTTPAccessConditions httpAccessConditions,
@@ -63,18 +66,34 @@ public final class BlobAccessConditions {
                 PageBlobAccessConditions.NONE : pageBlobAccessConditions;
     }
 
+    /**
+     * @return
+     *      The HttpAccessConditions.
+     */
     HTTPAccessConditions getHttpAccessConditions() {
         return httpAccessConditions;
     }
 
+    /**
+     * @return
+     *      The LeaseAccessConditions.
+     */
     LeaseAccessConditions getLeaseAccessConditions() {
         return leaseAccessConditions;
     }
 
+    /**
+     * @return
+     *      The AppendBlobAccessConditions.
+     */
     AppendBlobAccessConditions getAppendBlobAccessConditions() {
         return appendBlobAccessConditions;
     }
 
+    /**
+     * @return
+     *      The PageBlobAccessConditions.
+     */
     PageBlobAccessConditions getPageBlobAccessConditions() {
         return pageBlobAccessConditions;
     }

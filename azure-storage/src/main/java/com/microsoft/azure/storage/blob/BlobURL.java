@@ -36,7 +36,7 @@ public class BlobURL extends StorageURL {
      * @param url
      *      A {@code java.net.URL} to a blob.
      * @param pipeline
-     *      An {@link HttpPipeline} representing a pipeline for requests.
+     *      An {@link HttpPipeline} for sending requests.
      */
     public BlobURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
@@ -63,7 +63,7 @@ public class BlobURL extends StorageURL {
      * Creates a new {@link BlobURL} with the given snapshot.
      *
      * @param snapshot
-     *      A {@code java.util.Date} to set.
+     *      A {@code String} to set.
      * @return
      *      A {@link BlobURL} object with the given pipeline.
      */
@@ -75,6 +75,7 @@ public class BlobURL extends StorageURL {
 
     /**
      * Converts this BlobURL to a {@link BlockBlobURL} object.
+     *
      * @return
      *      A {@link BlockBlobURL} object.
      */
@@ -118,11 +119,11 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * StartCopy copies the data at the source URL to a blob.
+     * Copies the data at the source URL to a blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/copy-blob.
      *
      * @param sourceURL
-     *      A {@code String} representing the source URL to copy from.
+     *      A {@code java.net.URL} representing the source URL to copy from.
      *      URLs outside of Azure may only be copied to block blobs.
      * @param metadata
      *      A {@link Metadata} object that specifies key value pairs to set on the blob.
@@ -140,7 +141,6 @@ public class BlobURL extends StorageURL {
         sourceAccessConditions = sourceAccessConditions == null ? BlobAccessConditions.NONE : sourceAccessConditions;
         destAccessConditions = destAccessConditions == null ? BlobAccessConditions.NONE : sourceAccessConditions;
 
-        // TODO: Remove sourceURL.toString when runtime updates
         return this.storageClient.blobs().copyWithRestResponseAsync(
                 sourceURL, null, metadata,
                 sourceAccessConditions.getHttpAccessConditions().getIfModifiedSince(),
@@ -156,7 +156,7 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * AbortCopy stops a pending copy that was previously started and leaves a destination blob with 0 length and
+     * Stops a pending copy that was previously started and leaves a destination blob with 0 length and
      * metadata. For more information, see https://docs.microsoft.com/rest/api/storageservices/abort-copy-blob.
      *
      * @param copyId
@@ -176,13 +176,15 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * GetBlob reads a range of bytes from a blob. The response also includes the blob's properties and metadata.
+     * Reads a range of bytes from a blob. The response also includes the blob's properties and metadata.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/get-blob.
      *
      * @param range
      *      A {@code Long} which represents the number of bytes to read or {@code null}.
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that represents the access conditions for the blob.
+     * @param rangeGetContentMD5
+     *      A {@code boolean} indicating if the contentMD5 for the specified blob range should be returned.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobGetHeaders, Flowable&lt;byte[]&gt;&gt;&gt;} object if successful.
      */
@@ -201,8 +203,7 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * Deletes the specified blob or snapshot.
-     * Note that deleting a blob also deletes all its snapshots.
+     * Deletes the specified blob or snapshot. Note that deleting a blob also deletes all its snapshots.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/delete-blob.
      *
      * @param deleteBlobSnapshotOptions
@@ -226,7 +227,7 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * GetPropertiesAndMetadata returns the blob's metadata and properties.
+     * Returns the blob's metadata and properties.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/get-blob-properties.
      *
      * @param accessConditions
@@ -247,7 +248,7 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * SetProperties changes a blob's HTTP header properties.
+     * Changes a blob's HTTP header properties.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/set-blob-properties.
      *
      * @param headers
@@ -276,7 +277,7 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * SetMetadata changes a blob's metadata.
+     * Changes a blob's metadata.
      * https://docs.microsoft.com/rest/api/storageservices/set-blob-metadata.
      *
      * @param metadata
@@ -302,7 +303,7 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * CreateSnapshot creates a read-only snapshot of a blob.
+     * Creates a read-only snapshot of a blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/snapshot-blob.
      *
      * @param metadata
@@ -327,7 +328,7 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * AcquireLease acquires a lease on the blob for write and delete operations. The lease duration must be between
+     * Acquires a lease on the blob for write and delete operations. The lease duration must be between
      * 15 to 60 seconds, or infinite (-1).
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
      *
@@ -360,7 +361,7 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * RenewLease renews the blob's previously-acquired lease.
+     * Renews the blob's previously-acquired lease.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-blob.
      *
      * @param leaseID
@@ -383,7 +384,7 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * ReleaseLease releases the blob's previously-acquired lease. For more information, see
+     * Releases the blob's previously-acquired lease. For more information, see
      * https://docs.microsoft.com/rest/api/storageservices/lease-blob.
      *
      * @param leaseID

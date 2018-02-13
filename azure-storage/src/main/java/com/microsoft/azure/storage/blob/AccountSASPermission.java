@@ -15,7 +15,7 @@
 package com.microsoft.azure.storage.blob;
 
 /**
- * Represents possible permissions to be used for an Account SAS
+ * Represents possible permissions to be used for an Account SAS.
  */
 public final class AccountSASPermission {
     /**
@@ -59,7 +59,13 @@ public final class AccountSASPermission {
     public boolean processMessages;
 
     /**
-     * Converts the given permissions to a {@code String}.
+     * Initializes an {@code AccountSASPermssion} object with all fields set to false.
+     */
+    public AccountSASPermission() {}
+
+    /**
+     * Converts the given permissions to a {@code String}. Using this method will guarantee the permissions are in an
+     * order accepted by the service.
      *
      * @return
      *      A {@code String} which represents the {@code AccountSASPermissions}.
@@ -105,10 +111,9 @@ public final class AccountSASPermission {
         return builder.toString();
     }
 
-    public AccountSASPermission() {}
-
     /**
-     * Creates an {@code AccountSASPermission} from the specified permissions string.
+     * Creates an {@code AccountSASPermission} from the specified permissions string. This method will throw an
+     * {@code IllegalArgumentException} if it encounters a character that does not correspond to a valid permission.
      *
      * @param permString
      *      A {@code String} which represents the {@code SharedAccessAccountPermissions}.
