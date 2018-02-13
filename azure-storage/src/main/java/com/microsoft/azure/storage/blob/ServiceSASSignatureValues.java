@@ -105,7 +105,6 @@ public final class ServiceSASSignatureValues {
      *      A {@link SharedKeyCredentials} object used to sign the SAS values.
      * @return
      *      A {@link SASQueryParameters} object containing the signed query parameters.
-     * @throws InvalidKeyException
      */
     public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials) {
         if (sharedKeyCredentials == null) {

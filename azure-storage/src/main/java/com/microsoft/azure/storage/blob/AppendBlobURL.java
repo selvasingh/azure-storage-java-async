@@ -99,7 +99,8 @@ public final class AppendBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@code Single&lt;RestResponse&lt;{@link BlobPutHeaders}, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobPutHeaders} and {@code Void}
+     *      body if successful.
      */
     public Single<RestResponse<BlobPutHeaders, Void>> create(
             BlobHTTPHeaders headers, Metadata metadata, BlobAccessConditions accessConditions) {
@@ -131,8 +132,8 @@ public final class AppendBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@code Single&lt;RestResponse&lt;{@link AppendBlobAppendBlockHeaders}, Void&gt;&gt;} object if
-     *      successful.
+     *      The {@link Single} which emits the {@link RestResponse} object containing the {@link AppendBlobAppendBlockHeaders}
+     *      and {@code Void} body if successful.
      */
     public Single<RestResponse<AppendBlobAppendBlockHeaders, Void>> appendBlock(
             Flowable<ByteBuffer> data, long length, BlobAccessConditions accessConditions) {

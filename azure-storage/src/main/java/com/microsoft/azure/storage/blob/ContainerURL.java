@@ -147,7 +147,8 @@ public final class ContainerURL extends StorageURL {
      * @param accessType
      *      A value of the class {@link PublicAccessType}.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ContainerCreateHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerCreateHeaders} an a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerCreateHeaders, Void>> create(
             Metadata metadata, PublicAccessType accessType) {
@@ -165,7 +166,8 @@ public final class ContainerURL extends StorageURL {
      *      A {@link ContainerAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ContainerDeleteHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerDeleteHeaders} an a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerDeleteHeaders, Void>> delete(
             ContainerAccessConditions accessConditions) {
@@ -192,7 +194,8 @@ public final class ContainerURL extends StorageURL {
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the container if there is one.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ContainerGetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerGetPropertiesHeaders} an a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerGetPropertiesHeaders, Void>> getPropertiesAndMetadata(
             LeaseAccessConditions leaseAccessConditions) {
@@ -212,7 +215,8 @@ public final class ContainerURL extends StorageURL {
      *      A {@link ContainerAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ContainerSetMetadataHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerSetMetadataHeaders} an a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadata(
             Metadata metadata, ContainerAccessConditions accessConditions) {
@@ -241,8 +245,8 @@ public final class ContainerURL extends StorageURL {
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the container if there is one.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ContainerGetAclHeaders, List&lt;SignedIdentifier&gt;&gt;&gt;}
-     *      object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerGetAclHeaders} and a
+     *      {@link List} of {@link SignedIdentifier} as the body if successful.
      */
     public Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getPermissions(
             LeaseAccessConditions leaseAccessConditions) {
@@ -265,7 +269,8 @@ public final class ContainerURL extends StorageURL {
      *      A {@link ContainerAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ContainerSetAclHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerSetAclHeaders} an a 
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerSetAclHeaders, Void>> setPermissions(
             PublicAccessType accessType, List<SignedIdentifier> identifiers,
@@ -298,7 +303,8 @@ public final class ContainerURL extends StorageURL {
      * @param httpAccessConditions
      *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ContainerLeaseHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerLeaseHeaders} an a 
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> acquireLease(
             String proposedID, Integer duration, HTTPAccessConditions httpAccessConditions) {
@@ -326,7 +332,8 @@ public final class ContainerURL extends StorageURL {
      * @param httpAccessConditions
      *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerLeaseHeaders} an a 
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> renewLease(
             String leaseID, HTTPAccessConditions httpAccessConditions) {
@@ -354,7 +361,8 @@ public final class ContainerURL extends StorageURL {
      * @param httpAccessConditions
      *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerLeaseHeaders} an a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLease(
             String leaseID, HTTPAccessConditions httpAccessConditions) {
@@ -380,7 +388,8 @@ public final class ContainerURL extends StorageURL {
      * @param httpAccessConditions
      *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerLeaseHeaders} an a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> breakLease(
             HTTPAccessConditions httpAccessConditions) {
@@ -410,7 +419,8 @@ public final class ContainerURL extends StorageURL {
      * @param httpAccessConditions
      *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerLeaseHeaders} an a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLease(
             String leaseID, String proposedID, HTTPAccessConditions httpAccessConditions) {
@@ -441,8 +451,8 @@ public final class ContainerURL extends StorageURL {
      * @param options
      *      A {@link ListBlobsOptions} object which specifies one or more datasets to include in the response.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ContainerListBlobsHeaders, ListBlobsResponse&gt;&gt;} object if
-     *      successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ContainerListBlobsHeaders} and a
+     *      {@code ListBlobsResponse} as the body if successful.
      */
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobs(
             String marker, ListBlobsOptions options) {

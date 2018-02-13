@@ -97,7 +97,7 @@ public final class BlockBlobURL extends BlobURL {
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
      *
      * @param data
-     *      A {@code Flowable&lt;byte[]&gt;} which contains the data to write to the blob.
+     *      A {@link Flowable} emitting {@link ByteBuffer} which contain the data to write to the blob.
      * @param length
      *      A {@code long} indicating how long the data is.
      * @param headers
@@ -108,7 +108,8 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlobPutHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<BlobPutHeaders, Void>> putBlob(
             Flowable<ByteBuffer> data, long length, BlobHTTPHeaders headers, Metadata metadata,
@@ -142,7 +143,8 @@ public final class BlockBlobURL extends BlobURL {
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the blob if there is one.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlockBlobPutBlockHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlock(
             String base64BlockID, Flowable<ByteBuffer> data, long length,
@@ -160,7 +162,8 @@ public final class BlockBlobURL extends BlobURL {
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the blob if there is one.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlockBlobGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlockBlobGetBlockListHeaders} and a
+     *      {@link BlockList} body if successful.
      */
     public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockList(
             BlockListType listType, LeaseAccessConditions leaseAccessConditions) {
@@ -187,7 +190,8 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockListHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlockBlobPutBlockListHeaders} and a
+     *      {@code Void} body if successful.
      */
     // TODO: Add Content-Length to swagger once the modeler knows to hide (or whatever solution).
     public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockList(

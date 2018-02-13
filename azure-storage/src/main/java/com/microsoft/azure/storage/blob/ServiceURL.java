@@ -71,8 +71,8 @@ public final class ServiceURL extends StorageURL {
      * @param options
      *      A {@link ListContainersOptions} which specifies what data should be returned by the service.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if
-     *      successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ServiceListContainersHeaders} and a
+     *      {@link ListContainersResponse} body  if successful.
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainers(
             String marker, ListContainersOptions options) {
@@ -86,8 +86,8 @@ public final class ServiceURL extends StorageURL {
      * https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties.
      *
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ServiceGetPropertiesHeaders, StorageServiceProperties&gt;&gt;} object
-     *      if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ServiceGetPropertiesHeaders} and a
+     *      {@link StorageServiceProperties} body if successful.
      */
     public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getProperties() {
         return this.storageClient.services().getPropertiesWithRestResponseAsync(null, null);
@@ -100,7 +100,8 @@ public final class ServiceURL extends StorageURL {
      * @param properties
      *      A {@link StorageServiceProperties} object containing the configurations for the service.
      * @return
-     *      A {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     *      A {@link Single} which emits a {@link RestResponse} containing the {@link ServiceSetPropertiesHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setProperties(
             StorageServiceProperties properties) {
@@ -114,8 +115,8 @@ public final class ServiceURL extends StorageURL {
      * information, see: https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats.
      *
      * @return
-     *      A {@link Single&lt;RestResponse&lt;ServiceGetStatsHeaders, StorageServiceStats&gt;&gt;} object if
-     *      successful.
+     *      A {@link Single} which emits a {@link RestResponse} containing the {@link ServiceGetStatsHeaders} and a
+     *      {@link StorageServiceStats} body if xssuccessful.
      */
     public Single<RestResponse<ServiceGetStatsHeaders, StorageServiceStats>> getStats() {
         return this.storageClient.services().getStatsWithRestResponseAsync(null, null);

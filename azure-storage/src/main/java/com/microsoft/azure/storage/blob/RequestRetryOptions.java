@@ -64,7 +64,7 @@ public final class RequestRetryOptions {
      * @param secondaryHost
      *      RetryReadsFromSecondaryHost specifies whether the retry policy should retry a read operation against another
      *      host. If RetryReadsFromSecondaryHost is {@code null} (the default) then operations are not retried against another
-     *      host. NOTE: Before setting this field, make sure you understand the issues around reading stale &
+     *      host. NOTE: Before setting this field, make sure you understand the issues around reading stale and
      *      potentially-inconsistent data at this webpage:
      *      https://docs.microsoft.com/en-us/azure/storage/common/storage-designing-ha-apps-with-ragrs
      */
@@ -135,7 +135,7 @@ public final class RequestRetryOptions {
      * @return
      *      RetryReadsFromSecondaryHost specifies whether the retry policy should retry a read operation against another
      *      host. If RetryReadsFromSecondaryHost is {@code null} (the default) then operations are not retried against another
-     *      host. NOTE: Before setting this field, make sure you understand the issues around reading stale &
+     *      host. NOTE: Before setting this field, make sure you understand the issues around reading stale and
      *      potentially-inconsistent data at this webpage:
      *      https://docs.microsoft.com/en-us/azure/storage/common/storage-designing-ha-apps-with-ragrs
      */

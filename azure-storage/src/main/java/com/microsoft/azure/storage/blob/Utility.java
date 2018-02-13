@@ -77,9 +77,6 @@ final class Utility {
      *            A {@code String} that represents the string to decode.
      *
      * @return A {@code String} that represents the decoded string.
-     *
-     * @throws UnsupportedEncodingException
-     *             If a storage service error occurred.
      */
     static String safeURLDecode(final String stringToDecode) {
         if (stringToDecode.length() == 0) {

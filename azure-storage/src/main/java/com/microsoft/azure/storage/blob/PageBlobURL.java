@@ -102,7 +102,8 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *       The {@link Single &lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
+     *       The {@link Single} which emits a {@link RestResponse} containing the {@link BlobPutHeaders} and a {@code Void}
+     *       body if successful.
      */
     public Single<RestResponse<BlobPutHeaders, Void>> create(
             long size, Long sequenceNumber, BlobHTTPHeaders headers, Metadata metadata,
@@ -146,7 +147,8 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, Void&gt;&gt;} object if successful.
+     *      A {@link Single} which emits a {@link RestResponse} containing the {@link PageBlobPutPageHeaders} and a
+     *      [@code Void} body if successful.
      */
     public Single<RestResponse<PageBlobPutPageHeaders, Void>> putPages(
             PageRange pageRange, Flowable<ByteBuffer> body, BlobAccessConditions accessConditions) {
@@ -180,7 +182,8 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, Void&gt;&gt;} object if successful.
+     *      A {@link Single} which emits a {@link RestResponse} containing the {@link PageBlobPutPageHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<PageBlobPutPageHeaders, Void>> clearPages(
             PageRange pageRange, BlobAccessConditions accessConditions) {
@@ -214,7 +217,8 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      A {@link Single &lt;RestResponse&lt;PageBlobPutPage, PageList&gt;&gt;} object if successful.
+     *      A {@link Single} which emits a {@link RestResponse} containing the {@link PageBlobGetPageRangesHeaders} and a
+     *      {@link PageList} body if successful.
      */
     public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRanges(
             BlobRange blobRange, BlobAccessConditions accessConditions) {
@@ -244,7 +248,8 @@ public final class PageBlobURL extends BlobURL {
      *     A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *     complete.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;PageBlobGetPageRangesHeaders, PageList&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link PageBlobGetPageRangesHeaders} and a
+     *      {@link PageList} body if successful.
      */
     public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRangesDiff(
             BlobRange blobRange, String prevSnapshot, BlobAccessConditions accessConditions) {
@@ -271,7 +276,8 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single &lt;RestResponse&lt;BlobSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlobSetPropertiesHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<BlobSetPropertiesHeaders, Void>> resize(
             long size, BlobAccessConditions accessConditions) {
@@ -306,7 +312,8 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single &lt;RestResponse&lt;BlobSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlobSetPropertiesHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<BlobSetPropertiesHeaders, Void>> setSequenceNumber(
             SequenceNumberActionType action, Long sequenceNumber, BlobHTTPHeaders headers,
@@ -350,7 +357,8 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      A {@link Single &lt;RestResponse&lt;PageBlobIncrementalCopyHeaders, Void&gt;&gt;} object if successful.
+     *      A {@link Single} which emits a {@link RestResponse} containing the {@link PageBlobIncrementalCopyHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<PageBlobIncrementalCopyHeaders, Void>> startIncrementalCopy(
             URL source, String snapshot, BlobAccessConditions accessConditions) {
