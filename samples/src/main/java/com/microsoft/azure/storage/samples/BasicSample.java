@@ -28,6 +28,7 @@ import com.microsoft.rest.v2.http.HttpPipelineLogger;
 import com.microsoft.rest.v2.http.HttpResponse;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.exceptions.Exceptions;
@@ -68,16 +69,16 @@ public class BasicSample {
                 }
             }
         };
-        LoggingOptions loggingOptions = new LoggingOptions(Level.INFO);
+        LoggingOptions loggingOptions = LoggingOptions.DEFAULT;
 
         SharedKeyCredentials creds = new SharedKeyCredentials(accountName, accountKey);
-        TelemetryOptions telemetryOptions = new TelemetryOptions();
+        TelemetryOptions telemetryOptions = TelemetryOptions.DEFAULT;
         PipelineOptions pop = new PipelineOptions();
         pop.telemetryOptions = telemetryOptions;
         pop.client = HttpClient.createDefault();
         pop.logger = logger;
         pop.loggingOptions = loggingOptions;
-        return StorageURL.CreatePipeline(creds, pop);
+        return StorageURL.createPipeline(creds, pop);
     }
 
     public static void main(String[] args) throws Exception {
@@ -100,14 +101,14 @@ public class BasicSample {
         final byte[] data = { 0, 1, 2, 3, 4 };
 
         // Convert the data to the common interface used for streaming transfers.
-        final AsyncInputStream asyncStream = AsyncInputStream.create(data);
+        final Flowable<ByteBuffer> asyncStream = Flowable.just(ByteBuffer.wrap(data));
 
         // Comment the above stream and uncomment this to upload a file instead.
         // This shows how to upload a file.
-//        AsyncInputStream stream = AsyncInputStream.create(AsynchronousFileChannel.open(Paths.get("myfile")));
+        //Flowable<ByteBuffer> stream = Flowable.create(AsynchronousFileChannel.open(Paths.get("myfile")).read(ByteBuffer.allocate(0), 0));
 
         // Create a container with containerURL.createAsync().
-        Disposable disposable = containerURL.createAsync(null, null)
+        Disposable disposable = containerURL.create(null, null)
             .toCompletable() // Converting to Completable supports error recovery from containerURL.createAsync.
             .onErrorResumeNext(new Function<Throwable, CompletableSource>() {
                 @Override
@@ -129,30 +130,30 @@ public class BasicSample {
                     throw Exceptions.propagate(throwable);
                 }
             }) // blobURL.putBlobAsync will be performed unless the container create fails with an unrecoverable error.
-            .andThen(blobURL.putBlobAsync(asyncStream, null, null, null))
-            .flatMap(new Function<RestResponse<BlobPutHeaders, Void>, Single<RestResponse<BlobGetHeaders, AsyncInputStream>>>() {
+            .andThen(blobURL.putBlob(asyncStream, data.length, null, null, null))
+            .flatMap(new Function<RestResponse<BlobPutHeaders, Void>, Single<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>>>() {
             @Override
-            public Single<RestResponse<BlobGetHeaders, AsyncInputStream>> apply(RestResponse<BlobPutHeaders, Void> response) throws Exception {
+            public Single<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>> apply(RestResponse<BlobPutHeaders, Void> response) throws Exception {
                 // This method is called after the blob is uploaded successfully.
 
                 // Now let's download the blob.
-                return blobURL.getBlobAsync(new BlobRange(0L, new Long(data.length)), null, false);
+                return blobURL.getBlob(new BlobRange(0L, new Long(data.length)), null, false);
             }
-            }).flatMapCompletable(new Function<RestResponse<BlobGetHeaders, AsyncInputStream>, Completable>() {
+            }).flatMapCompletable(new Function<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>, Completable>() {
                 @Override
-                public Completable apply(RestResponse<BlobGetHeaders, AsyncInputStream> response) throws Exception {
+                public Completable apply(RestResponse<BlobGetHeaders, Flowable<ByteBuffer>> response) throws Exception {
                     // This method is called after getBlobAsync response headers have come back from the service.
                     // We now need to download the blob's contents.
 
                     // Output file path for downloaded blob.
                     final Path path = Paths.get("myFilePath");
                     final AsynchronousFileChannel outFile = AsynchronousFileChannel.open(path, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
-                    return response.body().content().flatMapCompletable(new Function<byte[], CompletableSource>() {
+                    return response.body().flatMapCompletable(new Function<ByteBuffer, CompletableSource>() {
                         long position = 0;
                         @Override
-                        public CompletableSource apply(byte[] bytes) throws Exception {
-                            Completable result = Completable.fromFuture(outFile.write(ByteBuffer.wrap(bytes), position));
-                            position += bytes.length;
+                        public CompletableSource apply(ByteBuffer bytes) throws Exception {
+                            Completable result = Completable.fromFuture(outFile.write(bytes, position));
+                            position += bytes.capacity();
                             return result;
                         }
                     })
