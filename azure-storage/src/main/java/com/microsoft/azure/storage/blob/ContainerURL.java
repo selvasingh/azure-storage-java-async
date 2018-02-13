@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,7 +63,7 @@ public final class ContainerURL extends StorageURL {
      */
     public BlockBlobURL createBlockBlobURL(String blobName) {
         try {
-            return new BlockBlobURL(super.appendToURLPath(new URL(this.storageClient.url()), blobName),
+            return new BlockBlobURL(StorageURL.appendToURLPath(new URL(this.storageClient.url()), blobName),
                     this.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
             // TODO: remove
@@ -85,7 +85,7 @@ public final class ContainerURL extends StorageURL {
      */
     public PageBlobURL createPageBlobURL(String blobName) {
         try {
-            return new PageBlobURL(super.appendToURLPath(new URL(this.storageClient.url()), blobName),
+            return new PageBlobURL(StorageURL.appendToURLPath(new URL(this.storageClient.url()), blobName),
                     this.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
             // TODO: remove
@@ -107,7 +107,7 @@ public final class ContainerURL extends StorageURL {
      */
     public AppendBlobURL createAppendBlobURL(String blobName) {
         try {
-            return new AppendBlobURL(super.appendToURLPath(new URL(this.storageClient.url()), blobName),
+            return new AppendBlobURL(StorageURL.appendToURLPath(new URL(this.storageClient.url()), blobName),
                     this.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
             // TODO: remove
@@ -129,7 +129,7 @@ public final class ContainerURL extends StorageURL {
      */
     public BlobURL createBlobURL(String blobName) {
         try {
-            return new BlobURL(super.appendToURLPath(new URL(this.storageClient.url()), blobName),
+            return new BlobURL(StorageURL.appendToURLPath(new URL(this.storageClient.url()), blobName),
                     this.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
             // TODO: remove
@@ -151,11 +151,9 @@ public final class ContainerURL extends StorageURL {
      */
     public Single<RestResponse<ContainerCreateHeaders, Void>> create(
             Metadata metadata, PublicAccessType accessType) {
-        if (metadata == null) {
-            metadata = Metadata.NONE;
-        }
+        metadata = metadata == null ? Metadata.NONE : metadata;
         return this.storageClient.containers().createWithRestResponseAsync(
-                null, metadata.toString(), accessType, null);
+                null, metadata, accessType, null);
     }
 
     /**
@@ -171,9 +169,8 @@ public final class ContainerURL extends StorageURL {
      */
     public Single<RestResponse<ContainerDeleteHeaders, Void>> delete(
             ContainerAccessConditions accessConditions) {
-        if (accessConditions == null) {
-            accessConditions = ContainerAccessConditions.NONE;
-        }
+        accessConditions = accessConditions == null ? ContainerAccessConditions.NONE : accessConditions;
+
         if (!accessConditions.getHttpAccessConditions().getIfMatch().equals(ETag.NONE) ||
                 !accessConditions.getHttpAccessConditions().getIfNoneMatch().equals(ETag.NONE)) {
             // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
@@ -199,9 +196,7 @@ public final class ContainerURL extends StorageURL {
      */
     public Single<RestResponse<ContainerGetPropertiesHeaders, Void>> getPropertiesAndMetadata(
             LeaseAccessConditions leaseAccessConditions) {
-        if (leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.NONE;
-        }
+        leaseAccessConditions = leaseAccessConditions == null ? LeaseAccessConditions.NONE : leaseAccessConditions;
 
         return this.storageClient.containers().getPropertiesWithRestResponseAsync(null,
                 leaseAccessConditions.getLeaseId(), null);
@@ -221,10 +216,9 @@ public final class ContainerURL extends StorageURL {
      */
     public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadata(
             Metadata metadata, ContainerAccessConditions accessConditions) {
-        if (accessConditions == null) {
-            accessConditions = ContainerAccessConditions.NONE;
-        }
-        else if (accessConditions.getHttpAccessConditions().getIfMatch() != ETag.NONE ||
+        metadata = metadata == null ? Metadata.NONE : metadata;
+        accessConditions = accessConditions == null ? ContainerAccessConditions.NONE : accessConditions;
+        if (accessConditions.getHttpAccessConditions().getIfMatch() != ETag.NONE ||
                 accessConditions.getHttpAccessConditions().getIfNoneMatch() != ETag.NONE ||
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince() != null) {
             // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
@@ -232,12 +226,10 @@ public final class ContainerURL extends StorageURL {
             throw new IllegalArgumentException(
                     "If-Modified-Since is the only HTTP access condition supported for this API");
         }
-        if (metadata == null) {
-            metadata = Metadata.NONE;
-        }
+
 
         return this.storageClient.containers().setMetadataWithRestResponseAsync(null,
-                accessConditions.getLeaseID().getLeaseId(), metadata.toString(),
+                accessConditions.getLeaseID().getLeaseId(), metadata,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),null);
     }
 
@@ -254,9 +246,7 @@ public final class ContainerURL extends StorageURL {
      */
     public Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getPermissions(
             LeaseAccessConditions leaseAccessConditions) {
-        if (leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.NONE;
-        }
+        leaseAccessConditions = leaseAccessConditions == null ? LeaseAccessConditions.NONE : leaseAccessConditions;
 
         return this.storageClient.containers().getAclWithRestResponseAsync(
                 null, leaseAccessConditions.getLeaseId(), null);
@@ -280,9 +270,7 @@ public final class ContainerURL extends StorageURL {
     public Single<RestResponse<ContainerSetAclHeaders, Void>> setPermissions(
             PublicAccessType accessType, List<SignedIdentifier> identifiers,
             ContainerAccessConditions accessConditions) {
-        if(accessConditions == null) {
-            accessConditions = ContainerAccessConditions.NONE;
-        }
+        accessConditions = accessConditions == null ? ContainerAccessConditions.NONE : accessConditions;
 
         // TODO: validate that empty list clears permissions and null list does not change list. Document behavior.
         return this.storageClient.containers().setAclWithRestResponseAsync(identifiers, null,
@@ -292,7 +280,7 @@ public final class ContainerURL extends StorageURL {
                 null);
     }
 
-    private boolean validateLeaseOperationAccessConditions(HttpAccessConditions httpAccessConditions) {
+    private boolean validateLeaseOperationAccessConditions(HTTPAccessConditions httpAccessConditions) {
         return (httpAccessConditions.getIfMatch() == ETag.NONE &&
                 httpAccessConditions.getIfNoneMatch() == ETag.NONE);
     }
@@ -308,16 +296,14 @@ public final class ContainerURL extends StorageURL {
      *      A {@code Integer} specifies the duration of the lease, in seconds, or negative one (-1) for a lease that
      *      never expires. A non-infinite lease can be between 15 and 60 seconds.
      * @param httpAccessConditions
-     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
      *      The {@link Single&lt;RestResponse&lt;ContainerLeaseHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> acquireLease(
-            String proposedID, Integer duration, HttpAccessConditions httpAccessConditions) {
-        if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.NONE;
-        }
-        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)){
+            String proposedID, Integer duration, HTTPAccessConditions httpAccessConditions) {
+        httpAccessConditions = httpAccessConditions == null ? HTTPAccessConditions.NONE : httpAccessConditions;
+        if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)){
             // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
             // subscription.
             throw new IllegalArgumentException(
@@ -338,16 +324,14 @@ public final class ContainerURL extends StorageURL {
      * @param leaseID
      *      A {@code String} representing the lease on the blob.
      * @param httpAccessConditions
-     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> renewLease(
-            String leaseID, HttpAccessConditions httpAccessConditions) {
-        if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.NONE;
-        }
-        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
+            String leaseID, HTTPAccessConditions httpAccessConditions) {
+        httpAccessConditions = httpAccessConditions == null ? HTTPAccessConditions.NONE : httpAccessConditions;
+        if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
             // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
             // subscription.
             throw new IllegalArgumentException(
@@ -368,16 +352,14 @@ public final class ContainerURL extends StorageURL {
      * @param leaseID
      *      A {@code String} representing the lease on the blob.
      * @param httpAccessConditions
-     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLease(
-            String leaseID, HttpAccessConditions httpAccessConditions) {
-        if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.NONE;
-        }
-        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
+            String leaseID, HTTPAccessConditions httpAccessConditions) {
+        httpAccessConditions = httpAccessConditions == null ? HTTPAccessConditions.NONE : httpAccessConditions;
+        if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
             // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
             // subscription.
             throw new IllegalArgumentException(
@@ -396,16 +378,14 @@ public final class ContainerURL extends StorageURL {
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/lease-container.
      *
      * @param httpAccessConditions
-     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> breakLease(
-            HttpAccessConditions httpAccessConditions) {
-        if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.NONE;
-        }
-        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
+            HTTPAccessConditions httpAccessConditions) {
+        httpAccessConditions = httpAccessConditions == null ? HTTPAccessConditions.NONE : httpAccessConditions;
+        if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
             // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
             // subscription.
             throw new IllegalArgumentException(
@@ -428,16 +408,14 @@ public final class ContainerURL extends StorageURL {
      * @param proposedID
      *      A {@code String} in any valid GUID format.
      * @param httpAccessConditions
-     *      A {@link HttpAccessConditions} object that represents HTTP access conditions.
+     *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobsLeaseHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerLeaseHeaders, Void>> releaseLease(
-            String leaseID, String proposedID, HttpAccessConditions httpAccessConditions) {
-        if (httpAccessConditions == null) {
-            httpAccessConditions = HttpAccessConditions.NONE;
-        }
-        else if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
+            String leaseID, String proposedID, HTTPAccessConditions httpAccessConditions) {
+        httpAccessConditions = httpAccessConditions == null ? HTTPAccessConditions.NONE : httpAccessConditions;
+        if (!this.validateLeaseOperationAccessConditions(httpAccessConditions)) {
             // Throwing is preferred to Single.error because this will error out immediately instead of waiting until
             // subscription.
             throw new IllegalArgumentException(
@@ -468,9 +446,7 @@ public final class ContainerURL extends StorageURL {
      */
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobs(
             String marker, ListBlobsOptions options) {
-        if (options == null) {
-            options = ListBlobsOptions.DEFAULT;
-        }
+        options = options == null ? ListBlobsOptions.DEFAULT : options;
         return this.storageClient.containers().listBlobsWithRestResponseAsync(options.getPrefix(),
                 options.getDelimiter(), marker, options.getMaxResults(),
                 options.getDetails().toList(), null, null);

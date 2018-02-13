@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ package com.microsoft.azure.storage.blob;
 public final class LeaseAccessConditions {
 
     public static final LeaseAccessConditions NONE = new LeaseAccessConditions(null);
+
     private final String leaseId;
 
     /**

@@ -30,9 +30,9 @@ public enum DeleteSnapshotsOptionType {
     /**
      * The actual serialized value for a DeleteSnapshotsOptionType instance.
      */
-    private String value;
+    private final String value;
 
-    DeleteSnapshotsOptionType(String value) {
+    private DeleteSnapshotsOptionType(String value) {
         this.value = value;
     }
 

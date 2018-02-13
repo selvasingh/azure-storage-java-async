@@ -11,6 +11,7 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
@@ -19,7 +20,7 @@ import org.joda.time.DateTime;
  * Defines headers for GetPageRanges operation.
  */
 @JacksonXmlRootElement(localName = "PageBlob-GetPageRanges-Headers")
-public class PageBlobGetPageRangesHeaders {
+public final class PageBlobGetPageRangesHeaders {
     /**
      * Returns the date and time the container was last modified. Any operation
      * that modifies the blob, including an update of the blob's metadata or

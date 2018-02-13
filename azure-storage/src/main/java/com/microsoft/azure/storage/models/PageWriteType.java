@@ -30,9 +30,9 @@ public enum PageWriteType {
     /**
      * The actual serialized value for a PageWriteType instance.
      */
-    private String value;
+    private final String value;
 
-    PageWriteType(String value) {
+    private PageWriteType(String value) {
         this.value = value;
     }
 

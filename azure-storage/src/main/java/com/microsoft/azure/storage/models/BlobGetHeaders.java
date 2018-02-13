@@ -11,8 +11,10 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
+import com.microsoft.rest.v2.annotations.HeaderCollection;
 import java.util.Map;
 import org.joda.time.DateTime;
 
@@ -20,7 +22,7 @@ import org.joda.time.DateTime;
  * Defines headers for Get operation.
  */
 @JacksonXmlRootElement(localName = "Blob-Get-Headers")
-public class BlobGetHeaders {
+public final class BlobGetHeaders {
     /**
      * Returns the date and time the container was last modified. Any operation
      * that modifies the blob, including an update of the blob's metadata or
@@ -32,7 +34,7 @@ public class BlobGetHeaders {
     /**
      * The metadata property.
      */
-    @JsonProperty(value = "x-ms-meta")
+    @HeaderCollection("x-ms-meta-")
     private Map<String, String> metadata;
 
     /**

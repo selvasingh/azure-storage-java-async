@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,14 +20,14 @@ import java.security.InvalidKeyException;
 import java.util.Date;
 
 /**
- * AccountSasSignatureValues is used to generate a Shared Access Signature (SAS) for an Azure Storage account.
+ * AccountSASSignatureValues is used to generate a Shared Access Signature (SAS) for an Azure Storage account.
  */
-public final class AccountSasSignatureValues {
+public final class AccountSASSignatureValues {
 
     /**
-     * If null or empty, this defaults to {@code Constants.HeaderConstants.TARGET_STORAGE_VERSION}
+     * If null or empty, this defaults to the service version targeted by this version of the library.
      */
-    public String version;
+    public String version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
 
     /**
      * A {@link SASProtocol} value representing the allowed Internet protocols.
@@ -51,7 +51,7 @@ public final class AccountSasSignatureValues {
     public String permissions;
 
     /**
-     * A {@link IPRange} representing the allowed IP range.
+     * An {@link IPRange} representing the IP addresses permitted to use this SAS.
      */
     public IPRange ipRange;
 
@@ -67,31 +67,28 @@ public final class AccountSasSignatureValues {
      */
     public String resourceTypes;
 
-    public AccountSasSignatureValues() {}
+    /**
+     * Initializes an {@code AccountSASSignatureValues} object with the version number set to the default and all
+     * other values empty. For more information on how to use this class, please refer to
+     * https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
+     */
+    public AccountSASSignatureValues() { }
 
     /**
      * Generates {@link SASQueryParameters} object which contains all SAS query parameters.
      *
      * @param sharedKeyCredentials
-     *      A (@link SharedKeyCredentials} object for the storage account and corresponding primary or secondary key
+     *      A {@link SharedKeyCredentials} object for the storage account and corresponding primary or secondary key.
      * @return
-     *      A {@link SASQueryParameters} object which contains all SAS query parameters
-     * @throws InvalidKeyException
+     *      A {@link SASQueryParameters} object which contains all SAS query parameters.
      */
-    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials)
-            throws InvalidKeyException {
+    public SASQueryParameters generateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials) {
         Utility.assertNotNull("SharedKeyCredentials", sharedKeyCredentials);
         Utility.assertNotNull("services", this.services);
         Utility.assertNotNull("resourceTypes", this.resourceTypes);
         Utility.assertNotNull("expiryTime", this.expiryTime);
         Utility.assertNotNull("permissions", this.permissions);
 
-        if (Utility.isNullOrEmpty(version)) {
-            this.version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
-        }
-        else {
-            this.version = version;
-        }
         IPRange ipRange;
         if (this.ipRange == null) {
             ipRange = IPRange.DEFAULT;
@@ -100,30 +97,29 @@ public final class AccountSasSignatureValues {
             ipRange = this.ipRange;
         }
 
+        // Signature is generated on the un-url-encoded values.
         String stringToSign = Utility.join(new String[]{
                 sharedKeyCredentials.getAccountName(),
-                AccountSASPermission.toString(AccountSASPermission.parse(this.permissions)), // guarantees ordering
+                AccountSASPermission.parse(this.permissions).toString(), // guarantees ordering
                 this.services,
                 resourceTypes,
-                Utility.getUTCTimeOrEmpty(this.startTime),
-                Utility.getUTCTimeOrEmpty(this.expiryTime),
+                this.startTime == null ? "" : Utility.ISO8601UTCDateFormat.format(this.startTime),
+                this.expiryTime == null ? "" : Utility.ISO8601UTCDateFormat.format(this.expiryTime),
                 ipRange.toString(),
                 this.protocol.toString(),
                 this.version,
                 Constants.EMPTY_STRING // Account SAS requires an additional newline character
         }, '\n');
 
-        String signature = sharedKeyCredentials.computeHmac256(stringToSign);
-
-        SASQueryParameters sasParams = null;
+        String signature;
         try {
-            sasParams = new SASQueryParameters(this.version, this.services, resourceTypes,
-                    this.protocol.toString(), this.startTime, this.expiryTime, this.ipRange, null,
-                    null, this.permissions, URLEncoder.encode(signature, Constants.UTF8_CHARSET));
-        } catch (UnsupportedEncodingException e) {
-            throw new Error(e);
+            signature = sharedKeyCredentials.computeHmac256(stringToSign);
+        } catch (InvalidKeyException e) {
+            throw new Error(e); // The key should have been validated by now. If it is no longer valid here, we fail.
         }
 
-        return sasParams;
+        return new SASQueryParameters(this.version, this.services, resourceTypes,
+                this.protocol, this.startTime, this.expiryTime, this.ipRange, null,
+                null, this.permissions, signature);
     }
 }

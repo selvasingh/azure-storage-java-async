@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,117 +14,112 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import java.util.EnumSet;
-
 /**
  * Specifies the set of possible permissions for a blob shared access policy.
  */
-public enum BlobSASPermission {
+public final class BlobSASPermission {
     /**
      * Specifies Read access granted.
      */
-    READ('r'),
+    public boolean read;
 
     /**
      * Specifies Add access granted.
      */
-    ADD('a'),
+    public boolean add;
 
     /**
      * Specifies Create access granted.
      */
-    CREATE('c'),
+    public boolean create;
 
     /**
      * Specifies Write access granted.
      */
-    WRITE('w'),
+    public boolean write;
 
     /**
      * Specifies Delete access granted.
      */
-    DELETE('d');
-
-    final private char value;
+    public boolean delete;
 
     /**
-     * Create a {@code BlobSASPermissions}.
-     *
-     * @param c
-     *      The {@code char} which represents this permission.
+     * Initializes an {@code BlobSASPermission} object with all fields set to false.
      */
-    private BlobSASPermission(char c) {
-        this.value = c;
-    }
+    public BlobSASPermission() {}
 
     /**
-     * Converts the given permissions to a {@code String}.
+     * Converts the given permissions to a {@code String}. Using this method will guarantee the permissions are in an
+     * order accepted by the service.
      *
-     * @param permissions
-     *            The permissions to convert to a {@code String}.
-     *
-     * @return A {@code String} which represents the {@code BlobSASPermission}.
+     * @return
+     *      A {@code String} which represents the {@code BlobSASPermission}.
      */
-    static String toString(EnumSet<BlobSASPermission> permissions) {
-        if (permissions == null) {
-            return Constants.EMPTY_STRING;
-        }
+    @Override
+    public String toString() {
+        // The order of the characters should be as specified here to ensure correctness:
+        // https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-a-service-sas
 
-        // The service supports a fixed order => racwdl
         final StringBuilder builder = new StringBuilder();
 
-        if (permissions.contains(BlobSASPermission.READ)) {
-            builder.append("r");
+        if (this.read) {
+            builder.append('r');
         }
 
-        if (permissions.contains(BlobSASPermission.ADD)) {
-            builder.append("a");
+        if (this.add) {
+            builder.append('a');
         }
 
-        if (permissions.contains(BlobSASPermission.CREATE)) {
-            builder.append("c");
+        if (this.create) {
+            builder.append('c');
         }
 
-        if (permissions.contains(BlobSASPermission.WRITE)) {
-            builder.append("w");
+        if (this.write) {
+            builder.append('w');
         }
 
-        if (permissions.contains(BlobSASPermission.DELETE)) {
-            builder.append("d");
+        if (this.delete) {
+            builder.append('d');
         }
 
         return builder.toString();
     }
 
     /**
-     * Creates an {@link EnumSet<BlobSASPermission>} from the specified permissions string.
+     * Creates an {@code BlobSASPermission} from the specified permissions string. This method will throw an
+     * {@code IllegalArgumentException} if it encounters a character that does not correspond to a valid permission.
      *
      * @param permString
      *      A {@code String} which represents the {@code BlobSASPermission}.
      * @return
-     *      A {@link EnumSet<BlobSASPermission>} generated from the given {@code String}.
+     *      A {@code BlobSASPermission} generated from the given {@code String}.
      */
-    public static EnumSet<BlobSASPermission> parse(String permString) {
-        EnumSet<BlobSASPermission> permissions = EnumSet.noneOf(BlobSASPermission.class);
+    public static BlobSASPermission parse(String permString) {
+        BlobSASPermission permissions = new BlobSASPermission();
 
         for (int i=0; i<permString.length(); i++) {
-            boolean invalidCharacter = true;
             char c = permString.charAt(i);
-
-            for (BlobSASPermission perm : BlobSASPermission.values()) {
-                if (c == perm.value) {
-                    permissions.add(perm);
-                    invalidCharacter = false;
+            switch (c) {
+                case 'r':
+                    permissions.read = true;
                     break;
-                }
-            }
-
-            if (invalidCharacter) {
-                throw new IllegalArgumentException(
+                case 'a':
+                    permissions.read = true;
+                    break;
+                case 'c':
+                    permissions.create = true;
+                    break;
+                case 'w':
+                    permissions.write = true;
+                    break;
+                case 'd':
+                    permissions.delete = true;
+                    break;
+                default:
+                    throw new IllegalArgumentException(
                         String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Permissions", permString, c));
             }
         }
-
         return permissions;
     }
 }

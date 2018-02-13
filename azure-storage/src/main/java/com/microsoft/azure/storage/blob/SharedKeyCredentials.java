@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,13 +24,12 @@ import io.reactivex.Single;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-
-import static com.microsoft.azure.storage.blob.Utility.getGMTTime;
 
 public final class SharedKeyCredentials implements ICredentials {
 
@@ -41,7 +40,8 @@ public final class SharedKeyCredentials implements ICredentials {
     private final Mac hmacSha256;
 
     /**
-     * Initializes a new instance of SharedKeyCredentials contains an account's name and its primary or secondary accountKey.
+     * Initializes a new instance of SharedKeyCredentials contains an account's name and its primary or secondary
+     * accountKey.
      *
      * @param accountName
      *      The account name associated with the request.
@@ -50,7 +50,7 @@ public final class SharedKeyCredentials implements ICredentials {
      */
     public SharedKeyCredentials(String accountName, String accountKey) throws InvalidKeyException {
         this.accountName = accountName;
-        this.accountKey = Base64.decode(accountKey);
+        this.accountKey = DatatypeConverter.parseBase64Binary(accountKey);
 
         try {
             this.hmacSha256 = Mac.getInstance("HmacSHA256");
@@ -98,7 +98,7 @@ public final class SharedKeyCredentials implements ICredentials {
         @Override
         public Single<HttpResponse> sendAsync(final HttpRequest request) {
             if (request.headers().value(Constants.HeaderConstants.DATE) == null) {
-                request.headers().set(Constants.HeaderConstants.DATE, getGMTTime(new Date()));
+                request.headers().set(Constants.HeaderConstants.DATE, Utility.RFC1123GMTDateFormat.format(new Date()));
             }
             final String stringToSign = this.factory.buildStringToSign(request);
             try {
@@ -171,7 +171,7 @@ public final class SharedKeyCredentials implements ICredentials {
         // Add only headers that begin with 'x-ms-'
         final ArrayList<String> xmsHeaderNameArray = new ArrayList<String>();
         for (HttpHeader header : headers) {
-            String lowerCaseHeader = header.name().toLowerCase(Utility.LOCALE_US);
+            String lowerCaseHeader = header.name().toLowerCase(Locale.US);
             if (lowerCaseHeader.startsWith(Constants.PREFIX_FOR_STORAGE_HEADER)) {
                 xmsHeaderNameArray.add(lowerCaseHeader);
             }
@@ -272,14 +272,13 @@ public final class SharedKeyCredentials implements ICredentials {
      *      If the accountKey is not a valid Base64-encoded string.
      */
     String computeHmac256(final String stringToSign) throws InvalidKeyException {
-        byte[] utf8Bytes = null;
         try {
-            utf8Bytes = stringToSign.getBytes(Constants.UTF8_CHARSET);
+            byte[] utf8Bytes = stringToSign.getBytes(Constants.UTF8_CHARSET);
+            return DatatypeConverter.printBase64Binary(this.hmacSha256.doFinal(utf8Bytes));
         }
         catch (final UnsupportedEncodingException e) {
             throw new Error(e);
         }
-        return Base64.encode(this.hmacSha256.doFinal(utf8Bytes));
     }
 }
 

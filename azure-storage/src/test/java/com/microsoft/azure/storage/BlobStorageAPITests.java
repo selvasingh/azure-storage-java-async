@@ -1,7 +1,6 @@
 package com.microsoft.azure.storage;
 
 import com.microsoft.azure.storage.blob.*;
-import com.microsoft.azure.storage.blob.Base64;
 import com.microsoft.azure.storage.models.*;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.http.*;
@@ -12,6 +11,7 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -103,11 +103,11 @@ public class BlobStorageAPITests {
             // Download the blob contents.
             Flowable<ByteBuffer> data = bu.getBlob(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
-            byte[] dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            byte[] dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
             // Set and retrieve the blob properties. Metadata is not yet supported.
-            BlobHttpHeaders headers = new BlobHttpHeaders("myControl", "myDisposition",
+            BlobHTTPHeaders headers = new BlobHTTPHeaders("myControl", "myDisposition",
                     "myContentEncoding", "myLanguage", null,
                     "myType");
             bu.setProperties(headers, null).blockingGet();
@@ -130,7 +130,7 @@ public class BlobStorageAPITests {
             // Download the contents of the snapshot.
             data = buSnapshot.getBlob(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
-            dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0,0,0});
 
             // Create a reference to another blob within the same container and copies the first blob into this location.
@@ -150,7 +150,7 @@ public class BlobStorageAPITests {
             // Create a reference to a new blob within the same container to upload blocks. Upload a single block.
             BlockBlobURL bu3 = cu.createBlockBlobURL("javablob3");
             ArrayList<String> blockIDs = new ArrayList<>();
-            blockIDs.add(Base64.encode(new byte[]{0}));
+            blockIDs.add(DatatypeConverter.printBase64Binary(new byte[]{0}));
             bu3.putBlock(blockIDs.get(0), Flowable.just(ByteBuffer.wrap(new byte[]{0,0,0})), 3,
                     null).blockingGet();
 
@@ -171,36 +171,43 @@ public class BlobStorageAPITests {
             bu3.putBlockList(blockIDs, null, null, null).blockingGet();
             data = bu3.getBlob(new BlobRange(0L, 3L),
                     null, false).blockingGet().body();
-            dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0,0,0});
 
             // SAS -----------------------------
             // Parses a URL into its constituent components. This structure's URL fields may be modified.
             BlobURLParts parts = URLParser.parse(bu.toURL());
 
-            // Construct the AccountSasSignatureValues values object. This encapsulates all the values needed to create an AccountSasSignatureValues.
-            AccountSasSignatureValues sas = new AccountSasSignatureValues();
+            // Construct the AccountSASSignatureValues values object. This encapsulates all the values needed to create an AccountSASSignatureValues.
+            AccountSASSignatureValues sas = new AccountSASSignatureValues();
+            AccountSASPermission perms = new AccountSASPermission();
+            perms.read = true;
+            perms.write = true;
+            AccountSASService service = new AccountSASService();
+            service.blob = true;
+            AccountSASResourceType resourceType = new AccountSASResourceType();
+            resourceType.object = true;
             sas.version = "2016-05-31";
             sas.protocol = SASProtocol.HTTPS_HTTP;
             sas.startTime  = null;
             sas.expiryTime= DateTime.now().plusDays(1).toDate();
-            sas.permissions = AccountSASPermission.toString(EnumSet.of(AccountSASPermission.READ, AccountSASPermission.WRITE));
+            sas.permissions = perms.toString();
             sas.ipRange = null;
-            sas.services = AccountSASService.toString(EnumSet.of(AccountSASService.BLOB));
-            sas.resourceTypes = AccountSASResourceType.toString(EnumSet.of(AccountSASResourceType.OBJECT));
+            sas.services = service.toString();
+            sas.resourceTypes = resourceType.toString();
 
-            // Construct a ServiceSasSignatureValues in a pattern similar to that of the AccountSasSignatureValues.
-            // Comment out the AccountSasSignatureValues creation and uncomment this to run with ServiceSasSignatureValues.
-            /*ServiceSasSignatureValues sas = new ServiceSasSignatureValues("2016-05-31", SASProtocol.HTTPS_HTTP,
+            // Construct a ServiceSASSignatureValues in a pattern similar to that of the AccountSASSignatureValues.
+            // Comment out the AccountSASSignatureValues creation and uncomment this to run with ServiceSASSignatureValues.
+            /*ServiceSASSignatureValues sas = new ServiceSASSignatureValues("2016-05-31", SASProtocol.HTTPS_HTTP,
                     DateTime.now().minusDays(1).toDate(), DateTime.now().plusDays(1).toDate(),
                     EnumSet.of(ContainerSASPermission.READ, ContainerSASPermission.WRITE),
                     null, containerName, null, null,
                     null, null, null, null);*/
 
 
-            // GenerateSASQueryParameters hashes the sas using your account's credentials and then associates the
+            // generateSASQueryParameters hashes the sas using your account's credentials and then associates the
             // sasQueryParameters with the blobURLParts.
-            parts.setSasQueryParameters(sas.GenerateSASQueryParameters(creds));
+            parts.sasQueryParameters = sas.generateSASQueryParameters(creds);
 
             // Using a SAS requires AnonymousCredentials on the pipeline.
             pipeline = StorageURL.createPipeline(new AnonymousCredentials(), new PipelineOptions());
@@ -212,7 +219,7 @@ public class BlobStorageAPITests {
             // Download the blob using the SAS. To perform other operations, ensure the appropriate permissions are
             // specified above.
             data = sasBlob.getBlob(new BlobRange(0L, 3L), null, false).blockingGet().body();
-            dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
             // --------------APPEND BLOBS-------------
@@ -221,7 +228,7 @@ public class BlobStorageAPITests {
             abu.appendBlock(Flowable.just(ByteBuffer.wrap(new byte[]{0,0,0})), 3,  null).blockingGet();
 
             data = abu.getBlob(new BlobRange(0L, 3L), null, false).blockingGet().body();
-            dataByte = FlowableUtil.collectBytes(data).blockingGet();
+            dataByte = FlowableUtil.collectBytesInArray(data).blockingGet();
             assertArrayEquals(dataByte, new byte[]{0, 0, 0});
 
             // ---------------PAGE BLOBS-------------

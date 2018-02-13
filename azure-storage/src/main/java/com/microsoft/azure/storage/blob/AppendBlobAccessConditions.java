@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,9 @@ package com.microsoft.azure.storage.blob;
  */
 public final class AppendBlobAccessConditions {
 
+    /**
+     * An object representing no access conditions.
+     */
     public static final AppendBlobAccessConditions NONE =
             new AppendBlobAccessConditions(null, null);
 
@@ -27,7 +30,7 @@ public final class AppendBlobAccessConditions {
     private final Integer ifMaxSizeLessThanOrEqual;
 
     /**
-     * Creates a {@link AppendBlobAccessConditions} object
+     * Creates a {@code AppendBlobAccessConditions} object.
      *
      * @param ifAppendPositionEquals
      *      Ensures that the AppendBlock operation succeeds only if the append position is equal to a value.

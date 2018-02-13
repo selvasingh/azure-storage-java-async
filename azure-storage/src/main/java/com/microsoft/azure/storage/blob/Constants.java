@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ final class Constants {
     /**
      * Defines constants for use with HTTP headers.
      */
-    static class HeaderConstants {
+    static final class HeaderConstants {
         /**
          * The Authorization header.
          */

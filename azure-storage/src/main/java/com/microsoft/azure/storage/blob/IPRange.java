@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,59 +21,19 @@ import java.net.Inet4Address;
  */
 public final class IPRange {
 
-    public static final IPRange DEFAULT = new IPRange("", "");
-
-    private final String ipMin;
-
-    private final String ipMax;
+    public static final IPRange DEFAULT = new IPRange();
 
     /**
-     * Creates an IP Range using the specified single IP address. The IP address must be IPv4.
-     *
-     * @param ip
-     *      A {@link String} representing a single IP address.
+     * A {@link String} representing the minimum IP address of the range.
      */
-    public IPRange(String ip) {
-        this(ip, ip);
-    }
+    public Inet4Address ipMin;
 
     /**
-     * Creates an IP Range using the specified minimum and maximum IP addresses. The IP addresses must be IPv4.
-     *
-     * @param minimumIP
-     *      A {@link String} representing the minimum IP address of the range.
-     * @param maximumIP
-     *      A {@link String} representing the maximum IP address of the range.
+     * A {@link String} representing the maximum IP address of the range.
      */
-    public IPRange(String minimumIP, String maximumIP) {
-        Utility.assertNotNull("minimumIP", minimumIP);
-        Utility.assertNotNull("maximumIP", maximumIP);
+    public Inet4Address ipMax;
 
-        this.ipMin = minimumIP;
-        this.ipMax = maximumIP;
-    }
-
-    /**
-     * The minimum IP address for the range, inclusive.
-     * Will match {@link #getIpMax()} if this {@code IPRange} represents a single IP address.
-     *
-     * @return
-     *      The minimum IP address.
-     */
-    public String getIpMin() {
-        return this.ipMin;
-    }
-
-    /**
-     * The maximum IP address for the range, inclusive.
-     * Will match {@link #getIpMin()} if this {@code IPRange} represents a single IP address.
-     *
-     * @return
-     *      The maximum IP address.
-     */
-    public String getIpMax() {
-        return this.ipMax;
-    }
+    public IPRange() { }
 
     /**
      * Output the single IP address or range of IP addresses.
@@ -83,13 +43,14 @@ public final class IPRange {
      */
     @Override
     public String toString() {
-        if(this.ipMin.length() == 0) {
+        if (this.ipMin == null) {
             return "";
         }
-        StringBuilder str = new StringBuilder(this.ipMin);
+        this.ipMax = this.ipMax == null ? this.ipMin : this.ipMax;
+        StringBuilder str = new StringBuilder(this.ipMin.toString());
         if (!this.ipMin.equals(this.ipMax)) {
             str.append('-');
-            str.append(this.ipMax);
+            str.append(this.ipMax.toString());
         }
 
         return str.toString();

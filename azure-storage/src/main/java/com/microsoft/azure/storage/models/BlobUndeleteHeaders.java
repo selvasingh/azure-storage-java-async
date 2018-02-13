@@ -17,17 +17,10 @@ import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
 
 /**
- * Defines headers for ListBlobs operation.
+ * Defines headers for Undelete operation.
  */
-@JacksonXmlRootElement(localName = "Container-ListBlobs-Headers")
-public final class ContainerListBlobsHeaders {
-    /**
-     * The content type specified for the blob. The default content type is
-     * 'application/octet-stream'.
-     */
-    @JsonProperty(value = "Content-Type")
-    private String contentType;
-
+@JacksonXmlRootElement(localName = "Blob-Undelete-Headers")
+public final class BlobUndeleteHeaders {
     /**
      * This header uniquely identifies the request that was made and can be
      * used for troubleshooting the request.
@@ -51,26 +44,6 @@ public final class ContainerListBlobsHeaders {
     private DateTimeRfc1123 dateProperty;
 
     /**
-     * Get the contentType value.
-     *
-     * @return the contentType value.
-     */
-    public String contentType() {
-        return this.contentType;
-    }
-
-    /**
-     * Set the contentType value.
-     *
-     * @param contentType the contentType value to set.
-     * @return the ContainerListBlobsHeaders object itself.
-     */
-    public ContainerListBlobsHeaders withContentType(String contentType) {
-        this.contentType = contentType;
-        return this;
-    }
-
-    /**
      * Get the requestId value.
      *
      * @return the requestId value.
@@ -83,9 +56,9 @@ public final class ContainerListBlobsHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set.
-     * @return the ContainerListBlobsHeaders object itself.
+     * @return the BlobUndeleteHeaders object itself.
      */
-    public ContainerListBlobsHeaders withRequestId(String requestId) {
+    public BlobUndeleteHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -103,9 +76,9 @@ public final class ContainerListBlobsHeaders {
      * Set the version value.
      *
      * @param version the version value to set.
-     * @return the ContainerListBlobsHeaders object itself.
+     * @return the BlobUndeleteHeaders object itself.
      */
-    public ContainerListBlobsHeaders withVersion(String version) {
+    public BlobUndeleteHeaders withVersion(String version) {
         this.version = version;
         return this;
     }
@@ -126,9 +99,9 @@ public final class ContainerListBlobsHeaders {
      * Set the dateProperty value.
      *
      * @param dateProperty the dateProperty value to set.
-     * @return the ContainerListBlobsHeaders object itself.
+     * @return the BlobUndeleteHeaders object itself.
      */
-    public ContainerListBlobsHeaders withDateProperty(DateTime dateProperty) {
+    public BlobUndeleteHeaders withDateProperty(DateTime dateProperty) {
         if (dateProperty == null) {
             this.dateProperty = null;
         } else {

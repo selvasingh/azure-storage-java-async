@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@ public final class ServiceURL extends StorageURL {
 
     public ContainerURL createContainerURL(String containerName) {
         try {
-            return new ContainerURL(super.appendToURLPath(new URL(super.storageClient.url()), containerName),
+            return new ContainerURL(StorageURL.appendToURLPath(new URL(super.storageClient.url()), containerName),
                     super.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
             // TODO: remove
@@ -76,9 +76,7 @@ public final class ServiceURL extends StorageURL {
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainers(
             String marker, ListContainersOptions options) {
-        if (options == null) {
-            options = ListContainersOptions.DEFAULT;
-        }
+        options = options == null ? ListContainersOptions.DEFAULT : options;
         return this.storageClient.services().listContainersWithRestResponseAsync(options.getPrefix(), marker,
                 options.getMaxResults(), options.getDetails().toIncludeType(), null, null);
     }

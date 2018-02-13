@@ -11,13 +11,14 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * The ClearRange model.
  */
 @JacksonXmlRootElement(localName = "ClearRange")
-public class ClearRange {
+public final class ClearRange {
     /**
      * The start property.
      */

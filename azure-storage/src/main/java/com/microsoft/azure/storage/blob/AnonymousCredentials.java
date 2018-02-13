@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +14,7 @@
  */
 package com.microsoft.azure.storage.blob;
 
+import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.http.HttpRequest;
 import com.microsoft.rest.v2.http.HttpResponse;
 import com.microsoft.rest.v2.policy.RequestPolicy;
@@ -27,15 +28,20 @@ import io.reactivex.Single;
  */
 public final class AnonymousCredentials implements ICredentials {
 
+    /**
+     * Returns an empty instance of {@code AnonymousCredentials}.
+     */
     public AnonymousCredentials(){}
 
     /**
      * Creates a new {@code AnonymousCredentialsPolicy}.
      *
      * @param nextRequestPolicy
-     *      The next policy in the pipeline which will be called after this policy completes.
+     *      The next {@link RequestPolicy} in the pipeline which will be called after this policy completes.
+     * @param options
+     *      Unused.
      * @return
-     *      A {@link RequestPolicy} object to be inserted into the {@link com.microsoft.rest.v2.http.HttpPipeline}.
+     *      A {@link RequestPolicy} object to be inserted into the {@link HttpPipeline}.
      */
     @Override
     public RequestPolicy create(RequestPolicy nextRequestPolicy, RequestPolicyOptions options) {
@@ -60,7 +66,7 @@ public final class AnonymousCredentials implements ICredentials {
          * @param request
          *      An {@link HttpRequest} object representing the storage request.
          * @return
-         *      The {@link Single&lt;HttpResponse&gt;} containing the response if successful.
+         *      A Single containing the {@link HttpResponse} if successful.
          */
         public Single<HttpResponse> sendAsync(HttpRequest request) { return nextPolicy.sendAsync(request); }
     }

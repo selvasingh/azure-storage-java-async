@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@ public final class LoggingFactory implements RequestPolicyFactory {
     private final LoggingOptions loggingOptions;
 
     public LoggingFactory(LoggingOptions loggingOptions) {
-        this.loggingOptions = loggingOptions;
+        this.loggingOptions = loggingOptions == null ? LoggingOptions.DEFAULT : loggingOptions;
     }
 
     private final class LoggingPolicy implements RequestPolicy {
@@ -44,6 +44,7 @@ public final class LoggingFactory implements RequestPolicyFactory {
 
         private final RequestPolicyOptions options;
 
+        // The following fields are not final because they are updated by the policy.
         private int tryCount;
 
         private long operationStartTime;

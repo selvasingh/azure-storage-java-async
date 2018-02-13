@@ -27,7 +27,6 @@ import com.microsoft.azure.storage.models.PublicAccessType;
 import com.microsoft.azure.storage.models.SignedIdentifier;
 import com.microsoft.rest.v2.CollectionFormat;
 import com.microsoft.rest.v2.DateTimeRfc1123;
-import com.microsoft.rest.v2.RestException;
 import com.microsoft.rest.v2.RestProxy;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.ServiceCallback;
@@ -40,22 +39,24 @@ import com.microsoft.rest.v2.annotations.GET;
 import com.microsoft.rest.v2.annotations.HeaderParam;
 import com.microsoft.rest.v2.annotations.Host;
 import com.microsoft.rest.v2.annotations.HostParam;
-import com.microsoft.rest.v2.annotations.PathParam;
 import com.microsoft.rest.v2.annotations.PUT;
 import com.microsoft.rest.v2.annotations.QueryParam;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.joda.time.DateTime;
 
 /**
  * An instance of this class provides access to all the operations defined in
  * Containers.
  */
-public class ContainersImpl implements Containers {
+public final class ContainersImpl implements Containers {
     /**
      * The proxy service used to perform REST calls.
      */
@@ -81,10 +82,10 @@ public class ContainersImpl implements Containers {
      * proxy service to perform REST calls.
      */
     @Host("{url}")
-    interface ContainersService {
+    private interface ContainersService {
         @PUT("{containerName}")
         @ExpectedResponses({201})
-        Single<RestResponse<ContainerCreateHeaders, Void>> create(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("x-ms-blob-public-access") PublicAccessType access, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype);
+        Single<RestResponse<ContainerCreateHeaders, Void>> create(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-meta-") Map<String, String> metadata, @HeaderParam("x-ms-blob-public-access") PublicAccessType access, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype);
 
         @GET("{containerName}")
         @ExpectedResponses({200})
@@ -100,7 +101,7 @@ public class ContainersImpl implements Containers {
 
         @PUT("{containerName}")
         @ExpectedResponses({200})
-        Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadata(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-meta") String metadata, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
+        Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadata(@HostParam("url") String url, @QueryParam("timeout") Integer timeout, @HeaderParam("x-ms-lease-id") String leaseId, @HeaderParam("x-ms-meta-") Map<String, String> metadata, @HeaderParam("If-Modified-Since") DateTimeRfc1123 ifModifiedSince, @HeaderParam("x-ms-version") String version, @HeaderParam("x-ms-client-request-id") String requestId, @QueryParam("restype") String restype, @QueryParam("comp") String comp);
 
         @GET("{containerName}")
         @ExpectedResponses({200})
@@ -122,8 +123,6 @@ public class ContainersImpl implements Containers {
     /**
      * creates a new container under the specified account. If the container with the same name already exists, the operation fails.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void create() {
@@ -137,14 +136,13 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> createAsync(final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> createAsync(@NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(createAsync(), serviceCallback);
     }
 
     /**
      * creates a new container under the specified account. If the container with the same name already exists, the operation fails.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerCreateHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerCreateHeaders, Void>> createWithRestResponseAsync() {
@@ -156,7 +154,7 @@ public class ContainersImpl implements Containers {
         }
         final String restype = "container";
         final Integer timeout = null;
-        final String metadata = null;
+        final Map<String, String> metadata = null;
         final PublicAccessType access = null;
         final String requestId = null;
         return service.create(this.client.url(), timeout, metadata, access, this.client.version(), requestId, restype);
@@ -165,7 +163,6 @@ public class ContainersImpl implements Containers {
     /**
      * creates a new container under the specified account. If the container with the same name already exists, the operation fails.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
     public Completable createAsync() {
@@ -181,10 +178,9 @@ public class ContainersImpl implements Containers {
      * @param access Specifies whether data in the container may be accessed publicly and the level of access. Possible values include: 'container', 'blob'.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void create(Integer timeout, String metadata, PublicAccessType access, String requestId) {
+    public void create(Integer timeout, Map<String, String> metadata, PublicAccessType access, String requestId) {
         createAsync(timeout, metadata, access, requestId).blockingAwait();
     }
 
@@ -199,7 +195,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> createAsync(Integer timeout, String metadata, PublicAccessType access, String requestId, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> createAsync(Integer timeout, Map<String, String> metadata, PublicAccessType access, String requestId, @NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(createAsync(timeout, metadata, access, requestId), serviceCallback);
     }
 
@@ -213,13 +209,14 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerCreateHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerCreateHeaders, Void>> createWithRestResponseAsync(Integer timeout, String metadata, PublicAccessType access, String requestId) {
+    public Single<RestResponse<ContainerCreateHeaders, Void>> createWithRestResponseAsync(Integer timeout, Map<String, String> metadata, PublicAccessType access, String requestId) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (this.client.version() == null) {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
+        Validator.validate(metadata);
         final String restype = "container";
         return service.create(this.client.url(), timeout, metadata, access, this.client.version(), requestId, restype);
     }
@@ -234,7 +231,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable createAsync(Integer timeout, String metadata, PublicAccessType access, String requestId) {
+    public Completable createAsync(Integer timeout, Map<String, String> metadata, PublicAccessType access, String requestId) {
         return createWithRestResponseAsync(timeout, metadata, access, requestId)
             .toCompletable();
     }
@@ -242,8 +239,6 @@ public class ContainersImpl implements Containers {
     /**
      * returns all user-defined metadata and system properties for the specified container. The data returned does not include the container's list of blobs.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void getProperties() {
@@ -257,14 +252,13 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> getPropertiesAsync(final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> getPropertiesAsync(@NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(getPropertiesAsync(), serviceCallback);
     }
 
     /**
      * returns all user-defined metadata and system properties for the specified container. The data returned does not include the container's list of blobs.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerGetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerGetPropertiesHeaders, Void>> getPropertiesWithRestResponseAsync() {
@@ -284,7 +278,6 @@ public class ContainersImpl implements Containers {
     /**
      * returns all user-defined metadata and system properties for the specified container. The data returned does not include the container's list of blobs.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
     public Completable getPropertiesAsync() {
@@ -299,7 +292,6 @@ public class ContainersImpl implements Containers {
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void getProperties(Integer timeout, String leaseId, String requestId) {
@@ -316,7 +308,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> getPropertiesAsync(Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> getPropertiesAsync(Integer timeout, String leaseId, String requestId, @NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(getPropertiesAsync(timeout, leaseId, requestId), serviceCallback);
     }
 
@@ -357,8 +349,6 @@ public class ContainersImpl implements Containers {
     /**
      * operation marks the specified container for deletion. The container and any blobs contained within it are later deleted during garbage collection.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void delete() {
@@ -372,14 +362,13 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> deleteAsync(final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> deleteAsync(@NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(deleteAsync(), serviceCallback);
     }
 
     /**
      * operation marks the specified container for deletion. The container and any blobs contained within it are later deleted during garbage collection.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerDeleteHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerDeleteHeaders, Void>> deleteWithRestResponseAsync() {
@@ -409,7 +398,6 @@ public class ContainersImpl implements Containers {
     /**
      * operation marks the specified container for deletion. The container and any blobs contained within it are later deleted during garbage collection.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
     public Completable deleteAsync() {
@@ -426,7 +414,6 @@ public class ContainersImpl implements Containers {
      * @param ifUnmodifiedSince Specify this header value to operate only on a blob if it has not been modified since the specified date/time.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void delete(Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId) {
@@ -445,7 +432,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> deleteAsync(Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> deleteAsync(Integer timeout, String leaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId, @NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(deleteAsync(timeout, leaseId, ifModifiedSince, ifUnmodifiedSince, requestId), serviceCallback);
     }
 
@@ -498,8 +485,6 @@ public class ContainersImpl implements Containers {
     /**
      * returns all user-defined metadata for the container.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void getMetadata() {
@@ -513,14 +498,13 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> getMetadataAsync(final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> getMetadataAsync(@NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(getMetadataAsync(), serviceCallback);
     }
 
     /**
      * returns all user-defined metadata for the container.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerGetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerGetMetadataHeaders, Void>> getMetadataWithRestResponseAsync() {
@@ -541,7 +525,6 @@ public class ContainersImpl implements Containers {
     /**
      * returns all user-defined metadata for the container.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
     public Completable getMetadataAsync() {
@@ -556,7 +539,6 @@ public class ContainersImpl implements Containers {
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void getMetadata(Integer timeout, String leaseId, String requestId) {
@@ -573,7 +555,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> getMetadataAsync(Integer timeout, String leaseId, String requestId, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> getMetadataAsync(Integer timeout, String leaseId, String requestId, @NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(getMetadataAsync(timeout, leaseId, requestId), serviceCallback);
     }
 
@@ -615,8 +597,6 @@ public class ContainersImpl implements Containers {
     /**
      * operation sets one or more user-defined name-value pairs for the specified container.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void setMetadata() {
@@ -630,14 +610,13 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> setMetadataAsync(final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> setMetadataAsync(@NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(setMetadataAsync(), serviceCallback);
     }
 
     /**
      * operation sets one or more user-defined name-value pairs for the specified container.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync() {
@@ -651,7 +630,7 @@ public class ContainersImpl implements Containers {
         final String comp = "metadata";
         final Integer timeout = null;
         final String leaseId = null;
-        final String metadata = null;
+        final Map<String, String> metadata = null;
         final DateTime ifModifiedSince = null;
         final String requestId = null;
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -664,7 +643,6 @@ public class ContainersImpl implements Containers {
     /**
      * operation sets one or more user-defined name-value pairs for the specified container.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
     public Completable setMetadataAsync() {
@@ -681,10 +659,9 @@ public class ContainersImpl implements Containers {
      * @param ifModifiedSince Specify this header value to operate only on a blob if it has been modified since the specified date/time.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void setMetadata(Integer timeout, String leaseId, String metadata, DateTime ifModifiedSince, String requestId) {
+    public void setMetadata(Integer timeout, String leaseId, Map<String, String> metadata, DateTime ifModifiedSince, String requestId) {
         setMetadataAsync(timeout, leaseId, metadata, ifModifiedSince, requestId).blockingAwait();
     }
 
@@ -700,7 +677,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> setMetadataAsync(Integer timeout, String leaseId, String metadata, DateTime ifModifiedSince, String requestId, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> setMetadataAsync(Integer timeout, String leaseId, Map<String, String> metadata, DateTime ifModifiedSince, String requestId, @NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(setMetadataAsync(timeout, leaseId, metadata, ifModifiedSince, requestId), serviceCallback);
     }
 
@@ -715,13 +692,14 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerSetMetadataHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(Integer timeout, String leaseId, String metadata, DateTime ifModifiedSince, String requestId) {
+    public Single<RestResponse<ContainerSetMetadataHeaders, Void>> setMetadataWithRestResponseAsync(Integer timeout, String leaseId, Map<String, String> metadata, DateTime ifModifiedSince, String requestId) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
         if (this.client.version() == null) {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
+        Validator.validate(metadata);
         final String restype = "container";
         final String comp = "metadata";
         DateTimeRfc1123 ifModifiedSinceConverted = null;
@@ -742,14 +720,12 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable setMetadataAsync(Integer timeout, String leaseId, String metadata, DateTime ifModifiedSince, String requestId) {
+    public Completable setMetadataAsync(Integer timeout, String leaseId, Map<String, String> metadata, DateTime ifModifiedSince, String requestId) {
         return setMetadataWithRestResponseAsync(timeout, leaseId, metadata, ifModifiedSince, requestId)
             .toCompletable();
     }
 
     /**
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the List&lt;SignedIdentifier&gt; object if successful.
      */
@@ -762,12 +738,11 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;List&lt;SignedIdentifier&gt;&gt;} object.
      */
-    public ServiceFuture<List<SignedIdentifier>> getAclAsync(final ServiceCallback<List<SignedIdentifier>> serviceCallback) {
+    public ServiceFuture<List<SignedIdentifier>> getAclAsync(@NonNull ServiceCallback<List<SignedIdentifier>> serviceCallback) {
         return ServiceFuture.fromBody(getAclAsync(), serviceCallback);
     }
 
     /**
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerGetAclHeaders, List&lt;SignedIdentifier&gt;&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerGetAclHeaders, List<SignedIdentifier>>> getAclWithRestResponseAsync() {
@@ -786,7 +761,6 @@ public class ContainersImpl implements Containers {
     }
 
     /**
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Maybe&lt;List&lt;SignedIdentifier&gt;&gt;} object if successful.
      */
     public Maybe<List<SignedIdentifier>> getAclAsync() {
@@ -807,7 +781,6 @@ public class ContainersImpl implements Containers {
      * @param leaseId If specified, the operation only succeeds if the container's lease is active and matches this ID.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the List&lt;SignedIdentifier&gt; object if successful.
      */
@@ -823,7 +796,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;List&lt;SignedIdentifier&gt;&gt;} object.
      */
-    public ServiceFuture<List<SignedIdentifier>> getAclAsync(Integer timeout, String leaseId, String requestId, final ServiceCallback<List<SignedIdentifier>> serviceCallback) {
+    public ServiceFuture<List<SignedIdentifier>> getAclAsync(Integer timeout, String leaseId, String requestId, @NonNull ServiceCallback<List<SignedIdentifier>> serviceCallback) {
         return ServiceFuture.fromBody(getAclAsync(timeout, leaseId, requestId), serviceCallback);
     }
 
@@ -867,8 +840,6 @@ public class ContainersImpl implements Containers {
     }
 
     /**
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void setAcl() {
@@ -880,12 +851,11 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> setAclAsync(final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> setAclAsync(@NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(setAclAsync(), serviceCallback);
     }
 
     /**
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerSetAclHeaders, Void&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerSetAclHeaders, Void>> setAclWithRestResponseAsync() {
@@ -916,7 +886,6 @@ public class ContainersImpl implements Containers {
     }
 
     /**
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
     public Completable setAclAsync() {
@@ -933,7 +902,6 @@ public class ContainersImpl implements Containers {
      * @param ifUnmodifiedSince Specify this header value to operate only on a blob if it has not been modified since the specified date/time.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     public void setAcl(List<SignedIdentifier> containerAcl, Integer timeout, String leaseId, PublicAccessType access, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId) {
@@ -952,7 +920,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> setAclAsync(List<SignedIdentifier> containerAcl, Integer timeout, String leaseId, PublicAccessType access, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> setAclAsync(List<SignedIdentifier> containerAcl, Integer timeout, String leaseId, PublicAccessType access, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId, @NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(setAclAsync(containerAcl, timeout, leaseId, access, ifModifiedSince, ifUnmodifiedSince, requestId), serviceCallback);
     }
 
@@ -974,9 +942,9 @@ public class ContainersImpl implements Containers {
         if (this.client.version() == null) {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
+        Validator.validate(containerAcl);
         final String restype = "container";
         final String comp = "acl";
-        Validator.validate(containerAcl);
         DateTimeRfc1123 ifModifiedSinceConverted = null;
         if (ifModifiedSince != null) {
             ifModifiedSinceConverted = new DateTimeRfc1123(ifModifiedSince);
@@ -1009,10 +977,9 @@ public class ContainersImpl implements Containers {
      *
      * @param action Describes what lease action to take. Possible values include: 'acquire', 'renew', 'change', 'release', 'break'.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void lease(LeaseActionType action) {
+    public void lease(@NonNull LeaseActionType action) {
         leaseAsync(action).blockingAwait();
     }
 
@@ -1024,7 +991,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> leaseAsync(LeaseActionType action, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> leaseAsync(@NonNull LeaseActionType action, @NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(leaseAsync(action), serviceCallback);
     }
 
@@ -1035,7 +1002,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerLeaseHeaders, Void>> leaseWithRestResponseAsync(LeaseActionType action) {
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> leaseWithRestResponseAsync(@NonNull LeaseActionType action) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -1073,7 +1040,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable leaseAsync(LeaseActionType action) {
+    public Completable leaseAsync(@NonNull LeaseActionType action) {
         return leaseWithRestResponseAsync(action)
             .toCompletable();
     }
@@ -1091,10 +1058,9 @@ public class ContainersImpl implements Containers {
      * @param ifUnmodifiedSince Specify this header value to operate only on a blob if it has not been modified since the specified date/time.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    public void lease(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId) {
+    public void lease(@NonNull LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId) {
         leaseAsync(action, timeout, leaseId, breakPeriod, duration, proposedLeaseId, ifModifiedSince, ifUnmodifiedSince, requestId).blockingAwait();
     }
 
@@ -1114,7 +1080,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    public ServiceFuture<Void> leaseAsync(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId, final ServiceCallback<Void> serviceCallback) {
+    public ServiceFuture<Void> leaseAsync(@NonNull LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId, @NonNull ServiceCallback<Void> serviceCallback) {
         return ServiceFuture.fromBody(leaseAsync(action, timeout, leaseId, breakPeriod, duration, proposedLeaseId, ifModifiedSince, ifUnmodifiedSince, requestId), serviceCallback);
     }
 
@@ -1133,7 +1099,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerLeaseHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<ContainerLeaseHeaders, Void>> leaseWithRestResponseAsync(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId) {
+    public Single<RestResponse<ContainerLeaseHeaders, Void>> leaseWithRestResponseAsync(@NonNull LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId) {
         if (this.client.url() == null) {
             throw new IllegalArgumentException("Parameter this.client.url() is required and cannot be null.");
         }
@@ -1171,7 +1137,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    public Completable leaseAsync(LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId) {
+    public Completable leaseAsync(@NonNull LeaseActionType action, Integer timeout, String leaseId, Integer breakPeriod, Integer duration, String proposedLeaseId, DateTime ifModifiedSince, DateTime ifUnmodifiedSince, String requestId) {
         return leaseWithRestResponseAsync(action, timeout, leaseId, breakPeriod, duration, proposedLeaseId, ifModifiedSince, ifUnmodifiedSince, requestId)
             .toCompletable();
     }
@@ -1179,8 +1145,6 @@ public class ContainersImpl implements Containers {
     /**
      * The List Blobs operation returns a list of the blobs under the specified container.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the ListBlobsResponse object if successful.
      */
@@ -1195,14 +1159,13 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;ListBlobsResponse&gt;} object.
      */
-    public ServiceFuture<ListBlobsResponse> listBlobsAsync(final ServiceCallback<ListBlobsResponse> serviceCallback) {
+    public ServiceFuture<ListBlobsResponse> listBlobsAsync(@NonNull ServiceCallback<ListBlobsResponse> serviceCallback) {
         return ServiceFuture.fromBody(listBlobsAsync(), serviceCallback);
     }
 
     /**
      * The List Blobs operation returns a list of the blobs under the specified container.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ContainerListBlobsHeaders, ListBlobsResponse&gt;&gt;} object if successful.
      */
     public Single<RestResponse<ContainerListBlobsHeaders, ListBlobsResponse>> listBlobsWithRestResponseAsync() {
@@ -1228,7 +1191,6 @@ public class ContainersImpl implements Containers {
     /**
      * The List Blobs operation returns a list of the blobs under the specified container.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Maybe&lt;ListBlobsResponse&gt;} object if successful.
      */
     public Maybe<ListBlobsResponse> listBlobsAsync() {
@@ -1255,7 +1217,6 @@ public class ContainersImpl implements Containers {
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the ListBlobsResponse object if successful.
      */
@@ -1277,7 +1238,7 @@ public class ContainersImpl implements Containers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;ListBlobsResponse&gt;} object.
      */
-    public ServiceFuture<ListBlobsResponse> listBlobsAsync(String prefix, String delimiter, String marker, Integer maxresults, List<ListBlobsIncludeItem> include, Integer timeout, String requestId, final ServiceCallback<ListBlobsResponse> serviceCallback) {
+    public ServiceFuture<ListBlobsResponse> listBlobsAsync(String prefix, String delimiter, String marker, Integer maxresults, List<ListBlobsIncludeItem> include, Integer timeout, String requestId, @NonNull ServiceCallback<ListBlobsResponse> serviceCallback) {
         return ServiceFuture.fromBody(listBlobsAsync(prefix, delimiter, marker, maxresults, include, timeout, requestId), serviceCallback);
     }
 
@@ -1301,9 +1262,9 @@ public class ContainersImpl implements Containers {
         if (this.client.version() == null) {
             throw new IllegalArgumentException("Parameter this.client.version() is required and cannot be null.");
         }
+        Validator.validate(include);
         final String restype = "container";
         final String comp = "list";
-        Validator.validate(include);
         String includeConverted = this.client.serializerAdapter().serializeList(include, CollectionFormat.CSV);
         return service.listBlobs(this.client.url(), prefix, delimiter, marker, maxresults, includeConverted, timeout, this.client.version(), requestId, restype, comp);
     }

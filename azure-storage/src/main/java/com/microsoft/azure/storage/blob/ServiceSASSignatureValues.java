@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +19,13 @@ import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.util.Date;
 
-public final class ServiceSasSignatureValues {
+public final class ServiceSASSignatureValues {
 
     /**
      * The version of the service this SAS will target. If not specified, it will default to the version targeted by the
      * library.
      */
-    public String version;
+    public String version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
 
     /**
      * A {@link SASProtocol} value representing the allowed Internet protocols.
@@ -95,7 +95,7 @@ public final class ServiceSasSignatureValues {
      */
     public String contentType;
 
-    public ServiceSasSignatureValues() {}
+    public ServiceSASSignatureValues() { }
 
     /**
      * Uses an account's shared key credential to sign these signature values to produce the proper SAS query
@@ -107,62 +107,49 @@ public final class ServiceSasSignatureValues {
      *      A {@link SASQueryParameters} object containing the signed query parameters.
      * @throws InvalidKeyException
      */
-    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials)
-            throws InvalidKeyException {
+    public SASQueryParameters GenerateSASQueryParameters(SharedKeyCredentials sharedKeyCredentials) {
         if (sharedKeyCredentials == null) {
             throw new IllegalArgumentException("SharedKeyCredentials cannot be null.");
-        }
-        if (expiryTime == null || permissions == null) {
-            throw new IllegalArgumentException("ExpiryTime and Permissions cannot be null.");
-        }
-        if (Utility.isNullOrEmpty(version)) {
-            this.version = Constants.HeaderConstants.TARGET_STORAGE_VERSION;
-        }
-        else {
-            this.version = version;
         }
 
         String resource = "c";
         String verifiedPermissions;
+        // Calling parse and toString guarantees the proper ordering and throws on invalid characters.
         if (Utility.isNullOrEmpty(this.blobName)) {
-            verifiedPermissions = ContainerSASPermission.toString(
-                    ContainerSASPermission.parse(this.permissions));
+            verifiedPermissions = ContainerSASPermission.parse(this.permissions).toString();
         }
         else {
-            verifiedPermissions = BlobSASPermission.toString(BlobSASPermission.parse(this.permissions));
+            verifiedPermissions = BlobSASPermission.parse(this.permissions).toString();
             resource = "b";
         }
 
-        // TODO: will a null string produce an empty line?
-        // use the appropriate enumSet
+        // Signature is generated on the un-url-encoded values.
          String stringToSign = Utility.join(new String[]{
-                        verifiedPermissions,
-                        Utility.getUTCTimeOrEmpty(this.startTime),
-                        Utility.getUTCTimeOrEmpty(this.expiryTime),
-                        getCanonicalName(sharedKeyCredentials.getAccountName()),
-                        this.identifier,
-                        this.ipRange.toString(),
-                        this.protocol.toString(),
-                        this.version,
-                        this.cacheControl,
-                        this.contentDisposition,
-                        this.contentEncoding,
-                        this.contentLanguage,
-                        this.contentType
-                }, '\n');
+                 verifiedPermissions,
+                 this.startTime == null ? "" : Utility.ISO8601UTCDateFormat.format(this.startTime),
+                 this.expiryTime == null ? "" : Utility.ISO8601UTCDateFormat.format(this.expiryTime),
+                 getCanonicalName(sharedKeyCredentials.getAccountName()),
+                 this.identifier,
+                 this.ipRange.toString(),
+                 this.protocol.toString(),
+                 this.version,
+                 this.cacheControl,
+                 this.contentDisposition,
+                 this.contentEncoding,
+                 this.contentLanguage,
+                 this.contentType
+         }, '\n');
 
-        String signature = sharedKeyCredentials.computeHmac256(stringToSign);
-
-        SASQueryParameters sasParams = null;
+        String signature = null;
         try {
-            sasParams = new SASQueryParameters(this.version, null, null,
-                    this.protocol.toString(), this.startTime, this.expiryTime, this.ipRange, this.identifier, resource,
-                    this.permissions, URLEncoder.encode(signature, Constants.UTF8_CHARSET));
-        } catch (UnsupportedEncodingException e) {
-            throw new Error(e);
+            signature = sharedKeyCredentials.computeHmac256(stringToSign);
+        } catch (InvalidKeyException e) {
+            throw new Error(e); // The key should have been validated by now. If it is no longer valid here, we fail.
         }
 
-        return sasParams;
+        return new SASQueryParameters(this.version, null, null,
+                this.protocol, this.startTime, this.expiryTime, this.ipRange, this.identifier, resource,
+                this.permissions, signature);
     }
 
     private String getCanonicalName(String accountName) {
@@ -172,7 +159,7 @@ public final class ServiceSasSignatureValues {
         canonicalName.append('/').append(accountName).append('/').append(this.containerName);
 
         if (!Utility.isNullOrEmpty(this.blobName)) {
-            canonicalName.append("/").append(this.blobName.replace("\\", "/"));
+            canonicalName.append("/").append(this.blobName);
         }
 
         return canonicalName.toString();

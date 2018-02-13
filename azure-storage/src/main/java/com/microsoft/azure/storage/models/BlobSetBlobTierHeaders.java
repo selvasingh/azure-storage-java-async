@@ -15,10 +15,10 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
- * Defines headers for ListContainers operation.
+ * Defines headers for SetBlobTier operation.
  */
-@JacksonXmlRootElement(localName = "Service-ListContainers-Headers")
-public final class ServiceListContainersHeaders {
+@JacksonXmlRootElement(localName = "Blob-SetBlobTier-Headers")
+public final class BlobSetBlobTierHeaders {
     /**
      * This header uniquely identifies the request that was made and can be
      * used for troubleshooting the request.
@@ -29,7 +29,7 @@ public final class ServiceListContainersHeaders {
     /**
      * Indicates the version of the Blob service used to execute the request.
      * This header is returned for requests made against version 2009-09-19 and
-     * above.
+     * newer.
      */
     @JsonProperty(value = "x-ms-version")
     private String version;
@@ -47,9 +47,9 @@ public final class ServiceListContainersHeaders {
      * Set the requestId value.
      *
      * @param requestId the requestId value to set.
-     * @return the ServiceListContainersHeaders object itself.
+     * @return the BlobSetBlobTierHeaders object itself.
      */
-    public ServiceListContainersHeaders withRequestId(String requestId) {
+    public BlobSetBlobTierHeaders withRequestId(String requestId) {
         this.requestId = requestId;
         return this;
     }
@@ -67,9 +67,9 @@ public final class ServiceListContainersHeaders {
      * Set the version value.
      *
      * @param version the version value to set.
-     * @return the ServiceListContainersHeaders object itself.
+     * @return the BlobSetBlobTierHeaders object itself.
      */
-    public ServiceListContainersHeaders withVersion(String version) {
+    public BlobSetBlobTierHeaders withVersion(String version) {
         this.version = version;
         return this;
     }

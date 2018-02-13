@@ -25,9 +25,9 @@ public enum ListContainersIncludeType {
     /**
      * The actual serialized value for a ListContainersIncludeType instance.
      */
-    private String value;
+    private final String value;
 
-    ListContainersIncludeType(String value) {
+    private ListContainersIncludeType(String value) {
         this.value = value;
     }
 

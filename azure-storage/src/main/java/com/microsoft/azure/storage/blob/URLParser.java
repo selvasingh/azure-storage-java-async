@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +14,10 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -31,8 +31,10 @@ public final class URLParser {
      *      The {@code java.net.URL} to be parsed.
      * @return
      *      A {@link BlobURLParts} object containing all the components of a BlobURL.
+     * @throws UnknownHostException
+     *      If the url contains an improperly formatted ipaddress or unknown host address.
      */
-    public static BlobURLParts parse(URL url) {
+    public static BlobURLParts parse(URL url) throws UnknownHostException {
 
         final String scheme = url.getProtocol();
         final String host = url.getHost();
@@ -60,7 +62,7 @@ public final class URLParser {
                 blobName = path.substring(containerEndIndex + 1);
             }
         }
-        Map<String, String[]> queryParamsMap = parseQueryString(url.getQuery(), true);
+        Map<String, String[]> queryParamsMap = parseQueryString(url.getQuery());
 
         String snapshot = null;
         String[] snapshotArray = queryParamsMap.get("snapshot");
@@ -71,7 +73,15 @@ public final class URLParser {
 
         SASQueryParameters sasQueryParameters = new SASQueryParameters(queryParamsMap, true);
 
-        return new BlobURLParts(scheme, host, containerName, blobName, snapshot, sasQueryParameters, queryParamsMap);
+        BlobURLParts parts = new BlobURLParts();
+        parts.scheme = scheme;
+        parts.host = host;
+        parts.containerName =containerName;
+        parts.blobName = blobName;
+        parts.snapshot = snapshot;
+        parts.sasQueryParameters = sasQueryParameters;
+        parts.unparsedParameters = queryParamsMap;
+        return parts;
     }
 
     /**
@@ -82,7 +92,7 @@ public final class URLParser {
      * @return
      *      A {@code HashMap&lt;String, String[]&gt;} of the key values.
      */
-    private static TreeMap<String, String[]> parseQueryString(String queryParams, boolean lowerCaseKey)
+    private static TreeMap<String, String[]> parseQueryString(String queryParams)
              {
 
         final TreeMap<String, String[]> retVals = new TreeMap<String, String[]>(new Comparator<String>() {
@@ -103,12 +113,8 @@ public final class URLParser {
         for (int m = 0; m < valuePairs.length; m++) {
             // Getting key and value for a single query parameter
             final int equalDex = valuePairs[m].indexOf("=");
-            String key = Utility.safeDecode(valuePairs[m].substring(0, equalDex));
-            if (lowerCaseKey) {
-                key = key.toLowerCase(Utility.LOCALE_US);
-            }
-
-            String value = Utility.safeDecode(valuePairs[m].substring(equalDex + 1));
+            String key = Utility.safeURLDecode(valuePairs[m].substring(0, equalDex)).toLowerCase(Locale.US);
+            String value = Utility.safeURLDecode(valuePairs[m].substring(equalDex + 1));
 
             // add to map
             String[] keyValues = retVals.get(key);

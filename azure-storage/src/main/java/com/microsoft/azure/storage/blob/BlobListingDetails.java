@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,12 @@ import java.util.ArrayList;
  */
 public final class BlobListingDetails {
 
+    /**
+     * An object representing no listing details.
+     */
+    public static final BlobListingDetails NONE = new BlobListingDetails(false, false, false,
+            false);
+
     private final boolean copy;
 
     private final boolean metadata;
@@ -44,7 +50,7 @@ public final class BlobListingDetails {
      *      newest.
      * @param uncommittedBlobs
      *      A {@code boolean} indicating if blobs for which blocks have been uploaded, but which have not
-     *      been committed using Put Block List, be included in the response.
+     *      been committed using Put Block List, should be included in the response.
      */
     public BlobListingDetails(boolean copy, boolean metadata, boolean snapshots, boolean uncommittedBlobs) {
         this.copy = copy;
@@ -79,12 +85,16 @@ public final class BlobListingDetails {
 
     /**
      * @return
-     *      A {@code boolean} indicating if uncomitted blobs should be returned.
+     *      A {@code boolean} indicating if uncommitted blobs should be returned.
      */
     public boolean getUncommittedBlobs() {
         return uncommittedBlobs;
     }
 
+    /*
+     This is used internally to convert the details structure into a list to pass to the protocol layer. The customer
+     should never have need for this.
+     */
     ArrayList<ListBlobsIncludeItem> toList() {
         ArrayList<ListBlobsIncludeItem> details = new ArrayList<ListBlobsIncludeItem>();
         if(this.copy) {
