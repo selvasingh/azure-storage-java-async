@@ -44,9 +44,8 @@ public final class ContainerURL extends StorageURL {
         try {
             return new ContainerURL(new URL(this.storageClient.url()), pipeline);
         } catch (MalformedURLException e) {
-            // TODO: remove
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -66,9 +65,8 @@ public final class ContainerURL extends StorageURL {
             return new BlockBlobURL(StorageURL.appendToURLPath(new URL(this.storageClient.url()), blobName),
                     this.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
-            // TODO: remove
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -88,9 +86,8 @@ public final class ContainerURL extends StorageURL {
             return new PageBlobURL(StorageURL.appendToURLPath(new URL(this.storageClient.url()), blobName),
                     this.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
-            // TODO: remove
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -110,9 +107,8 @@ public final class ContainerURL extends StorageURL {
             return new AppendBlobURL(StorageURL.appendToURLPath(new URL(this.storageClient.url()), blobName),
                     this.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
-            // TODO: remove
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -132,9 +128,8 @@ public final class ContainerURL extends StorageURL {
             return new BlobURL(StorageURL.appendToURLPath(new URL(this.storageClient.url()), blobName),
                     this.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
-            // TODO: remove
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
