@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,53 +22,27 @@ import java.util.logging.Level;
  */
 public final class LoggingOptions {
 
-    private final Long minDurationToLogSlowRequestsInMs;
+    public static final LoggingOptions DEFAULT = new LoggingOptions(3000);
 
-    private final Level loggingLevel;
+    private final long minDurationToLogSlowRequestsInMs;
 
-    /**
-     * Creates a new {@link LoggingOptions} object.
-     */
-    public LoggingOptions() {
-        this(Level.SEVERE);
-    }
+
 
     /**
      * Creates a new {@link LoggingOptions} object.
      *
-     * @param loggingLevel
-     *      The minimum {@code java.util.logging.Level} to log requests
-     */
-    public LoggingOptions(Level loggingLevel) {
-        this(loggingLevel, 3000L);
-    }
-
-    /**
-     * Creates a new {@link LoggingOptions} object.
-     *
-     * @param loggingLevel
-     *      The minimum {@code java.util.logging.Level} to log requests.
      * @param minDurationToLogSlowRequestsInMs
-     *      A {@code Long} representing the minimum duration for a tried operation to log a warning.
+     *      A {@code long} representing the minimum duration for a tried operation to log a warning.
      */
-    public LoggingOptions(Level loggingLevel, Long minDurationToLogSlowRequestsInMs) {
-        this.loggingLevel = loggingLevel;
+    public LoggingOptions(long minDurationToLogSlowRequestsInMs) {
         this.minDurationToLogSlowRequestsInMs = minDurationToLogSlowRequestsInMs;
     }
 
     /**
      * @return
-     *      The minimum {@code java.util.logging.Level} to log requests.
+     *      A {@code long} representing the minimum duration for a tried operation to log a warning.
      */
-    public Level getLoggingLevel() {
-        return loggingLevel;
-    }
-
-    /**
-     * @return
-     *      A {@code Long} representing the minimum duration for a tried operation to log a warning.
-     */
-    public Long getMinDurationToLogSlowRequestsInMs() {
+    public long getMinDurationToLogSlowRequestsInMs() {
         return minDurationToLogSlowRequestsInMs;
     }
 

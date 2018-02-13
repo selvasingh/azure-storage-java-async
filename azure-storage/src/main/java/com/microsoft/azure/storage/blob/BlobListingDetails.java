@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,15 +21,21 @@ import java.util.ArrayList;
 /**
  * Details indicating what additional information the service should return with each blob.
  */
-public class BlobListingDetails {
+public final class BlobListingDetails {
 
-    private boolean copy;
+    /**
+     * An object representing no listing details.
+     */
+    public static final BlobListingDetails NONE = new BlobListingDetails(false, false, false,
+            false);
 
-    private boolean metadata;
+    private final boolean copy;
 
-    private boolean snapshots;
+    private final boolean metadata;
 
-    private boolean uncommittedBlobs;
+    private final boolean snapshots;
+
+    private final boolean uncommittedBlobs;
 
     /**
      * A {@link BlobListingDetails} object.
@@ -44,7 +50,7 @@ public class BlobListingDetails {
      *      newest.
      * @param uncommittedBlobs
      *      A {@code boolean} indicating if blobs for which blocks have been uploaded, but which have not
-     *      been committed using Put Block List, be included in the response.
+     *      been committed using Put Block List, should be included in the response.
      */
     public BlobListingDetails(boolean copy, boolean metadata, boolean snapshots, boolean uncommittedBlobs) {
         this.copy = copy;
@@ -79,13 +85,17 @@ public class BlobListingDetails {
 
     /**
      * @return
-     *      A {@code boolean} indicating if uncomitted blobs should be returned.
+     *      A {@code boolean} indicating if uncommitted blobs should be returned.
      */
     public boolean getUncommittedBlobs() {
         return uncommittedBlobs;
     }
 
-    public ArrayList<ListBlobsIncludeItem> toList() {
+    /*
+     This is used internally to convert the details structure into a list to pass to the protocol layer. The customer
+     should never have need for this.
+     */
+    ArrayList<ListBlobsIncludeItem> toList() {
         ArrayList<ListBlobsIncludeItem> details = new ArrayList<ListBlobsIncludeItem>();
         if(this.copy) {
             details.add(ListBlobsIncludeItem.COPY);

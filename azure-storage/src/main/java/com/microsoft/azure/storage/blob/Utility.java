@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,88 +23,23 @@ import java.util.*;
 
 final class Utility {
 
-    /**
-     * Thread local for storing GMT date format.
-    */
-    private static ThreadLocal<DateFormat>
-            RFC1123_GMT_DATE_TIME_FORMATTER = new ThreadLocal<DateFormat>() {
-        @Override
-        protected DateFormat initialValue() {
-            final DateFormat formatter = new SimpleDateFormat(RFC1123_PATTERN, LOCALE_US);
-            formatter.setTimeZone(GMT_ZONE);
-            return formatter;
+    static final class RFC1123GMTDateFormat extends SimpleDateFormat {
+        RFC1123GMTDateFormat() {
+            super("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+            this.setTimeZone(TimeZone.getTimeZone("GMT"));
         }
-    };
+    }
 
-    /**
-     * Thread local for storing GMT date format for snapshots.
-     */
-    private static ThreadLocal<DateFormat>
-            RFC3339_GMT_DATE_TIME_FORMATTER = new ThreadLocal<DateFormat>() {
-        @Override
-        protected DateFormat initialValue() {
-            final DateFormat formatter = new SimpleDateFormat(RFC3339_PATTERN, LOCALE_US);
-            formatter.setTimeZone(GMT_ZONE);
-            return formatter;
+    static final class ISO8601UTCDateFormat extends SimpleDateFormat {
+        ISO8601UTCDateFormat() {
+            super("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+            this.setTimeZone(TimeZone.getTimeZone("UTC"));
         }
-    };
-
-    /**
-     * Stores a reference to the RFC1123 date/time pattern.
-     */
-    private static final String RFC1123_PATTERN = "EEE, dd MMM yyyy HH:mm:ss z";
-
-    /**
-     * Stores a reference to the RFC3339 date/time pattern.
-     */
-    private static final String RFC3339_PATTERN = "yyyy-MM-dd'T'h:m:ssZZZZZ";
-
-    /**
-     * Stores a reference to the GMT time zone.
-     */
-    public static final TimeZone GMT_ZONE = TimeZone.getTimeZone("GMT");
-
-    /**
-     * Stores a reference to the US locale.
-     */
-    public static final Locale LOCALE_US = Locale.US;
-
-    /**
-     * Returns the current GMT date/time String using the RFC1123 pattern.
-     *
-     * @return A {@code String} that represents the current GMT date/time using the RFC1123 pattern.
-     */
-    public static String getGMTTime() {
-        return getGMTTime(new Date());
     }
 
-    /**
-     * Returns the GTM date/time String for the specified value using the RFC1123 pattern.
-     *
-     * @param date
-     *            A <code>Date</code> object that represents the date to convert to GMT date/time in the RFC1123
-     *            pattern.
-     *
-     * @return A {@code String} that represents the GMT date/time for the specified value using the RFC1123
-     *         pattern.
-     */
-    public static String getGMTTime(final Date date) {
-        return RFC1123_GMT_DATE_TIME_FORMATTER.get().format(date);
-    }
+    static final DateFormat RFC1123GMTDateFormat = new RFC1123GMTDateFormat();
 
-    /**
-     * Returns the GTM date/time String for the specified value using the RFC3339 pattern.
-     *
-     * @param date
-     *            A <code>Date</code> object that represents the date to convert to GMT date/time in the RFC3339
-     *            pattern.
-     *
-     * @return A {@code String} that represents the GMT date/time for the specified value using the RFC3339
-     *         pattern.
-     */
-    public static String getGMTTimeSnapshot(final Date date) {
-        return RFC3339_GMT_DATE_TIME_FORMATTER.get().format(date);
-    }
+    static final DateFormat ISO8601UTCDateFormat = new ISO8601UTCDateFormat();
 
     /**
      * Asserts that a value is not <code>null</code>.
@@ -116,9 +51,9 @@ final class Utility {
      *            An <code>Object</code> object that represents the value of the specified parameter. This is the value
      *            being asserted as not <code>null</code>.
      */
-    public static void assertNotNull(final String param, final Object value) {
+    static void assertNotNull(final String param, final Object value) {
         if (value == null) {
-            throw new IllegalArgumentException(String.format(Utility.LOCALE_US, SR.ARGUMENT_NULL_OR_EMPTY, param));
+            throw new IllegalArgumentException(String.format(Locale.US, SR.ARGUMENT_NULL_OR_EMPTY, param));
         }
     }
 
@@ -130,7 +65,7 @@ final class Utility {
      *
      * @return <code>true</code> if the specified value is <code>null</code> or empty; otherwise, <code>false</code>
      */
-    public static boolean isNullOrEmpty(final String value) {
+    static boolean isNullOrEmpty(final String value) {
         return value == null || value.length() == 0;
     }
 
@@ -146,7 +81,7 @@ final class Utility {
      * @throws UnsupportedEncodingException
      *             If a storage service error occurred.
      */
-    public static String safeDecode(final String stringToDecode) throws UnsupportedEncodingException {
+    static String safeURLDecode(final String stringToDecode) {
         if (stringToDecode.length() == 0) {
             return Constants.EMPTY_STRING;
         }
@@ -159,8 +94,12 @@ final class Utility {
             for (int m = 0; m < stringToDecode.length(); m++) {
                 if (stringToDecode.charAt(m) == '+') {
                     if (m > startDex) {
-                        outBuilder.append(URLDecoder.decode(stringToDecode.substring(startDex, m),
-                                Constants.UTF8_CHARSET));
+                        try {
+                            outBuilder.append(URLDecoder.decode(stringToDecode.substring(startDex, m),
+                                    Constants.UTF8_CHARSET));
+                        } catch (UnsupportedEncodingException e) {
+                            throw new Error(e);
+                        }
                     }
 
                     outBuilder.append("+");
@@ -169,21 +108,29 @@ final class Utility {
             }
 
             if (startDex != stringToDecode.length()) {
-                outBuilder.append(URLDecoder.decode(stringToDecode.substring(startDex, stringToDecode.length()),
-                        Constants.UTF8_CHARSET));
+                try {
+                    outBuilder.append(URLDecoder.decode(stringToDecode.substring(startDex, stringToDecode.length()),
+                            Constants.UTF8_CHARSET));
+                } catch (UnsupportedEncodingException e) {
+                    throw new Error(e);
+                }
             }
 
             return outBuilder.toString();
         }
         else {
-            return URLDecoder.decode(stringToDecode, Constants.UTF8_CHARSET);
+            try {
+                return URLDecoder.decode(stringToDecode, Constants.UTF8_CHARSET);
+            } catch (UnsupportedEncodingException e) {
+                throw new Error(e);
+            }
         }
     }
 
     /**
      * Stores a reference to the UTC time zone.
      */
-    public static final TimeZone UTC_ZONE = TimeZone.getTimeZone("UTC");
+     static final TimeZone UTC_ZONE = TimeZone.getTimeZone("UTC");
 
     /**
      * Stores a reference to the date/time pattern with the greatest precision Java.util.Date is capable of expressing.
@@ -214,6 +161,7 @@ final class Utility {
      *
      * @return the corresponding <code>Date</code> object
      */
+    // TODO: Get rid of this with Java 8 if possible.
     public static Date parseDate(String dateString) {
         String pattern = MAX_PRECISION_PATTERN;
         switch(dateString.length()) {
@@ -242,7 +190,7 @@ final class Utility {
                 throw new IllegalArgumentException(String.format(SR.INVALID_DATE_STRING, dateString));
         }
 
-        final DateFormat format = new SimpleDateFormat(pattern, Utility.LOCALE_US);
+        final DateFormat format = new SimpleDateFormat(pattern, Locale.US);
         format.setTimeZone(UTC_ZONE);
         try {
             return format.parse(dateString);
@@ -250,27 +198,6 @@ final class Utility {
         catch (final ParseException e) {
             throw new IllegalArgumentException(String.format(SR.INVALID_DATE_STRING, dateString), e);
         }
-    }
-
-    /**
-     * Returns the UTC date/time for the specified value using the ISO8601 pattern.
-     *
-     * @param value
-     *            A <code>Date</code> object that represents the date to convert to UTC date/time in the ISO8601
-     *            pattern. If this value is <code>null</code>, this method returns an empty string.
-     *
-     * @return A {@code String} that represents the UTC date/time for the specified value using the ISO8601
-     *         pattern, or an empty string if <code>value</code> is <code>null</code>.
-     */
-    public static String getUTCTimeOrEmpty(final Date value) {
-        if (value == null) {
-            return Constants.EMPTY_STRING;
-        }
-
-        final DateFormat iso8601Format = new SimpleDateFormat(ISO8601_PATTERN, LOCALE_US);
-        iso8601Format.setTimeZone(UTC_ZONE);
-
-        return iso8601Format.format(value);
     }
 
     /**
@@ -292,10 +219,19 @@ final class Utility {
         }
     }
 
+    /*
+    Note that this join method will treat null as an empty string instead of "null". This is because our use cases for
+    this are building strings to sign, which want empty instead of "null".
+     */
+
     public static String join(String[] components, char delimiter) {
         StringBuilder result = new StringBuilder();
         for (String component : components) {
-            result.append(component);
+            if (component == null) {
+                result.append("");
+            } else {
+                result.append(component);
+            }
             result.append(delimiter);
         }
         result.deleteCharAt(result.length() - 1); // Delete the extra delimiter.

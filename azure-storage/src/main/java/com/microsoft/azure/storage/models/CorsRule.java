@@ -11,6 +11,7 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
@@ -21,7 +22,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * one domain (the origin domain) to call APIs in another domain.
  */
 @JacksonXmlRootElement(localName = "CorsRule")
-public class CorsRule {
+public final class CorsRule {
     /**
      * The origin domains that are permitted to make a request against the
      * storage service via CORS. The origin domain is the domain from which the

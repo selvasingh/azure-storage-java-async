@@ -20,11 +20,12 @@ import com.microsoft.azure.storage.StorageClient;
 import com.microsoft.rest.v2.RestProxy;
 import com.microsoft.rest.v2.ServiceClient;
 import com.microsoft.rest.v2.http.HttpPipeline;
+import io.reactivex.annotations.NonNull;
 
 /**
  * Initializes a new instance of the StorageClient type.
  */
-public class StorageClientImpl extends ServiceClient implements StorageClient {
+public final class StorageClientImpl extends ServiceClient implements StorageClient {
     /**
      * The URL of the service account, container, or blob that is the targe of the desired operation.
      */
@@ -171,7 +172,7 @@ public class StorageClientImpl extends ServiceClient implements StorageClient {
      *
      * @param httpPipeline The HTTP pipeline to send requests through.
      */
-    public StorageClientImpl(HttpPipeline httpPipeline) {
+    public StorageClientImpl(@NonNull HttpPipeline httpPipeline) {
         super(httpPipeline);
         this.services = new ServicesImpl(this);
         this.containers = new ContainersImpl(this);

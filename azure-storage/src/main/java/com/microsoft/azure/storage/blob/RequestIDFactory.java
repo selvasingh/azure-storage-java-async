@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,11 +29,11 @@ import java.util.UUID;
 public final class RequestIDFactory implements RequestPolicyFactory {
 
     private final class RequestIDPolicy implements RequestPolicy {
-        final RequestPolicy nextPolicy;
+        private final RequestPolicy nextPolicy;
 
-        final RequestPolicyOptions options;
+        private final RequestPolicyOptions options;
 
-        public RequestIDPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options) {
+        private RequestIDPolicy(RequestPolicy nextPolicy, RequestPolicyOptions options) {
             this.nextPolicy = nextPolicy;
             this.options = options;
         }

@@ -11,13 +11,14 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * The BlobPrefix model.
  */
 @JacksonXmlRootElement(localName = "BlobPrefix")
-public class BlobPrefix {
+public final class BlobPrefix {
     /**
      * The name property.
      */

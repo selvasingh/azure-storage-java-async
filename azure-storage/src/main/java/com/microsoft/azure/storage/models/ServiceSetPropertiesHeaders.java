@@ -11,13 +11,14 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Defines headers for SetProperties operation.
  */
 @JacksonXmlRootElement(localName = "Service-SetProperties-Headers")
-public class ServiceSetPropertiesHeaders {
+public final class ServiceSetPropertiesHeaders {
     /**
      * This header uniquely identifies the request that was made and can be
      * used for troubleshooting the request.

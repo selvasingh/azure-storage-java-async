@@ -11,6 +11,7 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.joda.time.DateTime;
 
@@ -18,7 +19,7 @@ import org.joda.time.DateTime;
  * An Access policy.
  */
 @JacksonXmlRootElement(localName = "AccessPolicy")
-public class AccessPolicy {
+public final class AccessPolicy {
     /**
      * the date-time the policy is active.
      */

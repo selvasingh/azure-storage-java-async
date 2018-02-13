@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,33 +42,34 @@ public final class RequestRetryFactory implements RequestPolicyFactory {
      *      A {@link RequestRetryOptions} object configuring this factory and all its resultant policies.
      */
     public RequestRetryFactory(RequestRetryOptions requestRetryOptions) {
-        this.requestRetryOptions = requestRetryOptions;
+        this.requestRetryOptions = requestRetryOptions == null ? RequestRetryOptions.DEFAULT : requestRetryOptions;
     }
 
     private final class RequestRetryPolicy implements RequestPolicy {
 
         private final RequestPolicy nextPolicy;
 
-        final private RequestRetryOptions requestRetryOptions;
+        private final RequestRetryOptions requestRetryOptions;
 
         // TODO: It looked like there was some stuff in here to log how long the operation took. Do we want that?
 
-        RequestRetryPolicy(RequestPolicy nextPolicy, RequestRetryOptions requestRetryOptions) {
+        private RequestRetryPolicy(RequestPolicy nextPolicy, RequestRetryOptions requestRetryOptions) {
             this.nextPolicy = nextPolicy;
             this.requestRetryOptions = requestRetryOptions;
         }
 
         @Override
         public Single<HttpResponse> sendAsync(HttpRequest httpRequest) {
-            boolean considerSecondary = (httpRequest.httpMethod().toString().equals("GET") ||
-                    httpRequest.httpMethod().toString().equals("HEAD"))
-                    && (this.requestRetryOptions.secondaryHost != null);
+            boolean considerSecondary = (httpRequest.httpMethod().equals(HttpMethod.GET) ||
+                    httpRequest.httpMethod().equals(HttpMethod.HEAD))
+                    && (this.requestRetryOptions.getSecondaryHost() != null);
 
             return this.attemptAsync(httpRequest, 1, considerSecondary, 1);
         }
 
+        // This is to log for debugging purposes only. Comment/uncomment as necessary for releasing/debugging.
         private void logf(String s, Object... args) {
-            System.out.println(String.format(s, args));
+            //System.out.println(String.format(s, args));
         }
 
         /**
@@ -121,7 +122,7 @@ public final class RequestRetryFactory implements RequestPolicyFactory {
             final HttpRequest requestCopy = httpRequest.buffer();
             if(!tryingPrimary) {
                 UrlBuilder builder = UrlBuilder.parse(requestCopy.url());
-                builder.withHost(this.requestRetryOptions.secondaryHost);
+                builder.withHost(this.requestRetryOptions.getSecondaryHost());
                 try {
                     requestCopy.withUrl(builder.toURL());
                 } catch (MalformedURLException e) {
@@ -135,7 +136,7 @@ public final class RequestRetryFactory implements RequestPolicyFactory {
             // the specified timeout.
             return Completable.complete().delay(delayMs, TimeUnit.MILLISECONDS)
                     .andThen(this.nextPolicy.sendAsync(requestCopy)
-                    .timeout(this.requestRetryOptions.tryTimeout, TimeUnit.SECONDS)
+                    .timeout(this.requestRetryOptions.getTryTimeout(), TimeUnit.SECONDS)
                     .flatMap(new Function<HttpResponse, Single<? extends HttpResponse>>() {
                 @Override
                 public Single<? extends HttpResponse> apply(HttpResponse httpResponse) throws Exception {
@@ -158,7 +159,7 @@ public final class RequestRetryFactory implements RequestPolicyFactory {
 
                     logf("Action=%s\n", action);
 
-                    if(action.charAt(0)=='R' && attempt < requestRetryOptions.maxTries) {
+                    if(action.charAt(0)=='R' && attempt < requestRetryOptions.getMaxTries()) {
                         // We increment primaryTry if we are about to try the primary again (which is when we consider
                         // the secondary and tried the secondary this time (tryingPrimary==false) or we do not consider
                         // the secondary at all (considerSecondary==false)). This will ensure primaryTry is correct when
@@ -171,7 +172,7 @@ public final class RequestRetryFactory implements RequestPolicyFactory {
             }).onErrorResumeNext(new Function<Throwable, SingleSource<? extends HttpResponse>>() {
                 @Override
                 public SingleSource<? extends HttpResponse> apply(Throwable throwable) throws Exception {
-                    if (throwable instanceof IOException && attempt < requestRetryOptions.maxTries) {
+                    if (throwable instanceof IOException && attempt < requestRetryOptions.getMaxTries()) {
                         // We increment primaryTry if we are about to try the primary again (which is when we consider
                         // the secondary and tried the secondary this time (tryingPrimary==false) or we do not consider
                         // the secondary at all (considerSecondary==false)). This will ensure primaryTry is correct when

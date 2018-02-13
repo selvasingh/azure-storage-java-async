@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,5 +37,23 @@ public enum SASProtocol {
     @Override
     public String toString() {
         return this.protocols;
+    }
+
+    /**
+     * Parses a {@code String} into a {@code SASProtocl} value if possible.
+     *
+     * @param str
+     *      The value to try to parse.
+     * @return
+     *      A {@code SASProtocol} value that represents the string if possible.
+     */
+    public static SASProtocol parse(String str) {
+        if (str.equals(Constants.HTTPS)) {
+            return SASProtocol.HTTPS_ONLY;
+        }
+        else if (str.equals(Constants.HTTPS_HTTP)) {
+            return SASProtocol.HTTPS_HTTP;
+        }
+        throw new IllegalArgumentException(String.format("%s could not be parsed into a SASProtocl value.", str));
     }
 }

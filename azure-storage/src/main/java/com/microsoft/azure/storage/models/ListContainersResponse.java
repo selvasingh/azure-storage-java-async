@@ -10,8 +10,8 @@
 
 package com.microsoft.azure.storage.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
  * An enumeration of containers.
  */
 @JacksonXmlRootElement(localName = "EnumerationResults")
-public class ListContainersResponse {
+public final class ListContainersResponse {
     /**
      * The serviceEndpoint property.
      */
@@ -45,12 +45,21 @@ public class ListContainersResponse {
     @JsonProperty(value = "MaxResults", required = true)
     private int maxResults;
 
+    private static final class ContainersWrapper {
+        @JacksonXmlProperty(localName = "Container")
+        private final List<Container> items;
+
+        @JsonCreator
+        private ContainersWrapper(@JacksonXmlProperty(localName = "Container") List<Container> items) {
+            this.items = items;
+        }
+    }
+
     /**
      * The containers property.
      */
-    @JacksonXmlElementWrapper(localName = "Containers")
-    @JsonProperty("Container")
-    private List<Container> containers;
+    @JsonProperty(value = "Containers")
+    private ContainersWrapper containers;
 
     /**
      * The nextMarker property.
@@ -144,7 +153,7 @@ public class ListContainersResponse {
      * @return the containers value.
      */
     public List<Container> containers() {
-        return this.containers;
+        return this.containers.items;
     }
 
     /**
@@ -154,7 +163,7 @@ public class ListContainersResponse {
      * @return the ListContainersResponse object itself.
      */
     public ListContainersResponse withContainers(List<Container> containers) {
-        this.containers = containers;
+        this.containers = new ContainersWrapper(containers);
         return this;
     }
 

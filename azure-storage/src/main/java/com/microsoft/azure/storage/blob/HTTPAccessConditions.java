@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,16 +21,21 @@ import java.util.Date;
 /**
  * HTTP Access Conditions
  */
-public final class HttpAccessConditions {
+public final class HTTPAccessConditions {
 
-    private static HttpAccessConditions defaultHttpAccessConditions;
+    public static final HTTPAccessConditions NONE = new HTTPAccessConditions(null, null,
+            null, null);
+
     private final Date ifModifiedSince;
+
     private final Date ifUnmodifiedSince;
+
     private final ETag ifMatch;
+
     private final ETag ifNoneMatch;
 
     /**
-     * Creates a {@link HttpAccessConditions} object.
+     * Creates a {@link HTTPAccessConditions} object.
      *
      * @param ifModifiedSince
      *      A {@code java.util.Date} if modified since condition.
@@ -41,15 +46,15 @@ public final class HttpAccessConditions {
      * @param ifNoneMatch
      *      An {@link ETag} if none match condition.
      */
-    public HttpAccessConditions(Date ifModifiedSince, Date ifUnmodifiedSince, ETag ifMatch, ETag ifNoneMatch) {
-        this.ifModifiedSince = (ifModifiedSince != null) ? new Date(ifModifiedSince.getTime()) : null;
-        this.ifUnmodifiedSince = (ifUnmodifiedSince != null) ? new Date(ifUnmodifiedSince.getTime()) : null;
+    public HTTPAccessConditions(Date ifModifiedSince, Date ifUnmodifiedSince, ETag ifMatch, ETag ifNoneMatch) {
+        this.ifModifiedSince = ifModifiedSince == null ? null : new Date(ifModifiedSince.getTime());
+        this.ifUnmodifiedSince = ifUnmodifiedSince == null ? null : new Date(ifUnmodifiedSince.getTime());
 
-        this.ifMatch = ifMatch == null ? ETag.getDefault() : ifMatch;
-        this.ifNoneMatch = ifNoneMatch == null ? ETag.getDefault() : ifNoneMatch;
+        this.ifMatch = ifMatch == null ? ETag.NONE : ifMatch;
+        this.ifNoneMatch = ifNoneMatch == null ? ETag.NONE : ifNoneMatch;
     }
 
-    // TODO: Change to java.util.Date
+    // TODO: Change to java.util.Date and remove null check
     public DateTime getIfModifiedSince() {
         return ifModifiedSince == null ? null : new DateTime(ifModifiedSince);
     }
@@ -64,15 +69,5 @@ public final class HttpAccessConditions {
 
     public ETag getIfNoneMatch() {
         return ifNoneMatch;
-    }
-
-
-    public static HttpAccessConditions getDefault() {
-        if (defaultHttpAccessConditions == null) {
-            defaultHttpAccessConditions = new HttpAccessConditions(null, null,
-                    ETag.getDefault(), ETag.getDefault());
-        }
-
-        return defaultHttpAccessConditions;
     }
 }

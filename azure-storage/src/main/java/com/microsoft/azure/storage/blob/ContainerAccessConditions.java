@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,11 @@ package com.microsoft.azure.storage.blob;
  * Access conditions specific to containers
  */
 public final class ContainerAccessConditions {
-    private static ContainerAccessConditions defaultContainerAccessConditions;
-    private final HttpAccessConditions httpAccessConditions;
+
+    public static final ContainerAccessConditions NONE = new ContainerAccessConditions(null,
+            null);
+
+    private final HTTPAccessConditions httpAccessConditions;
 
     private final LeaseAccessConditions leaseID;
 
@@ -27,20 +30,20 @@ public final class ContainerAccessConditions {
      * Creates a {@link ContainerAccessConditions} object.
      *
      * @param httpAccessConditions
-     *      An {@link HttpAccessConditions} object.
+     *      An {@link HTTPAccessConditions} object.
      * @param leaseID
      *      A {@link LeaseAccessConditions} object.
      */
-    public ContainerAccessConditions(HttpAccessConditions httpAccessConditions, LeaseAccessConditions leaseID) {
-        this.httpAccessConditions = httpAccessConditions;
-        this.leaseID = leaseID;
+    public ContainerAccessConditions(HTTPAccessConditions httpAccessConditions, LeaseAccessConditions leaseID) {
+        this.httpAccessConditions = httpAccessConditions == null ? HTTPAccessConditions.NONE : httpAccessConditions;
+        this.leaseID = leaseID == null ? LeaseAccessConditions.NONE : leaseID;
     }
 
     /**
      * @return
-     *      A {@link HttpAccessConditions} object
+     *      A {@link HTTPAccessConditions} object
      */
-    public HttpAccessConditions getHttpAccessConditions() {
+    public HTTPAccessConditions getHttpAccessConditions() {
         return httpAccessConditions;
     }
 
@@ -50,14 +53,5 @@ public final class ContainerAccessConditions {
      */
     public LeaseAccessConditions getLeaseID() {
         return leaseID;
-    }
-
-    public static ContainerAccessConditions getDefault() {
-        if (defaultContainerAccessConditions == null) {
-            defaultContainerAccessConditions = new ContainerAccessConditions(HttpAccessConditions.getDefault(),
-                    LeaseAccessConditions.getDefault());
-        }
-
-        return defaultContainerAccessConditions;
     }
 }

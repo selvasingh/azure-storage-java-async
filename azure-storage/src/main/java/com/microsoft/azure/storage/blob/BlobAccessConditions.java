@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +19,15 @@ package com.microsoft.azure.storage.blob;
  */
 public final class BlobAccessConditions {
 
-    private static BlobAccessConditions defaultBlobAccessConditions;
+    /**
+     * An object representing no access conditions.
+     */
+    public static final BlobAccessConditions NONE =
+            new BlobAccessConditions(null, null, null,
+                    null);
 
     // Optional standard HTTP access conditions which are optionally set
-    private final HttpAccessConditions httpAccessConditions;
+    private final HTTPAccessConditions httpAccessConditions;
 
     // Optional access conditions for a lease on a container or blob
     private final LeaseAccessConditions leaseAccessConditions;
@@ -38,49 +43,59 @@ public final class BlobAccessConditions {
      * default value.
      *
      * @param httpAccessConditions
-     *      Optional standard HTTP access conditions which are optionally set
+     *      Optional standard HTTP access conditions.
      * @param leaseAccessConditions
-     *      Optional access conditions for a lease on a container or blob
+     *      Optional access conditions for a lease on a container or blob.
      * @param appendBlobAccessConditions
-     *      Optional access conditions which are specific to append blobs
+     *      Optional access conditions which are specific to append blobs.
      * @param pageBlobAccessConditions
-     *      Optional access conditions which are specific to page blobs
+     *      Optional access conditions which are specific to page blobs.
      */
     public BlobAccessConditions(
-            HttpAccessConditions httpAccessConditions,
+            HTTPAccessConditions httpAccessConditions,
             LeaseAccessConditions leaseAccessConditions,
             AppendBlobAccessConditions appendBlobAccessConditions,
             PageBlobAccessConditions pageBlobAccessConditions) {
-        this.httpAccessConditions = httpAccessConditions == null ? HttpAccessConditions.getDefault() : httpAccessConditions;
-        this.leaseAccessConditions = leaseAccessConditions == null ? LeaseAccessConditions.getDefault() : leaseAccessConditions;
-        this.appendBlobAccessConditions = appendBlobAccessConditions == null ? AppendBlobAccessConditions.getDefault() : appendBlobAccessConditions;
-        this.pageBlobAccessConditions = pageBlobAccessConditions == null ? PageBlobAccessConditions.getDefault() : pageBlobAccessConditions;
+        this.httpAccessConditions = httpAccessConditions == null ?
+                HTTPAccessConditions.NONE : httpAccessConditions;
+        this.leaseAccessConditions = leaseAccessConditions == null ?
+                LeaseAccessConditions.NONE : leaseAccessConditions;
+        this.appendBlobAccessConditions = appendBlobAccessConditions == null ?
+                AppendBlobAccessConditions.NONE : appendBlobAccessConditions;
+        this.pageBlobAccessConditions = pageBlobAccessConditions == null ?
+                PageBlobAccessConditions.NONE : pageBlobAccessConditions;
     }
 
-    HttpAccessConditions getHttpAccessConditions() {
+    /**
+     * @return
+     *      The HttpAccessConditions.
+     */
+    HTTPAccessConditions getHttpAccessConditions() {
         return httpAccessConditions;
     }
 
+    /**
+     * @return
+     *      The LeaseAccessConditions.
+     */
     LeaseAccessConditions getLeaseAccessConditions() {
         return leaseAccessConditions;
     }
 
+    /**
+     * @return
+     *      The AppendBlobAccessConditions.
+     */
     AppendBlobAccessConditions getAppendBlobAccessConditions() {
         return appendBlobAccessConditions;
     }
 
+    /**
+     * @return
+     *      The PageBlobAccessConditions.
+     */
     PageBlobAccessConditions getPageBlobAccessConditions() {
         return pageBlobAccessConditions;
     }
-    
-    public static BlobAccessConditions getDefault() {
-        if (defaultBlobAccessConditions == null) {
-            defaultBlobAccessConditions = new BlobAccessConditions(HttpAccessConditions.getDefault(),
-                    LeaseAccessConditions.getDefault(),
-                    AppendBlobAccessConditions.getDefault(),
-                    PageBlobAccessConditions.getDefault());
-        }
 
-        return defaultBlobAccessConditions;
-    }
 }

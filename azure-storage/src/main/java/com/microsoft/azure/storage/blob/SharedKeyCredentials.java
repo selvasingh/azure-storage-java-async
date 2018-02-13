@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,45 +24,42 @@ import io.reactivex.Single;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static com.microsoft.azure.storage.blob.Utility.getGMTTime;
 
 public final class SharedKeyCredentials implements ICredentials {
 
     private final String accountName;
 
-    private final byte[] key;
+    private final byte[] accountKey;
 
     private final Mac hmacSha256;
 
     /**
-     * Initializes a new instance of SharedKeyCredentials contains an account's name and its primary or secondary key.
+     * Initializes a new instance of SharedKeyCredentials contains an account's name and its primary or secondary
+     * accountKey.
      *
      * @param accountName
      *      The account name associated with the request.
-     * @param key
-     *      A string that represent the account access key.
+     * @param accountKey
+     *      A string that represent the account access accountKey.
      */
-    public SharedKeyCredentials(String accountName, String key)
-            throws UnsupportedEncodingException, InvalidKeyException {
+    public SharedKeyCredentials(String accountName, String accountKey) throws InvalidKeyException {
         this.accountName = accountName;
-        this.key = Base64.decode(key);
+        this.accountKey = DatatypeConverter.parseBase64Binary(accountKey);
 
         try {
             this.hmacSha256 = Mac.getInstance("HmacSHA256");
         }
         catch (final NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException();
+            throw new Error(e);
         }
 
-        this.hmacSha256.init(new SecretKeySpec(this.key, "HmacSHA256"));
+        this.hmacSha256.init(new SecretKeySpec(this.accountKey, "HmacSHA256"));
     }
 
     /**
@@ -77,44 +74,42 @@ public final class SharedKeyCredentials implements ICredentials {
 
     private final class SharedKeyCredentialsPolicy implements RequestPolicy {
 
-        private final RequestPolicy requestPolicy;
+        private final SharedKeyCredentials factory;
+
+        private final RequestPolicy nextPolicy;
 
         private final RequestPolicyOptions options;
 
-        private final SharedKeyCredentials factory;
-
-        SharedKeyCredentialsPolicy(RequestPolicy requestPolicy, RequestPolicyOptions options,
-                                   SharedKeyCredentials factory) {
-            this.requestPolicy = requestPolicy;
-            this.options = options;
+        SharedKeyCredentialsPolicy(SharedKeyCredentials factory, RequestPolicy nextPolicy,
+                                   RequestPolicyOptions options) {
             this.factory = factory;
+            this.nextPolicy = nextPolicy;
+            this.options = options;
         }
 
         /**
          * Sign the request.
          *
          * @param request
-         *      the request to sign
+         *      The request to sign.
          * @return
          *      A {@link Single} representing the HTTP response that will arrive asynchronously.
          */
         @Override
         public Single<HttpResponse> sendAsync(final HttpRequest request) {
             if (request.headers().value(Constants.HeaderConstants.DATE) == null) {
-                request.headers().set(Constants.HeaderConstants.DATE, getGMTTime(new Date()));
+                request.headers().set(Constants.HeaderConstants.DATE, Utility.RFC1123GMTDateFormat.format(new Date()));
             }
-
-            final AtomicReference<String> stringToSign = new AtomicReference<>();
+            final String stringToSign = this.factory.buildStringToSign(request);
             try {
-                stringToSign.set(this.factory.buildStringToSign(request));
-                final String computedBase64Signature = this.factory.computeHmac256(stringToSign.get());
-                request.headers().set(Constants.HeaderConstants.AUTHORIZATION, "SharedKey " + this.factory.accountName +
-                        ":"  + computedBase64Signature);
+                final String computedBase64Signature = this.factory.computeHmac256(stringToSign);
+                request.headers().set(Constants.HeaderConstants.AUTHORIZATION,
+                        "SharedKey " + this.factory.accountName + ":" + computedBase64Signature);
             } catch (Exception e) {
                 return Single.error(e);
             }
 
-            Single<HttpResponse> response = requestPolicy.sendAsync(request);
+            Single<HttpResponse> response = nextPolicy.sendAsync(request);
             return response.doOnSuccess(new Consumer<HttpResponse>() {
                 @Override
                 public void accept(HttpResponse response) {
@@ -122,7 +117,7 @@ public final class SharedKeyCredentials implements ICredentials {
                         if (options.shouldLog(HttpPipelineLogLevel.ERROR)) {
                             options.log(HttpPipelineLogLevel.ERROR,
                                     "===== HTTP Forbidden status, String-to-Sign:%n'%s'%n==================%n",
-                                    stringToSign.get());
+                                    stringToSign);
                         }
                     }
                 }
@@ -132,7 +127,7 @@ public final class SharedKeyCredentials implements ICredentials {
 
     @Override
     public RequestPolicy create(RequestPolicy nextRequestPolicy, RequestPolicyOptions options) {
-        return new SharedKeyCredentialsPolicy(nextRequestPolicy, options, this);
+        return new SharedKeyCredentialsPolicy(this, nextRequestPolicy, options);
     }
 
     /**
@@ -143,7 +138,7 @@ public final class SharedKeyCredentials implements ICredentials {
      * @return
      *      A canonicalized string.
      */
-    private String buildStringToSign(final HttpRequest request) throws Exception {
+    private String buildStringToSign(final HttpRequest request) {
         final HttpHeaders httpHeaders = request.headers();
         String contentLength = getStandardHeaderValue(httpHeaders, Constants.HeaderConstants.CONTENT_LENGTH);
         contentLength = contentLength.equals("0") ? Constants.EMPTY_STRING : contentLength;
@@ -176,7 +171,7 @@ public final class SharedKeyCredentials implements ICredentials {
         // Add only headers that begin with 'x-ms-'
         final ArrayList<String> xmsHeaderNameArray = new ArrayList<String>();
         for (HttpHeader header : headers) {
-            String lowerCaseHeader = header.name().toLowerCase(Utility.LOCALE_US);
+            String lowerCaseHeader = header.name().toLowerCase(Locale.US);
             if (lowerCaseHeader.startsWith(Constants.PREFIX_FOR_STORAGE_HEADER)) {
                 xmsHeaderNameArray.add(lowerCaseHeader);
             }
@@ -209,11 +204,8 @@ public final class SharedKeyCredentials implements ICredentials {
      *      A {@code java.net.URL} of the request.
      * @return
      *      The canonicalized resource to sign.
-     * @throws MalformedURLException
-     * @throws UnsupportedEncodingException
      */
-    private String getCanonicalizedResource(URL requestURL)
-            throws MalformedURLException, UnsupportedEncodingException {
+    private String getCanonicalizedResource(URL requestURL) {
 
         // Resource path
         final StringBuilder canonicalizedResource = new StringBuilder("/");
@@ -270,23 +262,23 @@ public final class SharedKeyCredentials implements ICredentials {
 
     /**
      * Computes a signature for the specified string using the HMAC-SHA256 algorithm.
+     * Package-private because it is used to generate SAS signatures.
      *
      * @param stringToSign
      *      The UTF-8-encoded string to sign.
      * @return
      *      A {@code String} that contains the HMAC-SHA256-encoded signature.
      * @throws InvalidKeyException
-     *      If the key is not a valid Base64-encoded string.
+     *      If the accountKey is not a valid Base64-encoded string.
      */
     String computeHmac256(final String stringToSign) throws InvalidKeyException {
-        byte[] utf8Bytes = null;
         try {
-            utf8Bytes = stringToSign.getBytes(Constants.UTF8_CHARSET);
+            byte[] utf8Bytes = stringToSign.getBytes(Constants.UTF8_CHARSET);
+            return DatatypeConverter.printBase64Binary(this.hmacSha256.doFinal(utf8Bytes));
         }
         catch (final UnsupportedEncodingException e) {
-            throw new IllegalArgumentException(e);
+            throw new Error(e);
         }
-        return Base64.encode(this.hmacSha256.doFinal(utf8Bytes));
     }
 }
 

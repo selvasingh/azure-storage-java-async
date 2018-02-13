@@ -11,13 +11,14 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * The Metrics model.
  */
 @JacksonXmlRootElement(localName = "Metrics")
-public class Metrics {
+public final class Metrics {
     /**
      * The version of Storage Analytics to configure.
      */

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,20 +17,13 @@ package com.microsoft.azure.storage.blob;
 import java.util.HashMap;
 
 /**
- * Constains metadata key/value pairs
+ * Contains metadata key/value pairs
  */
 public final class Metadata extends HashMap<String, String> {
-    private static Metadata defaultMetadata;
+    public static final Metadata NONE = new Metadata();
 
     // TODO Add other constructors
     public Metadata() {
         super();
-    }
-
-    public static Metadata getDefault() {
-        if(defaultMetadata == null) {
-            defaultMetadata = new Metadata();
-        }
-        return defaultMetadata;
     }
 }

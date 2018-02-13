@@ -11,6 +11,7 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
@@ -19,7 +20,7 @@ import org.joda.time.DateTime;
  * Defines headers for ListBlobs operation.
  */
 @JacksonXmlRootElement(localName = "Container-ListBlobs-Headers")
-public class ContainerListBlobsHeaders {
+public final class ContainerListBlobsHeaders {
     /**
      * The content type specified for the blob. The default content type is
      * 'application/octet-stream'.

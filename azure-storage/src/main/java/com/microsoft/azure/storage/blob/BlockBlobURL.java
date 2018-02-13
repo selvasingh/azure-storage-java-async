@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +20,10 @@ import com.microsoft.rest.v2.RestResponse;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 /**
@@ -31,12 +32,27 @@ import java.util.List;
 public final class BlockBlobURL extends BlobURL {
 
     /**
+     * Indicates the maximum number of bytes that can be sent in a call to putBlob.
+     */
+    public static final int MAX_PUT_BLOB_BYTES = 256 * Constants.MB;
+
+    /**
+     * Indicates the maximum number of bytes that can be sent in a call to putBlock.
+     */
+    public static final int MAX_PUT_BLOCK_BYTES = 100 * Constants.MB;
+
+    /**
+     * Indicates the maximum number of blocks allowed in a block blob.
+     */
+    public static final int MAX_BLOCKS = 50000;
+
+    /**
      * Creates a new {@link BlockBlobURL} object.
      *
      * @param url
      *      A {@code java.net.URL} to a block blob.
      * @param pipeline
-     *      An {@link HttpPipeline} object representing the pipeline for requests.
+     *      An {@link HttpPipeline} for sending requests.
      */
     public BlockBlobURL(URL url, HttpPipeline pipeline) {
         super(url, pipeline);
@@ -67,9 +83,9 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      A {@link BlockBlobURL} object with the given pipeline.
      */
-    public BlockBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnsupportedEncodingException {
-        BlobURLParts blobURLParts = URLParser.ParseURL(new URL(this.storageClient.url()));
-        blobURLParts.setSnapshot(snapshot);
+    public BlockBlobURL withSnapshot(String snapshot) throws MalformedURLException, UnknownHostException {
+        BlobURLParts blobURLParts = URLParser.parse(new URL(this.storageClient.url()));
+        blobURLParts.snapshot = snapshot;
         return new BlockBlobURL(blobURLParts.toURL(), super.storageClient.httpPipeline());
     }
 
@@ -82,8 +98,10 @@ public final class BlockBlobURL extends BlobURL {
      *
      * @param data
      *      A {@code Flowable&lt;byte[]&gt;} which contains the data to write to the blob.
+     * @param length
+     *      A {@code long} indicating how long the data is.
      * @param headers
-     *      A {@link BlobHttpHeaders} object that specifies which properties to set on the blob.
+     *      A {@link BlobHTTPHeaders} object that specifies which properties to set on the blob.
      * @param metadata
      *      A {@link Metadata} object that specifies key value pairs to set on the blob.
      * @param accessConditions
@@ -92,23 +110,17 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlobPutHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlobPutHeaders, Void>> putBlobAsync(
-            Flowable<byte[]> data, long contentLength, BlobHttpHeaders headers, Metadata metadata,
+    public Single<RestResponse<BlobPutHeaders, Void>> putBlob(
+            Flowable<ByteBuffer> data, long length, BlobHTTPHeaders headers, Metadata metadata,
             BlobAccessConditions accessConditions) {
-        if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
-        }
-        if(headers == null) {
-            headers = BlobHttpHeaders.getDefault();
-        }
+        headers = headers == null ? BlobHTTPHeaders.NONE : headers;
+        metadata = metadata == null ? Metadata.NONE : metadata;
+        accessConditions = accessConditions == null ? BlobAccessConditions.NONE : accessConditions;
         // TODO: Metadata protocol layer broken.
-        if(metadata == null) {
-            metadata = Metadata.getDefault();
-        }
-        return this.storageClient.blobs().putWithRestResponseAsync(contentLength, BlobType.BLOCK_BLOB, data,
+        return this.storageClient.blobs().putWithRestResponseAsync(length, BlobType.BLOCK_BLOB, data,
                 null, headers.getContentType(), headers.getContentEncoding(),
-                headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata.toString(),
-                accessConditions.getLeaseAccessConditions().toString(),
+                headers.getContentLanguage(), headers.getContentMD5(), headers.getCacheControl(), metadata,
+                accessConditions.getLeaseAccessConditions().getLeaseId(),
                 headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
@@ -125,19 +137,19 @@ public final class BlockBlobURL extends BlobURL {
      *      A Base64 encoded {@code String} that specifies the ID for this block.
      * @param data
      *      A {@code Flowable&lt;byte[]&gt;} which contains the data to write to the block.
+     * @param length
+     *      A {@code long} indicating how long the data is.
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the blob if there is one.
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockHeaders, Void&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlockAsync(
-            String base64BlockID, Flowable<byte[]> data, long contentLength,
+    public Single<RestResponse<BlockBlobPutBlockHeaders, Void>> putBlock(
+            String base64BlockID, Flowable<ByteBuffer> data, long length,
             LeaseAccessConditions leaseAccessConditions) {
-        if(leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.getDefault();
-        }
-        return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(base64BlockID, contentLength, data,
-                null, leaseAccessConditions.toString(), null);
+        leaseAccessConditions = leaseAccessConditions == null ? LeaseAccessConditions.NONE : leaseAccessConditions;
+        return this.storageClient.blockBlobs().putBlockWithRestResponseAsync(base64BlockID, length, data,
+                null, leaseAccessConditions.getLeaseId(), null);
     }
 
     /**
@@ -150,13 +162,11 @@ public final class BlockBlobURL extends BlobURL {
      * @return
      *      The {@link Single&lt;RestResponse&lt;BlockBlobGetBlockListHeaders, BlockList&gt;&gt;} object if successful.
      */
-    public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockListAsync(
+    public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockList(
             BlockListType listType, LeaseAccessConditions leaseAccessConditions) {
-        if(leaseAccessConditions == null) {
-            leaseAccessConditions = LeaseAccessConditions.getDefault();
-        }
+        leaseAccessConditions = leaseAccessConditions == null ? LeaseAccessConditions.NONE : leaseAccessConditions;
         return this.storageClient.blockBlobs().getBlockListWithRestResponseAsync(listType,
-                null, null, leaseAccessConditions.toString(), null);
+                null, null, leaseAccessConditions.getLeaseId(), null);
     }
 
     /**
@@ -169,10 +179,10 @@ public final class BlockBlobURL extends BlobURL {
      *
      * @param base64BlockIDs
      *      A {@code java.util.List} of base64 {@code String} that specifies the block IDs to be committed.
+     * @param headers
+     *      A {@link BlobHTTPHeaders} object that specifies which properties to set on the blob.
      * @param metadata
      *      A {@link Metadata} object that specifies key value pairs to set on the blob.
-     * @param httpHeaders
-     *      A {@link BlobHttpHeaders} object that specifies which properties to set on the blob.
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
@@ -180,23 +190,17 @@ public final class BlockBlobURL extends BlobURL {
      *      The {@link Single&lt;RestResponse&lt;BlockBlobPutBlockListHeaders, Void&gt;&gt;} object if successful.
      */
     // TODO: Add Content-Length to swagger once the modeler knows to hide (or whatever solution).
-    public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockListAsync(
-            List<String> base64BlockIDs, Metadata metadata, BlobHttpHeaders httpHeaders,
+    public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockList(
+            List<String> base64BlockIDs, BlobHTTPHeaders headers, Metadata metadata,
             BlobAccessConditions accessConditions) {
-        if(metadata == null) {
-            metadata = Metadata.getDefault();
-        }
-        if(httpHeaders == null) {
-            httpHeaders = BlobHttpHeaders.getDefault();
-        }
-        if(accessConditions == null) {
-            accessConditions = BlobAccessConditions.getDefault();
-        }
+        headers = headers == null ? BlobHTTPHeaders.NONE : headers;
+        metadata = metadata == null ? Metadata.NONE : metadata;
+        accessConditions = accessConditions == null ? BlobAccessConditions.NONE : accessConditions;
         return this.storageClient.blockBlobs().putBlockListWithRestResponseAsync(
                 new BlockLookupList().withLatest(base64BlockIDs), null,
-                httpHeaders.getCacheControl(), httpHeaders.getContentType(),httpHeaders.getContentEncoding(),
-                httpHeaders.getContentLanguage(), httpHeaders.getContentMD5(), metadata.toString(),
-                accessConditions.getLeaseAccessConditions().toString(), httpHeaders.getContentDisposition(),
+                headers.getCacheControl(), headers.getContentType(),headers.getContentEncoding(),
+                headers.getContentLanguage(), headers.getContentMD5(), metadata,
+                accessConditions.getLeaseAccessConditions().getLeaseId(), headers.getContentDisposition(),
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),

@@ -18,14 +18,13 @@ import com.microsoft.azure.storage.models.ServiceListContainersHeaders;
 import com.microsoft.azure.storage.models.ServiceSetPropertiesHeaders;
 import com.microsoft.azure.storage.models.StorageServiceProperties;
 import com.microsoft.azure.storage.models.StorageServiceStats;
-import com.microsoft.rest.v2.RestException;
 import com.microsoft.rest.v2.RestResponse;
 import com.microsoft.rest.v2.ServiceCallback;
 import com.microsoft.rest.v2.ServiceFuture;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.annotations.NonNull;
 
 /**
  * An instance of this class provides access to all the operations defined in
@@ -37,10 +36,9 @@ public interface Services {
      *
      * @param storageServiceProperties The StorageService properties.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void setProperties(StorageServiceProperties storageServiceProperties);
+    void setProperties(@NonNull StorageServiceProperties storageServiceProperties);
 
     /**
      * Sets properties for a storage account's Blob service endpoint, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
@@ -50,7 +48,7 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> setPropertiesAsync(StorageServiceProperties storageServiceProperties, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> setPropertiesAsync(@NonNull StorageServiceProperties storageServiceProperties, @NonNull ServiceCallback<Void> serviceCallback);
 
     /**
      * Sets properties for a storage account's Blob service endpoint, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
@@ -59,7 +57,7 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(StorageServiceProperties storageServiceProperties);
+    Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(@NonNull StorageServiceProperties storageServiceProperties);
 
     /**
      * Sets properties for a storage account's Blob service endpoint, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
@@ -68,7 +66,7 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable setPropertiesAsync(StorageServiceProperties storageServiceProperties);
+    Completable setPropertiesAsync(@NonNull StorageServiceProperties storageServiceProperties);
 
     /**
      * Sets properties for a storage account's Blob service endpoint, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
@@ -77,10 +75,9 @@ public interface Services {
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void setProperties(StorageServiceProperties storageServiceProperties, Integer timeout, String requestId);
+    void setProperties(@NonNull StorageServiceProperties storageServiceProperties, Integer timeout, String requestId);
 
     /**
      * Sets properties for a storage account's Blob service endpoint, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
@@ -92,7 +89,7 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;Void&gt;} object.
      */
-    ServiceFuture<Void> setPropertiesAsync(StorageServiceProperties storageServiceProperties, Integer timeout, String requestId, final ServiceCallback<Void> serviceCallback);
+    ServiceFuture<Void> setPropertiesAsync(@NonNull StorageServiceProperties storageServiceProperties, Integer timeout, String requestId, @NonNull ServiceCallback<Void> serviceCallback);
 
     /**
      * Sets properties for a storage account's Blob service endpoint, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
@@ -103,7 +100,7 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
      */
-    Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(StorageServiceProperties storageServiceProperties, Integer timeout, String requestId);
+    Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setPropertiesWithRestResponseAsync(@NonNull StorageServiceProperties storageServiceProperties, Integer timeout, String requestId);
 
     /**
      * Sets properties for a storage account's Blob service endpoint, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
@@ -114,13 +111,11 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Completable} object if successful.
      */
-    Completable setPropertiesAsync(StorageServiceProperties storageServiceProperties, Integer timeout, String requestId);
+    Completable setPropertiesAsync(@NonNull StorageServiceProperties storageServiceProperties, Integer timeout, String requestId);
 
     /**
      * gets the properties of a storage account's Blob service, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the StorageServiceProperties object if successful.
      */
@@ -133,12 +128,11 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;StorageServiceProperties&gt;} object.
      */
-    ServiceFuture<StorageServiceProperties> getPropertiesAsync(final ServiceCallback<StorageServiceProperties> serviceCallback);
+    ServiceFuture<StorageServiceProperties> getPropertiesAsync(@NonNull ServiceCallback<StorageServiceProperties> serviceCallback);
 
     /**
      * gets the properties of a storage account's Blob service, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ServiceGetPropertiesHeaders, StorageServiceProperties&gt;&gt;} object if successful.
      */
     Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getPropertiesWithRestResponseAsync();
@@ -146,7 +140,6 @@ public interface Services {
     /**
      * gets the properties of a storage account's Blob service, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Maybe&lt;StorageServiceProperties&gt;} object if successful.
      */
     Maybe<StorageServiceProperties> getPropertiesAsync();
@@ -157,7 +150,6 @@ public interface Services {
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the StorageServiceProperties object if successful.
      */
@@ -172,7 +164,7 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;StorageServiceProperties&gt;} object.
      */
-    ServiceFuture<StorageServiceProperties> getPropertiesAsync(Integer timeout, String requestId, final ServiceCallback<StorageServiceProperties> serviceCallback);
+    ServiceFuture<StorageServiceProperties> getPropertiesAsync(Integer timeout, String requestId, @NonNull ServiceCallback<StorageServiceProperties> serviceCallback);
 
     /**
      * gets the properties of a storage account's Blob service, including properties for Storage Analytics and CORS (Cross-Origin Resource Sharing) rules.
@@ -197,8 +189,6 @@ public interface Services {
     /**
      * Retrieves statistics related to replication for the Blob service. It is only available on the secondary location endpoint when read-access geo-redundant replication is enabled for the storage account.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the StorageServiceStats object if successful.
      */
@@ -211,12 +201,11 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;StorageServiceStats&gt;} object.
      */
-    ServiceFuture<StorageServiceStats> getStatsAsync(final ServiceCallback<StorageServiceStats> serviceCallback);
+    ServiceFuture<StorageServiceStats> getStatsAsync(@NonNull ServiceCallback<StorageServiceStats> serviceCallback);
 
     /**
      * Retrieves statistics related to replication for the Blob service. It is only available on the secondary location endpoint when read-access geo-redundant replication is enabled for the storage account.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ServiceGetStatsHeaders, StorageServiceStats&gt;&gt;} object if successful.
      */
     Single<RestResponse<ServiceGetStatsHeaders, StorageServiceStats>> getStatsWithRestResponseAsync();
@@ -224,7 +213,6 @@ public interface Services {
     /**
      * Retrieves statistics related to replication for the Blob service. It is only available on the secondary location endpoint when read-access geo-redundant replication is enabled for the storage account.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Maybe&lt;StorageServiceStats&gt;} object if successful.
      */
     Maybe<StorageServiceStats> getStatsAsync();
@@ -235,7 +223,6 @@ public interface Services {
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the StorageServiceStats object if successful.
      */
@@ -250,7 +237,7 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;StorageServiceStats&gt;} object.
      */
-    ServiceFuture<StorageServiceStats> getStatsAsync(Integer timeout, String requestId, final ServiceCallback<StorageServiceStats> serviceCallback);
+    ServiceFuture<StorageServiceStats> getStatsAsync(Integer timeout, String requestId, @NonNull ServiceCallback<StorageServiceStats> serviceCallback);
 
     /**
      * Retrieves statistics related to replication for the Blob service. It is only available on the secondary location endpoint when read-access geo-redundant replication is enabled for the storage account.
@@ -275,8 +262,6 @@ public interface Services {
     /**
      * The List Containers operation returns a list of the containers under the specified account.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the ListContainersResponse object if successful.
      */
@@ -289,12 +274,11 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;ListContainersResponse&gt;} object.
      */
-    ServiceFuture<ListContainersResponse> listContainersAsync(final ServiceCallback<ListContainersResponse> serviceCallback);
+    ServiceFuture<ListContainersResponse> listContainersAsync(@NonNull ServiceCallback<ListContainersResponse> serviceCallback);
 
     /**
      * The List Containers operation returns a list of the containers under the specified account.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if successful.
      */
     Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainersWithRestResponseAsync();
@@ -302,7 +286,6 @@ public interface Services {
     /**
      * The List Containers operation returns a list of the containers under the specified account.
      *
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link Maybe&lt;ListContainersResponse&gt;} object if successful.
      */
     Maybe<ListContainersResponse> listContainersAsync();
@@ -317,7 +300,6 @@ public interface Services {
      * @param timeout The timeout parameter is expressed in seconds. For more information, see &lt;a href="https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/setting-timeouts-for-blob-service-operations"&gt;Setting Timeouts for Blob Service Operations.&lt;/a&gt;.
      * @param requestId Provides a client-generated, opaque value with a 1 KB character limit that is recorded in the analytics logs when storage analytics logging is enabled.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws RestException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the ListContainersResponse object if successful.
      */
@@ -336,7 +318,7 @@ public interface Services {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @return the {@link ServiceFuture&lt;ListContainersResponse&gt;} object.
      */
-    ServiceFuture<ListContainersResponse> listContainersAsync(String prefix, String marker, Integer maxresults, ListContainersIncludeType include, Integer timeout, String requestId, final ServiceCallback<ListContainersResponse> serviceCallback);
+    ServiceFuture<ListContainersResponse> listContainersAsync(String prefix, String marker, Integer maxresults, ListContainersIncludeType include, Integer timeout, String requestId, @NonNull ServiceCallback<ListContainersResponse> serviceCallback);
 
     /**
      * The List Containers operation returns a list of the containers under the specified account.

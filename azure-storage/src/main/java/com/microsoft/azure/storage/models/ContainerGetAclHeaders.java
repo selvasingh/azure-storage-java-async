@@ -11,6 +11,7 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
@@ -19,7 +20,7 @@ import org.joda.time.DateTime;
  * Defines headers for GetAcl operation.
  */
 @JacksonXmlRootElement(localName = "Container-GetAcl-Headers")
-public class ContainerGetAclHeaders {
+public final class ContainerGetAclHeaders {
     /**
      * Indicated whether data in the container may be accessed publicly and the
      * level of access. Possible values include: 'container', 'blob'.

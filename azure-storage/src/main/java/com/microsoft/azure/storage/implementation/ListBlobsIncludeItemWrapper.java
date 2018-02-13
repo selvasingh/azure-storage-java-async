@@ -15,24 +15,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.azure.storage.models.ListBlobsIncludeItem;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A wrapper around List&lt;ListBlobsIncludeItem&gt; which provides top-level metadata for serialization.
+ */
 @JacksonXmlRootElement(localName = "ListBlobsIncludeItem")
-public class ListBlobsIncludeItemWrapper {
+public final class ListBlobsIncludeItemWrapper {
     @JacksonXmlProperty(localName = "ListBlobsIncludeItem")
     private final List<ListBlobsIncludeItem> listBlobsIncludeItem;
 
+    /**
+     * Creates an instance of ListBlobsIncludeItemWrapper.
+     *
+     * @param listBlobsIncludeItem the list.
+     */
     @JsonCreator
-    public ListBlobsIncludeItemWrapper(@JsonProperty("listBlobsIncludeItem") List<ListBlobsIncludeItem> listBlobsIncludeItem) {
+    public ListBlobsIncludeItemWrapper(@JsonProperty("ListBlobsIncludeItem") List<ListBlobsIncludeItem> listBlobsIncludeItem) {
         this.listBlobsIncludeItem = listBlobsIncludeItem;
     }
 
     /**
-     * Get the ListBlobsIncludeItem value.
+     * Get the List&lt;ListBlobsIncludeItem&gt; contained in this wrapper.
      *
-     * @return the ListBlobsIncludeItem value
+     * @return the List&lt;ListBlobsIncludeItem&gt;.
      */
-    public List<ListBlobsIncludeItem> listBlobsIncludeItem() {
+    public List<ListBlobsIncludeItem> items() {
         return listBlobsIncludeItem;
     }
 }

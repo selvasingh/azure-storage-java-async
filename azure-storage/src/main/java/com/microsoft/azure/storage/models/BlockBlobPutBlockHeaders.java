@@ -11,6 +11,7 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
@@ -19,7 +20,7 @@ import org.joda.time.DateTime;
  * Defines headers for PutBlock operation.
  */
 @JacksonXmlRootElement(localName = "BlockBlob-PutBlock-Headers")
-public class BlockBlobPutBlockHeaders {
+public final class BlockBlobPutBlockHeaders {
     /**
      * If the blob has an MD5 hash and this operation is to read the full blob,
      * this response header is returned so that the client can check for

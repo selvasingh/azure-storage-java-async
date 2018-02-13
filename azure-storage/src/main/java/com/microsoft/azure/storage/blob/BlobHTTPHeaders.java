@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,15 @@
 package com.microsoft.azure.storage.blob;
 
 /**
- * Blob HTTP headers for getting and setting blob properties
+ * Blob HTTP headers for getting and setting blob properties.
  */
-public final class BlobHttpHeaders {
+public final class BlobHTTPHeaders {
 
-    private static BlobHttpHeaders defaultBlobHttpHeaders;
+    /**
+     * An object representing no blob properties.
+     */
+    public static final BlobHTTPHeaders NONE = new BlobHTTPHeaders(null, null,
+            null,null, null, null);
 
     private final String cacheControl;
 
@@ -31,10 +35,10 @@ public final class BlobHttpHeaders {
 
     private final String contentMD5;
 
-    private String contentType;
+    private final String contentType;
 
     /**
-     * A {@link BlobHttpHeaders} object.
+     * A {@link BlobHTTPHeaders} object.
      *
      * @param cacheControl
      *      A {@code String} representing the cache-control value stored for the blob.
@@ -55,7 +59,7 @@ public final class BlobHttpHeaders {
      *      A {@code String} representing the content type value stored for the blob.
      *      If this field has not been set for the blob, the field returns {@code null}.
      */
-    public BlobHttpHeaders(String cacheControl, String contentDisposition, String contentEncoding,
+    public BlobHTTPHeaders(String cacheControl, String contentDisposition, String contentEncoding,
                            String contentLanguage, String contentMD5, String contentType) {
         this.cacheControl = cacheControl;
         this.contentDisposition = contentDisposition;
@@ -119,11 +123,4 @@ public final class BlobHttpHeaders {
         return contentType;
     }
 
-    public static BlobHttpHeaders getDefault() {
-        if(defaultBlobHttpHeaders == null) {
-            defaultBlobHttpHeaders = new BlobHttpHeaders(null, null, null,
-                    null, null, null);
-        }
-        return defaultBlobHttpHeaders;
-    }
 }

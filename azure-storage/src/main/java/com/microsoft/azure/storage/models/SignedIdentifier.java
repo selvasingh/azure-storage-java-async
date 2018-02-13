@@ -11,13 +11,14 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * signed identifier.
  */
 @JacksonXmlRootElement(localName = "SignedIdentifier")
-public class SignedIdentifier {
+public final class SignedIdentifier {
     /**
      * a unique id.
      */

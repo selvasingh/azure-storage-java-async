@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,93 +14,96 @@
  */
 package com.microsoft.azure.storage.blob;
 
-import java.util.EnumSet;
-
 /**
- * Represents possible services to be used for an Account SAS
+ * Represents possible services to be used for an Account SAS.
  */
-public enum AccountSASService {
+public final class AccountSASService {
     /**
      * Permission to access blob resources granted.
      */
-    BLOB('b'),
+    public boolean blob;
 
     /**
      * Permission to access file resources granted.
      */
-    FILE('f'),
+    public boolean file;
 
     /**
      * Permission to access queue resources granted.
      */
-    QUEUE('q'),
+    public boolean queue;
 
     /**
      * Permission to access table resources granted.
      */
-    TABLE('t');
-
-    char value;
+    public boolean table;
 
     /**
-     * Creates a {@code AccountSASService}.
-     *
-     * @param c
-     *      The {@code char} which represents this service.
+     * Initializes an {@code AccountSASService} object with all fields set to false.
      */
-    private AccountSASService(char c) {
-        this.value = c;
-    }
+    public AccountSASService() {}
 
     /**
-     * Converts the given services to a {@code String}.
+     * Converts the given services to a {@code String}. Using this method will guarantee the services are in an order
+     * accepted by the service.
      *
-     * @param services
-     *      The services to convert to a {@code String}.
      * @return
-     *      A {@code String} which represents the {@code SharedAccessAccountServices}.
+     *      A {@code String} which represents the {@code AccountSASServices}.
      */
-    static String servicesToString(EnumSet<AccountSASService> services) {
-        if (services == null) {
-            return Constants.EMPTY_STRING;
-        }
-
+    @Override
+    public String toString() {
+        // The order of the characters should be as specified here to ensure correctness:
+        // https://docs.microsoft.com/en-us/rest/api/storageservices/constructing-an-account-sas
         StringBuilder value = new StringBuilder();
 
-        for (AccountSASService service : services) {
-            value.append(service.value);
+        if (this.blob) {
+            value.append('b');
+        }
+        if (this.queue) {
+            value.append('q');
+        }
+        if (this.table) {
+            value.append('t');
+        }
+        if (this.file) {
+            value.append('f');
         }
 
         return value.toString();
     }
 
     /**
-     * Creates an {@link EnumSet<AccountSASService>} from the specified services string.
+     * Creates an {@code AccountSASService} from the specified services string. This method will throw an
+     * {@code IllegalArgumentException} if it encounters a character that does not correspond to a valid service.
      *
      * @param servicesString
-     *            A {@code String} which represents the {@code SharedAccessAccountServices}.
-     * @return A {@link EnumSet<AccountSASService>} generated from the given {@code String}.
+     *      A {@code String} which represents the {@code SharedAccessAccountServices}.
+     * @return
+     *      A {@code AccountSASService} generated from the given {@code String}.
      */
-    static EnumSet<AccountSASService> servicesFromString(String servicesString) {
-        EnumSet<AccountSASService> services = EnumSet.noneOf(AccountSASService.class);
+    public static AccountSASService parse(String servicesString) {
+        AccountSASService services = new AccountSASService();
 
-        for (final char c : servicesString.toLowerCase().toCharArray()) {
-            boolean invalidCharacter = true;
-
-            for (AccountSASService service : AccountSASService.values()) {
-                if (c == service.value) {
-                    services.add(service);
-                    invalidCharacter = false;
+        for (int i=0; i < servicesString.length(); i++) {
+            char c = servicesString.charAt(i);
+            switch (c) {
+                case 'b':
+                    services.blob = true;
                     break;
-                }
-            }
-
-            if (invalidCharacter) {
-                throw new IllegalArgumentException(
-                        String.format(SR.ENUM_COULD_NOT_BE_PARSED, "Services", servicesString));
+                case 'f':
+                    services.file = true;
+                    break;
+                case 'q':
+                    services.queue = true;
+                    break;
+                case 't':
+                    services.table = true;
+                    break;
+                default:
+                    throw new IllegalArgumentException(
+                        String.format(SR.ENUM_COULD_NOT_BE_PARSED_INVALID_VALUE, "Services", servicesString, c));
             }
         }
-
         return services;
     }
 }

@@ -1,3 +1,17 @@
+/*
+ * Copyright Microsoft Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.microsoft.azure.storage.blob;
 
 import com.microsoft.rest.v2.http.HttpRequest;
@@ -11,8 +25,13 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * TokenCredentials is a {@link com.microsoft.rest.v2.http.HttpPipeline} and is the TokenCredential's policy factory.
  */
-public class TokenCredentials  implements ICredentials{
+public final class TokenCredentials implements ICredentials{
 
+    /*
+    This is an atomic reference because it must be thread safe as all parts of the pipeline must be. It however cannot
+    be final as most factory fields are because in order to actually be useful, the token has to be renewed every few
+    hours, which requires updating the value here.
+     */
     private AtomicReference<String> token;
 
     /**
@@ -47,27 +66,27 @@ public class TokenCredentials  implements ICredentials{
 
     @Override
     public RequestPolicy create(RequestPolicy next, RequestPolicyOptions options) {
-        return new TokenCredentialsPolicy(next);
+        return new TokenCredentialsPolicy(this, next);
     }
 
     private final class TokenCredentialsPolicy implements RequestPolicy {
 
-        final RequestPolicy requestPolicy;
+        private final TokenCredentials factory;
 
-        TokenCredentials factory;
+        private final RequestPolicy nextPolicy;
 
-        TokenCredentialsPolicy(RequestPolicy requestPolicy) {
-            this.requestPolicy = requestPolicy;
+        private TokenCredentialsPolicy(TokenCredentials factory, RequestPolicy nextPolicy) {
+            this.factory = factory;
+            this.nextPolicy = nextPolicy;
         }
 
         public Single<HttpResponse> sendAsync(HttpRequest request) {
             if (!request.url().getProtocol().equals(Constants.HTTPS)) {
-                throw new IllegalArgumentException(
-                        "Token credentials require a URL using the https protocol scheme");
+                throw new Error("Token credentials require a URL using the https protocol scheme");
             }
-            request.withHeader(Constants.HeaderConstants.AUTHORIZATION, "Bearer " +
-                    this.factory.getToken());
-            return this.requestPolicy.sendAsync(request);
+            request.withHeader(Constants.HeaderConstants.AUTHORIZATION,
+                    "Bearer " + this.factory.getToken());
+            return this.nextPolicy.sendAsync(request);
         }
     }
 }

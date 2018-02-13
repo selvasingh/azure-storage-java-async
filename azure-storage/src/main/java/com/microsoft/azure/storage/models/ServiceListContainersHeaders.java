@@ -11,13 +11,14 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Defines headers for ListContainers operation.
  */
 @JacksonXmlRootElement(localName = "Service-ListContainers-Headers")
-public class ServiceListContainersHeaders {
+public final class ServiceListContainersHeaders {
     /**
      * This header uniquely identifies the request that was made and can be
      * used for troubleshooting the request.

@@ -15,24 +15,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.azure.storage.models.SignedIdentifier;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A wrapper around List&lt;SignedIdentifier&gt; which provides top-level metadata for serialization.
+ */
 @JacksonXmlRootElement(localName = "SignedIdentifiers")
-public class SignedIdentifiersWrapper {
-    @JacksonXmlProperty(localName = "SignedIdentifier")
+public final class SignedIdentifiersWrapper {
+    @JacksonXmlProperty(localName = "SignedIdentifiers")
     private final List<SignedIdentifier> signedIdentifiers;
 
+    /**
+     * Creates an instance of SignedIdentifiersWrapper.
+     *
+     * @param signedIdentifiers the list.
+     */
     @JsonCreator
-    public SignedIdentifiersWrapper(@JsonProperty("signedIdentifiers") List<SignedIdentifier> signedIdentifiers) {
+    public SignedIdentifiersWrapper(@JsonProperty("SignedIdentifiers") List<SignedIdentifier> signedIdentifiers) {
         this.signedIdentifiers = signedIdentifiers;
     }
 
     /**
-     * Get the SignedIdentifiers value.
+     * Get the List&lt;SignedIdentifier&gt; contained in this wrapper.
      *
-     * @return the SignedIdentifiers value
+     * @return the List&lt;SignedIdentifier&gt;.
      */
-    public List<SignedIdentifier> signedIdentifiers() {
+    public List<SignedIdentifier> items() {
         return signedIdentifiers;
     }
 }

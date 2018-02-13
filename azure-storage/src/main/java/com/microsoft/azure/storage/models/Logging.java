@@ -11,13 +11,14 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Azure Analytics Logging settings.
  */
 @JacksonXmlRootElement(localName = "Logging")
-public class Logging {
+public final class Logging {
     /**
      * The version of Storage Analytics to configure.
      */

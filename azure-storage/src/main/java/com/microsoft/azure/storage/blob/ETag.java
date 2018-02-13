@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright Microsoft Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ public final class ETag {
     /**
      * Used for matching with no ETag.
      */
-    public static final ETag NONE = new ETag(Constants.EMPTY_STRING);
+    public static final ETag NONE = new ETag(null);
 
     /**
      * Used for matching with any ETag.
@@ -52,15 +52,11 @@ public final class ETag {
         if (this.eTagString == null) {
             return ((ETag) obj).eTagString == null;
         }
-        return this.eTagString.equals(obj);
+        return this.eTagString.equals(((ETag)obj).eTagString);
     }
 
     @Override
     public String toString() {
         return this.eTagString;
-    }
-
-    public static ETag getDefault() {
-        return new ETag(null);
     }
 }
