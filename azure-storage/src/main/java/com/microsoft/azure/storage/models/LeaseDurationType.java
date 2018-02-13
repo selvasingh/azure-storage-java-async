@@ -30,9 +30,9 @@ public enum LeaseDurationType {
     /**
      * The actual serialized value for a LeaseDurationType instance.
      */
-    private String value;
+    private final String value;
 
-    LeaseDurationType(String value) {
+    private LeaseDurationType(String value) {
         this.value = value;
     }
 

@@ -10,7 +10,9 @@
 
 package com.microsoft.azure.storage.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
 
@@ -18,17 +20,17 @@ import java.util.List;
  * The Blobs model.
  */
 @JacksonXmlRootElement(localName = "Blobs")
-public class Blobs {
+public final class Blobs {
     /**
      * The blobPrefix property.
      */
-    @JsonProperty(value = "BlobPrefix")
+    @JsonProperty("BlobPrefix")
     private List<BlobPrefix> blobPrefix;
 
     /**
      * The blob property.
      */
-    @JsonProperty(value = "Blob")
+    @JsonProperty("Blob")
     private List<Blob> blob;
 
     /**

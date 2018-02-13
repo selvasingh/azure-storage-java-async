@@ -26,6 +26,7 @@ import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.http.HttpPipelineLogLevel;
 import com.microsoft.rest.v2.http.HttpPipelineLogger;
 import com.microsoft.rest.v2.http.HttpResponse;
+import com.microsoft.rest.v2.util.FlowableUtil;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Flowable;
@@ -85,8 +86,8 @@ public class BasicSample {
         // This sample depends on some knowledge of RxJava.
         // A general primer on Rx can be found at http://reactivex.io/intro.html.
 
-        String accountName = System.getenv("AZURE_STORAGE_ACCOUNT_NAME");
-        String accountKey = System.getenv("AZURE_STORAGE_ACCOUNT_KEY");
+        String accountName = System.getenv("ACCOUNT_NAME");
+        String accountKey = System.getenv("ACCOUNT_KEY");
 
         // Set up the HTTP pipeline.
         HttpPipeline pipeline = getPipeline(accountName, accountKey);
@@ -105,7 +106,7 @@ public class BasicSample {
 
         // Comment the above stream and uncomment this to upload a file instead.
         // This shows how to upload a file.
-        //Flowable<ByteBuffer> stream = Flowable.create(AsynchronousFileChannel.open(Paths.get("myfile")).read(ByteBuffer.allocate(0), 0));
+        //Flowable<ByteBuffer> stream = FlowableUtil.readFile(AsynchronousFileChannel.open(Paths.get("myfile")));
 
         // Create a container with containerURL.createAsync().
         Disposable disposable = containerURL.create(null, null)

@@ -11,13 +11,14 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * the retention policy.
  */
 @JacksonXmlRootElement(localName = "RetentionPolicy")
-public class RetentionPolicy {
+public final class RetentionPolicy {
     /**
      * Indicates whether a retention policy is enabled for the storage service.
      */

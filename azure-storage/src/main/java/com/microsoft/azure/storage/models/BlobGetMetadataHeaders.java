@@ -11,8 +11,10 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
+import com.microsoft.rest.v2.annotations.HeaderCollection;
 import java.util.Map;
 import org.joda.time.DateTime;
 
@@ -20,11 +22,11 @@ import org.joda.time.DateTime;
  * Defines headers for GetMetadata operation.
  */
 @JacksonXmlRootElement(localName = "Blob-GetMetadata-Headers")
-public class BlobGetMetadataHeaders {
+public final class BlobGetMetadataHeaders {
     /**
      * The metadata property.
      */
-    @JsonProperty(value = "x-ms-meta")
+    @HeaderCollection("x-ms-meta-")
     private Map<String, String> metadata;
 
     /**

@@ -18,7 +18,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * An enumeration of blobs.
  */
 @JacksonXmlRootElement(localName = "EnumerationResults")
-public class ListBlobsResponse {
+public final class ListBlobsResponse {
     /**
      * The serviceEndpoint property.
      */

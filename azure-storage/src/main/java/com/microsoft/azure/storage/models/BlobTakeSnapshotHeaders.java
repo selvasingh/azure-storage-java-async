@@ -11,6 +11,7 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
@@ -19,7 +20,7 @@ import org.joda.time.DateTime;
  * Defines headers for TakeSnapshot operation.
  */
 @JacksonXmlRootElement(localName = "Blob-TakeSnapshot-Headers")
-public class BlobTakeSnapshotHeaders {
+public final class BlobTakeSnapshotHeaders {
     /**
      * Uniquely identifies the snapshot and indicates the snapshot version. It
      * may be used in subsequent requests to access the snapshot.

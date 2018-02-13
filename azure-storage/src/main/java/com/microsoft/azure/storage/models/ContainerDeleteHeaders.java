@@ -11,6 +11,7 @@
 package com.microsoft.azure.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.microsoft.rest.v2.DateTimeRfc1123;
 import org.joda.time.DateTime;
@@ -19,7 +20,7 @@ import org.joda.time.DateTime;
  * Defines headers for Delete operation.
  */
 @JacksonXmlRootElement(localName = "Container-Delete-Headers")
-public class ContainerDeleteHeaders {
+public final class ContainerDeleteHeaders {
     /**
      * This header uniquely identifies the request that was made and can be
      * used for troubleshooting the request.

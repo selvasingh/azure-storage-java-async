@@ -10,8 +10,9 @@
 
 package com.microsoft.azure.storage.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
  * Storage Service Properties.
  */
 @JacksonXmlRootElement(localName = "StorageServiceProperties")
-public class StorageServiceProperties {
+public final class StorageServiceProperties {
     /**
      * Azure Analytics Logging settings.
      */
@@ -40,12 +41,21 @@ public class StorageServiceProperties {
     @JsonProperty(value = "MinuteMetrics")
     private Metrics minuteMetrics;
 
+    private static final class CorsWrapper {
+        @JacksonXmlProperty(localName = "CorsRule")
+        private final List<CorsRule> items;
+
+        @JsonCreator
+        private CorsWrapper(@JacksonXmlProperty(localName = "CorsRule") List<CorsRule> items) {
+            this.items = items;
+        }
+    }
+
     /**
      * The set of CORS rules.
      */
-    @JacksonXmlElementWrapper(localName = "Cors")
-    @JsonProperty("CorsRule")
-    private List<CorsRule> cors;
+    @JsonProperty(value = "Cors")
+    private CorsWrapper cors;
 
     /**
      * The default version to use for requests to the Blob service if an
@@ -127,7 +137,7 @@ public class StorageServiceProperties {
      * @return the cors value.
      */
     public List<CorsRule> cors() {
-        return this.cors;
+        return this.cors.items;
     }
 
     /**
@@ -137,7 +147,7 @@ public class StorageServiceProperties {
      * @return the StorageServiceProperties object itself.
      */
     public StorageServiceProperties withCors(List<CorsRule> cors) {
-        this.cors = cors;
+        this.cors = new CorsWrapper(cors);
         return this;
     }
 
