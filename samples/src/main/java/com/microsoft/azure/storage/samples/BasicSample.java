@@ -26,7 +26,6 @@ import com.microsoft.rest.v2.util.FlowableUtil;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.exceptions.Exceptions;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -114,7 +113,7 @@ public class BasicSample {
 
                 // If the error wasn't due to an HTTP 409, the error is considered unrecoverable.
                 // By propagating the exception we received, the workflow completes without performing the putBlob or getBlob.
-                throw Exceptions.propagate(throwable);
+                return Completable.error(throwable);
             }) // blobURL.putBlobAsync will be performed unless the container create fails with an unrecoverable error.
             .andThen(blobURL.putBlob(asyncStream, data.length, null, null, null))
             .flatMap(putResponse ->
