@@ -18,7 +18,7 @@ public class Highlevel {
 
         private IProgressReceiver progressReceiver;
 
-        private BlobHttpHeaders httpHeaders;
+        private BlobHTTPHeaders httpHeaders;
 
         private Metadata metadata;
 
@@ -33,7 +33,7 @@ public class Highlevel {
          *      An object that implements the {@link IProgressReceiver} interface which will be invoked periodically as
          *      bytes are sent in a PutBlock call to the BlockBlobURL.
          * @param httpHeaders
-         *      A {@link BlobHttpHeaders} to be associated with the blob when PutBlockList is called.
+         *      A {@link BlobHTTPHeaders} to be associated with the blob when PutBlockList is called.
          * @param metadata
          *      A {@link Metadata} object to be associated with the blob when PutBlockList is called.
          * @param accessConditions
@@ -42,7 +42,7 @@ public class Highlevel {
          *      A {@code int} that indicates the maximum number of blocks to upload in parallel. Must be greater than 0.
          *      The default is 5 (null=default).
          */
-        public UploadToBlockBlobOptions(IProgressReceiver progressReceiver, BlobHttpHeaders httpHeaders,
+        public UploadToBlockBlobOptions(IProgressReceiver progressReceiver, BlobHTTPHeaders httpHeaders,
                                         Metadata metadata, BlobAccessConditions accessConditions, Integer parallelism) {
             if (parallelism == null) {
                 this.parallelism = 5;
