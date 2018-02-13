@@ -36,9 +36,8 @@ public final class ServiceURL extends StorageURL {
             return new ContainerURL(StorageURL.appendToURLPath(new URL(super.storageClient.url()), containerName),
                     super.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
-            // TODO: remove
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
