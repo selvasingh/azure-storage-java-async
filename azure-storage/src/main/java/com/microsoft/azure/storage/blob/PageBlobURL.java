@@ -364,7 +364,6 @@ public final class PageBlobURL extends BlobURL {
             // We are parsing a valid url and adding a query parameter. If this fails, we can't recover.
             throw new Error(e);
         }
-
         return this.storageClient.pageBlobs().incrementalCopyWithRestResponseAsync(source,
                 null, null,
                 accessConditions.getHttpAccessConditions().getIfModifiedSince(),
