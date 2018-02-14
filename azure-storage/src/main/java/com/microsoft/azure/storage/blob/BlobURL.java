@@ -74,7 +74,8 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * Converts this BlobURL to a {@link BlockBlobURL} object.
+     * Converts this BlobURL to a {@link BlockBlobURL} object. Note that this does not change the actual type of the
+     * blob if it has already been created.
      *
      * @return
      *      A {@link BlockBlobURL} object.
@@ -89,7 +90,8 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * Converts this BlobURL to an {@link AppendBlobURL} object.
+     * Converts this BlobURL to an {@link AppendBlobURL} object. Note that this does not change the actual type of the
+     * blob if it has already been created.
      *
      * @return
      *      An {@link AppendBlobURL} object.
@@ -104,7 +106,8 @@ public class BlobURL extends StorageURL {
     }
 
     /**
-     * Converts this BlobURL to a {@link PageBlobURL} object.
+     * Converts this BlobURL to a {@link PageBlobURL} object. Note that this does not change the actual type of the blob
+     * if it has already been created.
      *
      * @return
      *      A {@link PageBlobURL} object.
@@ -182,7 +185,7 @@ public class BlobURL extends StorageURL {
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/get-blob.
      *
      * @param range
-     *      A {@code Long} which represents the number of bytes to read or {@code null}.
+     *      A {@link BlobRange} which bytes to read.
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that represents the access conditions for the blob.
      * @param rangeGetContentMD5
@@ -262,8 +265,8 @@ public class BlobURL extends StorageURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobSetPropertiesHeaders} and a 
-     *      {@code Void} body if successful.
+     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobSetPropertiesHeaders}
+     *      and a {@code Void} body if successful.
      */
     public Single<RestResponse<BlobSetPropertiesHeaders, Void>> setProperties(
             BlobHTTPHeaders headers, BlobAccessConditions accessConditions) {
@@ -292,8 +295,8 @@ public class BlobURL extends StorageURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobSetMetadataHeaders} and a
-     *      {@code Void} body if successful.
+     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobSetMetadataHeaders}
+     *      and a {@code Void} body if successful.
      */
     public Single<RestResponse<BlobSetMetadataHeaders, Void>> setMetadata(
             Metadata metadata, BlobAccessConditions accessConditions) {
@@ -318,8 +321,8 @@ public class BlobURL extends StorageURL {
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that represents the access conditions for the blob.
      * @return
-     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobTakeSnapshotHeaders} and a
-     *      {@code Void} body if successful.
+     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobTakeSnapshotHeaders}
+     *      and a {@code Void} body if successful.
      */
     public Single<RestResponse<BlobTakeSnapshotHeaders, Void>> createSnapshot(
             Metadata metadata, BlobAccessConditions accessConditions) {
@@ -378,7 +381,8 @@ public class BlobURL extends StorageURL {
      * @param httpAccessConditions
      *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobLeaseHeaders} and a {@code Void} body if successful.
+     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobLeaseHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<BlobLeaseHeaders, Void>> renewLease(
             String leaseID, HTTPAccessConditions httpAccessConditions) {
@@ -401,7 +405,8 @@ public class BlobURL extends StorageURL {
      * @param httpAccessConditions
      *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobLeaseHeaders} and a {@code Void} body if successful.
+     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobLeaseHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<BlobLeaseHeaders, Void>> releaseLease(
             String leaseID, HTTPAccessConditions httpAccessConditions) {
@@ -428,7 +433,8 @@ public class BlobURL extends StorageURL {
      * @param httpAccessConditions
      *      A {@link HTTPAccessConditions} object that represents HTTP access conditions.
      * @return
-     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobLeaseHeaders} and a {@code Void} body if successful.
+     *      The {@link Single} which emits a {@link RestResponse} object containing the {@link BlobLeaseHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<BlobLeaseHeaders, Void>> breakLease(
             Integer breakPeriodInSeconds, HTTPAccessConditions httpAccessConditions) {

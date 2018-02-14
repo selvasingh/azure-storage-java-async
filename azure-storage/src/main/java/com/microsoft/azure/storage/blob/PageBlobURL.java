@@ -74,7 +74,7 @@ public final class PageBlobURL extends BlobURL {
      * Creates a new {@link PageBlobURL} with the given snapshot.
      *
      * @param snapshot
-     *      A {@code java.util.Date} to set.
+     *      A {@code String} of the snapshot id.
      * @return
      *      A {@link PageBlobURL} object with the given pipeline.
      */
@@ -85,7 +85,7 @@ public final class PageBlobURL extends BlobURL {
     }
 
     /**
-     * Create creates a page blob of the specified length. Call PutPage to upload data data to a page blob.
+     * Creates a page blob of the specified length. Call PutPage to upload data data to a page blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-blob.
      *
      * @param size
@@ -136,19 +136,19 @@ public final class PageBlobURL extends BlobURL {
     }
 
     /**
-     * PutPages writes 1 or more pages to the page blob. The start and end offsets must be a multiple of 512.
+     * Writes 1 or more pages to the page blob. The start and end offsets must be a multiple of 512.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-page.
      *
      * @param pageRange
      *      A {@link PageRange} object. Specifies the range of bytes to be written as a page.
      * @param body
-     *      A {@code Flowable&lt;byte[]&gt;} that contains the content of the page.
+     *      A {@link Flowable} of {@link ByteBuffer} that contains the content of the page.
      * @param accessConditions
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
      *      A {@link Single} which emits a {@link RestResponse} containing the {@link PageBlobPutPageHeaders} and a
-     *      [@code Void} body if successful.
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<PageBlobPutPageHeaders, Void>> putPages(
             PageRange pageRange, Flowable<ByteBuffer> body, BlobAccessConditions accessConditions) {
@@ -173,7 +173,7 @@ public final class PageBlobURL extends BlobURL {
     }
 
     /**
-     * ClearPages frees the specified pages from the page blob.
+     * Frees the specified pages from the page blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/put-page.
      *
      * @param pageRange
@@ -207,7 +207,7 @@ public final class PageBlobURL extends BlobURL {
     }
 
     /**
-     * GetPageRanges returns the list of valid page ranges for a page blob or snapshot of a page blob.
+     * Returns the list of valid page ranges for a page blob or snapshot of a page blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges.
      *
      * @param blobRange
@@ -217,8 +217,8 @@ public final class PageBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      A {@link Single} which emits a {@link RestResponse} containing the {@link PageBlobGetPageRangesHeaders} and a
-     *      {@link PageList} body if successful.
+     *      A {@link Single} which emits a {@link RestResponse} containing the {@link PageBlobGetPageRangesHeaders} and
+     *      a {@link PageList} body if successful.
      */
     public Single<RestResponse<PageBlobGetPageRangesHeaders, PageList>> getPageRanges(
             BlobRange blobRange, BlobAccessConditions accessConditions) {
@@ -235,13 +235,13 @@ public final class PageBlobURL extends BlobURL {
     }
 
     /**
-     * GetPageRangesDiff gets the collection of page ranges that differ between a specified snapshot and this page blob.
+     * Gets the collection of page ranges that differ between a specified snapshot and this page blob.
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/get-page-ranges.
      *
      * @param blobRange
      *     A {@link PageRange} object. Specifies the range of bytes to be written as a page.
      * @param prevSnapshot
-     *     A {@code org.joda.time.DateTime} specifies that the response will contain only pages that were changed
+     *     A {@code String} specifies that the response will contain only pages that were changed
      *     between target blob and previous snapshot. Changed pages include both updated and cleared pages. The target
      *     blob may be a snapshot, as long as the snapshot specified by prevsnapshot is the older of the two.
      * @param accessConditions
@@ -266,7 +266,7 @@ public final class PageBlobURL extends BlobURL {
     }
 
     /**
-     * Resize resizes the page blob to the specified size (which must be a multiple of 512).
+     * Resizes the page blob to the specified size (which must be a multiple of 512).
      * For more information, see https://docs.microsoft.com/rest/api/storageservices/set-blob-properties.
      *
      * @param size
@@ -299,7 +299,7 @@ public final class PageBlobURL extends BlobURL {
     }
 
     /**
-     * SetSequenceNumber sets the page blob's sequence number.
+     * Sets the page blob's sequence number.
      *
      * @param action
      *      Indicates how the service should modify the blob's sequence number.
@@ -342,7 +342,7 @@ public final class PageBlobURL extends BlobURL {
     }
 
     /**
-     * StartIncrementalCopy begins an operation to start an incremental copy from one page blob's snapshot to this page
+     * Begins an operation to start an incremental copy from one page blob's snapshot to this page
      * blob. The snapshot is copied such that only the differential changes between the previously copied snapshot are
      * transferred to the destination. The copied snapshots are complete copies of the original snapshot and can be read
      * or copied from as usual. For more information, see

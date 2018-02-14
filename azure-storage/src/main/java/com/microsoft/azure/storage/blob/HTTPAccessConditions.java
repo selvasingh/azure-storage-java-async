@@ -19,10 +19,13 @@ import org.joda.time.DateTime;
 import java.util.Date;
 
 /**
- * HTTP Access Conditions
+ * HTTP Access Conditions.
  */
 public final class HTTPAccessConditions {
 
+    /**
+     * An object representing no access conditions.
+     */
     public static final HTTPAccessConditions NONE = new HTTPAccessConditions(null, null,
             null, null);
 
@@ -55,18 +58,35 @@ public final class HTTPAccessConditions {
     }
 
     // TODO: Change to java.util.Date and remove null check
+
+    /**
+     * @return
+     *      If not null, operations will only succeed if the object has been modified since this time.
+     */
     public DateTime getIfModifiedSince() {
         return ifModifiedSince == null ? null : new DateTime(ifModifiedSince);
     }
 
+    /**
+     * @return
+     *      If not null, operations will only succeed if the object has been unmodified since this time.
+     */
     public DateTime getIfUnmodifiedSince() {
         return ifUnmodifiedSince == null ? null : new DateTime(ifUnmodifiedSince);
     }
 
+    /**
+     * @return
+     *      If not null, operations will only succeed if the object's etag matches this value.
+     */
     public ETag getIfMatch() {
         return ifMatch;
     }
 
+    /**
+     * @return
+     *      If not null, operations will only succeed if the object's etag does not match this value.
+     */
     public ETag getIfNoneMatch() {
         return ifNoneMatch;
     }

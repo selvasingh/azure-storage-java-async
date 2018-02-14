@@ -19,6 +19,9 @@ package com.microsoft.azure.storage.blob;
  */
 public final class ContainerAccessConditions {
 
+    /**
+     * An object representing no access conditions.
+     */
     public static final ContainerAccessConditions NONE = new ContainerAccessConditions(null,
             null);
 

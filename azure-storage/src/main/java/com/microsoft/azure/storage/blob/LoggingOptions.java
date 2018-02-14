@@ -18,10 +18,13 @@ import java.util.logging.Level;
 // TODO: Do we want to be using the HttpPipelineLoggingLevel here instead of that java.util?
 
 /**
- * Logging options
+ * Options to configure the {@link LoggingFactory}.
  */
 public final class LoggingOptions {
 
+    /**
+     * An object representing default logging options. {@code MinDurationToLogSlowRequestsInMs} is set to 3000;
+     */
     public static final LoggingOptions DEFAULT = new LoggingOptions(3000);
 
     private final long minDurationToLogSlowRequestsInMs;

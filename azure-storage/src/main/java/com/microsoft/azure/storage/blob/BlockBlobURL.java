@@ -79,7 +79,7 @@ public final class BlockBlobURL extends BlobURL {
      * Creates a new {@link BlockBlobURL} with the given snapshot.
      *
      * @param snapshot
-     *      A {@code java.util.Date} to set.
+     *      A {@code String} of the snapshot identifier.
      * @return
      *      A {@link BlockBlobURL} object with the given pipeline.
      */
@@ -90,7 +90,7 @@ public final class BlockBlobURL extends BlobURL {
     }
 
     /**
-     * PutBlob creates a new block blob, or updates the content of an existing block blob.
+     * Creates a new block blob, or updates the content of an existing block blob.
      * Updating an existing block blob overwrites any existing metadata on the blob. Partial updates are not
      * supported with PutBlob; the content of the existing blob is overwritten with the new content. To
      * perform a partial update of a block blob's, use PutBlock and PutBlockList.
@@ -131,13 +131,13 @@ public final class BlockBlobURL extends BlobURL {
     }
 
     /**
-     * PutBlock uploads the specified block to the block blob's "staging area" to be later commited by a call to
+     * Uploads the specified block to the block blob's "staging area" to be later commited by a call to
      * PutBlockList. For more information, see https://docs.microsoft.com/rest/api/storageservices/put-block.
      *
      * @param base64BlockID
      *      A Base64 encoded {@code String} that specifies the ID for this block.
      * @param data
-     *      A {@code Flowable&lt;byte[]&gt;} which contains the data to write to the block.
+     *      A {@link Flowable} of {@link ByteBuffer} which contains the data to write to the block.
      * @param length
      *      A {@code long} indicating how long the data is.
      * @param leaseAccessConditions
@@ -155,15 +155,16 @@ public final class BlockBlobURL extends BlobURL {
     }
 
     /**
-     * GetBlockList returns the list of blocks that have been uploaded as part of a block blob using the specified block
+     * Returns the list of blocks that have been uploaded as part of a block blob using the specified block
      * list filter. For more information, see https://docs.microsoft.com/rest/api/storageservices/get-block-list.
+     *
      * @param listType
      *      A {@link BlockListType} value specifies which type of blocks to return.
      * @param leaseAccessConditions
      *      A {@link LeaseAccessConditions} object that specifies the lease on the blob if there is one.
      * @return
-     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlockBlobGetBlockListHeaders} and a
-     *      {@link BlockList} body if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlockBlobGetBlockListHeaders}
+     *      and a {@link BlockList} body if successful.
      */
     public Single<RestResponse<BlockBlobGetBlockListHeaders, BlockList>> getBlockList(
             BlockListType listType, LeaseAccessConditions leaseAccessConditions) {
@@ -173,7 +174,7 @@ public final class BlockBlobURL extends BlobURL {
     }
 
     /**
-     * PutBlockList writes a blob by specifying the list of block IDs that make up the blob.
+     * Writes a blob by specifying the list of block IDs that make up the blob.
      * In order to be written as part of a blob, a block must have been successfully written
      * to the server in a prior PutBlock operation. You can call PutBlockList to update a blob
      * by uploading only those blocks that have changed, then committing the new and existing
@@ -190,8 +191,8 @@ public final class BlockBlobURL extends BlobURL {
      *      A {@link BlobAccessConditions} object that specifies under which conditions the operation should
      *      complete.
      * @return
-     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlockBlobPutBlockListHeaders} and a
-     *      {@code Void} body if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link BlockBlobPutBlockListHeaders}
+     *      and a {@code Void} body if successful.
      */
     // TODO: Add Content-Length to swagger once the modeler knows to hide (or whatever solution).
     public Single<RestResponse<BlockBlobPutBlockListHeaders, Void>> putBlockList(

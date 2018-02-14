@@ -23,7 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Represents a URL to an Azure Storage Blob Service
+ * Represents a URL to an Azure Storage Blob Service.
  */
 public final class ServiceURL extends StorageURL {
 
@@ -58,7 +58,7 @@ public final class ServiceURL extends StorageURL {
     }
 
     /**
-     * ListContainers returns a single segment of containers starting from the specified Marker.
+     * Returns a single segment of containers starting from the specified Marker.
      * Use an empty marker to start enumeration from the beginning. Container names are returned in lexicographic order.
      * After getting a segment, process it, and then call ListContainers again (passing the the previously-returned
      * Marker) to get the next segment. For more information, see
@@ -81,7 +81,7 @@ public final class ServiceURL extends StorageURL {
     }
 
     /**
-     * GetProperties gets the properties of a storage account’s Blob service. For more information, see:
+     * Gets the properties of a storage account’s Blob service. For more information, see:
      * https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties.
      *
      * @return
@@ -93,7 +93,7 @@ public final class ServiceURL extends StorageURL {
     }
 
     /**
-     * SetProperties sets properties for a storage account's Blob service endpoint. For more information, see:
+     * Sets properties for a storage account's Blob service endpoint. For more information, see:
      * https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties.
      *
      * @param properties
@@ -109,7 +109,7 @@ public final class ServiceURL extends StorageURL {
     }
 
     /**
-     * GetStats retrieves statistics related to replication for the Blob service. It is only available on the secondary
+     * Retrieves statistics related to replication for the Blob service. It is only available on the secondary
      * location endpoint when read-access geo-redundant replication is enabled for the storage account. For more
      * information, see: https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats.
      *

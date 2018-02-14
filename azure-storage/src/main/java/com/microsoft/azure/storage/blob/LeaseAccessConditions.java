@@ -15,16 +15,19 @@
 package com.microsoft.azure.storage.blob;
 
 /**
- * Access conditions specific to leasing
+ * Access conditions specific to leases on storage objects.
  */
 public final class LeaseAccessConditions {
 
+    /**
+     * An object representing no lease access conditions.
+     */
     public static final LeaseAccessConditions NONE = new LeaseAccessConditions(null);
 
     private final String leaseId;
 
     /**
-     * Creates a {@link ContainerAccessConditions} object.
+     * Creates a {@link LeaseAccessConditions} object.
      *
      * @param leaseId
      *      A {@code String} representing the lease access conditions for a container or blob.
@@ -47,6 +50,10 @@ public final class LeaseAccessConditions {
         return this.leaseId.equals(obj);
     }
 
+    /**
+     * @return
+     *      The id of the lease.
+     */
     public String getLeaseId() {
         return this.leaseId;
     }

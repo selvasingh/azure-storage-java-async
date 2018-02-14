@@ -95,6 +95,9 @@ public final class ServiceSASSignatureValues {
      */
     public String contentType;
 
+    /**
+     * Creates an object with empty values for all fields.
+     */
     public ServiceSASSignatureValues() { }
 
     /**
