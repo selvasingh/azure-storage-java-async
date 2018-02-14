@@ -368,11 +368,40 @@ public class BlobStorageAPITests {
                             byteBuffers.add(byteBuffer);
                         }
                     }).blockingGet();
-            ByteBuffer receivedTruncated = received.get(0).duplicate();
+            ByteBuffer receivedTruncated = ByteBuffer.allocate(1024*10);
+            receivedTruncated.position(0);
+            receivedTruncated.put(received.get(0).duplicate());
+            int i = 1;
+            int total = received.get(0).remaining();
+            while (total < 1024) {
+                receivedTruncated.put(received.get(i));
+                total += received.get(i).remaining();
+                i++;
+            }
+            receivedTruncated.position(0);
             receivedTruncated.limit(1024);
             assertEquals(receivedTruncated.compareTo(buffers.get(0)), 0);
-            receivedTruncated = received.get(received.size()-1).duplicate();
-            receivedTruncated.position(1024*9-received.get(received.size()-2).remaining()); // 4 bytes per int * 1024 int * 9 blocks to get the start of the last block
+            total = 0;
+            i=0;
+            while (total < 1024) {
+                total += received.get(received.size()-i-1).remaining();
+                i++;
+            }
+            receivedTruncated = ByteBuffer.allocate(1024*10);
+            receivedTruncated.position(0);
+            receivedTruncated.put(received.get(received.size()-i).duplicate());
+            for(int j = i-1; j>=1; j--){
+                receivedTruncated = receivedTruncated.put(received.get(received.size()-j));
+            }
+            receivedTruncated.position(total-1024);
+            receivedTruncated.limit(total);
+            //receivedTruncated.position(0);
+            //receivedTruncated.position(1024*9-received.get(received.size()-2).remaining()); // 1024 int * 9 blocks to get the start of the last block
+
+            /*while (receivedTruncated.remaining() < 1024) {
+                receivedTruncated.put(received.get(received.size()-1-i).array(), 0);
+                receivedTruncated.put
+            }*/
             assertEquals(receivedTruncated.compareTo(buffers.get(9)), 0);
             // TODO: Test different size buffers. Variable sizes, etc.
         }

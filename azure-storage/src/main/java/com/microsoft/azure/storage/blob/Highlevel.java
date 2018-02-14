@@ -8,6 +8,7 @@ import io.reactivex.*;
 import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.Function;
 
+import javax.xml.bind.DatatypeConverter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -124,7 +125,8 @@ public class Highlevel {
 
                         // TODO: progress
 
-                        final String blockId = Base64.encode(UUID.randomUUID().toString().getBytes());
+                        final String blockId = DatatypeConverter.printBase64Binary(
+                                UUID.randomUUID().toString().getBytes());
 
                         // TODO: What happens if one of the calls fails? It seems like this single/observable
                         // will emit an error, which will halt the collecting into a list. Will the list still
@@ -174,7 +176,7 @@ public class Highlevel {
                  */
                 .flatMap(new Function<ArrayList<String>, SingleSource<RestResponse<BlockBlobPutBlockListHeaders, Void>>>() {
                     public SingleSource<RestResponse<BlockBlobPutBlockListHeaders, Void>> apply(ArrayList<String> ids) throws Exception {
-                        return blockBlobURL.putBlockList(ids, options.metadata, options.httpHeaders,
+                        return blockBlobURL.putBlockList(ids, options.httpHeaders, options.metadata,
                                 options.accessConditions);
                     }
                 })
