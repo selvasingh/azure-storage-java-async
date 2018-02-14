@@ -374,8 +374,8 @@ public class BlobStorageAPITests {
             int i = 1;
             int total = received.get(0).remaining();
             while (total < 1024) {
-                receivedTruncated.put(received.get(i));
                 total += received.get(i).remaining();
+                receivedTruncated.put(received.get(i));
                 i++;
             }
             receivedTruncated.position(0);
@@ -395,13 +395,6 @@ public class BlobStorageAPITests {
             }
             receivedTruncated.position(total-1024);
             receivedTruncated.limit(total);
-            //receivedTruncated.position(0);
-            //receivedTruncated.position(1024*9-received.get(received.size()-2).remaining()); // 1024 int * 9 blocks to get the start of the last block
-
-            /*while (receivedTruncated.remaining() < 1024) {
-                receivedTruncated.put(received.get(received.size()-1-i).array(), 0);
-                receivedTruncated.put
-            }*/
             assertEquals(receivedTruncated.compareTo(buffers.get(9)), 0);
             // TODO: Test different size buffers. Variable sizes, etc.
         }
