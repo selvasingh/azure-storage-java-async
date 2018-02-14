@@ -9,7 +9,9 @@ import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.Function;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -62,16 +64,43 @@ public class Highlevel {
     }
 
     /**
-     * Uploads an iterable of ByteBuffers to a block blob.
+     * Uploads the contents of a file to a block blob.
      *
-     * @param data
-     *      A {@code Iterable&lt;ByteBuffer&gt;} that contains the data to upload.
+     * @param file
+     *      The file to upload.
      * @param blockBlobURL
      *      A {@link BlockBlobURL} that points to the blob to which the data should be uploaded.
      * @param options
      *      A {@link UploadToBlockBlobOptions} object to configure the upload behavior.
      * @return
-     *      A {@code Single} that will return a {@link CommonRestResponse} if successful.
+     *      A {@link Single} that will return a {@link CommonRestResponse} if successful.
+     */
+    public static Single<CommonRestResponse> uploadFileToBlockBlob(
+            FileChannel file, BlockBlobURL blockBlobURL, int blockLength, UploadToBlockBlobOptions options) {
+        if (blockLength > BlockBlobURL.MAX_PUT_BLOCK_BYTES) {
+            throw new IllegalArgumentException(SR.INVALID_BLOCK_SIZE);
+        }
+        try {
+            for (long position = 0; position < file.size(); position += blockLength) {
+                file.map(FileChannel.MapMode.READ_ONLY, position, blockLength);
+            }
+        }
+        catch (IOException e) {
+            throw n
+        }
+    }
+
+    /**
+     * Uploads an iterable of ByteBuffers to a block blob.
+     *
+     * @param data
+     *      A {@code Iterable} of {@link ByteBuffer} that contains the data to upload.
+     * @param blockBlobURL
+     *      A {@link BlockBlobURL} that points to the blob to which the data should be uploaded.
+     * @param options
+     *      A {@link UploadToBlockBlobOptions} object to configure the upload behavior.
+     * @return
+     *      A {@link Single} that will return a {@link CommonRestResponse} if successful.
      */
     public static Single<CommonRestResponse> uploadByteBuffersToBlockBlob(
             final Iterable<ByteBuffer> data, final BlockBlobURL blockBlobURL,
@@ -85,7 +114,7 @@ public class Highlevel {
         }
 
         // If the size can fit in 1 putBlob call, do it this way.
-        if (numBlocks == 1 && size <= Constants.MAX_PUT_BLOB_BYTES) {
+        if (numBlocks == 1 && size <= BlockBlobURL.MAX_PUT_BLOB_BYTES) {
             if (options.progressReceiver != null) {
                 // TODO: Wrap in a progress stream once progress is written.
             }
@@ -103,7 +132,7 @@ public class Highlevel {
                     });
         }
 
-        if (numBlocks > Constants.MAX_BLOCKS) {
+        if (numBlocks > BlockBlobURL.MAX_BLOCKS) {
             throw new IllegalArgumentException(SR.BLOB_OVER_MAX_BLOCK_LIMIT);
         }
 
