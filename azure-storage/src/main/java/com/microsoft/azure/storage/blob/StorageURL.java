@@ -30,6 +30,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Represents a URL to a Azure storage object.
+ */
 public abstract class StorageURL {
 
     protected final StorageClientImpl storageClient;
@@ -51,6 +54,10 @@ public abstract class StorageURL {
         return this.storageClient.url();
     }
 
+    /**
+     * @return
+     *      The underlying url to the resource.
+     */
     public URL toURL() {
         try {
             return new URL(this.storageClient.url());
@@ -82,6 +89,17 @@ public abstract class StorageURL {
     }
 
     // TODO: Move this? Not discoverable.
+
+    /**
+     * Creates an pipeline to process the HTTP requests and Responses.
+     *
+     * @param credentials
+     *      The credentials the pipeline will use to authenticate the requests.
+     * @param pipelineOptions
+     *      Configurations for each policy in the pipeline.
+     * @return
+     *      The pipeline.
+     */
     public static HttpPipeline createPipeline(ICredentials credentials, PipelineOptions pipelineOptions) {
         /*
         PipelineOptions is mutable, but its fields refer to immutable objects. This method can pass the fields to other

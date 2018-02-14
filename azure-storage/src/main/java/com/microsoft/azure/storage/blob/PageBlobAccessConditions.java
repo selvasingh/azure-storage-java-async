@@ -16,6 +16,9 @@ package com.microsoft.azure.storage.blob;
 
 public final class PageBlobAccessConditions {
 
+    /**
+     * An object representing no access conditions.
+     */
     public static final PageBlobAccessConditions NONE = new PageBlobAccessConditions(null,
             null, null);
 

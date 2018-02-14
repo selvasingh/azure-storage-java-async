@@ -23,7 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Represents a URL to an Azure Storage Blob Service
+ * Represents a URL to an Azure Storage Blob Service.
  */
 public final class ServiceURL extends StorageURL {
 
@@ -36,9 +36,8 @@ public final class ServiceURL extends StorageURL {
             return new ContainerURL(StorageURL.appendToURLPath(new URL(super.storageClient.url()), containerName),
                     super.storageClient.httpPipeline());
         } catch (MalformedURLException e) {
-            // TODO: remove
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -59,7 +58,7 @@ public final class ServiceURL extends StorageURL {
     }
 
     /**
-     * ListContainers returns a single segment of containers starting from the specified Marker.
+     * Returns a single segment of containers starting from the specified Marker.
      * Use an empty marker to start enumeration from the beginning. Container names are returned in lexicographic order.
      * After getting a segment, process it, and then call ListContainers again (passing the the previously-returned
      * Marker) to get the next segment. For more information, see
@@ -71,8 +70,8 @@ public final class ServiceURL extends StorageURL {
      * @param options
      *      A {@link ListContainersOptions} which specifies what data should be returned by the service.
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ServiceListContainersHeaders, ListContainersResponse&gt;&gt;} object if
-     *      successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ServiceListContainersHeaders} and a
+     *      {@link ListContainersResponse} body  if successful.
      */
     public Single<RestResponse<ServiceListContainersHeaders, ListContainersResponse>> listContainers(
             String marker, ListContainersOptions options) {
@@ -82,25 +81,26 @@ public final class ServiceURL extends StorageURL {
     }
 
     /**
-     * GetProperties gets the properties of a storage account’s Blob service. For more information, see:
+     * Gets the properties of a storage account’s Blob service. For more information, see:
      * https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-properties.
      *
      * @return
-     *      The {@link Single&lt;RestResponse&lt;ServiceGetPropertiesHeaders, StorageServiceProperties&gt;&gt;} object
-     *      if successful.
+     *      The {@link Single} which emits a {@link RestResponse} containing the {@link ServiceGetPropertiesHeaders} and a
+     *      {@link StorageServiceProperties} body if successful.
      */
     public Single<RestResponse<ServiceGetPropertiesHeaders, StorageServiceProperties>> getProperties() {
         return this.storageClient.services().getPropertiesWithRestResponseAsync(null, null);
     }
 
     /**
-     * SetProperties sets properties for a storage account's Blob service endpoint. For more information, see:
+     * Sets properties for a storage account's Blob service endpoint. For more information, see:
      * https://docs.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties.
      *
      * @param properties
      *      A {@link StorageServiceProperties} object containing the configurations for the service.
      * @return
-     *      A {@link Single&lt;RestResponse&lt;ServiceSetPropertiesHeaders, Void&gt;&gt;} object if successful.
+     *      A {@link Single} which emits a {@link RestResponse} containing the {@link ServiceSetPropertiesHeaders} and a
+     *      {@code Void} body if successful.
      */
     public Single<RestResponse<ServiceSetPropertiesHeaders, Void>> setProperties(
             StorageServiceProperties properties) {
@@ -109,13 +109,13 @@ public final class ServiceURL extends StorageURL {
     }
 
     /**
-     * GetStats retrieves statistics related to replication for the Blob service. It is only available on the secondary
+     * Retrieves statistics related to replication for the Blob service. It is only available on the secondary
      * location endpoint when read-access geo-redundant replication is enabled for the storage account. For more
      * information, see: https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats.
      *
      * @return
-     *      A {@link Single&lt;RestResponse&lt;ServiceGetStatsHeaders, StorageServiceStats&gt;&gt;} object if
-     *      successful.
+     *      A {@link Single} which emits a {@link RestResponse} containing the {@link ServiceGetStatsHeaders} and a
+     *      {@link StorageServiceStats} body if xssuccessful.
      */
     public Single<RestResponse<ServiceGetStatsHeaders, StorageServiceStats>> getStats() {
         return this.storageClient.services().getStatsWithRestResponseAsync(null, null);

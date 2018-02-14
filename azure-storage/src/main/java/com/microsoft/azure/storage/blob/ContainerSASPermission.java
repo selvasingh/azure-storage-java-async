@@ -49,11 +49,15 @@ public final class ContainerSASPermission {
      */
     public boolean list;
 
+    /**
+     * Initializes an {@code ContainerSASPermssion} object with all fields set to false.
+     */
     public ContainerSASPermission() {}
 
 
     /**
-     * Converts the given permissions to a {@code String}.
+     * Converts the given permissions to a {@code String}. Using this method will guarantee the permissions are in an
+     * order accepted by the service.
      *
      * @return
      *      A {@code String} which represents the {@code ContainerSASPermission}.
@@ -92,7 +96,8 @@ public final class ContainerSASPermission {
     }
 
     /**
-     * Creates an {@code ContainerSASPermission} from the specified permissions string.
+     * Creates an {@code ContainerSASPermission} from the specified permissions string. This method will throw an
+     * {@code IllegalArgumentException} if it encounters a character that does not correspond to a valid permission.
      *
      * @param permString
      *      A {@code String} which represents the {@code ContainerSASPermission}.

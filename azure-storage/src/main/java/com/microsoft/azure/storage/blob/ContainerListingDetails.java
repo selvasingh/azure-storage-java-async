@@ -21,6 +21,9 @@ import com.microsoft.azure.storage.models.ListContainersIncludeType;
  */
 public final class ContainerListingDetails {
 
+    /**
+     * An object indicating that no extra details should be returned.
+     */
     public static final ContainerListingDetails NONE = new ContainerListingDetails(false);
 
     private final boolean metadata;

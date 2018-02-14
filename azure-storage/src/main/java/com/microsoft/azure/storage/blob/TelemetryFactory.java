@@ -23,6 +23,9 @@ import io.reactivex.Single;
 
 import java.util.Locale;
 
+/**
+ * Used to add telemetry to outgoing HTTP requests.
+ */
 public final class TelemetryFactory implements RequestPolicyFactory {
 
     private final String userAgent;
