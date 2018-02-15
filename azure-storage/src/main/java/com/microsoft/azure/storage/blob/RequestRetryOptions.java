@@ -21,6 +21,10 @@ import java.util.concurrent.TimeUnit;
  */
 public final class RequestRetryOptions {
 
+    /**
+     * An object representing default retry values: Exponential backoff, maxTries=4, tryTimeout=30, retryDelayInMs=4,
+     * maxRetryDelayInMs=120, secondayHost=null.
+     */
     public static final RequestRetryOptions DEFAULT = new RequestRetryOptions(RetryPolicyType.EXPONENTIAL, 0,
             0,null, null, null);
 
@@ -46,8 +50,8 @@ public final class RequestRetryOptions {
      *      A {@link RetryPolicyType} specifying the type of retry pattern to use.
      * @param maxTries
      *      Specifies the maximum number of attempts an operation will be tried before producing an error
-     *      (0=default). A value of {@code null} means that you accept our default policy. A value of 1 means 1 try and no
-     *      retries.
+     *      (0=default). A value of {@code null} means that you accept our default policy. A value of 1 means 1 try and
+     *      no retries.
      * @param tryTimeout
      *      Indicates the maximum time allowed for any single try of an HTTP request.
      *      A value of {@code null} means that you accept our default timeout. NOTE: When transferring large amounts
@@ -59,13 +63,12 @@ public final class RequestRetryOptions {
      *      The delay increases (exponentially or linearly) with each retry up to a maximum specified by
      *      MaxRetryDelay. If you specify 0, then you must also specify 0 for MaxRetryDelay.
      * @param maxRetryDelayInMs
-     *      MaxRetryDelay specifies the maximum delay allowed before retrying an operation (0=default).
+     *      Specifies the maximum delay allowed before retrying an operation (0=default).
      *      If you specify 0, then you must also specify 0 for RetryDelay.
      * @param secondaryHost
-     *      RetryReadsFromSecondaryHost specifies whether the retry policy should retry a read operation against another
-     *      host. If RetryReadsFromSecondaryHost is {@code null} (the default) then operations are not retried against another
-     *      host. NOTE: Before setting this field, make sure you understand the issues around reading stale &
-     *      potentially-inconsistent data at this webpage:
+     *      If a secondaryHost is specified, retries will be tried against this host. If secondaryHost is {@code null}
+     *      (the default) then operations are not retried against another host. NOTE: Before setting this field, make
+     *      sure you understand the issues around reading stale and potentially-inconsistent data at this webpage:
      *      https://docs.microsoft.com/en-us/azure/storage/common/storage-designing-ha-apps-with-ragrs
      */
     public RequestRetryOptions(RetryPolicyType retryPolicyType, int maxTries, int tryTimeout,
@@ -121,7 +124,7 @@ public final class RequestRetryOptions {
 
     /**
      * @return
-     *      TryTimeout indicates the maximum time in seconds allowed for any single try of an HTTP request.
+     *      tryTimeout indicates the maximum time in seconds allowed for any single try of an HTTP request.
      *      A value of zero means that you accept our default timeout. NOTE: When transferring large amounts
      *      of data, the default TryTimeout will probably not be sufficient. You should override this value
      *      based on the bandwidth available to the host machine and proximity to the Storage service. A good
@@ -133,10 +136,9 @@ public final class RequestRetryOptions {
 
     /**
      * @return
-     *      RetryReadsFromSecondaryHost specifies whether the retry policy should retry a read operation against another
-     *      host. If RetryReadsFromSecondaryHost is {@code null} (the default) then operations are not retried against another
-     *      host. NOTE: Before setting this field, make sure you understand the issues around reading stale &
-     *      potentially-inconsistent data at this webpage:
+     *      If a secondaryHost is specified, retries will be tried against this host. If secondaryHost is {@code null}
+     *      (the default) then operations are not retried against another host. NOTE: Before setting this field, make
+     *      sure you understand the issues around reading stale and potentially-inconsistent data at this webpage:
      *      https://docs.microsoft.com/en-us/azure/storage/common/storage-designing-ha-apps-with-ragrs
      */
     public String getSecondaryHost() {

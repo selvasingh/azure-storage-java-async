@@ -16,6 +16,9 @@ package com.microsoft.azure.storage.blob;
 
 import java.util.Locale;
 
+/**
+ * A representation of a range of bytes to retrieve from a blob.
+ */
 public final class BlobRange {
 
     /**
@@ -28,7 +31,7 @@ public final class BlobRange {
     private final long count;
 
     /**
-     * A {@code BlobRange} object represents a range on a blob to be retrieved.
+     * A {@code BlobRange} object.
      *
      * @param offset
      *      A {@code long} that indicates the start of the range.
@@ -63,6 +66,10 @@ public final class BlobRange {
     }
 
     @Override
+    /**
+     * @returns
+     *      A {@code String} compliant with the format of the Azure Storage x-ms-range and Range headers.
+     */
     public String toString() {
 
         if (count != 0) {

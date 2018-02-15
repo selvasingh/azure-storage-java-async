@@ -24,19 +24,19 @@ public final class IPRange {
     public static final IPRange DEFAULT = new IPRange();
 
     /**
-     * A {@link String} representing the minimum IP address of the range.
+     * A {@link Inet4Address} representing the minimum IP address of the range.
      */
     public Inet4Address ipMin;
 
     /**
-     * A {@link String} representing the maximum IP address of the range.
+     * A {@link Inet4Address} representing the maximum IP address of the range.
      */
     public Inet4Address ipMax;
 
     public IPRange() { }
 
     /**
-     * Output the single IP address or range of IP addresses.
+     * Output the single IP address or range of IP addresses for.
      *
      * @return
      *      The single IP address or range of IP addresses formatted as a {@code String}.

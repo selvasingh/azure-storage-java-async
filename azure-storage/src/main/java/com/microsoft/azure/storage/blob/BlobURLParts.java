@@ -67,12 +67,15 @@ public final class BlobURLParts {
     public Map<String, String[]> unparsedParameters;
 
 
+    /**
+     * Initializes a BlobURLParts object with all fields set to null, except unparsedParameters, which is an empty map.
+     */
     public BlobURLParts() {
         unparsedParameters = new HashMap<>();
     }
 
     /**
-     * Converts the blob URL parts to {@code String} representing a URL.
+     * Converts the blob URL parts to a {@link URL}.
      *
      * @return
      *      A {@code java.net.URL} to the blob resource composed of all the elements in the object.

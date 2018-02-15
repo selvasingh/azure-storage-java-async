@@ -44,7 +44,7 @@ public final class BlobSASPermission {
     public boolean delete;
 
     /**
-     * Initializes an {@code BlobSASPermission} object with all fields set to false.
+     * Initializes a {@code BlobSASPermission} object with all fields set to false.
      */
     public BlobSASPermission() {}
 
@@ -86,7 +86,7 @@ public final class BlobSASPermission {
     }
 
     /**
-     * Creates an {@code BlobSASPermission} from the specified permissions string. This method will throw an
+     * Creates a {@code BlobSASPermission} from the specified permissions string. This method will throw an
      * {@code IllegalArgumentException} if it encounters a character that does not correspond to a valid permission.
      *
      * @param permString

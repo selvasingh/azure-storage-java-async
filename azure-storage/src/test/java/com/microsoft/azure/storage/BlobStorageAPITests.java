@@ -13,6 +13,8 @@ import org.junit.Test;
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
@@ -55,7 +57,11 @@ public class BlobStorageAPITests {
                 System.getenv().get("ACCOUNT_KEY"));
 
         // Currently only the default PipelineOptions are supported.
-        HttpPipeline pipeline = StorageURL.createPipeline(creds, new PipelineOptions());
+        PipelineOptions po = new PipelineOptions();
+        HttpClient.Configuration configuration = new HttpClient.Configuration(
+                new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));
+        po.client = HttpClient.createDefault();//configuration);
+        HttpPipeline pipeline = StorageURL.createPipeline(creds, po);
 
         // Create a reference to the service.
         ServiceURL su = new ServiceURL(

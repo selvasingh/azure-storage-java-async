@@ -14,8 +14,14 @@
  */
 package com.microsoft.azure.storage.blob;
 
+/**
+ * Defines options available when calling listContainers.
+ */
 public final class ListContainersOptions {
 
+    /**
+     * An object representing the default options: no details or prefix and using the service's default for maxResults.
+     */
     public static final ListContainersOptions DEFAULT =
             new ListContainersOptions(new ContainerListingDetails(false),null, null);
 

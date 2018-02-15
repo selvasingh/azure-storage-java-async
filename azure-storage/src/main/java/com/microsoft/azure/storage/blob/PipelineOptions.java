@@ -30,27 +30,33 @@ public final class PipelineOptions {
      must not be passed to anything with a longer lifetime.
      */
 
-    // Log configures the pipeline's logging infrastructure indicating what information is logged and where.
+    /**
+     * Specifies which HttpClient to use to send the requests.
+     */
     public HttpClient client;
 
+    /**
+     * Specifies the logger for the pipeline.
+     */
     public HttpPipelineLogger logger;
 
-    // Retry configures the built-in retry policy behavior.
+    /**
+     * Configures the retry policy's behavior.
+     */
     public RequestRetryOptions requestRetryOptions = RequestRetryOptions.DEFAULT;
 
-    // configures the built-in request logging policy.
+    /**
+     * Configures the built-in request logging policy.
+     */
     public LoggingOptions loggingOptions = LoggingOptions.DEFAULT;
 
-    // Telemetry configures the built-in telemetry policy behavior.
+    /**
+     * Configures the built-in telemetry policy behavior.
+     */
     public TelemetryOptions telemetryOptions = TelemetryOptions.DEFAULT;
 
     // TODO:
     public PipelineOptions() {
-        HttpClient.Configuration configuration = new HttpClient.Configuration(
-                new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8888)));
-        // TODO: Move proxy addition to tests.
-        this.client = HttpClient.createDefault(configuration); // Pass in configuration for Fiddler support.
-
         this.logger = new HttpPipelineLogger() {
             @Override
             public HttpPipelineLogLevel minimumLogLevel() {
