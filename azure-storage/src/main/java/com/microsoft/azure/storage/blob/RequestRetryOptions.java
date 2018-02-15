@@ -110,6 +110,8 @@ public final class RequestRetryOptions {
             this.maxRetryDelayInMs = TimeUnit.SECONDS.toMillis(120);
             this.retryDelayInMs = Math.min(TimeUnit.SECONDS.toMillis(4), this.maxRetryDelayInMs);
         }
+
+        this.secondaryHost = secondaryHost;
     }
 
     /**

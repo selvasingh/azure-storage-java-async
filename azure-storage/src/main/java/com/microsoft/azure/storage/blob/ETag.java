@@ -57,6 +57,9 @@ public final class ETag {
 
     @Override
     public String toString() {
+        if (this.equals(ETag.NONE)) {
+            return null;
+        }
         return this.eTagString;
     }
 }

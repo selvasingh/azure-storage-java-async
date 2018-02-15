@@ -196,12 +196,15 @@ public class BlobURL extends StorageURL {
      */
     public Single<RestResponse<BlobGetHeaders, Flowable<ByteBuffer>>> getBlob(
             BlobRange range, BlobAccessConditions accessConditions, boolean rangeGetContentMD5) {
+
+        // TODO: Are there other places for this? Should this be in the swagger?
+        Boolean getMD5 = rangeGetContentMD5 ? rangeGetContentMD5 : null;
         range = range == null ? BlobRange.DEFAULT : range;
         accessConditions = accessConditions == null ? BlobAccessConditions.NONE : accessConditions;
 
         return this.storageClient.blobs().getWithRestResponseAsync(null, null,
                 range.toString(), accessConditions.getLeaseAccessConditions().getLeaseId(),
-                rangeGetContentMD5, accessConditions.getHttpAccessConditions().getIfModifiedSince(),
+                getMD5, accessConditions.getHttpAccessConditions().getIfModifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfUnmodifiedSince(),
                 accessConditions.getHttpAccessConditions().getIfMatch().toString(),
                 accessConditions.getHttpAccessConditions().getIfNoneMatch().toString(),
