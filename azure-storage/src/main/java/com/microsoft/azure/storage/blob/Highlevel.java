@@ -11,6 +11,7 @@ import io.reactivex.functions.Function;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -18,6 +19,13 @@ import java.util.UUID;
 public class Highlevel {
 
     public static class UploadToBlockBlobOptions {
+
+        /**
+         * An object which represents the default parallel upload options. progressReceiver=null. httpHeaders, metadata,
+         * and accessConditions are default values. parallelism=5.
+         */
+        public static final UploadToBlockBlobOptions DEFAULT = new UploadToBlockBlobOptions(null,
+                null, null, null, null);
 
         private IProgressReceiver progressReceiver;
 
@@ -64,30 +72,126 @@ public class Highlevel {
     }
 
     /**
-     * Uploads the contents of a file to a block blob.
+     * Uploads the contents of a file to a block blob in parallel, breaking it into block-size chunks if necessary.
      *
      * @param file
      *      The file to upload.
      * @param blockBlobURL
      *      A {@link BlockBlobURL} that points to the blob to which the data should be uploaded.
+     * @param blockLength
+     *      If the data must be broken up into blocks, this value determines what size those blocks will be. This will
+     *      affect the total number of service requests made. This value will be ignored if the data can be uploaded in
+     *      a single put-blob operation.
      * @param options
      *      A {@link UploadToBlockBlobOptions} object to configure the upload behavior.
      * @return
      *      A {@link Single} that will return a {@link CommonRestResponse} if successful.
      */
     public static Single<CommonRestResponse> uploadFileToBlockBlob(
-            FileChannel file, BlockBlobURL blockBlobURL, int blockLength, UploadToBlockBlobOptions options) {
-        if (blockLength > BlockBlobURL.MAX_PUT_BLOCK_BYTES) {
-            throw new IllegalArgumentException(SR.INVALID_BLOCK_SIZE);
-        }
+            final FileChannel file, final BlockBlobURL blockBlobURL, final int blockLength,
+            final UploadToBlockBlobOptions options) {
+        Utility.assertNotNull("file", file);
+        Utility.assertNotNull("blockBlobURL", blockBlobURL);
+        Utility.assertNotNull("options", options);
+        Utility.assertInBounds("blockLength", blockLength, 1, BlockBlobURL.MAX_PUT_BLOCK_BYTES);
+
         try {
-            for (long position = 0; position < file.size(); position += blockLength) {
-                file.map(FileChannel.MapMode.READ_ONLY, position, blockLength);
+            // If the size of the file can fit in a single putBlob, do it this way.
+            if (file.size() < BlockBlobURL.MAX_PUT_BLOB_BYTES) {
+                return doSingleShotUpload(file.map(FileChannel.MapMode.READ_ONLY, 0, file.size()), blockBlobURL,
+                        options);
             }
+            // Can successfully cast to an int because MaxBlockSize is an int, which this expression must be less than.
+            int numBlocks = (int)(file.size()/blockLength);
+            return Observable.range(0, numBlocks)
+                    .map(new Function<Integer, ByteBuffer>() {
+                        @Override
+                        public ByteBuffer apply(Integer i) throws Exception {
+                            /*
+                            The docs say that the result of mapping a region which is not entirely contained by the file
+                            is undefined, so we must be precise with the last block size.
+                             */
+                            int count = Math.min(blockLength, (int)(file.size()-i*blockLength));
+                            // Memory map the file to get a ByteBuffer to an in memory portion of the file.
+                            return file.map(FileChannel.MapMode.READ_ONLY, i*blockLength, count);
+                        }
+                    })
+                    // Gather all of the buffers, in order, into this list, which will become the block list.
+                    .collectInto(new ArrayList<ByteBuffer>(numBlocks),
+                            new BiConsumer<ArrayList<ByteBuffer>, ByteBuffer>() {
+                        @Override
+                        public void accept(ArrayList<ByteBuffer> blocks, ByteBuffer block) throws Exception {
+                            blocks.add(block);
+                        }
+                    })
+                    // Turn the list into a call to uploadByteBuffersToBlockBlob and return that result.
+                    .flatMap(new Function<ArrayList<ByteBuffer>, SingleSource<CommonRestResponse>>() {
+                        @Override
+                        public SingleSource<CommonRestResponse> apply(ArrayList<ByteBuffer> blocks) throws Exception {
+                            return uploadByteBuffersToBlockBlob(blocks, blockBlobURL, options);
+                        }
+                    });
         }
         catch (IOException e) {
-            throw n
+            throw new Error(e);
         }
+    }
+
+    /**
+     * Uploads a large ByteBuffer to a block blob in parallel, breaking it up into block-size chunks if necessary.
+     *
+     * @param data
+     *      The buffer to upload.
+     * @param blockBlobURL
+     *      A {@link BlockBlobURL} that points to the blob to which the data should be uploaded.
+     * @param blockLength
+     *      If the data must be broken up into blocks, this value determines what size those blocks will be. This will
+     *      affect the total number of service requests made. This value will be ignored if the data can be uploaded in
+     *      a single put-blob operation.
+     * @param options
+     *      A {@link UploadToBlockBlobOptions} object to configure the upload behavior.
+     * @return
+     *      A {@link Single} that will return a {@link CommonRestResponse} if successful.
+     */
+    public static Single<CommonRestResponse> uploadByteBufferToBlockBlob(
+            final ByteBuffer data, final BlockBlobURL blockBlobURL, final int blockLength,
+            final UploadToBlockBlobOptions options) {
+        Utility.assertNotNull("data", data);
+        Utility.assertNotNull("blockBlobURL", blockBlobURL);
+        Utility.assertNotNull("options", options);
+        Utility.assertInBounds("blockLength", blockLength, 1, BlockBlobURL.MAX_PUT_BLOCK_BYTES);
+
+        // If the size of the buffer can fit in a single putBlob, do it this way.
+        if (data.remaining() < BlockBlobURL.MAX_PUT_BLOB_BYTES) {
+            //return doSingleShotUpload(data, blockBlobURL, options);
+        }
+
+        int numBlocks = data.remaining()/blockLength;
+        return Observable.range(0, numBlocks)
+                .map(new Function<Integer, ByteBuffer>() {
+                    @Override
+                    public ByteBuffer apply(Integer i) throws Exception {
+                        int count = Math.min(blockLength, data.remaining()-i*blockLength);
+                        ByteBuffer block = data.duplicate();
+                        block.position(i*blockLength);
+                        block.limit(i*blockLength+count);
+                        return block;
+                    }
+                })
+                .collectInto(new ArrayList<ByteBuffer>(numBlocks),
+                        new BiConsumer<ArrayList<ByteBuffer>, ByteBuffer>() {
+                            @Override
+                            public void accept(ArrayList<ByteBuffer> blocks, ByteBuffer block)
+                                    throws Exception {
+                                blocks.add(block);
+                            }
+                        })
+                .flatMap(new Function<ArrayList<ByteBuffer>, SingleSource<? extends CommonRestResponse>>() {
+                    @Override
+                    public SingleSource<CommonRestResponse> apply(ArrayList<ByteBuffer> blocks) throws Exception {
+                        return uploadByteBuffersToBlockBlob(blocks, blockBlobURL, options);
+                    }
+                });
     }
 
     /**
@@ -105,6 +209,10 @@ public class Highlevel {
     public static Single<CommonRestResponse> uploadByteBuffersToBlockBlob(
             final Iterable<ByteBuffer> data, final BlockBlobURL blockBlobURL,
             final UploadToBlockBlobOptions options) {
+        Utility.assertNotNull("data", data);
+        Utility.assertNotNull("blockBlobURL", blockBlobURL);
+        Utility.assertNotNull("options", options);
+
         // Determine the size of the blob and the number of blocks
         long size = 0;
         int numBlocks = 0;
@@ -115,21 +223,7 @@ public class Highlevel {
 
         // If the size can fit in 1 putBlob call, do it this way.
         if (numBlocks == 1 && size <= BlockBlobURL.MAX_PUT_BLOB_BYTES) {
-            if (options.progressReceiver != null) {
-                // TODO: Wrap in a progress stream once progress is written.
-            }
-
-            ByteBuffer buf = data.iterator().next();
-            return blockBlobURL.putBlob(Flowable.just(buf), buf.remaining(), options.httpHeaders,
-                    options.metadata, options.accessConditions)
-                    .map(new Function<RestResponse<BlobPutHeaders, Void>, CommonRestResponse>() {
-                        // Transform the specific RestResponse into a CommonRestResponse.
-                        @Override
-                        public CommonRestResponse apply(
-                                RestResponse<BlobPutHeaders, Void> response) throws Exception {
-                            return CommonRestResponse.createFromPutBlobResponse(response);
-                        }
-                    });
+            return doSingleShotUpload(data.iterator().next(), blockBlobURL, options);
         }
 
         if (numBlocks > BlockBlobURL.MAX_BLOCKS) {
@@ -229,5 +323,23 @@ public class Highlevel {
          * those bytes into memory. Create using Flowable.just(byte[]).
          *
          */
+    }
+
+    private static Single<CommonRestResponse> doSingleShotUpload(
+            ByteBuffer data, BlockBlobURL blockBlobURL, UploadToBlockBlobOptions options) {
+        if (options.progressReceiver != null) {
+            // TODO: Wrap in a progress stream once progress is written.
+        }
+
+        return blockBlobURL.putBlob(Flowable.just(data), data.remaining(), options.httpHeaders,
+                options.metadata, options.accessConditions)
+                .map(new Function<RestResponse<BlobPutHeaders, Void>, CommonRestResponse>() {
+                    // Transform the specific RestResponse into a CommonRestResponse.
+                    @Override
+                    public CommonRestResponse apply(
+                            RestResponse<BlobPutHeaders, Void> response) throws Exception {
+                        return CommonRestResponse.createFromPutBlobResponse(response);
+                    }
+                });
     }
 }
